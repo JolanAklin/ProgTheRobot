@@ -1,0 +1,2 @@
+[Main Menu]
+welcome = Bonjour, comment allez-vous
