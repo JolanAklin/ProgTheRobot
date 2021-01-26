@@ -9,7 +9,8 @@ public class PopUpColor : MonoBehaviour
 {
 
     public Image showColor;
-    private Color color;
+    [HideInInspector]
+    public Color color;
     public Slider[] colorSliders;
     public Slider sliderRed;
     public Slider sliderGreen;
@@ -18,11 +19,16 @@ public class PopUpColor : MonoBehaviour
     public TMP_Text textGreen;
     public TMP_Text textBlue;
 
+    // delegate called when the button are clicked
+    private Action cancelAction;
+    private Action OkAction;
+
     private void Start()
     {
-        Init(Color.black);
+        Init(Color.white);
     }
 
+    // set the color and the slider and the text
     public void Init(Color color)
     {
         this.color = color;
@@ -30,6 +36,9 @@ public class PopUpColor : MonoBehaviour
         textRed.text = Math.Round((255f * color.r), 0).ToString();
         textGreen.text = Math.Round((255f * color.g), 0).ToString();
         textBlue.text = Math.Round((255f * color.b), 0).ToString();
+        sliderRed.value = 255;
+        sliderGreen.value = 255;
+        sliderBlue.value = 255;
         ShowNewColor();
     }
 
@@ -55,5 +64,25 @@ public class PopUpColor : MonoBehaviour
     private void ShowNewColor()
     {
         showColor.color = color;
+    }
+
+    // set the delegate called when a button is clicked
+    public void SetButtonOk(Action action)
+    {
+        OkAction = action;
+    }
+    public void SetButtonCancel(Action action)
+    {
+        cancelAction = action;
+    }
+
+    // when button is pressed;
+    public void Cancel()
+    {
+        cancelAction();
+    }
+    public void Ok()
+    {
+        OkAction();
     }
 }

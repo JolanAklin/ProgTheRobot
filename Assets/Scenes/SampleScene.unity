@@ -133,6 +133,7 @@ GameObject:
   m_Component:
   - component: {fileID: 34863}
   - component: {fileID: 34862}
+  - component: {fileID: 34864}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -152,7 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b67ff89eeee69488f6f3e7812b9bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canvasScaler: {fileID: 1754670297}
+  canvas: {fileID: 1754670295}
 --- !u!4 &34863
 Transform:
   m_ObjectHideFlags: 0
@@ -167,6 +168,29 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &34864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7345b77ef86df4b4aa4c921ba293fe57, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  popUpWindows:
+  - popUpObj: {fileID: 6566659817004047491, guid: b94599c3d372726458a1a9e5b6a78f10, type: 3}
+    popUpType: menu
+  - popUpObj: {fileID: 6621357214056061664, guid: 4e01028c827df9f4c9f7b61b9cdbba3b, type: 3}
+    popUpType: robotModif
+  - popUpObj: {fileID: 2766626530558450154, guid: 2e45342c869a44c42a292d6a6bbe1637, type: 3}
+    popUpType: colorPicker
+  - popUpObj: {fileID: 3185205639265627637, guid: 2b6508cd9a4f4a440addb67836a2a6cd, type: 3}
+    popUpType: saveWarning
+  - popUpObj: {fileID: 2149542840406885528, guid: 180165895d6b1a545b13e8757afa92ee, type: 3}
+    popUpType: addScript
 --- !u!1 &4418599
 GameObject:
   m_ObjectHideFlags: 0
@@ -2090,9 +2114,9 @@ RectTransform:
   m_Father: {fileID: 4418600}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 365, y: -22.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 365, y: 0}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &568890601
@@ -3826,9 +3850,9 @@ RectTransform:
   m_Father: {fileID: 4418600}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 225, y: -22.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 225, y: 0}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009728105
@@ -8690,7 +8714,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1981981911225733510}
   m_HandleRect: {fileID: 1981981911225733511}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

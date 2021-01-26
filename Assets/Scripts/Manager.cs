@@ -11,8 +11,10 @@ public class Manager : MonoBehaviour
 
     public event EventHandler OnLanguageChanged;
 
+    public GameObject canvas;
+
     //change the resolution of the canvas when screen resolution changes
-    public CanvasScaler canvasScaler;
+    private CanvasScaler canvasScaler;
     private Resolution res;
 
     private void Awake()
@@ -27,6 +29,7 @@ public class Manager : MonoBehaviour
             Destroy(this);
         }
 
+        canvasScaler = canvas.GetComponent<CanvasScaler>();
         res.height = Screen.height;
         res.width = Screen.width;
         canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
@@ -48,7 +51,13 @@ public class Manager : MonoBehaviour
         Translation.Init();
         Translation.LoadData("fr");
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
+
+        // demo of showing a popup
+        PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
+
+
     }
+
     public void ChangeLanguage(ToggleScript toggle)
     {
         if(toggle.Value)
