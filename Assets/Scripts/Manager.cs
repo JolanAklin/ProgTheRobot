@@ -55,7 +55,6 @@ public class Manager : MonoBehaviour
         // demo of showing a popup
         PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
 
-
     }
 
     public void ChangeLanguage(ToggleScript toggle)

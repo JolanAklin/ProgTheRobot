@@ -1,2 +1,3 @@
-[Main Menu]
-welcome = Hello, there
+[blocs]
+start = Start
+end = End
