@@ -4,8 +4,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class List : MonoBehaviour
+public class ListRobot : MonoBehaviour
 {
+    public uint defaultSelectedIndex;
+    //change this list to be able to use robot instead of string
     public List<string> choices = new List<string>();
     public GameObject listButton;
     private List<Button> buttons = new List<Button>();
@@ -23,6 +25,12 @@ public class List : MonoBehaviour
     // create all button from the choices list
     private void LoadChoice()
     {
+        if (defaultSelectedIndex >= choices.Count)
+            defaultSelectedIndex = 0;
+        if (defaultSelectedIndex < 0)
+            defaultSelectedIndex = 0;
+
+        int i = 0;
         foreach (string choice in choices)
         {
             Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
@@ -31,6 +39,9 @@ public class List : MonoBehaviour
             button.colors = colorBlockBase;
             button.onClick.AddListener(() => ButtonClicked(button));
             buttons.Add(button);
+            if(defaultSelectedIndex == i)
+                ButtonClicked(button);
+            i++;
         }
     }
 

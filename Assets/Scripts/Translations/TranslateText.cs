@@ -10,7 +10,7 @@ public class TranslateText : MonoBehaviour
 {
     public string translationKey;
 
-    private void Awake()
+    private void Start()
     {
         Manager.instance.OnLanguageChanged += ChangeLanguage;
     }
