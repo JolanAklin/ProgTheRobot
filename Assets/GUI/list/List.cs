@@ -1,13 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using TMPro;
 
 public class List : MonoBehaviour
 {
-    public uint defaultSelectedIndex;
-    public List<string> choices = new List<string>();
+
+    public class ListElement
+    {
+        public string displayedText;
+        public UnityAction actionOnClick;
+    }
+
+    private uint defaultSelectedIndex = 0;
+    private List<ListElement> choices = new List<ListElement>();
     public GameObject listButton;
     private List<Button> buttons = new List<Button>();
     public ColorBlock colorBlockBase;
@@ -18,6 +27,12 @@ public class List : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    public void Init(List<ListElement> listChoices, uint defaulSelected)
+    {
+        defaultSelectedIndex = defaulSelected;
+        choices = listChoices;
         LoadChoice();
     }
 
@@ -30,13 +45,14 @@ public class List : MonoBehaviour
             defaultSelectedIndex = 0;
 
         int i = 0;
-        foreach (string choice in choices)
+        foreach (ListElement choice in choices)
         {
             Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
             TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-            buttonText.text = choice;
+            buttonText.text = choice.displayedText;
             button.colors = colorBlockBase;
             button.onClick.AddListener(() => ButtonClicked(button));
+            button.onClick.AddListener(choice.actionOnClick);
             buttons.Add(button);
             if(defaultSelectedIndex == i)
                 ButtonClicked(button);

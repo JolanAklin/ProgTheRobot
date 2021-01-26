@@ -53,8 +53,8 @@ public class Manager : MonoBehaviour
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
 
         // demo of showing a popup
-        PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
-
+        //PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
+        testList();
     }
 
     public void ChangeLanguage(ToggleScript toggle)
@@ -68,6 +68,18 @@ public class Manager : MonoBehaviour
             Translation.LoadData("fr");
             OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
         }
+    }
+
+
+    // testing the new list obj
+    public List list;
+    private void testList()
+    {
+        List<List.ListElement> elements = new List<List.ListElement>();
+        elements.Add(new List.ListElement { displayedText = "test", actionOnClick = () => {Debug.Log("test");} });
+        elements.Add(new List.ListElement { displayedText = "sdf", actionOnClick = () => {Debug.Log("234");} });
+        elements.Add(new List.ListElement { displayedText = "qathdf sdf g", actionOnClick = () => {Debug.Log("25");} });
+        list.Init(elements, 0);
     }
 
 }
