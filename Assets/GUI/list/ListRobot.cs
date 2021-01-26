@@ -2,13 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 using TMPro;
 
 public class ListRobot : MonoBehaviour
 {
+
+    public class ListElement
+    {
+        public Color robotColor;
+        public UnityAction actionOnClick;
+    }
+
     public uint defaultSelectedIndex;
     //change this list to be able to use robot instead of string
-    public List<string> choices = new List<string>();
+    private List<ListElement> choices = new List<ListElement>();
     public GameObject listButton;
     private List<Button> buttons = new List<Button>();
     public ColorBlock colorBlockBase;
@@ -31,13 +39,14 @@ public class ListRobot : MonoBehaviour
             defaultSelectedIndex = 0;
 
         int i = 0;
-        foreach (string choice in choices)
+        foreach (ListElement choice in choices)
         {
             Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
-            TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-            buttonText.text = choice;
+            Image buttonImage = button.GetComponentInChildren<Image>();
+            buttonImage.color = choice.robotColor;
             button.colors = colorBlockBase;
             button.onClick.AddListener(() => ButtonClicked(button));
+            button.onClick.AddListener(choice.actionOnClick);
             buttons.Add(button);
             if(defaultSelectedIndex == i)
                 ButtonClicked(button);
