@@ -10,6 +10,7 @@ public class ListRobot : MonoBehaviour
 
     public class ListElement
     {
+        public bool isAddRobot = false;
         public Color robotColor;
         public UnityAction actionOnClick;
     }
@@ -24,9 +25,10 @@ public class ListRobot : MonoBehaviour
     private Button currentSelectedButton;
     public GameObject Content;
 
-    // Start is called before the first frame update
-    void Start()
+    public void Init(List<ListElement> listChoices, uint defaulSelected)
     {
+        defaultSelectedIndex = defaulSelected;
+        choices = listChoices;
         LoadChoice();
     }
 
@@ -42,8 +44,16 @@ public class ListRobot : MonoBehaviour
         foreach (ListElement choice in choices)
         {
             Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
-            Image buttonImage = button.GetComponentInChildren<Image>();
-            buttonImage.color = choice.robotColor;
+            if(!choice.isAddRobot)
+            {
+                Image buttonImage = button.transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
+                buttonImage.color = choice.robotColor;
+            }
+            else
+            {
+                button.transform.GetChild(0).gameObject.SetActive(false);
+                button.transform.GetChild(1).gameObject.SetActive(true);
+            }
             button.colors = colorBlockBase;
             button.onClick.AddListener(() => ButtonClicked(button));
             button.onClick.AddListener(choice.actionOnClick);

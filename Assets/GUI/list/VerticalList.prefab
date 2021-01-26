@@ -740,7 +740,7 @@ MonoBehaviour:
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
-  m_ScrollSensitivity: 1
+  m_ScrollSensitivity: 5
   m_Viewport: {fileID: 6997345317171862032}
   m_HorizontalScrollbar: {fileID: 6997345317723882767}
   m_VerticalScrollbar: {fileID: 6997345318417555644}
@@ -763,11 +763,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3232552da0870b14397f272f85c8918a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultSelectedIndex: 0
-  choices:
-  - test
-  - test
-  - test
   listButton: {fileID: 3909758198722530456, guid: 9a15fbcc282ce3644bc6f0a5b65976e8, type: 3}
   colorBlockBase:
     m_NormalColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}

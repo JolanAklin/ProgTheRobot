@@ -73,13 +73,22 @@ public class Manager : MonoBehaviour
 
     // testing the new list obj
     public List list;
+    public ListRobot listRobot;
     private void testList()
     {
         List<List.ListElement> elements = new List<List.ListElement>();
         elements.Add(new List.ListElement { displayedText = "test", actionOnClick = () => {Debug.Log("test");} });
         elements.Add(new List.ListElement { displayedText = "sdf", actionOnClick = () => {Debug.Log("234");} });
         elements.Add(new List.ListElement { displayedText = "qathdf sdf g", actionOnClick = () => {Debug.Log("25");} });
+        elements.Add(new List.ListElement { isAddScript = true, actionOnClick = () => {Debug.Log("plus");} });
         list.Init(elements, 0);
+
+        List<ListRobot.ListElement> rElements = new List<ListRobot.ListElement>();
+        rElements.Add(new ListRobot.ListElement { robotColor = Color.red, actionOnClick = () => { Debug.Log("hello"); } });
+        rElements.Add(new ListRobot.ListElement { robotColor = Color.green, actionOnClick = () => { Debug.Log("auflisbjfls sdfls"); } });
+        rElements.Add(new ListRobot.ListElement { robotColor = Color.magenta, actionOnClick = () => { Debug.Log("aéejf"); } });
+        rElements.Add(new ListRobot.ListElement { isAddRobot = true, actionOnClick = () => { Debug.Log("aéejf"); } });
+        listRobot.Init(rElements, 0);
     }
 
 }

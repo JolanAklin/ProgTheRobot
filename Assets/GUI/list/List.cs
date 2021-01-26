@@ -11,6 +11,7 @@ public class List : MonoBehaviour
 
     public class ListElement
     {
+        public bool isAddScript;
         public string displayedText;
         public UnityAction actionOnClick;
     }
@@ -48,8 +49,16 @@ public class List : MonoBehaviour
         foreach (ListElement choice in choices)
         {
             Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
-            TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-            buttonText.text = choice.displayedText;
+            if(!choice.isAddScript)
+            {
+                TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
+                buttonText.text = choice.displayedText;
+            }
+            else
+            {
+                button.transform.GetChild(0).gameObject.SetActive(false);
+                button.transform.GetChild(1).gameObject.SetActive(true);
+            }
             button.colors = colorBlockBase;
             button.onClick.AddListener(() => ButtonClicked(button));
             button.onClick.AddListener(choice.actionOnClick);
