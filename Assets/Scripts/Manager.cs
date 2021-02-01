@@ -84,15 +84,16 @@ public class Manager : MonoBehaviour
                 robot.CreateScript($"Script {i}, {j}");
             }
         }
-        List<ListRobot.ListElement> robotElements = new List<ListRobot.ListElement>(); 
-        robotElements.Add(new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => {
-            listRobot.AddChoice(new Robot(Color.red, "", 2000).ConvertToListElement());
-            listRobot.Select(listRobot.Count()-1);
+        Dictionary<int, ListRobot.ListElement> robotElements = new Dictionary<int, ListRobot.ListElement>();
+        robotElements.Add(-1, new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => {
+            Robot robot = new Robot(Color.red, "", 2000);
+            listRobot.AddChoice(robot.id, robot.ConvertToListElement());
+            listRobot.Select(robot.id);
             ChangeRobotSettings();
         } });
         foreach (Robot robot in robots)
         {
-            robotElements.Add(robot.ConvertToListElement());
+            robotElements.Add(robot.id, robot.ConvertToListElement());
         }
         listRobot.Init(robotElements, 1);
     }

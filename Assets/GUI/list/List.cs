@@ -26,11 +26,6 @@ public class List : MonoBehaviour
     private Button addButton;
     public GameObject Content;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-    }
-
     public void Init(List<ListElement> listChoices, uint defaulSelected)
     {
         defaultSelectedIndex = defaulSelected;
@@ -79,6 +74,16 @@ public class List : MonoBehaviour
             addButton.transform.SetAsLastSibling();
         }
         return button;
+    }
+
+    public void Clear()
+    {
+        foreach (Transform child in Content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        buttons.Clear();
+        choices.Clear();
     }
 
     // create all button from the choices list

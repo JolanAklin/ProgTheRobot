@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
+using System.Linq;
 
 public class ListRobot : MonoBehaviour
 {
@@ -17,16 +18,16 @@ public class ListRobot : MonoBehaviour
 
     public uint defaultSelectedIndex;
     //change this list to be able to use robot instead of string
-    private List<ListElement> choices = new List<ListElement>();
+    private Dictionary<int, ListElement> choices = new Dictionary<int, ListElement>();
     public GameObject listButton;
-    private List<Button> buttons = new List<Button>();
+    private Dictionary<int, Button> buttons = new Dictionary<int, Button>();
     public ColorBlock colorBlockBase;
     public ColorBlock colorBlockSelected;
     private Button currentSelectedButton;
     public GameObject Content;
     private Button addButton;
 
-    public void Init(List<ListElement> listChoices, uint defaulSelected)
+    public void Init(Dictionary<int, ListElement> listChoices, uint defaulSelected)
     {
         defaultSelectedIndex = defaulSelected;
         choices = listChoices;
@@ -35,22 +36,19 @@ public class ListRobot : MonoBehaviour
 
     public void RemoveRobot(int id)
     {
-        // buttons list has one more button at the start than the robots list
-        choices.RemoveAt(id+1);
-        Destroy(buttons[id + 1].gameObject);
-        buttons.RemoveAt(id + 1);
-        Robot.idSelected = Count()-1;
-        if(!choices[Robot.idSelected].isAddRobot)
-            buttons[Robot.idSelected].onClick?.Invoke();
+        choices.Remove(id);
+        Destroy(buttons[id].gameObject);
+        buttons.Remove(id);
+        Manager.instance.list.Clear();
     }
 
-    public void AddChoice(ListElement listElement)
+    public void AddChoice(int id, ListElement listElement)
     {
-        choices.Add(listElement);
-        CreateChoice(listElement);
+        choices.Add(id, listElement);
+        CreateChoice(id, listElement);
     }
 
-    private Button CreateChoice(ListElement choice)
+    private Button CreateChoice(int id, ListElement choice)
     {
         Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
         if (!choice.isAddRobot)
@@ -67,7 +65,7 @@ public class ListRobot : MonoBehaviour
         button.colors = colorBlockBase;
         button.onClick.AddListener(() => ButtonClicked(button));
         button.onClick.AddListener(choice.actionOnClick);
-        buttons.Add(button);
+        buttons.Add(id, button);
         if (addButton != null)
         {
             addButton.transform.SetAsLastSibling();
@@ -84,13 +82,13 @@ public class ListRobot : MonoBehaviour
             defaultSelectedIndex = 0;
 
         int i = 0;
-        foreach (ListElement choice in choices)
+        foreach (KeyValuePair<int, ListElement> choice in choices)
         {
-            Button button = CreateChoice(choice);
+            Button button = CreateChoice(choice.Key, choice.Value);
             if(defaultSelectedIndex == i)
             {
                 ButtonClicked(button);
-                if (!choice.isAddRobot)
+                if (!choice.Value.isAddRobot)
                     button.onClick?.Invoke();
             }
             i++;
@@ -108,8 +106,7 @@ public class ListRobot : MonoBehaviour
 
     public void UpdateButtonColor()
     {
-        // buttons list has one more button at the start than the robots list
-        Image buttonImage = buttons[Robot.idSelected+1].transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
+        Image buttonImage = buttons[Robot.idSelected].transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
         buttonImage.color = Robot.robots[Robot.idSelected].color;
     }
 
