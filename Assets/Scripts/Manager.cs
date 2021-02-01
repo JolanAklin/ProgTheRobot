@@ -60,19 +60,36 @@ public class Manager : MonoBehaviour
         //PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
 
         //Create some RobotScript instance and put them into a list
-        List<RobotScript> robotScripts = new List<RobotScript>();
-        for (int i = 0; i < 10; i++)
+        //List<RobotScript> robotScripts = new List<RobotScript>();
+        //for (int i = 0; i < 10; i++)
+        //{
+        //    robotScripts.Add(new RobotScript($"Script {i}"));
+        //}
+        //List<List.ListElement> elements = new List<List.ListElement>();
+        //foreach (RobotScript item in robotScripts)
+        //{
+        //    elements.Add(item.ConvertToListElement());
+        //}
+        //elements.Add(new List.ListElement { isAddScript = true, actionOnClick = () => { list.AddChoice(new List.ListElement { displayedText = "test", actionOnClick = () => { Debug.Log($"Script test"); } }); } });
+        //list.Init(elements, 0);
+
+        List<Robot> robots = new List<Robot>();
+        for (int i = 0; i < 3; i++)
         {
-            robotScripts.Add(new RobotScript($"Script {i}"));
+            Robot robot = new Robot(Color.blue, "Testbot", 100);
+            robots.Add(robot);
+            List<RobotScript> robotScripts = new List<RobotScript>();
+            for (int j = 0; j < 10; j++)
+            {
+                robot.CreateScript($"Script {i}, {j}");
+            }
         }
-        List<List.ListElement> elements = new List<List.ListElement>();
-        foreach (RobotScript item in robotScripts)
+        List<ListRobot.ListElement> robotElements = new List<ListRobot.ListElement>(); 
+        foreach (Robot robot in robots)
         {
-            elements.Add(item.ConvertToListElement());
+            robotElements.Add(robot.ConvertToListElement());
         }
-        elements.Add(new List.ListElement { isAddScript = true, actionOnClick = () => { list.AddChoice(new List.ListElement { displayedText = "test", actionOnClick = () => { Debug.Log($"Script test"); } }); } });
-        list.Init(elements, 0);
-        //testList();
+        listRobot.Init(robotElements, 0);
     }
 
     public void ChangeLanguage(ToggleScript toggle)
@@ -87,24 +104,4 @@ public class Manager : MonoBehaviour
             OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
         }
     }
-
-
-    // testing the new list obj
-    private void testList()
-    {
-        List<List.ListElement> elements = new List<List.ListElement>();
-        elements.Add(new List.ListElement { displayedText = "test", actionOnClick = () => {Debug.Log("test");} });
-        elements.Add(new List.ListElement { displayedText = "sdf", actionOnClick = () => {Debug.Log("234");} });
-        elements.Add(new List.ListElement { displayedText = "qathdf sdf g", actionOnClick = () => {Debug.Log("25");} });
-        elements.Add(new List.ListElement { isAddScript = true, actionOnClick = () => {Debug.Log("plus");} });
-        list.Init(elements, 0);
-
-        List<ListRobot.ListElement> rElements = new List<ListRobot.ListElement>();
-        rElements.Add(new ListRobot.ListElement { robotColor = Color.red, actionOnClick = () => { Debug.Log("hello"); } });
-        rElements.Add(new ListRobot.ListElement { robotColor = Color.green, actionOnClick = () => { Debug.Log("auflisbjfls sdfls"); } });
-        rElements.Add(new ListRobot.ListElement { robotColor = Color.magenta, actionOnClick = () => { Debug.Log("aéejf"); } });
-        rElements.Add(new ListRobot.ListElement { isAddRobot = true, actionOnClick = () => { Debug.Log("aéejf"); } });
-        listRobot.Init(rElements, 0);
-    }
-
 }

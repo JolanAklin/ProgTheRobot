@@ -38,6 +38,18 @@ public class List : MonoBehaviour
         LoadChoice();
     }
 
+    public void ChangeList(List<ListElement> listChoices, uint defaulSelected)
+    {
+        foreach (Button button in buttons)
+        {
+            Destroy(button.gameObject);
+        }
+        buttons.Clear();
+        defaultSelectedIndex = defaulSelected;
+        choices = listChoices;
+        LoadChoice();
+    }
+
     public void AddChoice(ListElement element)
     {
         choices.Add(element);
@@ -82,7 +94,10 @@ public class List : MonoBehaviour
         {
             Button button = CreateChoice(choice);
             if(defaultSelectedIndex == i)
+            {
                 ButtonClicked(button);
+                button.onClick?.Invoke();
+            }
             i++;
         }
     }

@@ -59,7 +59,10 @@ public class ListRobot : MonoBehaviour
             button.onClick.AddListener(choice.actionOnClick);
             buttons.Add(button);
             if(defaultSelectedIndex == i)
+            {
                 ButtonClicked(button);
+                button.onClick?.Invoke();
+            }
             i++;
         }
     }
