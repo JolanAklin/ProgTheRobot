@@ -26,6 +26,8 @@ public abstract class Nodes : MonoBehaviour
 
     public int id;
     public static int nextid = 0;
+    private int nextId;
+    private GameObject nextGameObject;
 
     private void Awake()
     {

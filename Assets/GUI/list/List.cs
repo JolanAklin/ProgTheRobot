@@ -23,6 +23,7 @@ public class List : MonoBehaviour
     public ColorBlock colorBlockBase;
     public ColorBlock colorBlockSelected;
     private Button currentSelectedButton;
+    private Button addButton;
     public GameObject Content;
 
     // Start is called before the first frame update
@@ -37,6 +38,37 @@ public class List : MonoBehaviour
         LoadChoice();
     }
 
+    public void AddChoice(ListElement element)
+    {
+        choices.Add(element);
+        CreateChoice(element);
+    }
+
+    public Button CreateChoice(ListElement choice)
+    {
+        Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
+        if (!choice.isAddScript)
+        {
+            TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
+            buttonText.text = choice.displayedText;
+        }
+        else
+        {
+            button.transform.GetChild(0).gameObject.SetActive(false);
+            button.transform.GetChild(1).gameObject.SetActive(true);
+            addButton = button;
+        }
+        button.colors = colorBlockBase;
+        button.onClick.AddListener(() => ButtonClicked(button));
+        button.onClick.AddListener(choice.actionOnClick);
+        buttons.Add(button);
+        if(addButton != null)
+        {
+            addButton.transform.SetAsLastSibling();
+        }
+        return button;
+    }
+
     // create all button from the choices list
     private void LoadChoice()
     {
@@ -48,21 +80,7 @@ public class List : MonoBehaviour
         int i = 0;
         foreach (ListElement choice in choices)
         {
-            Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
-            if(!choice.isAddScript)
-            {
-                TMP_Text buttonText = button.GetComponentInChildren<TMP_Text>();
-                buttonText.text = choice.displayedText;
-            }
-            else
-            {
-                button.transform.GetChild(0).gameObject.SetActive(false);
-                button.transform.GetChild(1).gameObject.SetActive(true);
-            }
-            button.colors = colorBlockBase;
-            button.onClick.AddListener(() => ButtonClicked(button));
-            button.onClick.AddListener(choice.actionOnClick);
-            buttons.Add(button);
+            Button button = CreateChoice(choice);
             if(defaultSelectedIndex == i)
                 ButtonClicked(button);
             i++;

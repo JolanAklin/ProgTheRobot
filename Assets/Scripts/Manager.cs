@@ -13,6 +13,10 @@ public class Manager : MonoBehaviour
 
     public GameObject canvas;
 
+    //List used to display script and robot
+    public List list;
+    public ListRobot listRobot;
+
     //change the resolution of the canvas when screen resolution changes
     private CanvasScaler canvasScaler;
     private Resolution res;
@@ -54,7 +58,21 @@ public class Manager : MonoBehaviour
 
         // demo of showing a popup
         //PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
-        testList();
+
+        //Create some RobotScript instance and put them into a list
+        List<RobotScript> robotScripts = new List<RobotScript>();
+        for (int i = 0; i < 10; i++)
+        {
+            robotScripts.Add(new RobotScript($"Script {i}"));
+        }
+        List<List.ListElement> elements = new List<List.ListElement>();
+        foreach (RobotScript item in robotScripts)
+        {
+            elements.Add(item.ConvertToListElement());
+        }
+        elements.Add(new List.ListElement { isAddScript = true, actionOnClick = () => { list.AddChoice(new List.ListElement { displayedText = "test", actionOnClick = () => { Debug.Log($"Script test"); } }); } });
+        list.Init(elements, 0);
+        //testList();
     }
 
     public void ChangeLanguage(ToggleScript toggle)
@@ -72,8 +90,6 @@ public class Manager : MonoBehaviour
 
 
     // testing the new list obj
-    public List list;
-    public ListRobot listRobot;
     private void testList()
     {
         List<List.ListElement> elements = new List<List.ListElement>();
