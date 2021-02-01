@@ -1,3 +1,10 @@
 [nodes]
 start = Début
-end = fin
+end = Fin
+enterText = Entrer du text...
+ifYes = O
+ifNo = N
+forPlaceHolder = Pour i  0 jusque 10...
+forEnd = Suivant
+whilePlaceHolder = TantQue Vrai...
+whileEnd = FinTantQue

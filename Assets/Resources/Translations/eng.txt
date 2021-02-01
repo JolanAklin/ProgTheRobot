@@ -1,3 +1,10 @@
 [nodes]
 start = Start
 end = End
+enterText = Enter text...
+ifYes = Y
+ifNo = N
+forPlaceHolder = for i  0 up to 10...
+forEnd = Next
+whilePlaceHolder = While True...
+whileEnd = EndWhile
