@@ -14,8 +14,14 @@ public abstract class Nodes : MonoBehaviour
         methodCaller,
     }
 
+    /// <summary>
+    /// Will convert the node to json
+    /// </summary>
     public abstract void SerializeNode();
 
+    /// <summary>
+    /// Execute the node
+    /// </summary>
     public abstract void Execute();
 
     public int id;
@@ -23,6 +29,7 @@ public abstract class Nodes : MonoBehaviour
 
     private void Awake()
     {
+        // All nodes have a different id
         id = nextid;
         nextid++;
     }
@@ -30,5 +37,15 @@ public abstract class Nodes : MonoBehaviour
     public void Start()
     {
         
+    }
+
+    public void Move()
+    {
+
+    }
+
+    public void Resize()
+    {
+
     }
 }
