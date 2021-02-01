@@ -89,6 +89,7 @@ public class Manager : MonoBehaviour
         {
             robotElements.Add(robot.ConvertToListElement());
         }
+        robotElements.Add(new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => { listRobot.AddChoice(new Robot(Color.red, "Wall-E", 2000).ConvertToListElement()); } });
         listRobot.Init(robotElements, 0);
     }
 

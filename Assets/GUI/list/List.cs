@@ -56,7 +56,7 @@ public class List : MonoBehaviour
         CreateChoice(element);
     }
 
-    public Button CreateChoice(ListElement choice)
+    private Button CreateChoice(ListElement choice)
     {
         Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
         if (!choice.isAddScript)
@@ -96,7 +96,8 @@ public class List : MonoBehaviour
             if(defaultSelectedIndex == i)
             {
                 ButtonClicked(button);
-                button.onClick?.Invoke();
+                if(!choice.isAddScript)
+                    button.onClick?.Invoke();
             }
             i++;
         }

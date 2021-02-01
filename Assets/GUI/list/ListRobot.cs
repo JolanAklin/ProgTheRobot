@@ -24,12 +24,44 @@ public class ListRobot : MonoBehaviour
     public ColorBlock colorBlockSelected;
     private Button currentSelectedButton;
     public GameObject Content;
+    private Button addButton;
 
     public void Init(List<ListElement> listChoices, uint defaulSelected)
     {
         defaultSelectedIndex = defaulSelected;
         choices = listChoices;
         LoadChoice();
+    }
+
+    public void AddChoice(ListElement listElement)
+    {
+        choices.Add(listElement);
+        CreateChoice(listElement);
+    }
+
+    private Button CreateChoice(ListElement choice)
+    {
+        Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
+        if (!choice.isAddRobot)
+        {
+            Image buttonImage = button.transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
+            buttonImage.color = choice.robotColor;
+        }
+        else
+        {
+            button.transform.GetChild(0).gameObject.SetActive(false);
+            button.transform.GetChild(1).gameObject.SetActive(true);
+            addButton = button;
+        }
+        button.colors = colorBlockBase;
+        button.onClick.AddListener(() => ButtonClicked(button));
+        button.onClick.AddListener(choice.actionOnClick);
+        buttons.Add(button);
+        if (addButton != null)
+        {
+            addButton.transform.SetAsLastSibling();
+        }
+        return button;
     }
 
     // create all button from the choices list
@@ -43,21 +75,7 @@ public class ListRobot : MonoBehaviour
         int i = 0;
         foreach (ListElement choice in choices)
         {
-            Button button = Instantiate(listButton, Content.transform).GetComponent<Button>();
-            if(!choice.isAddRobot)
-            {
-                Image buttonImage = button.transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
-                buttonImage.color = choice.robotColor;
-            }
-            else
-            {
-                button.transform.GetChild(0).gameObject.SetActive(false);
-                button.transform.GetChild(1).gameObject.SetActive(true);
-            }
-            button.colors = colorBlockBase;
-            button.onClick.AddListener(() => ButtonClicked(button));
-            button.onClick.AddListener(choice.actionOnClick);
-            buttons.Add(button);
+            Button button = CreateChoice(choice);
             if(defaultSelectedIndex == i)
             {
                 ButtonClicked(button);
