@@ -33,6 +33,17 @@ public class ListRobot : MonoBehaviour
         LoadChoice();
     }
 
+    public void RemoveRobot(int id)
+    {
+        // buttons list has one more button at the start than the robots list
+        choices.RemoveAt(id+1);
+        Destroy(buttons[id + 1].gameObject);
+        buttons.RemoveAt(id + 1);
+        Robot.idSelected = Count()-1;
+        if(!choices[Robot.idSelected].isAddRobot)
+            buttons[Robot.idSelected].onClick?.Invoke();
+    }
+
     public void AddChoice(ListElement listElement)
     {
         choices.Add(listElement);
@@ -79,7 +90,8 @@ public class ListRobot : MonoBehaviour
             if(defaultSelectedIndex == i)
             {
                 ButtonClicked(button);
-                button.onClick?.Invoke();
+                if (!choice.isAddRobot)
+                    button.onClick?.Invoke();
             }
             i++;
         }
@@ -92,5 +104,26 @@ public class ListRobot : MonoBehaviour
             currentSelectedButton.colors = colorBlockBase;
         sender.colors = colorBlockSelected;
         currentSelectedButton = sender;
+    }
+
+    public void UpdateButtonColor()
+    {
+        // buttons list has one more button at the start than the robots list
+        Image buttonImage = buttons[Robot.idSelected+1].transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
+        buttonImage.color = Robot.robots[Robot.idSelected].color;
+    }
+
+    public void Select(int id)
+    {
+        Button button = buttons[id];
+        ListElement choice = choices[id];
+        ButtonClicked(button);
+        if (!choice.isAddRobot)
+            button.onClick?.Invoke();
+    }
+
+    public int Count()
+    {
+        return buttons.Count;
     }
 }

@@ -7,29 +7,46 @@ using UnityEngine.UI;
 
 public class PopUpRobot : MonoBehaviour
 {
+    [HideInInspector]
     public string robotName;
-    public float power;
+    [HideInInspector]
+    public uint power;
+    [HideInInspector]
     public Color robotColor;
     public Image colorButton;
     public GameObject boxVisual;
+
+    public TMP_InputField nameInput;
+    public TMP_InputField powerInput;
 
     // delegate while be triggered when a button is pressed
     private Action deleteAction;
     private Action OkAction;
     private Action cancelAction;
 
+    public void Init(Color color, string name, uint power)
+    {
+        robotColor = color;
+        robotName = name;
+        this.power = power;
+        colorButton.color = color;
+        nameInput.text = name;
+        powerInput.text = power.ToString();
+    }
     public void OnEndEditName(TMP_InputField inputField)
     {
+        Debug.Log(inputField.text);
         robotName = inputField.text;
     }
     public void OnEndEditPower(TMP_InputField inputField)
     {
-        float.TryParse(inputField.text, out power);
+        uint.TryParse(inputField.text, out power);
     }
     public void ChangeColor()
     {
         boxVisual.SetActive(false);
         PopUpColor cp = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "colorPicker")], Manager.instance.canvas.transform).GetComponent<PopUpColor>();
+        cp.Init(robotColor);
         cp.SetButtonOk(() => {
             robotColor = cp.color;
             Destroy(cp.gameObject);
@@ -40,6 +57,11 @@ public class PopUpRobot : MonoBehaviour
             Destroy(cp.gameObject);
             boxVisual.SetActive(true);
         });
+    }
+
+    public void PopUpClose()
+    {
+        Destroy(this.gameObject);
     }
 
     #region buttons action

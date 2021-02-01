@@ -85,12 +85,43 @@ public class Manager : MonoBehaviour
             }
         }
         List<ListRobot.ListElement> robotElements = new List<ListRobot.ListElement>(); 
+        robotElements.Add(new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => {
+            listRobot.AddChoice(new Robot(Color.red, "", 2000).ConvertToListElement());
+            listRobot.Select(listRobot.Count()-1);
+            ChangeRobotSettings();
+        } });
         foreach (Robot robot in robots)
         {
             robotElements.Add(robot.ConvertToListElement());
         }
-        robotElements.Add(new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => { listRobot.AddChoice(new Robot(Color.red, "Wall-E", 2000).ConvertToListElement()); } });
-        listRobot.Init(robotElements, 0);
+        listRobot.Init(robotElements, 1);
+    }
+
+    // robot customization
+    public void ChangeRobotSettings()
+    {
+        if(Robot.robots.ContainsKey(Robot.idSelected))
+        {
+            Robot robotToChange = Robot.robots[Robot.idSelected];
+            PopUpRobot rm = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
+            rm.Init(robotToChange.color, robotToChange.robotName, robotToChange.power);
+            rm.SetOkAction(() => {
+                robotToChange.color = rm.robotColor;
+                robotToChange.robotName = rm.robotName;
+                robotToChange.power = rm.power;
+                listRobot.UpdateButtonColor();
+                rm.PopUpClose();
+            });
+            rm.SetCancelAction(() =>
+            {
+                rm.PopUpClose();
+            });
+            rm.SetDeleteAction(() => {
+                listRobot.RemoveRobot(robotToChange.id);
+                Robot.DeleteRobot(robotToChange.id);
+                rm.PopUpClose();
+            });
+        }
     }
 
     public void ChangeLanguage(ToggleScript toggle)
