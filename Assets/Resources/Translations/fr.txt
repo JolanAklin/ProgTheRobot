@@ -8,3 +8,14 @@ forPlaceHolder = Pour i  0 jusque 10...
 forEnd = Suivant
 whilePlaceHolder = TantQue Vrai...
 whileEnd = FinTantQue
+
+[AddNodeList]
+addStartNode = Bloc de début
+addEndNode = Bloc de fin
+addExecuteNode = Bloc d'exécution
+addReadWriteNode = Bloc de lecture/écriture
+addWhileLoopNode = Bloc tant que
+addForLoopNode = Bloc pour
+addIfNode = Bloc de test
+addSubProgramNode = Bloc sous programme
+addAffectNode = Bloc d'affectation

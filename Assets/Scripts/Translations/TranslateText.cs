@@ -9,10 +9,14 @@ using System;
 public class TranslateText : MonoBehaviour
 {
     public string translationKey;
+    public bool translateAtStart = true;
 
     private void Start()
     {
         Manager.instance.OnLanguageChanged += ChangeLanguage;
+        if (translateAtStart)
+            ChangeLanguage(this, EventArgs.Empty);
+
     }
 
     private void ChangeLanguage(object sender, EventArgs e)

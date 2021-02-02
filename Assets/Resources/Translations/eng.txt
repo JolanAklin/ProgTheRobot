@@ -8,3 +8,14 @@ forPlaceHolder = for i  0 up to 10...
 forEnd = Next
 whilePlaceHolder = While True...
 whileEnd = EndWhile
+
+[AddNodeList]
+addStartNode = Start node
+addEndNode = End node
+addExecuteNode = Execution node
+addReadWriteNode = Read/write node
+addWhileLoopNode = While node
+addForLoopNode = For node
+addIfNode = Test node
+addSubProgramNode = SubProgramm node
+addAffectNode = Assignement node
