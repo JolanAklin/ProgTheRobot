@@ -31,6 +31,11 @@ public class RobotScript
 
     }
 
+    public void DeSerializeScript()
+    {
+
+    }
+
     public List.ListElement ConvertToListElement()
     {
         return new List.ListElement { isAddScript = false, displayedText = name, actionOnClick = () => { LoadNodes(); } };

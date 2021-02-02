@@ -56,23 +56,7 @@ public class Manager : MonoBehaviour
         Translation.LoadData("fr");
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
 
-        // demo of showing a popup
-        //PopUpRobot pr = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
-
-        //Create some RobotScript instance and put them into a list
-        //List<RobotScript> robotScripts = new List<RobotScript>();
-        //for (int i = 0; i < 10; i++)
-        //{
-        //    robotScripts.Add(new RobotScript($"Script {i}"));
-        //}
-        //List<List.ListElement> elements = new List<List.ListElement>();
-        //foreach (RobotScript item in robotScripts)
-        //{
-        //    elements.Add(item.ConvertToListElement());
-        //}
-        //elements.Add(new List.ListElement { isAddScript = true, actionOnClick = () => { list.AddChoice(new List.ListElement { displayedText = "test", actionOnClick = () => { Debug.Log($"Script test"); } }); } });
-        //list.Init(elements, 0);
-
+        // fill the list to test, while be removed
         List<Robot> robots = new List<Robot>();
         for (int i = 0; i < 3; i++)
         {
@@ -104,9 +88,10 @@ public class Manager : MonoBehaviour
         if(Robot.robots.ContainsKey(Robot.idSelected))
         {
             Robot robotToChange = Robot.robots[Robot.idSelected];
-            PopUpRobot rm = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif")], canvas.transform).GetComponent<PopUpRobot>();
+            PopUpRobot rm = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif"), canvas.transform).GetComponent<PopUpRobot>();
             rm.Init(robotToChange.color, robotToChange.robotName, robotToChange.power);
-            rm.SetOkAction(() => {
+            rm.SetOkAction(() =>
+            {
                 robotToChange.color = rm.robotColor;
                 robotToChange.robotName = rm.robotName;
                 robotToChange.power = rm.power;
@@ -117,7 +102,8 @@ public class Manager : MonoBehaviour
             {
                 rm.PopUpClose();
             });
-            rm.SetDeleteAction(() => {
+            rm.SetDeleteAction(() =>
+            {
                 listRobot.RemoveRobot(robotToChange.id);
                 Robot.DeleteRobot(robotToChange.id);
                 rm.PopUpClose();

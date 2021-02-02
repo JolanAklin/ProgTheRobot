@@ -48,4 +48,9 @@ public class WindowsManager : MonoBehaviour
         }
         
     }
+
+    public static GameObject InstantiateWindow(int WindowType, Transform parentTransform)
+    {
+        return Instantiate(instance.popUpWindowsDict[WindowType], parentTransform);
+    }
 }

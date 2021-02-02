@@ -15,6 +15,7 @@ public class PopUpRobot : MonoBehaviour
     public Color robotColor;
     public Image colorButton;
     public GameObject boxVisual;
+    public Image robotBodyColor;
 
     public TMP_InputField nameInput;
     public TMP_InputField powerInput;
@@ -32,6 +33,7 @@ public class PopUpRobot : MonoBehaviour
         colorButton.color = color;
         nameInput.text = name;
         powerInput.text = power.ToString();
+        robotBodyColor.color = color;
     }
     public void OnEndEditName(TMP_InputField inputField)
     {
@@ -49,6 +51,7 @@ public class PopUpRobot : MonoBehaviour
         cp.Init(robotColor);
         cp.SetButtonOk(() => {
             robotColor = cp.color;
+            robotBodyColor.color = cp.color;
             Destroy(cp.gameObject);
             colorButton.color = robotColor;
             boxVisual.SetActive(true);

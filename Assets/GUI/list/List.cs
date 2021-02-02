@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using System.Linq;
 using TMPro;
 
 public class List : MonoBehaviour
@@ -106,6 +107,23 @@ public class List : MonoBehaviour
             }
             i++;
         }
+    }
+
+    public void Select(int id)
+    {
+        Button button = buttons[id];
+        ListElement choice = choices[id];
+        ButtonClicked(button);
+        if (!choice.isAddScript)
+            button.onClick?.Invoke();
+    }
+    public void SelectLast()
+    {
+        Button button = buttons.Last();
+        ListElement choice = choices.Last();
+        ButtonClicked(button);
+        if (!choice.isAddScript)
+            button.onClick?.Invoke();
     }
 
     // Called when a button from the list is clicked

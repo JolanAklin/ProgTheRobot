@@ -53,7 +53,20 @@ public class Robot
     public List<List.ListElement> ScriptToList()
     {
         List<List.ListElement> list = new List<List.ListElement>();
-        list.Add(new List.ListElement { isAddScript = true, actionOnClick = () => { Manager.instance.list.AddChoice(this.CreateScript("test")); } });
+        list.Add(new List.ListElement { isAddScript = true, actionOnClick = () => {
+            PopUpAddScript pas = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "addScript"), Manager.instance.canvas.transform).GetComponent<PopUpAddScript>();
+            pas.SetCancelAction(() =>
+            {
+                pas.PopUpClose();
+            });
+            pas.SetOkAction(() =>
+            {
+                List.ListElement element = this.CreateScript(pas.scriptName);
+                Manager.instance.list.AddChoice(element);
+                Manager.instance.list.SelectLast();
+                pas.PopUpClose();
+            });
+        } });
         foreach (RobotScript scripts in robotScripts)
         {
             list.Add(scripts.ConvertToListElement());
