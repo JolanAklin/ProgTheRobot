@@ -26,6 +26,8 @@ public class AddNodeScript : MonoBehaviour
             AddAction(nodeType.ToString(), () =>
             {
                 Instantiate(nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject, NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono), Quaternion.identity, scriptPanel);
+                GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+                canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);
             });
         }

@@ -8,6 +8,7 @@ TagManager:
   - MenuAddScript
   - NodeHolder
   - ScriptPanelParent
+  - Canvas
   layers:
   - Default
   - TransparentFX

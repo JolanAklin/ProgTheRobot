@@ -250,6 +250,8 @@ MonoBehaviour:
   nodeRoot: {fileID: 8025506041070510844}
   nodeCollider: {fileID: 8751338036221503616}
   canvas: {fileID: 8025506041546081063}
+  needResize: 0
+  verticalResize: 0
   leftSide: {fileID: 0}
   rightSide: {fileID: 0}
   middleSide: {fileID: 8025506041627761100}
@@ -459,6 +461,10 @@ PrefabInstance:
     - target: {fileID: 2629133257769889747, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_Name
       value: nodeInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_fontSize
+      value: 35.8
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontColor.a

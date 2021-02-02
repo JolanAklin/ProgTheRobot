@@ -7,7 +7,8 @@ using UnityEngine.UI;
 public class UIRaycaster : MonoBehaviour
 {
     public GameObject addNodeMenuInstance;
-    private bool panelOpen;
+    [HideInInspector]
+    public bool panelOpen;
     private GameObject addNodeMenu;
 
     // raycast stuff
@@ -36,46 +37,13 @@ public class UIRaycaster : MonoBehaviour
             addNodeMenu.tag = "MenuAddScript";
             panelOpen = true;
         }
-        //if (Input.GetMouseButton(1))
-        //{
-        //    pointerevent = new PointerEventData(eventsystem);
-        //    pointerevent.position = Input.mousePosition;
-        //    rayCastResults = new List<RaycastResult>();
-        //    graphciraycaster.Raycast(pointerevent, rayCastResults);
-
-        //    int i = 0;
-        //    foreach (RaycastResult raycastResult in rayCastResults)
-        //    {
-        //        if(raycastResult.gameObject.tag == "ScriptPanel" && i == 0 && !panelOpen)
-        //        {
-        //            addNodeMenu = Instantiate(addNodeMenuInstance, pointerevent.position, Quaternion.identity, transform);
-        //            addNodeMenu.tag = "MenuAddScript";
-        //            panelOpen = true;
-        //            break;
-        //        }
-        //        i++;
-        //    }
-        //}
-        //if (Input.GetMouseButton(0))
-        //{
-        //    bool foundMenuAddScript = true;
-        //    pointerevent = new PointerEventData(eventsystem);
-        //    pointerevent.position = Input.mousePosition;
-        //    rayCastResults = new List<RaycastResult>();
-        //    graphciraycaster.Raycast(pointerevent, rayCastResults);
-
-        //    foreach (RaycastResult raycastResult in rayCastResults)
-        //    {
-        //        if (raycastResult.gameObject.tag == "MenuAddScript")
-        //        {
-        //            foundMenuAddScript = false;
-        //        }
-        //    }
-        //    if (foundMenuAddScript)
-        //    {
-        //        panelOpen = false;
-        //        Destroy(addNodeMenu);
-        //    }
-        //}
+        if(Input.GetMouseButton(0) && panelOpen && rayCastResults.Find(X => X.gameObject.tag == "MenuAddScript").gameObject == null)
+        {
+            if(addNodeMenu != null)
+            {
+                Destroy(addNodeMenu);
+                panelOpen = false;
+            }
+        }
     }
 }
