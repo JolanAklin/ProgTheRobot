@@ -13,7 +13,7 @@ public class ThreeElementNodeVisual : MonoBehaviour
     public RectTransform rightSide;
     public RectTransform middleSide;
 
-    private void FixedUpdate()
+    private void Start()
     {
         OnResize();
     }

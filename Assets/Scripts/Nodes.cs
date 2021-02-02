@@ -9,9 +9,12 @@ public abstract class Nodes : MonoBehaviour
         start = 0,
         end,
         execute,
-        loop,
+        readWrite,
         test,
-        methodCaller,
+        subProgram,
+        affectation,
+        whileLoop,
+        forLoop,
     }
 
     /// <summary>
