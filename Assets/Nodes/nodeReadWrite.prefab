@@ -482,6 +482,7 @@ MonoBehaviour:
   nodeCollider: {fileID: 5441930924106299802}
   canvas: {fileID: 6743916129884983869}
   needResize: 1
+  verticalResize: 0
   leftSide: {fileID: 6743916129594045906}
   rightSide: {fileID: 6743916129740016213}
   middleSide: {fileID: 6743916130209892566}
@@ -881,6 +882,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: enterText
+  translateAtStart: 1
 --- !u!1001 &5059052874310398792
 PrefabInstance:
   m_ObjectHideFlags: 0

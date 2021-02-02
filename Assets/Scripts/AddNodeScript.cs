@@ -25,7 +25,9 @@ public class AddNodeScript : MonoBehaviour
         {
             AddAction(nodeType.ToString(), () =>
             {
-                Instantiate(nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject, NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono), Quaternion.identity, scriptPanel);
+                Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
+                spawnPos.z = 0;
+                Instantiate(nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject, spawnPos, Quaternion.identity, scriptPanel);
                 GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);
@@ -48,5 +50,10 @@ public class AddNodeScript : MonoBehaviour
     public void DoAction(string nodeType)
     {
         nodes[(int)Enum.Parse(typeof(Nodes.NodeTypes), nodeType)]();
+    }
+
+    private Vector3 Round(Vector3 vector3, int round)
+    {
+        return new Vector3((float)Math.Round(vector3.x, round), (float)Math.Round(vector3.y,round), (float)Math.Round(vector3.z,round));
     }
 }

@@ -530,6 +530,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: forPlaceHolder
+  translateAtStart: 1
 --- !u!1 &3349243545954738658
 GameObject:
   m_ObjectHideFlags: 0
@@ -1915,6 +1916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: forEnd
+  translateAtStart: 1
 --- !u!1 &6739195633977426124
 GameObject:
   m_ObjectHideFlags: 0

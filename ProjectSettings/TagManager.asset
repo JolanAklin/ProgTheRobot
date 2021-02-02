@@ -9,6 +9,7 @@ TagManager:
   - NodeHolder
   - ScriptPanelParent
   - Canvas
+  - ResizeHandle
   layers:
   - Default
   - TransparentFX

@@ -997,6 +997,7 @@ MonoBehaviour:
   nodeCollider: {fileID: 6038745653658476706}
   canvas: {fileID: 5034817159356517125}
   needResize: 0
+  verticalResize: 0
   leftSide: {fileID: 5034817158003305706}
   rightSide: {fileID: 5034817158148821869}
   middleSide: {fileID: 5034817159694307822}
@@ -1456,6 +1457,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: enterText
+  translateAtStart: 1
 --- !u!1 &8791487680711306118
 GameObject:
   m_ObjectHideFlags: 0

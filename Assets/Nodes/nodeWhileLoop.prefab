@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: whilePlaceHolder
+  translateAtStart: 1
 --- !u!1 &1159343118033908966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,6 +1434,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: whileEnd
+  translateAtStart: 1
 --- !u!1 &3776935316971234019
 GameObject:
   m_ObjectHideFlags: 0

@@ -867,6 +867,7 @@ MonoBehaviour:
   nodeCollider: {fileID: 2293400400742197057}
   canvas: {fileID: 702956446777199846}
   needResize: 1
+  verticalResize: 0
   leftSide: {fileID: 702956444803230473}
   rightSide: {fileID: 702956445024769166}
   middleSide: {fileID: 702956446569698829}
@@ -1018,6 +1019,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: ifYes
+  translateAtStart: 1
 --- !u!1 &2774690855355064887
 GameObject:
   m_ObjectHideFlags: 0
@@ -1166,6 +1168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: ifNo
+  translateAtStart: 1
 --- !u!1 &3899985168870474304
 GameObject:
   m_ObjectHideFlags: 0
@@ -1510,6 +1513,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   translationKey: enterText
+  translateAtStart: 1
 --- !u!1 &3899985170275820460
 GameObject:
   m_ObjectHideFlags: 0

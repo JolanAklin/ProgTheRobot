@@ -15,10 +15,10 @@ public class ThreeElementNodeVisual : MonoBehaviour
 
     private void Start()
     {
-        OnResize();
+        Resize();
     }
 
-    public void OnResize()
+    public void Resize()
     {
         if(needResize)
         {
@@ -32,6 +32,6 @@ public class ThreeElementNodeVisual : MonoBehaviour
             }
         }
         nodeCollider.size = new Vector2(canvas.rect.width*canvas.localScale.x, middleSide.rect.height*canvas.localScale.y);
-        canvas.position = new Vector2(nodeRoot.position.x, nodeRoot.position.y);
+        //canvas.position = new Vector2(nodeRoot.position.x, nodeRoot.position.y);
     }
 }

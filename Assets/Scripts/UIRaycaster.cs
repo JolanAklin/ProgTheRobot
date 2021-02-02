@@ -17,6 +17,10 @@ public class UIRaycaster : MonoBehaviour
     EventSystem eventsystem;
     List<RaycastResult> rayCastResults = new List<RaycastResult>();
 
+    // resize node
+    private ResizeHandle resizeHandle;
+    private bool endResize = false;
+
     void Start()
     {
         graphciraycaster = GetComponent<GraphicRaycaster>();
@@ -27,6 +31,7 @@ public class UIRaycaster : MonoBehaviour
 
     void Update()
     {
+        #region On ui element
         pointerevent = new PointerEventData(eventsystem);
         pointerevent.position = Input.mousePosition;
         rayCastResults = new List<RaycastResult>();
@@ -45,5 +50,37 @@ public class UIRaycaster : MonoBehaviour
                 panelOpen = false;
             }
         }
+        #endregion
+
+        #region On nodes
+        if (Input.GetMouseButtonDown(0))
+        {
+            if(resizeHandle != null )
+            {
+                resizeHandle.NodeResize();
+                resizeHandle = null;
+                endResize = true;
+            }
+            if (rayCastResults.Count == 0 && resizeHandle == null && !endResize)
+            {
+                if(resizeHandle == null)
+                {
+                    RaycastHit2D hit;
+                    Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                    // Does the ray intersect any objects excluding the player layer
+                    if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
+                    {
+                        if(hit.collider.gameObject.tag == "ResizeHandle")
+                        {
+                            resizeHandle = hit.collider.GetComponent<ResizeHandle>();
+                            resizeHandle.NodeResize();
+                        }
+                    }
+                }
+            }
+            endResize = false;
+
+        }
+        #endregion
     }
 }
