@@ -45,9 +45,7 @@ namespace Language
             if (Translations.ContainsKey(key))
                 return Translations[key];
 
-        #if UNITY_EDITOR
-                Debug.LogError($"The key \"{key}\" is missing");
-        #endif
+            Debug.LogError($"The key \"{key}\" is missing");
 
             return key;
         }

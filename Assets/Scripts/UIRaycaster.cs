@@ -26,46 +26,56 @@ public class UIRaycaster : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButton(1))
+        pointerevent = new PointerEventData(eventsystem);
+        pointerevent.position = Input.mousePosition;
+        rayCastResults = new List<RaycastResult>();
+        graphciraycaster.Raycast(pointerevent, rayCastResults);
+        if (Input.GetMouseButtonDown(1) && !panelOpen && rayCastResults.Count == 0)
         {
-            pointerevent = new PointerEventData(eventsystem);
-            pointerevent.position = Input.mousePosition;
-            rayCastResults = new List<RaycastResult>();
-            graphciraycaster.Raycast(pointerevent, rayCastResults);
-
-            int i = 0;
-            foreach (RaycastResult raycastResult in rayCastResults)
-            {
-                if(raycastResult.gameObject.tag == "ScriptPanel" && i == 0 && !panelOpen)
-                {
-                    addNodeMenu = Instantiate(addNodeMenuInstance, pointerevent.position, Quaternion.identity, transform);
-                    addNodeMenu.tag = "MenuAddScript";
-                    panelOpen = true;
-                    break;
-                }
-                i++;
-            }
+            addNodeMenu = Instantiate(addNodeMenuInstance, Input.mousePosition, Quaternion.identity, transform);
+            addNodeMenu.tag = "MenuAddScript";
+            panelOpen = true;
         }
-        if (Input.GetMouseButton(0))
-        {
-            bool foundMenuAddScript = true;
-            pointerevent = new PointerEventData(eventsystem);
-            pointerevent.position = Input.mousePosition;
-            rayCastResults = new List<RaycastResult>();
-            graphciraycaster.Raycast(pointerevent, rayCastResults);
+        //if (Input.GetMouseButton(1))
+        //{
+        //    pointerevent = new PointerEventData(eventsystem);
+        //    pointerevent.position = Input.mousePosition;
+        //    rayCastResults = new List<RaycastResult>();
+        //    graphciraycaster.Raycast(pointerevent, rayCastResults);
 
-            foreach (RaycastResult raycastResult in rayCastResults)
-            {
-                if (raycastResult.gameObject.tag == "MenuAddScript")
-                {
-                    foundMenuAddScript = false;
-                }
-            }
-            if (foundMenuAddScript)
-            {
-                panelOpen = false;
-                Destroy(addNodeMenu);
-            }
-        }
+        //    int i = 0;
+        //    foreach (RaycastResult raycastResult in rayCastResults)
+        //    {
+        //        if(raycastResult.gameObject.tag == "ScriptPanel" && i == 0 && !panelOpen)
+        //        {
+        //            addNodeMenu = Instantiate(addNodeMenuInstance, pointerevent.position, Quaternion.identity, transform);
+        //            addNodeMenu.tag = "MenuAddScript";
+        //            panelOpen = true;
+        //            break;
+        //        }
+        //        i++;
+        //    }
+        //}
+        //if (Input.GetMouseButton(0))
+        //{
+        //    bool foundMenuAddScript = true;
+        //    pointerevent = new PointerEventData(eventsystem);
+        //    pointerevent.position = Input.mousePosition;
+        //    rayCastResults = new List<RaycastResult>();
+        //    graphciraycaster.Raycast(pointerevent, rayCastResults);
+
+        //    foreach (RaycastResult raycastResult in rayCastResults)
+        //    {
+        //        if (raycastResult.gameObject.tag == "MenuAddScript")
+        //        {
+        //            foundMenuAddScript = false;
+        //        }
+        //    }
+        //    if (foundMenuAddScript)
+        //    {
+        //        panelOpen = false;
+        //        Destroy(addNodeMenu);
+        //    }
+        //}
     }
 }
