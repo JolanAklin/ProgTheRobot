@@ -397,7 +397,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052317501531756442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.3, y: 1.3, z: 0}
+  m_LocalPosition: {x: -4, y: 1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052317501844846144}
@@ -443,10 +443,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  canvas: {fileID: 1052317501844846144}
-  ResizeHandle: {fileID: 783018540565910690}
-  canResize: 1
   nodeVisual: {fileID: 1052317501844846204}
+  canvas: {fileID: 1052317501844846144}
+  canResize: 1
+  ResizeHandle: {fileID: 783018540565910690}
+  canMove: 1
 --- !u!1 &1052317501700690350
 GameObject:
   m_ObjectHideFlags: 0
