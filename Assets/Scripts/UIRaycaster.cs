@@ -19,7 +19,8 @@ public class UIRaycaster : MonoBehaviour
 
     // resize node
     private ResizeHandle resizeHandle;
-    private bool endResize = false;
+    //move node
+    private Nodes nodeToMove;
 
     void Start()
     {
@@ -55,34 +56,53 @@ public class UIRaycaster : MonoBehaviour
         #region On nodes
         if(Input.GetMouseButtonUp(0))
         {
+            //end resize
             if(resizeHandle != null && resizeHandle.node.canResize)
             {
+                resizeHandle.node.gameObject.transform.position = new Vector3(resizeHandle.node.gameObject.transform.position.x, resizeHandle.node.transform.position.y, 0f);
                 resizeHandle.NodeResize();
                 resizeHandle = null;
-                endResize = true;
+            }
+
+            //end move
+            if (nodeToMove != null && nodeToMove.canMove)
+            {
+                nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0f);
+                nodeToMove.StartEndMove();
+                nodeToMove = null;
             }
         }
         if (Input.GetMouseButtonDown(0))
         {
-            if (rayCastResults.Count == 0 && resizeHandle == null && !endResize)
+            // start resize
+            if (rayCastResults.Count == 0 && resizeHandle == null)
             {
-                if(resizeHandle == null)
+                RaycastHit2D hit;
+                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
                 {
-                    RaycastHit2D hit;
-                    Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
-                    // Does the ray intersect any objects excluding the player layer
-                    if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
+                    if(hit.collider.gameObject.tag == "ResizeHandle")
                     {
-                        if(hit.collider.gameObject.tag == "ResizeHandle")
-                        {
-                            resizeHandle = hit.collider.GetComponent<ResizeHandle>();
-                            resizeHandle.NodeResize();
-                        }
+                        resizeHandle = hit.collider.GetComponent<ResizeHandle>();
+                        resizeHandle.NodeResize();
                     }
                 }
             }
-            endResize = false;
 
+            //move node
+            if (rayCastResults.Count == 0 && nodeToMove == null)
+            {
+                RaycastHit2D hit;
+                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
+                {
+                    if (hit.collider.gameObject.tag == "Node")
+                    {
+                        nodeToMove = hit.collider.GetComponent<Nodes>();
+                        nodeToMove.StartEndMove();
+                    }
+                }
+            }
         }
         #endregion
     }

@@ -30,6 +30,7 @@ public class AddNodeScript : MonoBehaviour
                 spawnPos.z = 0;
                 GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject;
                 Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
+                node.transform.position = spawnPos;
                 RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);

@@ -204,7 +204,7 @@ GameObject:
   - component: {fileID: 1235941011745416804}
   m_Layer: 0
   m_Name: nodeCommande
-  m_TagString: Untagged
+  m_TagString: Node
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -265,6 +265,7 @@ MonoBehaviour:
   id: 0
   canvas: {fileID: 8025506041546081063}
   ResizeHandle: {fileID: 2039390222973368603}
+  canResize: 1
   nodeVisual: {fileID: 8025506041546081051}
 --- !u!1 &8025506041546081060
 GameObject:

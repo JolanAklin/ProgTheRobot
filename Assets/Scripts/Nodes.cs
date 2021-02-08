@@ -35,13 +35,20 @@ public abstract class Nodes : MonoBehaviour
     public static int nextid = 0;
     private int nextId;
     private GameObject nextGameObject;
+    public ThreeElementNodeVisual nodeVisual; 
 
     public RectTransform canvas;
-    public GameObject ResizeHandle;
+
+    //resize
     private bool resize = false;
     [HideInInspector]
     public bool canResize = true; // the element while accept to be rized only if no other collider touches it
-    public ThreeElementNodeVisual nodeVisual;
+    public GameObject ResizeHandle;
+
+    //move
+    private bool move = false;
+    [HideInInspector]
+    public bool canMove = true;
 
     private void Awake()
     {
@@ -55,16 +62,15 @@ public abstract class Nodes : MonoBehaviour
         
     }
 
-    public void Move()
-    {
-
-    }
-
-    private void Update()
+    private void FixedUpdate()
     {
         if(resize)
         {
             Resize();
+        }
+        if(move)
+        {
+            Move();
         }
     }
 
@@ -79,11 +85,24 @@ public abstract class Nodes : MonoBehaviour
             resize = true;
         }
     }
+    public void StartEndMove()
+    {
+        if (move)
+        {
+            if (canMove)
+                move = false;
+        }
+        else
+        {
+            move = true;
+        }
+    }
 
     Vector3 resizeAmount;
 
     public void Resize()
     {
+        transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 delta = Absolute(mouseToWorldPoint - transform.position);
         resizeAmount = new Vector3((float)Math.Round(delta.x*2, 1), (float)Math.Round(delta.y*2, 1), 0);
@@ -96,6 +115,23 @@ public abstract class Nodes : MonoBehaviour
             if (collider.gameObject != this.gameObject && collider.gameObject.tag != "ResizeHandle")
             {
                 canResize = false;
+                break;
+            }
+        }
+    }
+
+    public void Move()
+    {
+        Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+        Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -1);
+        transform.position = pos;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f);
+        canMove = true;
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.gameObject != this.gameObject && collider.gameObject.tag != "ResizeHandle")
+            {
+                canMove = false;
                 break;
             }
         }

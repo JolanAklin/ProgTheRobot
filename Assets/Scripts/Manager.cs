@@ -131,7 +131,7 @@ public class Manager : MonoBehaviour
     // show and destroy nodes
     public void CreateNodeObject(GameObject node)
     {
-        Instantiate(node, nodeHolder.transform);
+        Instantiate(node, node.transform.position, Quaternion.identity,nodeHolder.transform);
     }
     public void DeleteNodes()
     {
