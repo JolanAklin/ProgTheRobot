@@ -33,9 +33,11 @@ public abstract class Nodes : MonoBehaviour
 
     public int id;
     public static int nextid = 0;
-    private int nextId;
-    private GameObject nextGameObject;
-    public ThreeElementNodeVisual nodeVisual; 
+    [HideInInspector]
+    public int nextId = -1;
+    [HideInInspector]
+    public GameObject nextGameObject;
+    public ThreeElementNodeVisual nodeVisual;
 
     public RectTransform canvas;
 
@@ -112,7 +114,7 @@ public abstract class Nodes : MonoBehaviour
         canResize = true;
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject != this.gameObject && collider.gameObject.tag != "ResizeHandle")
+            if (collider.gameObject != this.gameObject && collider.gameObject.tag != "ResizeHandle" && collider.gameObject.tag != "ConnectHandle")
             {
                 canResize = false;
                 break;
@@ -129,7 +131,7 @@ public abstract class Nodes : MonoBehaviour
         canMove = true;
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject != this.gameObject && collider.gameObject.tag != "ResizeHandle")
+            if (collider.gameObject != this.gameObject && collider.gameObject.CompareTag("ResizeHandle") && collider.gameObject.CompareTag("ConnectHandle"))
             {
                 canMove = false;
                 break;

@@ -25,6 +25,9 @@ public class Manager : MonoBehaviour
     public int currentlySelectedScript = -1;
     public GameObject nodeHolder;
 
+    // link
+    public GameObject linkGenerator;
+
     private void Awake()
     {
         if (instance == null)
@@ -50,7 +53,6 @@ public class Manager : MonoBehaviour
             canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
             res.height = Screen.height;
             res.width = Screen.width;
-
         }
     }
 

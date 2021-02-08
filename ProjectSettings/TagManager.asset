@@ -11,6 +11,7 @@ TagManager:
   - Canvas
   - ResizeHandle
   - Node
+  - ConnectHandle
   layers:
   - Default
   - TransparentFX

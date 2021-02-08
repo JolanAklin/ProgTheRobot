@@ -104,6 +104,23 @@ public class UIRaycaster : MonoBehaviour
                 }
             }
         }
+
+        if(Input.GetMouseButtonDown(0))
+        {
+            if (rayCastResults.Count == 0 && nodeToMove == null)
+            {
+                RaycastHit2D hit;
+                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
+                {
+                    if (hit.collider.gameObject.tag == "ConnectHandle")
+                    {
+                        ConnectHandle connect = hit.collider.gameObject.GetComponent<ConnectHandle>();
+                        connect.Click();
+                    }
+                }
+            }
+        }
         #endregion
     }
 }
