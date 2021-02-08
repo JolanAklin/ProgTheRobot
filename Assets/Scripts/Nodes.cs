@@ -19,6 +19,13 @@ public abstract class Nodes : MonoBehaviour
         forLoop,
     }
 
+    public enum ErrorCode
+    {
+        ok = 0,
+        wrongInput,
+        notConnected,
+    }
+
     /// <summary>
     /// Will convert the node to json
     /// </summary>
@@ -31,12 +38,18 @@ public abstract class Nodes : MonoBehaviour
     /// </summary>
     public abstract void Execute();
 
+    // id stuff
     public int id;
     public static int nextid = 0;
+
+
+    // connection with other node
     [HideInInspector]
-    public int nextId = -1;
+    public int nextNodeId = -1; // id of the next node, -1 = not connected
     [HideInInspector]
     public GameObject nextGameObject;
+    [HideInInspector]
+    public bool asAParent; // as another node higher in the hierarchy
     public ThreeElementNodeVisual nodeVisual;
 
     public RectTransform canvas;
@@ -52,6 +65,10 @@ public abstract class Nodes : MonoBehaviour
     [HideInInspector]
     public bool canMove = true;
 
+    // errors
+    protected int nodeErrorCode;
+    public int NodeErrorCode { get => nodeErrorCode;}
+
     private void Awake()
     {
         // All nodes have a different id
@@ -61,7 +78,27 @@ public abstract class Nodes : MonoBehaviour
 
     public void Start()
     {
-        
+        Manager.instance.CheckNode += isConnected;
+        canvas.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+    }
+
+    private void isConnected(object sender, EventArgs e)
+    {
+        if(asAParent)
+        {
+            if(nextNodeId >= 0)
+            {
+                if(nodeErrorCode == (int)ErrorCode.notConnected)
+                {
+                    nodeErrorCode = (int)ErrorCode.ok;
+                    Manager.instance.canExecute = true;
+                }
+                return;
+            }
+        }
+        nodeErrorCode = (int)ErrorCode.notConnected;
+        Manager.instance.canExecute = false;
+        return;
     }
 
     private void FixedUpdate()
@@ -101,6 +138,7 @@ public abstract class Nodes : MonoBehaviour
     }
 
     Vector3 resizeAmount;
+
 
     public void Resize()
     {
@@ -142,11 +180,5 @@ public abstract class Nodes : MonoBehaviour
     private Vector3 Absolute(Vector3 vector3)
     {
         return new Vector3(Math.Abs(vector3.x), Math.Abs(vector3.y), Math.Abs(vector3.z));
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireCube(transform.position, resizeAmount);
     }
 }

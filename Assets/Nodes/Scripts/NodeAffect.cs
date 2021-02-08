@@ -6,9 +6,19 @@ using TMPro;
 public class NodeAffect : Nodes
 {
     private string input;
+
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         input = tMP_InputField.text;
+        if(ValidateInput())
+        {
+            Debug.LogError("wrong input");
+        }
+    }
+
+    private bool ValidateInput()
+    {
+        return true;
     }
 
     public override void SerializeNode()

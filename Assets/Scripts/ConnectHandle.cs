@@ -14,7 +14,7 @@ public class ConnectHandle : MonoBehaviour
         {
             LinkGenerator link = Manager.instance.linkGenerator.GetComponent<LinkGenerator>();
             link.EndLink();
-            link.nodeStart.nextId = node.id;
+            link.nodeStart.nextNodeId = node.id;
             link.nodeStart.nextGameObject = node.gameObject;
         }
         else

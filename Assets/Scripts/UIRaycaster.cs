@@ -12,7 +12,7 @@ public class UIRaycaster : MonoBehaviour
     private GameObject addNodeMenu;
 
     // raycast stuff
-    GraphicRaycaster graphciraycaster;
+    GraphicRaycaster graphicraycaster;
     PointerEventData pointerevent;
     EventSystem eventsystem;
     List<RaycastResult> rayCastResults = new List<RaycastResult>();
@@ -24,7 +24,7 @@ public class UIRaycaster : MonoBehaviour
 
     void Start()
     {
-        graphciraycaster = GetComponent<GraphicRaycaster>();
+        graphicraycaster = GetComponent<GraphicRaycaster>();
         eventsystem = GetComponent<EventSystem>();
 
         panelOpen = false;
@@ -36,7 +36,7 @@ public class UIRaycaster : MonoBehaviour
         pointerevent = new PointerEventData(eventsystem);
         pointerevent.position = Input.mousePosition;
         rayCastResults = new List<RaycastResult>();
-        graphciraycaster.Raycast(pointerevent, rayCastResults);
+        graphicraycaster.Raycast(pointerevent, rayCastResults);
         if (Input.GetMouseButtonDown(1) && !panelOpen && rayCastResults.Count == 0)
         {
             addNodeMenu = Instantiate(addNodeMenuInstance, Input.mousePosition, Quaternion.identity, transform);

@@ -11,6 +11,10 @@ public class Manager : MonoBehaviour
 
     public event EventHandler OnLanguageChanged;
 
+    // trigger an event where every node will test if there is an error in their config
+    public event EventHandler CheckNode;
+    public bool canExecute = true;
+
     public GameObject canvas;
 
     //List used to display script and robot
