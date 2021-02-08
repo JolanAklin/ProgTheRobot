@@ -53,7 +53,7 @@ public class UIRaycaster : MonoBehaviour
         #endregion
 
         #region On nodes
-        if (Input.GetMouseButtonDown(0))
+        if(Input.GetMouseButtonUp(0))
         {
             if(resizeHandle != null )
             {
@@ -61,6 +61,9 @@ public class UIRaycaster : MonoBehaviour
                 resizeHandle = null;
                 endResize = true;
             }
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
             if (rayCastResults.Count == 0 && resizeHandle == null && !endResize)
             {
                 if(resizeHandle == null)
