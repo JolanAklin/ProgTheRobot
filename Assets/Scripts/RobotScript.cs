@@ -42,6 +42,13 @@ public class RobotScript
 
     public void LoadNodes()
     {
+        // need to update when there is json
+        //if(Manager.instance.currentlySelectedScript != -1)
+        //{
+        //    RobotScript oldSelectedScript = robotScripts[Manager.instance.currentlySelectedScript];
+        //    oldSelectedScript.nodes.Clear();
+        //    oldSelectedScript.nodes = Manager.instance.DeleteNodes();
+        //}
         Manager.instance.DeleteNodes();
         Manager.instance.currentlySelectedScript = this.id;
         foreach (GameObject node in nodes)
