@@ -4,13 +4,12 @@ using UnityEngine;
 
 public class RobotScript
 {
-
     public static int nextid = 0;
     public static Dictionary<int, RobotScript> robotScripts = new Dictionary<int, RobotScript>();
     public int id;
     public string name;
 
-    public List<Nodes> nodes = new List<Nodes>();
+    public List<GameObject> nodes = new List<GameObject>();
 
     public RobotScript(string name)
     {
@@ -43,6 +42,12 @@ public class RobotScript
 
     public void LoadNodes()
     {
+        Manager.instance.DeleteNodes();
+        Manager.instance.currentlySelectedScript = this.id;
+        foreach (GameObject node in nodes)
+        {
+            Manager.instance.CreateNodeObject(node);
+        }
         Debug.Log($"Loaded Script {id}");
     }
 }

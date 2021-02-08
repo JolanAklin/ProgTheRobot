@@ -55,7 +55,7 @@ public class UIRaycaster : MonoBehaviour
         #region On nodes
         if(Input.GetMouseButtonUp(0))
         {
-            if(resizeHandle != null )
+            if(resizeHandle != null && resizeHandle.node.canResize)
             {
                 resizeHandle.NodeResize();
                 resizeHandle = null;

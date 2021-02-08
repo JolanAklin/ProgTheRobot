@@ -39,7 +39,8 @@ public abstract class Nodes : MonoBehaviour
     public RectTransform canvas;
     public GameObject ResizeHandle;
     private bool resize = false;
-    private bool canResize = true; // the element while accept to be rized only if no other collider touches it
+    [HideInInspector]
+    public bool canResize = true; // the element while accept to be rized only if no other collider touches it
     public ThreeElementNodeVisual nodeVisual;
 
     private void Awake()

@@ -23,12 +23,14 @@ public class AddNodeScript : MonoBehaviour
 
         foreach (Nodes.NodeTypes nodeType in (Nodes.NodeTypes[])Enum.GetValues(typeof(Nodes.NodeTypes)))
         {
+            GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
             AddAction(nodeType.ToString(), () =>
             {
                 Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
                 spawnPos.z = 0;
-                Instantiate(nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject, spawnPos, Quaternion.identity, scriptPanel);
-                GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+                GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject;
+                Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
+                RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);
             });

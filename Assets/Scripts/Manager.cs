@@ -21,6 +21,10 @@ public class Manager : MonoBehaviour
     private CanvasScaler canvasScaler;
     private Resolution res;
 
+    [HideInInspector]
+    public int currentlySelectedScript = -1;
+    public GameObject nodeHolder;
+
     private void Awake()
     {
         if (instance == null)
@@ -121,6 +125,19 @@ public class Manager : MonoBehaviour
         {
             Translation.LoadData("fr");
             OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
+        }
+    }
+
+    // show and destroy nodes
+    public void CreateNodeObject(GameObject node)
+    {
+        Instantiate(node, nodeHolder.transform);
+    }
+    public void DeleteNodes()
+    {
+        foreach (Transform transform in nodeHolder.transform)
+        {
+            Destroy(transform.gameObject);
         }
     }
 }
