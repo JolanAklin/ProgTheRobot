@@ -2,10 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
 
 public class NodeAffect : Nodes
 {
     private string input;
+
+    private string varAffect;
 
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
@@ -18,7 +21,14 @@ public class NodeAffect : Nodes
 
     private bool ValidateInput()
     {
-        return true;
+        string[] inputSplited = input.Split(' ');
+        if(!inputSplited[0].Any(char.IsDigit))
+        {
+            varAffect = inputSplited[0];
+            if (inputSplited[1] == "=")
+                return true;
+        }
+        return false;
     }
 
     public override void SerializeNode()
