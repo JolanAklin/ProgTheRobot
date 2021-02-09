@@ -1,19 +1,32 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class LinkPartScript : MonoBehaviour
 {
-    public Transform a;
-    public Transform b;
-    public Transform c;
-    public Transform d;
-    public Transform abcd;
-    private float interpolateAmount;
-
-    public MeshFilter meshFilter;
+    private MeshFilter meshFilter;
     public float meshWidth;
 
+    public List<SplineSegment> splineSegments = new List<SplineSegment>();
+
+    // spline segment, while take 2 point
+    [Serializable]
+    public class SplineSegment
+    {
+        public SplinePoint splineStart;
+        public SplinePoint splineEnd;
+    }
+
+    // spline point
+    [Serializable]
+    public class SplinePoint
+    {
+        public Vector3 point;
+        public Vector3 handle;
+    }
+
+    // used to generate the mesh
     public class Square
     {
         private Vector3[] points;
@@ -49,50 +62,22 @@ public class LinkPartScript : MonoBehaviour
 
     private void Start()
     {
+        meshFilter = GetComponent<MeshFilter>();
         List<Square> squares = new List<Square>();
-        for (int i = 0; i <= 100; i++)
+        foreach (SplineSegment splineSegment in splineSegments)
         {
-            Vector3 startPos = CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, ((float)i) / 100);
-            Vector3 dir = CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, ((float)i + 1) / 100) - startPos;
-            Square square = new Square();
-            square.GeneratePoint(startPos, dir, meshWidth);
-            squares.Add(square);
+            for (int i = 0; i <= 100; i++)
+            {
+                //Vector3 startPos = CubicLerp(a.transform.position, b.transform.position, c.transform.position, d.transform.position, ((float)i) / 100);
+                Vector3 startPos = CubicLerp(splineSegment.splineStart.point, splineSegment.splineStart.handle, splineSegment.splineEnd.handle, splineSegment.splineEnd.point, ((float)i) / 100);
+                Vector3 dir = CubicLerp(splineSegment.splineStart.point, splineSegment.splineStart.handle, splineSegment.splineEnd.handle, splineSegment.splineEnd.point, ((float)i + 1) / 100) - startPos;
+                Square square = new Square();
+                square.GeneratePoint(startPos, dir, meshWidth);
+                squares.Add(square);
+            }
         }
         meshFilter.mesh = CreateMeshFromSquare(squares);
     }
-
-    //private void OnDrawGizmos()
-    //{
-    //    for (int i = 0; i <= 100; i++)
-    //    {
-    //        Gizmos.DrawLine(CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, ((float)i) / 100), CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, ((float)i + 1) / 100));
-    //    }
-
-    //    // get all the point needed to create a mesh
-    //    Vector3 test = CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, 0.2f) - CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, 0.1f);
-    //    Square square = new Square();
-    //    square.GeneratePoint(CubicLerp1(a.transform.position, b.transform.position, c.transform.position, d.transform.position, 0.1f), test, meshWidth);
-    //    Gizmos.color = Color.red;
-    //    foreach (Vector3 point in square.getPoints())
-    //    {
-    //        Gizmos.DrawSphere(point, 0.02f);
-    //    }
-    //    //Gizmos.color = Color.red;
-    //    //Vector3 testPerpendicular = new Vector3(-test.y, test.x).normalized * meshWidth;
-    //    //Vector3 up = test + testPerpendicular;
-    //    //Vector3 down = test - testPerpendicular;
-    //    //Gizmos.DrawLine(Vector3.zero, test);
-    //    //Gizmos.DrawLine(Vector3.zero, testPerpendicular);
-    //    //Gizmos.DrawLine(testPerpendicular, up);
-    //    //Gizmos.DrawLine(-testPerpendicular, down);
-    //}
-
-    //private void Update()
-    //{
-    //    interpolateAmount = (interpolateAmount + Time.deltaTime) % 1f;
-
-    //    abcd.position = CubicLerp(a.transform.position, b.transform.position, c.transform.position, d.transform.position, interpolateAmount);
-    //}
 
     public Mesh CreateMeshFromSquare(List<Square> squares)
     {
@@ -125,12 +110,6 @@ public class LinkPartScript : MonoBehaviour
             k += 4;
             i += 6;
         }
-        //{
-        //        // lower left triangle
-        //        0, 2, 1,
-        //        // upper right triangle
-        //        2, 3, 1
-        //};
         mesh.triangles = tris;
 
         Vector3[] normals = new Vector3[squares.Count * 4];
@@ -204,29 +183,13 @@ public class LinkPartScript : MonoBehaviour
         Vector3 ab = Vector3.Lerp(a, b, t);
         Vector3 bc = Vector3.Lerp(b, c, t);
 
-        return Vector3.Lerp(ab, bc, interpolateAmount);
+        return Vector3.Lerp(ab, bc, t);
     }
 
     private Vector3 CubicLerp(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
     {
         Vector3 ab_bc = QuadraticLerp(a, b, c, t);
         Vector3 bc_cd = QuadraticLerp(b, c, d, t);
-
-        return Vector3.Lerp(ab_bc, bc_cd, interpolateAmount);
-    }
-
-    private Vector3 QuadraticLerp1(Vector3 a, Vector3 b, Vector3 c, float t)
-    {
-        Vector3 ab = Vector3.Lerp(a, b, t);
-        Vector3 bc = Vector3.Lerp(b, c, t);
-
-        return Vector3.Lerp(ab, bc, t);
-    }
-
-    private Vector3 CubicLerp1(Vector3 a, Vector3 b, Vector3 c, Vector3 d, float t)
-    {
-        Vector3 ab_bc = QuadraticLerp1(a, b, c, t);
-        Vector3 bc_cd = QuadraticLerp1(b, c, d, t);
 
         return Vector3.Lerp(ab_bc, bc_cd, t);
     }
