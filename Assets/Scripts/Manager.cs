@@ -135,18 +135,20 @@ public class Manager : MonoBehaviour
     [HideInInspector]
     public Nodes node = null;
     public GameObject SplineObject;
+    private GameObject spline;
     public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender)
     {
         if(node == null && !isInput)
         {
-            instance.SplineObject = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
-            instance.SplineObject.GetComponent<SplineManager>().Init(handleTransform, sender);
+            instance.spline = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
+            instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender);
             node = sender;
         }
         if (isInput)
         {
-            SplineManager splineManager = instance.SplineObject.GetComponent<SplineManager>();
+            SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);
+            splineManager = null;
             return node;
         }
         return null;

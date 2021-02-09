@@ -31,9 +31,11 @@ public class SplineManager : MonoBehaviour
 
     private void ChangeSpline(object sender, EventArgs e)
     {
-        Debug.Log(startPos.position);
-        splineMaker.splineSegments[0].splineStart.point = startPos.position;
-        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = endPos.position;
+        splineMaker.splineSegments[0].splineStart.point = new Vector3(startPos.position.x, startPos.position.y, 0);
+        splineMaker.splineSegments[0].splineStart.handle = new Vector3(startPos.position.x, startPos.position.y, 0) + Vector3.down;
+        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = new Vector3(endPos.position.x, endPos.position.y, 0);
+        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, 0) + Vector3.up;
+
         splineMaker.GenerateMesh();
     }
 
@@ -144,18 +146,23 @@ public class SplineManager : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (currentSegment != null)
-        {
-            Gizmos.DrawSphere(currentSegment.splineStart.point, 0.1f);
-            Gizmos.DrawSphere(currentSegment.splineStart.handle, 0.1f);
-            Gizmos.DrawSphere(currentSegment.splineEnd.handle, 0.1f);
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawSphere(currentSegment.splineEnd.point, 0.1f);
-        }
-        if (lastSegment != null)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(lastSegment.splineEnd.handle, 0.1f);
-        }
+        //if (currentSegment != null)
+        //{
+        //    Gizmos.DrawSphere(currentSegment.splineStart.point, 0.1f);
+        //    Gizmos.DrawSphere(currentSegment.splineStart.handle, 0.1f);
+        //    Gizmos.DrawSphere(currentSegment.splineEnd.handle, 0.1f);
+        //    Gizmos.color = Color.cyan;
+        //    Gizmos.DrawSphere(currentSegment.splineEnd.point, 0.1f);
+        //}
+        //if (lastSegment != null)
+        //{
+        //    Gizmos.color = Color.red;
+        //    Gizmos.DrawSphere(lastSegment.splineEnd.handle, 0.1f);
+        //}
+        //Gizmos.color = Color.red;
+        //if (endPos != null)
+        //{
+        //    Gizmos.DrawSphere(endPos.position,0.1f);
+        //}
     }
 }

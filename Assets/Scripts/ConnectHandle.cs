@@ -16,7 +16,6 @@ public class ConnectHandle : MonoBehaviour
             node.nextGameObject = nextNode.gameObject;
             nextNode = null;
             Manager.instance.node = null;
-            Debug.Log(node.nextNodeId);
         }
     }
 }
