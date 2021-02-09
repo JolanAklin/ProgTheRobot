@@ -901,7 +901,7 @@ GameObject:
   - component: {fileID: 8120454241257089933}
   - component: {fileID: 7395766769445233137}
   - component: {fileID: 4164311028717327128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: nodeEnd
   m_TagString: Node
   m_Icon: {fileID: 0}
@@ -916,7 +916,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8120454241257089932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4, y: -0.1, z: 0}
+  m_LocalPosition: {x: -2.1, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8120454241193560662}
@@ -962,12 +962,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  nextId: 0
+  nextNodeId: -1
+  nextGameObject: {fileID: 0}
+  asAParent: 0
   nodeVisual: {fileID: 8120454241193560682}
   canvas: {fileID: 8120454241193560662}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   canResize: 1
   ResizeHandle: {fileID: 2666394107578352649}
   canMove: 1
+  borders:
+  - {fileID: 8120454240748035210}
+  - {fileID: 8120454241627881194}
+  - {fileID: 8120454240552357562}
+  defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
+  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
 --- !u!1 &8120454241339052605
 GameObject:
   m_ObjectHideFlags: 0

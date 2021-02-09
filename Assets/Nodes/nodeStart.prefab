@@ -131,7 +131,6 @@ GameObject:
   - component: {fileID: 6817452234320211644}
   - component: {fileID: 2412523710256266860}
   - component: {fileID: 8853204424281775284}
-  - component: {fileID: 8399091919482687317}
   m_Layer: 0
   m_Name: resizeHandle
   m_TagString: ResizeHandle
@@ -235,18 +234,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 25, y: 25}
   m_EdgeRadius: 0
---- !u!114 &8399091919482687317
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 783018540565910690}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26d3caf4053aea64b8eed6dd26da69a3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1052317501200489627
 GameObject:
   m_ObjectHideFlags: 0
@@ -513,7 +500,7 @@ GameObject:
   - component: {fileID: 1052317501531756443}
   - component: {fileID: 1767726195033546215}
   - component: {fileID: 7857630170474300718}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: nodeStart
   m_TagString: Node
   m_Icon: {fileID: 0}
@@ -528,7 +515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052317501531756442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.4, y: 2.5, z: 0}
+  m_LocalPosition: {x: -2.5, y: 2.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052317501844846144}
@@ -574,12 +561,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  nextId: 0
+  nextNodeId: -1
+  nextGameObject: {fileID: 0}
+  asAParent: 0
   nodeVisual: {fileID: 1052317501844846204}
   canvas: {fileID: 1052317501844846144}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   canResize: 1
   ResizeHandle: {fileID: 783018540565910690}
   canMove: 1
+  borders:
+  - {fileID: 1052317502103789724}
+  - {fileID: 1052317501205005052}
+  - {fileID: 1052317502303597228}
+  defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
+  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
 --- !u!1 &1052317501700690350
 GameObject:
   m_ObjectHideFlags: 0

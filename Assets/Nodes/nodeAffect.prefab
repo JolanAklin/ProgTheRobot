@@ -941,7 +941,7 @@ GameObject:
   - component: {fileID: 5034817158100937438}
   - component: {fileID: 6038745653658476706}
   - component: {fileID: 6509419568736403958}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: nodeAffect
   m_TagString: Node
   m_Icon: {fileID: 0}
@@ -1002,14 +1002,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  nextId: 0
+  nextNodeId: -1
   nextGameObject: {fileID: 0}
+  asAParent: 0
   nodeVisual: {fileID: 5034817159356517177}
   canvas: {fileID: 5034817159356517125}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   canResize: 1
   ResizeHandle: {fileID: 7167858784301427573}
   canMove: 1
-  input: 
+  borders:
+  - {fileID: 5034817159747689945}
+  - {fileID: 3277559388067887695}
+  - {fileID: 3277559387702853712}
+  - {fileID: 3277559386851771448}
+  - {fileID: 3277559387715855760}
+  defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
+  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
 --- !u!1 &5034817158148821870
 GameObject:
   m_ObjectHideFlags: 0

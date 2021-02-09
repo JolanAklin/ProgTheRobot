@@ -21,6 +21,7 @@ public class UIRaycaster : MonoBehaviour
     private ResizeHandle resizeHandle;
     //move node
     private Nodes nodeToMove;
+    private Vector3 beginMoveMousePos;
 
     void Start()
     {
@@ -68,7 +69,7 @@ public class UIRaycaster : MonoBehaviour
             if (nodeToMove != null && nodeToMove.canMove)
             {
                 nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0f);
-                nodeToMove.StartEndMove();
+                nodeToMove.EndMove();
                 nodeToMove = null;
             }
         }
@@ -98,9 +99,19 @@ public class UIRaycaster : MonoBehaviour
                 {
                     if (hit.collider.gameObject.tag == "Node")
                     {
+                        beginMoveMousePos = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition);
                         nodeToMove = hit.collider.GetComponent<Nodes>();
-                        nodeToMove.StartEndMove();
                     }
+                }
+            }
+        }
+        if(nodeToMove != null)
+        {
+            if(!nodeToMove.isMoving)
+            {
+                if((NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition) - beginMoveMousePos).sqrMagnitude > 1 && nodeToMove != null)
+                {
+                    nodeToMove.StartMove();
                 }
             }
         }

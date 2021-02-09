@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using System;
+using UnityEngine.UI;
 
 public abstract class Nodes : MonoBehaviour
 {
@@ -54,6 +55,9 @@ public abstract class Nodes : MonoBehaviour
 
     public RectTransform canvas;
 
+    // use to test if the bloc collide with other
+    public LayerMask layerMask;
+
     //resize
     private bool resize = false;
     [HideInInspector]
@@ -62,12 +66,19 @@ public abstract class Nodes : MonoBehaviour
 
     //move
     private bool move = false;
+    public bool isMoving { get => move;}
     [HideInInspector]
     public bool canMove = true;
 
     // errors
     protected int nodeErrorCode;
     public int NodeErrorCode { get => nodeErrorCode;}
+
+    // border, will change color when there is an error or when selected
+    public List<Image> borders = new List<Image>();
+    public Color defaultColor;
+    public Color selectedColor;
+    public Color errorColor;
 
     private void Awake()
     {
@@ -82,6 +93,14 @@ public abstract class Nodes : MonoBehaviour
         canvas.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
+    public void ChangeBorderColor(Color color)
+    {
+        foreach (Image image in borders)
+        {
+            image.color = color;
+        }
+    }
+
     private void isConnected(object sender, EventArgs e)
     {
         if(asAParent)
@@ -91,12 +110,14 @@ public abstract class Nodes : MonoBehaviour
                 if(nodeErrorCode == (int)ErrorCode.notConnected)
                 {
                     nodeErrorCode = (int)ErrorCode.ok;
+                    ChangeBorderColor(defaultColor);
                     Manager.instance.canExecute = true;
                 }
                 return;
             }
         }
         nodeErrorCode = (int)ErrorCode.notConnected;
+        ChangeBorderColor(errorColor);
         Manager.instance.canExecute = false;
         return;
     }
@@ -107,6 +128,7 @@ public abstract class Nodes : MonoBehaviour
         {
             Resize();
         }
+
         if(move)
         {
             Move();
@@ -124,17 +146,16 @@ public abstract class Nodes : MonoBehaviour
             resize = true;
         }
     }
-    public void StartEndMove()
+    public void StartMove()
     {
-        if (move)
-        {
-            if (canMove)
-                move = false;
-        }
-        else
-        {
-            move = true;
-        }
+        canMove = false;
+        move = true;
+    }
+
+    public void EndMove()
+    {
+        if (canMove)
+            move = false;
     }
 
     Vector3 resizeAmount;
@@ -148,16 +169,18 @@ public abstract class Nodes : MonoBehaviour
         resizeAmount = new Vector3((float)Math.Round(delta.x*2, 1), (float)Math.Round(delta.y*2, 1), 0);
         canvas.sizeDelta = resizeAmount*100;
         nodeVisual.Resize();
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, resizeAmount,0f);
-        canResize = true;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, resizeAmount, 0f, layerMask);
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject != this.gameObject && collider.gameObject.tag != "ResizeHandle" && collider.gameObject.tag != "ConnectHandle")
+            if (collider.gameObject != this.gameObject)
             {
                 canResize = false;
-                break;
+                ChangeBorderColor(errorColor);
+                return;
             }
         }
+        ChangeBorderColor(defaultColor);
+        canResize = true;
     }
 
     public void Move()
@@ -165,16 +188,18 @@ public abstract class Nodes : MonoBehaviour
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -1);
         transform.position = pos;
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f);
-        canMove = true;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f, layerMask);
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject != this.gameObject && collider.gameObject.CompareTag("ResizeHandle") && collider.gameObject.CompareTag("ConnectHandle"))
+            if (collider.gameObject != this.gameObject)
             {
                 canMove = false;
-                break;
+                ChangeBorderColor(errorColor);
+                return;
             }
         }
+        ChangeBorderColor(defaultColor);
+        canMove = true;
     }
 
     private Vector3 Absolute(Vector3 vector3)

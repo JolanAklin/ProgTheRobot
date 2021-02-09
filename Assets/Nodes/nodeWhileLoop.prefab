@@ -2314,7 +2314,7 @@ GameObject:
   - component: {fileID: 5158547176770619524}
   - component: {fileID: 5873956125557867256}
   - component: {fileID: 7249064320339202762}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: nodeWhileLoop
   m_TagString: Node
   m_Icon: {fileID: 0}
@@ -2375,13 +2375,28 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  nextId: 0
+  nextNodeId: -1
   nextGameObject: {fileID: 0}
+  asAParent: 0
   nodeVisual: {fileID: 5158547174704327011}
   canvas: {fileID: 5158547174704327007}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   canResize: 1
   ResizeHandle: {fileID: 2198036974579868831}
   canMove: 1
+  borders:
+  - {fileID: 3776935315687364536}
+  - {fileID: 3776935315797564355}
+  - {fileID: 3776935316698475046}
+  - {fileID: 3776935315557790692}
+  - {fileID: 3776935317277656365}
+  - {fileID: 3776935317167323749}
+  - {fileID: 3776935315845456865}
+  defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
+  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
 --- !u!1 &5355865931366499773
 GameObject:
   m_ObjectHideFlags: 0

@@ -502,7 +502,7 @@ GameObject:
   - component: {fileID: 6743916129687385062}
   - component: {fileID: 5441930924106299802}
   - component: {fileID: 758927656669524662}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: nodeReadWrite
   m_TagString: Node
   m_Icon: {fileID: 0}
@@ -563,13 +563,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 0
-  nextId: 0
+  nextNodeId: -1
   nextGameObject: {fileID: 0}
+  asAParent: 0
   nodeVisual: {fileID: 6743916129884983809}
   canvas: {fileID: 6743916129884983869}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 64
   canResize: 1
   ResizeHandle: {fileID: 7264466017576503823}
   canMove: 1
+  borders:
+  - {fileID: 6743916130263598305}
+  - {fileID: 6743916130593298129}
+  - {fileID: 6743916129517921921}
+  defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
+  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
 --- !u!1 &6743916129740016214
 GameObject:
   m_ObjectHideFlags: 0

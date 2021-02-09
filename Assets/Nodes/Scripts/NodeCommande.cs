@@ -13,11 +13,12 @@ public class NodeCommande : Nodes
         if (!ValidateInput())
         {
             nodeErrorCode = (int)Nodes.ErrorCode.wrongInput;
-            Debug.LogError("Wrong Input");
+            ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             return;
         }
         Manager.instance.canExecute = true;
+        ChangeBorderColor(defaultColor);
     }
 
 
@@ -25,6 +26,7 @@ public class NodeCommande : Nodes
     {
         switch (input)
         {
+            case "":
             case "Avancer":
             case "TournerADroite":
             case "TournerAGauche":
