@@ -6,30 +6,17 @@ public class ConnectHandle : MonoBehaviour
 {
     public Nodes node;
     public bool isInput = false;
-    public GameObject linkGeneratorPrefab;
 
     public void Click()
     {
-        if(isInput)
+        Nodes nextNode = Manager.instance.ConnectNode(isInput, transform, node);
+        if(nextNode != null)
         {
-            LinkGenerator link = Manager.instance.linkGenerator.GetComponent<LinkGenerator>();
-            link.EndLink();
-            link.nodeStart.nextNodeId = node.id;
-            link.nodeStart.nextGameObject = node.gameObject;
+            node.nextNodeId = nextNode.id;
+            node.nextGameObject = nextNode.gameObject;
+            nextNode = null;
+            Manager.instance.node = null;
+            Debug.Log(node.nextNodeId);
         }
-        else
-        {
-            Manager.instance.linkGenerator = Instantiate(linkGeneratorPrefab, transform.position, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
-            Manager.instance.linkGenerator.GetComponent<LinkGenerator>().nodeStart = node;
-        }
-    }
-
-    public void Show()
-    {
-
-    }
-    public void UnShow()
-    {
-
     }
 }

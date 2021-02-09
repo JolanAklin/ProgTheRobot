@@ -153,11 +153,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7b67ff89eeee69488f6f3e7812b9bb4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  canExecute: 1
   canvas: {fileID: 1754670295}
   list: {fileID: 76269666}
   listRobot: {fileID: 1122293913}
   currentlySelectedScript: -1
   nodeHolder: {fileID: 397547265}
+  node: {fileID: 0}
+  SplineObject: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
 --- !u!4 &34863
 Transform:
   m_ObjectHideFlags: 0

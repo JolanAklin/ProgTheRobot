@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 7857630170474300718}
   isInput: 0
-  linkGeneratorPrefab: {fileID: 4137744002778452033, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
+  SplineObject: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
 --- !u!1 &783018540565910690
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,7 +515,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052317501531756442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.5, y: 2.7, z: 0}
+  m_LocalPosition: {x: -2.9, y: 4.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052317501844846144}

@@ -69,6 +69,8 @@ public abstract class Nodes : MonoBehaviour
     public bool isMoving { get => move;}
     [HideInInspector]
     public bool canMove = true;
+    public EventHandler OnNodeModified;
+
 
     // errors
     protected int nodeErrorCode;
@@ -163,6 +165,7 @@ public abstract class Nodes : MonoBehaviour
 
     public void Resize()
     {
+        OnNodeModified?.Invoke(this, EventArgs.Empty);
         transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 delta = Absolute(mouseToWorldPoint - transform.position);
@@ -185,6 +188,7 @@ public abstract class Nodes : MonoBehaviour
 
     public void Move()
     {
+        OnNodeModified?.Invoke(this, EventArgs.Empty);
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -1);
         transform.position = pos;

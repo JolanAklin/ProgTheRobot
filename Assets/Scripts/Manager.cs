@@ -29,9 +29,6 @@ public class Manager : MonoBehaviour
     public int currentlySelectedScript = -1;
     public GameObject nodeHolder;
 
-    // link
-    public GameObject linkGenerator;
-
     private void Awake()
     {
         if (instance == null)
@@ -132,6 +129,27 @@ public class Manager : MonoBehaviour
             Translation.LoadData("fr");
             OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
         }
+    }
+
+    // create a spline and to connect to different node
+    [HideInInspector]
+    public Nodes node = null;
+    public GameObject SplineObject;
+    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender)
+    {
+        if(node == null && !isInput)
+        {
+            instance.SplineObject = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
+            instance.SplineObject.GetComponent<SplineManager>().Init(handleTransform, sender);
+            node = sender;
+        }
+        if (isInput)
+        {
+            SplineManager splineManager = instance.SplineObject.GetComponent<SplineManager>();
+            splineManager.EndSpline(handleTransform, sender);
+            return node;
+        }
+        return null;
     }
 
     // show and destroy nodes
