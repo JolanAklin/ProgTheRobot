@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LinkPartScript : MonoBehaviour
+public class SplineMaker : MonoBehaviour
 {
     private MeshFilter meshFilter;
     public float meshWidth;

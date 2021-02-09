@@ -215,42 +215,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1990681200}
-  - component: {fileID: 1990681199}
+  - component: {fileID: 6817981089485501525}
   - component: {fileID: 1990681202}
   - component: {fileID: 1990681201}
   m_Layer: 0
-  m_Name: LinkPartNew
+  m_Name: SplineLink
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1990681199
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1990681198}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15840f2dc4adcd544956ff83b8f65050, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  meshWidth: 0.05
-  splineSegments:
-  - splineStart:
-      point: {x: 0, y: 5, z: 0}
-      handle: {x: 0, y: 0, z: 0}
-    splineEnd:
-      point: {x: 15, y: 0, z: 0}
-      handle: {x: 15, y: 5, z: 0}
-  - splineStart:
-      point: {x: 15, y: 0, z: 0}
-      handle: {x: 15, y: -2, z: 0}
-    splineEnd:
-      point: {x: 5, y: 2, z: 0}
-      handle: {x: 3, y: 4, z: 0}
 --- !u!4 &1990681200
 Transform:
   m_ObjectHideFlags: 0
@@ -263,7 +237,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!23 &1990681201
 MeshRenderer:
@@ -407,68 +381,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
---- !u!1001 &4137744001409857305
-PrefabInstance:
+--- !u!114 &6817981089485501525
+MonoBehaviour:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 4137744002778452032, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: overrideCamera
-      value: 
-      objectReference: {fileID: 387309746}
-    - target: {fileID: 4137744002778452033, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_Name
-      value: Link
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452033, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_RootOrder
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4137744002778452034, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1990681198}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bcdab2dcffcf8464da3386bbd36af9e4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meshWidth: 0.015
+  splineSegments:
+  - splineStart:
+      point: {x: 0, y: 0, z: 0}
+      handle: {x: -3, y: 5, z: 0}
+    splineEnd:
+      point: {x: 5, y: 6, z: 0}
+      handle: {x: 2, y: -2, z: 0}
+  - splineStart:
+      point: {x: 5, y: 6, z: 0}
+      handle: {x: 7, y: -2, z: 0}
+    splineEnd:
+      point: {x: 15, y: 6, z: 0}
+      handle: {x: 5, y: 5, z: 0}
+  - splineStart:
+      point: {x: 15, y: 6, z: 0}
+      handle: {x: 0, y: 0, z: 0}
+    splineEnd:
+      point: {x: 10, y: 7, z: 0}
+      handle: {x: 2, y: 2, z: 0}
