@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 758927656669524662}
   isInput: 0
-  linkGeneratorPrefab: {fileID: 4137744002778452033, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
+  inputImage: {fileID: 0}
 --- !u!1 &1423410599189961209
 GameObject:
   m_ObjectHideFlags: 0
@@ -235,7 +235,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 758927656669524662}
   isInput: 1
-  linkGeneratorPrefab: {fileID: 4137744002778452033, guid: fb265e2070d7d3444b292dcd105ce3b4, type: 3}
+  inputImage: {fileID: 1559686563546823130}
 --- !u!1 &6743916129442883290
 GameObject:
   m_ObjectHideFlags: 0

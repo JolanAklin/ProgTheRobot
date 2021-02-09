@@ -136,16 +136,23 @@ public class Manager : MonoBehaviour
     public Nodes node = null;
     public GameObject SplineObject;
     private GameObject spline;
+    public EventHandler<OnSplineEventArgs> OnSpline;
+    public class OnSplineEventArgs : EventArgs
+    {
+        public bool splineStarted;
+    }
     public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender)
     {
         if(node == null && !isInput)
         {
+            OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
             instance.spline = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
             instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender);
             node = sender;
         }
         if (isInput)
         {
+            OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);
             splineManager = null;

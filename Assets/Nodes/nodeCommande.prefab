@@ -233,7 +233,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 1235941011745416804}
   isInput: 1
-  SplineObject: {fileID: 0}
+  inputImage: {fileID: 7989914216400686714}
 --- !u!1 &8025506040851281856
 GameObject:
   m_ObjectHideFlags: 0
@@ -751,7 +751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 1235941011745416804}
   isInput: 0
-  SplineObject: {fileID: 0}
+  inputImage: {fileID: 0}
 --- !u!1001 &2889291345652592691
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,11 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ConnectHandle : MonoBehaviour
 {
     public Nodes node;
     public bool isInput = false;
+    public Image inputImage;
+
+    private void Start()
+    {
+        if (isInput)
+            Manager.instance.OnSpline += ShowHide;
+        if (inputImage != null)
+            inputImage.enabled = false;
+    }
 
     public void Click()
     {
@@ -17,5 +27,13 @@ public class ConnectHandle : MonoBehaviour
             nextNode = null;
             Manager.instance.node = null;
         }
+    }
+
+    public void ShowHide(object sender, Manager.OnSplineEventArgs e)
+    {
+        if (e.splineStarted)
+            inputImage.enabled = true;
+        else
+            inputImage.enabled = false;
     }
 }
