@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// resize node's graphicals elements
 public class ThreeElementNodeVisual : MonoBehaviour
 {
     public Transform nodeRoot;
@@ -9,9 +10,10 @@ public class ThreeElementNodeVisual : MonoBehaviour
     public RectTransform canvas;
     public bool needResize = true;
     public bool verticalResize = false;
-    public RectTransform leftSide;
-    public RectTransform rightSide;
-    public RectTransform middleSide;
+
+    public RectTransform leftSide; // or top
+    public RectTransform rightSide; // or bottom
+    public RectTransform middleSide; // middleSide is dumb but changing it will imply that I have to change all the nodes middle object reference in the inspector 
 
     private void Start()
     {

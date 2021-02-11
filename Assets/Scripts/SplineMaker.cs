@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
+// create a spline curve and render it as a mesh
+
+// need some improvement when the spline is rendered
 public class SplineMaker : MonoBehaviour
 {
     private MeshFilter meshFilter;
@@ -10,7 +14,7 @@ public class SplineMaker : MonoBehaviour
 
     public List<SplineSegment> splineSegments = new List<SplineSegment>();
 
-    // spline segment, while take 2 point
+    // spline segment, take a start point and a end point
     [Serializable]
     public class SplineSegment
     {
@@ -26,11 +30,10 @@ public class SplineMaker : MonoBehaviour
         public Vector3 handle;
     }
 
-    // used to generate the mesh
+    // used to generate the mesh. Create two point along the spline. perpendicular to the spline, defined by two points
     public class Line
     {
         private Vector3[] points;
-        private Vector2[] uv;
 
         public void GeneratePoint(Vector3 startPos, Vector3 dir, float meshWidth)
         {
@@ -52,6 +55,7 @@ public class SplineMaker : MonoBehaviour
         GenerateMesh();
     }
 
+    // Interpolate along the spline and create points around it.
     public void GenerateMesh()
     {
         List<Line> lines = new List<Line>();
@@ -73,10 +77,13 @@ public class SplineMaker : MonoBehaviour
         meshFilter.mesh = CreateMeshFromLine(lines);
     }
 
+
+    //take a list of line and create a mesh out of it
     public Mesh CreateMeshFromLine(List<Line> lines)
     {
         Mesh mesh = new Mesh();
 
+        // make a list of points
         Vector3[] vertices = new Vector3[lines.Count * 2];
         int i = 0;
         foreach (Line square in lines)
@@ -89,6 +96,7 @@ public class SplineMaker : MonoBehaviour
         }
         mesh.vertices = vertices;
 
+        // create triangles between thos points
         int[] tris = new int[(lines.Count - 1) * 6];
         i = 0;
         int k = 0;
@@ -106,6 +114,7 @@ public class SplineMaker : MonoBehaviour
         }
         mesh.triangles = tris;
 
+        // create normals of the mesh
         Vector3[] normals = new Vector3[lines.Count * 2];
         for (int j = 0; j < normals.Length; j++)
         {
@@ -113,6 +122,7 @@ public class SplineMaker : MonoBehaviour
         }
         mesh.normals = normals;
 
+        // generate uvs. Will be used to display a texture
         Vector2[] uv = new Vector2[lines.Count * 2];
         i = 0;
         bool changeUvPos = false;
@@ -137,7 +147,7 @@ public class SplineMaker : MonoBehaviour
         return mesh;
     }
 
-    #region spline stuff
+    #region spline interpolation
     private Vector3 QuadraticLerp(Vector3 a, Vector3 b, Vector3 c, float t)
     {
         Vector3 ab = Vector3.Lerp(a, b, t);

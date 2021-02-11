@@ -11,6 +11,7 @@ public class Robot
     public uint power;
 
     public static int nextid = 0;
+    // store all the robot in this dictionnary
     public static Dictionary<int, Robot> robots = new Dictionary<int, Robot>();
     public static int idSelected;
     public int id;
@@ -28,7 +29,7 @@ public class Robot
 
     private void Init()
     {
-        // All robotscripts have a different id
+        // All robots have a different id
         id = nextid;
         nextid++;
         robots.Add(id, this);
@@ -39,20 +40,24 @@ public class Robot
         robots.Remove(id);
     }
 
+    // add a script to this robot
     public List.ListElement AddScript(RobotScript robotScript)
     {
         robotScripts.Add(robotScript);
         return robotScript.ConvertToListElement();
     }
 
+
     public List.ListElement CreateScript(string name)
     {
        return AddScript(new RobotScript(name));
     }
 
+    // convert all scripts to a displayable list element
     public List<List.ListElement> ScriptToList()
     {
         List<List.ListElement> list = new List<List.ListElement>();
+        // add a "add" button. The button will show a popup asking for the name of the script once clicked
         list.Add(new List.ListElement { isAddScript = true, actionOnClick = () => {
             PopUpAddScript pas = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "addScript"), Manager.instance.canvas.transform).GetComponent<PopUpAddScript>();
             pas.SetCancelAction(() =>
@@ -74,6 +79,7 @@ public class Robot
         return list;
     }
 
+    // convert the robot to a displayable list element
     public ListRobot.ListElement ConvertToListElement()
     {
         return new ListRobot.ListElement() { isAddRobot = false, robotColor = color, actionOnClick = () => {

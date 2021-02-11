@@ -9,6 +9,7 @@ public class AddNodeScript : MonoBehaviour
     private Transform scriptPanel;
     public List<nodeObject> nodeObjects = new List<nodeObject>();
 
+    // object used to fill the list in the inspector
     [Serializable]
     public class nodeObject
     {
@@ -16,7 +17,7 @@ public class AddNodeScript : MonoBehaviour
         public GameObject gameObject;
     }
 
-
+    // create the add node panel and sets it's actions
     private void Start()
     {
         scriptPanel = GameObject.FindGameObjectWithTag("NodeHolder").transform;
@@ -38,6 +39,7 @@ public class AddNodeScript : MonoBehaviour
         }
     }
 
+    // save the required action to create each node
     public void AddAction(string nodeTypeName, Action action)
     {
         int nodeType = (int)Enum.Parse(typeof(Nodes.NodeTypes), nodeTypeName);
@@ -50,6 +52,7 @@ public class AddNodeScript : MonoBehaviour
         }
     }
 
+    // do the action stored for the required node
     public void DoAction(string nodeType)
     {
         nodes[(int)Enum.Parse(typeof(Nodes.NodeTypes), nodeType)]();

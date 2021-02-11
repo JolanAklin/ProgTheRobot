@@ -5,16 +5,19 @@ using UnityEngine;
 using Language;
 using UnityEngine.UI;
 
+// manages the whole program
 public class Manager : MonoBehaviour
 {
     public static Manager instance;
 
+    // will be triggered when the language is changed by the toggle
     public event EventHandler OnLanguageChanged;
 
     // trigger an event where every node will test if there is an error in their config
     public event EventHandler CheckNode;
     public bool canExecute = true;
 
+    // the canvas with all the UI
     public GameObject canvas;
 
     //List used to display script and robot
@@ -27,7 +30,7 @@ public class Manager : MonoBehaviour
 
     [HideInInspector]
     public int currentlySelectedScript = -1;
-    public GameObject nodeHolder;
+    public GameObject nodeHolder; // all the nodes and spline are children of this object
 
     private void Awake()
     {
@@ -41,6 +44,7 @@ public class Manager : MonoBehaviour
             Destroy(this);
         }
 
+        // change the canvas resolution to match the screen size
         canvasScaler = canvas.GetComponent<CanvasScaler>();
         res.height = Screen.height;
         res.width = Screen.width;
@@ -49,7 +53,8 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
-        if(res.height != Screen.height || res.width != Screen.width)
+        // change the canvas resolution to match the screen size
+        if (res.height != Screen.height || res.width != Screen.width)
         {
             canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
             res.height = Screen.height;
@@ -59,11 +64,12 @@ public class Manager : MonoBehaviour
 
     private void Start()
     {
+        // load the translation
         Translation.Init();
         Translation.LoadData("fr");
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
 
-        // fill the list to test, while be removed
+        // fill robots and scripts lists to test, will be removed
         List<Robot> robots = new List<Robot>();
         for (int i = 0; i < 3; i++)
         {
@@ -95,6 +101,7 @@ public class Manager : MonoBehaviour
         if(Robot.robots.ContainsKey(Robot.idSelected))
         {
             Robot robotToChange = Robot.robots[Robot.idSelected];
+            // instantiate a popup to modify the robot. Set all actions of the popup
             PopUpRobot rm = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif"), canvas.transform).GetComponent<PopUpRobot>();
             rm.Init(robotToChange.color, robotToChange.robotName, robotToChange.power);
             rm.SetOkAction(() =>
@@ -131,12 +138,12 @@ public class Manager : MonoBehaviour
         }
     }
 
-    // create a spline and to connect to different node
+    // create a spline and to connect to two nodes
     [HideInInspector]
-    public Nodes node = null;
-    public GameObject SplineObject;
-    private GameObject spline;
-    public EventHandler<OnSplineEventArgs> OnSpline;
+    public Nodes node = null; // the node where the spline starts
+    public GameObject SplineObject; // spline prefab
+    private GameObject spline; // the current spline
+    public EventHandler<OnSplineEventArgs> OnSpline; // is used to show the input of all the nodes
     public class OnSplineEventArgs : EventArgs
     {
         public bool splineStarted;
@@ -145,6 +152,7 @@ public class Manager : MonoBehaviour
     {
         if(node == null && !isInput)
         {
+            // output. Where the spline is created
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
             instance.spline = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
             instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender);
@@ -152,6 +160,7 @@ public class Manager : MonoBehaviour
         }
         if (isInput)
         {
+            // input. Where the spline ends
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);

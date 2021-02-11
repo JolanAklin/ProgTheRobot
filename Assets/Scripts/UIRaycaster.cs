@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+// all raycast stuff goes in there
 public class UIRaycaster : MonoBehaviour
 {
     public GameObject addNodeMenuInstance;
@@ -33,6 +34,7 @@ public class UIRaycaster : MonoBehaviour
 
     void Update()
     {
+        // do only raycast on UI elements
         #region On ui element
         pointerevent = new PointerEventData(eventsystem);
         pointerevent.position = Input.mousePosition;
@@ -54,6 +56,7 @@ public class UIRaycaster : MonoBehaviour
         }
         #endregion
 
+        // only do raycast in the 3D/2D world
         #region On nodes
         if(Input.GetMouseButtonUp(0))
         {
@@ -105,6 +108,7 @@ public class UIRaycaster : MonoBehaviour
                 }
             }
         }
+        // only start moving a node if the cursor was moved pas 1 unit
         if(nodeToMove != null)
         {
             if(!nodeToMove.isMoving)

@@ -17,6 +17,7 @@ public class ConnectHandle : MonoBehaviour
             inputImage.enabled = false;
     }
 
+    // when the handle is clicked, will ask the manager.
     public void Click()
     {
         Nodes nextNode = Manager.instance.ConnectNode(isInput, transform, node);
@@ -29,6 +30,7 @@ public class ConnectHandle : MonoBehaviour
         }
     }
 
+    // show and hide the input image (red dot)
     public void ShowHide(object sender, Manager.OnSplineEventArgs e)
     {
         if (e.splineStarted)

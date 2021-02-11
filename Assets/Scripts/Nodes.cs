@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using System;
 using UnityEngine.UI;
 
+// handle all the common features of nodes
 public abstract class Nodes : MonoBehaviour
 {
     public enum NodeTypes
@@ -48,15 +49,15 @@ public abstract class Nodes : MonoBehaviour
     [HideInInspector]
     public int nextNodeId = -1; // id of the next node, -1 = not connected
     [HideInInspector]
-    public GameObject nextGameObject;
+    public GameObject nextGameObject; // will simplify script execution. It's not vital to have
     [HideInInspector]
     public bool asAParent; // as another node higher in the hierarchy
-    public ThreeElementNodeVisual nodeVisual;
+    public ThreeElementNodeVisual nodeVisual; // change the node element to look good when resized
 
-    public RectTransform canvas;
+    public RectTransform canvas; // the node canvas
 
-    // use to test if the bloc collide with other
-    public LayerMask layerMask;
+    // use to test if a node collide with an other
+    public LayerMask nodeLayerMask;
 
     //resize
     private bool resize = false;
@@ -91,7 +92,9 @@ public abstract class Nodes : MonoBehaviour
 
     public void Start()
     {
+        // subscribe to the checknode event. The node will check if it is connected correctly
         Manager.instance.CheckNode += isConnected;
+        // set the event camera of the canvas
         canvas.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
@@ -103,6 +106,7 @@ public abstract class Nodes : MonoBehaviour
         }
     }
 
+    // will return true only if there is no error and the node is connected correctly
     private void isConnected(object sender, EventArgs e)
     {
         if(asAParent)
@@ -148,6 +152,7 @@ public abstract class Nodes : MonoBehaviour
             resize = true;
         }
     }
+
     public void StartMove()
     {
         canMove = false;
@@ -160,19 +165,25 @@ public abstract class Nodes : MonoBehaviour
             move = false;
     }
 
+
     Vector3 resizeAmount;
-
-
     public void Resize()
     {
-        OnNodeModified?.Invoke(this, EventArgs.Empty);
+        // round the mouse position
         transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 delta = Absolute(mouseToWorldPoint - transform.position);
+
+        // The delta is calculated between the center and the corner. It is multiplied by 2 to have the full height
         resizeAmount = new Vector3((float)Math.Round(delta.x*2, 1), (float)Math.Round(delta.y*2, 1), 0);
+        // scale the size by a 100 cause the canvas scale is multiplied by 0.01
         canvas.sizeDelta = resizeAmount*100;
+
         nodeVisual.Resize();
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, resizeAmount, 0f, layerMask);
+        // change the spline
+        OnNodeModified?.Invoke(this, EventArgs.Empty);
+
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, resizeAmount, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject != this.gameObject)
@@ -188,11 +199,16 @@ public abstract class Nodes : MonoBehaviour
 
     public void Move()
     {
-        OnNodeModified?.Invoke(this, EventArgs.Empty);
+        // round the mouse position
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -1);
+
+        // change the node position
         transform.position = pos;
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f, layerMask);
+        // change the spline
+        OnNodeModified?.Invoke(this, EventArgs.Empty);
+
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
         {
             if (collider.gameObject != this.gameObject)
@@ -206,6 +222,7 @@ public abstract class Nodes : MonoBehaviour
         canMove = true;
     }
 
+    // convert a vector3 to absolute value
     private Vector3 Absolute(Vector3 vector3)
     {
         return new Vector3(Math.Abs(vector3.x), Math.Abs(vector3.y), Math.Abs(vector3.z));

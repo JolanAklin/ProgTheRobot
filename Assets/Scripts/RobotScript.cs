@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// will handle the loading of nodes
 public class RobotScript
 {
     public static int nextid = 0;
@@ -25,21 +26,25 @@ public class RobotScript
         robotScripts.Add(id, this);
     }
 
+    // convert this class to json
     public void SerializeScript()
     {
 
     }
 
+    // convert json to this class
     public void DeSerializeScript()
     {
 
     }
 
+    // convert node script to displayable element in list
     public List.ListElement ConvertToListElement()
     {
         return new List.ListElement { isAddScript = false, displayedText = name, actionOnClick = () => { LoadNodes(); } };
     }
 
+    // show the node from json when finished
     public void LoadNodes()
     {
         // need to update when there is json

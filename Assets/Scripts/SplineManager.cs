@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+// manages a spline maker
 public class SplineManager : MonoBehaviour
 {
     private SplineMaker splineMaker;
@@ -15,12 +16,14 @@ public class SplineManager : MonoBehaviour
     [HideInInspector]
     public Transform startPos, endPos;
 
-    // last segment direction
+    // last segment direction. not used yet
     private bool up;
     private bool down;
     private bool right;
     private bool left;
 
+    // start pos will be used when a node is moved or rized.
+    // the node parameter only serve to subscibe to the change/resize event
     public void Init(Transform startPos, Nodes node)
     {
         splineMaker = GetComponent<SplineMaker>();
@@ -29,6 +32,7 @@ public class SplineManager : MonoBehaviour
         this.startPos = startPos;
     }
 
+    // will update point and handle position when a node is moved or resized
     private void ChangeSpline(object sender, EventArgs e)
     {
         splineMaker.splineSegments[0].splineStart.point = new Vector3(startPos.position.x, startPos.position.y, 0);
@@ -39,6 +43,7 @@ public class SplineManager : MonoBehaviour
         splineMaker.GenerateMesh();
     }
 
+    // create a new segment added to the current spline
     public SplineMaker.SplineSegment CreateNewSplineSegment(Vector3 startPos)
     {
         Vector3 MousePos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition), 1);
@@ -68,9 +73,11 @@ public class SplineManager : MonoBehaviour
             MousePos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition), 1);
             splineEndPos = new Vector3(MousePos.x, MousePos.y, 0);
 
-            // test if the mouse pos x is greater than y
+            // rotate the end handle of the last segment and the start handle of the current segment. it could be done so that the handle is not stuck in only 4 direction
+            // could also implement movement only on x or y axis
             if(lastSegment != null)
             {
+                // test if the mouse pos x is greater than y
                 if (Mathf.Abs(MousePos.y - currentSegment.splineStart.point.y) < Mathf.Abs(MousePos.x - currentSegment.splineStart.point.x))
                 {
                     if (MousePos.x > currentSegment.splineStart.point.x && !left)
@@ -107,11 +114,13 @@ public class SplineManager : MonoBehaviour
 
             }
 
+            // update the pos of current spline's point
             currentSegment.splineEnd.point = splineEndPos;
             currentSegment.splineEnd.handle = currentSegment.splineEnd.point + Vector3.down;
 
             splineMaker.GenerateMesh();
         }
+        // create a new segment or end the spline
         if (Input.GetMouseButtonDown(0))
         {
             lastSegment = currentSegment;
@@ -125,6 +134,7 @@ public class SplineManager : MonoBehaviour
         }
     }
 
+    // finishes the spline
     public void EndSpline(Transform handleTransform, Nodes node)
     {
         if(splineMaker != null)
@@ -142,27 +152,5 @@ public class SplineManager : MonoBehaviour
     private Vector3 Round(Vector3 vector3, int decimals)
     {
         return new Vector3((float)Math.Round(vector3.x, decimals), (float)Math.Round(vector3.y, decimals), (float)Math.Round(vector3.z, decimals));
-    }
-
-    private void OnDrawGizmos()
-    {
-        //if (currentSegment != null)
-        //{
-        //    Gizmos.DrawSphere(currentSegment.splineStart.point, 0.1f);
-        //    Gizmos.DrawSphere(currentSegment.splineStart.handle, 0.1f);
-        //    Gizmos.DrawSphere(currentSegment.splineEnd.handle, 0.1f);
-        //    Gizmos.color = Color.cyan;
-        //    Gizmos.DrawSphere(currentSegment.splineEnd.point, 0.1f);
-        //}
-        //if (lastSegment != null)
-        //{
-        //    Gizmos.color = Color.red;
-        //    Gizmos.DrawSphere(lastSegment.splineEnd.handle, 0.1f);
-        //}
-        //Gizmos.color = Color.red;
-        //if (endPos != null)
-        //{
-        //    Gizmos.DrawSphere(endPos.position,0.1f);
-        //}
     }
 }
