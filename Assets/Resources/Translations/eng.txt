@@ -19,3 +19,6 @@ addForLoopNode = For node
 addIfNode = Test node
 addSubProgramNode = SubProgramm node
 addAffectNode = Assignement node
+
+[Errors]
+varNotExist = The specified variable is not known

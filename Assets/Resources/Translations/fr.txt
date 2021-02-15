@@ -1,4 +1,4 @@
-[nodes]
+[Nodes]
 start = Début
 end = Fin
 enterText = Entrer du text...
@@ -19,3 +19,6 @@ addForLoopNode = Bloc pour
 addIfNode = Bloc de test
 addSubProgramNode = Bloc sous programme
 addAffectNode = Bloc d'affectation
+
+[Errors]
+varNotExist = La variable spécifiée n'est pas connue

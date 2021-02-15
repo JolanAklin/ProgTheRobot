@@ -40,6 +40,11 @@ public abstract class Nodes : MonoBehaviour
     /// </summary>
     public abstract void Execute();
 
+    /// <summary>
+    /// Clean the node when the execution of the script is completed
+    /// </summary>
+    public abstract void PostExecutionCleanUp();
+
     // id stuff
     public int id;
     public static int nextid = 0;

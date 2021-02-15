@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 
 public class VarsManager : MonoBehaviour
 {
@@ -55,5 +56,25 @@ public class VarsManager : MonoBehaviour
         {
             Instance.vars[name] = Value;
         }
+    }
+
+    public string[] ReplaceStringByVar(string[] expression)
+    {
+        for (int i = 0; i < expression.Length; i++)
+        {
+            string item = expression[i];
+            if(item.Any(Char.IsLetter))
+                if(vars.ContainsKey(item))
+                {
+                    item = vars[item].ToString();
+                }
+            return null;
+        }
+        return expression;
+    }
+
+    public void Clean()
+    {
+        vars = new Dictionary<string, int>();
     }
 }

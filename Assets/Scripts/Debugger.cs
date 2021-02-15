@@ -17,4 +17,8 @@ public class Debugger : MonoBehaviour
     {
         debugList.AddChoice(new List.ListElement() { displayedText = text });
     }
+    public static void LogError(string text)
+    {
+        debugList.AddChoice(new List.ListElement() { displayedText = text });
+    }
 }
