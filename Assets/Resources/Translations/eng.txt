@@ -4,7 +4,7 @@ end = End
 enterText = Enter text...
 ifYes = Y
 ifNo = N
-forPlaceHolder = for i  0 up to 10...
+forPlaceHolder = For i  0 UpTo 10...
 forEnd = Next
 whilePlaceHolder = While True...
 whileEnd = EndWhile
@@ -20,5 +20,13 @@ addIfNode = Test node
 addSubProgramNode = SubProgramm node
 addAffectNode = Assignement node
 
-[Errors]
-varNotExist = The specified variable is not known
+[Command]
+GoForward = GoForward
+TurnRight = TurnRight
+TurnLeft = TurnLeft
+Mark = Mark
+Unmark = Unmark
+Reload = Reload
+PlaceBall = PlaceBall
+TakeBall = TakeBall
+ThrowBall = ThrowBall

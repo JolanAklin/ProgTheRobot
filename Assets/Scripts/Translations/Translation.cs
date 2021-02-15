@@ -7,7 +7,11 @@ namespace Language
     // from there http://www.demonixis.net/ajout-du-multilingue-dans-votre-jeux-avec-unity-3d/ modified by me
     public static class Translation
     {
+        private static string currentLanguage;
+        public static string CurrentLanguage { get => currentLanguage; private set => currentLanguage = value; }
+
         private static Dictionary<string, string> Translations = null;
+
 
         public static void Init()
         {
@@ -24,6 +28,7 @@ namespace Language
         /// <param name="lang">The target language</param>
         public static void LoadData(string lang)
         {
+            CurrentLanguage = lang;
             // Load and parse the translation file from the Resources folder.
             try
             {

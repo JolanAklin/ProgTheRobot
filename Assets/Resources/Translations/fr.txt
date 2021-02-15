@@ -20,5 +20,13 @@ addIfNode = Bloc de test
 addSubProgramNode = Bloc sous programme
 addAffectNode = Bloc d'affectation
 
-[Errors]
-varNotExist = La variable spécifiée n'est pas connue
+[Command]
+GoForward = Avancer
+TurnRight = TournerADroite
+TurnLeft = TournerAGauche
+Mark = Marquer
+Unmark = Démarquer
+Reload = Recharger
+PlaceBall = PoserBallon
+TakeBall = PrendreBallon
+ThrowBall = LancerBallon

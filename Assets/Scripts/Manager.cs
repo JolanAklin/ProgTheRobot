@@ -131,7 +131,8 @@ public class Manager : MonoBehaviour
         {
             Translation.LoadData("eng");
             OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
-        }else
+        }
+        else
         {
             Translation.LoadData("fr");
             OnLanguageChanged?.Invoke(instance, EventArgs.Empty);

@@ -49,6 +49,7 @@ public abstract class Nodes : MonoBehaviour
     public int id;
     public static int nextid = 0;
 
+    public RobotScript rs;
 
     // connection with other node
     [HideInInspector]

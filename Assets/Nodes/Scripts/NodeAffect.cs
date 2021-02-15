@@ -5,12 +5,11 @@ using TMPro;
 using System.Linq;
 using System.Data;
 using System;
-using System.Text.RegularExpressions;
-using Language;
 
 public class NodeAffect : Nodes
 {
     private string input;
+    private string[] inputSplited;
 
     private VarsManager.Var var;
 
@@ -19,7 +18,6 @@ public class NodeAffect : Nodes
         input = tMP_InputField.text;
         if(!ValidateInput())
         {
-            Debug.LogError("wrong input");
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             return;
@@ -30,7 +28,10 @@ public class NodeAffect : Nodes
 
     private bool ValidateInput()
     {
-        string[] inputSplited = input.Split(' ');
+        string[] delimiters = new string[] { " " };
+        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        if (inputSplited.Length <= 2)
+            return false;
         if (!inputSplited[0].Any(char.IsDigit))
         {
             try
@@ -41,25 +42,7 @@ public class NodeAffect : Nodes
                     {
                         if (!(inputSplited[i].Any(Char.IsDigit) || inputSplited[i].Any(Char.IsLetter)))
                         {
-                            if (inputSplited[i].Length == 1)
-                            {
-                                switch (inputSplited[i][0])
-                                {
-                                    case '+':
-                                    case '-':
-                                    case '*':
-                                    case '/':
-                                    case '(':
-                                    case ')':
-                                        break;
-                                    default:
-                                        return false;
-                                }
-                            }
-                            else
-                            {
-                                return false;
-                            }
+                            return VarsManager.CheckVarName(inputSplited[i]);
                         }
                     }
                     return true;
@@ -85,10 +68,17 @@ public class NodeAffect : Nodes
     {
         // calculate and set the var
         string[] inputSplited = VarsManager.Instance.ReplaceStringByVar(input.Split(' '));
-        if(inputSplited != null)
+        if (inputSplited != null)
         {
-            if(var != null)
-                var = VarsManager.Instance.getVar(inputSplited[0]);
+            if (var == null)
+            {
+                var = VarsManager.Instance.GetVar(inputSplited[0]);
+                if (var == null)
+                {
+                    Debugger.LogError("Une erreur est survenue");
+                    return;
+                }
+            }
 
             string expression = string.Join("", inputSplited, 2, inputSplited.Length - 2).Trim();
             var.Value = Convert.ToInt32(new DataTable().Compute(expression, null));
@@ -97,7 +87,7 @@ public class NodeAffect : Nodes
         else
         {
             // stop execution
-            Debugger.LogError(Translation.Get("varNotExist"));
+            Debugger.LogError("La variable spécifiée n'est pas connue");
             ChangeBorderColor(errorColor);
         }
     }

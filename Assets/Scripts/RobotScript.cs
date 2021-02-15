@@ -9,6 +9,7 @@ public class RobotScript
     public static Dictionary<int, RobotScript> robotScripts = new Dictionary<int, RobotScript>();
     public int id;
     public string name;
+    public Robot robot;
 
     public List<GameObject> nodes = new List<GameObject>();
 

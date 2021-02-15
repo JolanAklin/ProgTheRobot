@@ -10,6 +10,8 @@ public class Robot
     public string robotName;
     public uint power;
 
+    public RobotManager robotManager;
+
     public static int nextid = 0;
     // store all the robot in this dictionnary
     public static Dictionary<int, Robot> robots = new Dictionary<int, Robot>();

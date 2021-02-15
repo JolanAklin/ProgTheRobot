@@ -2,19 +2,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Linq;
+using System;
+using Language;
 
 public class NodeForLoop : Nodes
 {
     private string input;
+    private TMP_InputField inputField;
+    private string[] inputSplited;
 
-    private int varStart; // value of the var at the start of the loop
-    private int varEnd; // until value
-    private int varStep; // increment
-    private string varName; // name of the for var
+    private VarsManager.Var varIncrement;
+    private int varStart = 0;
+    private int varEnd;
+    private int varStep = 1;
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         input = tMP_InputField.text;
+        inputField = tMP_InputField;
+        inputSplited = input.Split(' ');
         if (!ValidateInput())
         {
             nodeErrorCode = (int)Nodes.ErrorCode.wrongInput;
@@ -22,55 +27,73 @@ public class NodeForLoop : Nodes
             Manager.instance.canExecute = false;
             return;
         }
-        Debug.Log($"varStart : {varStart}");
-        Debug.Log($"varEnd : {varEnd}");
-        Debug.Log($"varStep : {varStep}");
-        Debug.Log($"varName : {varName}");
         ChangeBorderColor(defaultColor);
         Manager.instance.canExecute = true;
+    }
+
+    private void Awake()
+    {
+        Manager.instance.OnLanguageChanged += TranslateText;
+    }
+
+    private void OnDestroy()
+    {
+        Manager.instance.OnLanguageChanged -= TranslateText;
     }
 
     public bool ValidateInput()
     {
         // need to add the var support
         // Pour i = 0 Jusque 2 Pas 1
+        // For i = 0 UpTo 10 Step 2
+        // Pour i = var1 Jusque var2 Step var3
         // Pour i = 0 Jusque 3
-        string[] inputSplited = input.Split(' ');
         try
         {
-            if(inputSplited[0] == "Pour")
-                if(!inputSplited[1].Any(char.IsDigit))
+            if(inputSplited[0] == "Pour" || inputSplited[0] == "For")
+                if(VarsManager.CheckVarName(inputSplited[1]))
                     if (inputSplited[2] == "=")
-                        if (int.TryParse(inputSplited[3], out varStart))
-                            if (inputSplited[4] == "Jusque")
-                                if (int.TryParse(inputSplited[5], out varEnd))
+                        if (inputSplited[4] == "Jusque" || inputSplited[4] == "UpTo")
+                        { 
+                            varStep = 1;
+                            if(inputSplited.Length == 8)
+                            {
+                                if (!(inputSplited[6] == "Pas" || inputSplited[6] == "Step"))
                                 {
-                                    varStep = 1;
-                                    if(inputSplited.Length == 8)
-                                    {
-                                        if (inputSplited[6] == "Pas")
-                                        {
-                                            if (!int.TryParse(inputSplited[7], out varStep))
-                                                return false;
-                                        }
-                                        if (inputSplited.Length > 8)
-                                            return false;
-                                    }
-
-                                    if (inputSplited.Length > 6 && inputSplited.Length != 8)
-                                        return false;
-
-                                    varName = inputSplited[1];
-
-                                    return true;
+                                    return false;
                                 }
-
+                            }
+                            if (inputSplited.Length > 6 && inputSplited.Length != 8)
+                                return false;
+                            TranslateText(this, EventArgs.Empty);
+                            return true;
+                        }
                 return false;
 
         }catch
         {
             return false;
         }
+    }
+
+    // translate the text inside the node
+    private void TranslateText(object sender, EventArgs e)
+    {
+        if(Translation.CurrentLanguage == "eng")
+        {
+            input = input.Replace("Pour", "For");
+            input = input.Replace("Jusque", "UpTo");
+            input = input.Replace("Pas", "Step");
+
+        }
+        if (Translation.CurrentLanguage == "fr")
+        {
+            input = input.Replace("For", "Pour");
+            input = input.Replace("UpTo", "Jusque");
+            input = input.Replace("Step", "Pas");
+        }
+
+        inputField.text = input;
     }
 
     public override void SerializeNode()
@@ -82,6 +105,59 @@ public class NodeForLoop : Nodes
         throw new System.NotImplementedException();
     }
     public override void Execute()
+    {
+        if(varIncrement == null)
+        {
+            varIncrement = VarsManager.Instance.GetVar(inputSplited[0]);
+            if(varIncrement == null)
+            {
+                Debugger.LogError("Une erreur est survenue");
+                return;
+            }
+            if(!int.TryParse(inputSplited[3], out varStart))
+            {
+                VarsManager.Var tempVar = VarsManager.Instance.GetVar(inputSplited[3]);
+                if(tempVar != null)
+                {
+                    varStart = tempVar.Value;
+                }
+                else
+                {
+                    Debugger.LogError("Une erreur est survenue");
+                    return;
+                }
+            }
+            if (!int.TryParse(inputSplited[5], out varEnd))
+            {
+                VarsManager.Var tempVar = VarsManager.Instance.GetVar(inputSplited[5]);
+                if (tempVar != null)
+                {
+                    varEnd = tempVar.Value;
+                }
+                else
+                {
+                    Debugger.LogError("Une erreur est survenue");
+                    return;
+                }
+            }
+            if (!int.TryParse(inputSplited[7], out varStep))
+            {
+                VarsManager.Var tempVar = VarsManager.Instance.GetVar(inputSplited[7]);
+                if (tempVar != null)
+                {
+                    varStep = tempVar.Value;
+                }
+                else
+                {
+                    Debugger.LogError("Une erreur est survenue");
+                    return;
+                }
+            }
+        }
+
+        // logic goes there
+    }
+    public override void PostExecutionCleanUp()
     {
         throw new System.NotImplementedException();
     }
