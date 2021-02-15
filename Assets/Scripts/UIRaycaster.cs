@@ -24,6 +24,12 @@ public class UIRaycaster : MonoBehaviour
     private Nodes nodeToMove;
     private Vector3 beginMoveMousePos;
 
+    // move node camera
+    private Vector3 mousePosBeginMove;
+    private Vector3 cameraPosAtPanStart;
+    private bool cameraCanBePanned;
+    public float nodeAreaPanSensitivity;
+
     void Start()
     {
         graphicraycaster = GetComponent<GraphicRaycaster>();
@@ -135,6 +141,25 @@ public class UIRaycaster : MonoBehaviour
                     }
                 }
             }
+        }
+
+        if(Input.GetMouseButton(2) && rayCastResults.Count == 0)
+        {
+            if(!cameraCanBePanned)
+            {
+                mousePosBeginMove = Input.mousePosition;
+                cameraCanBePanned = true;
+                cameraPosAtPanStart = NodeDisplay.instance.nodeCamera.transform.position;
+            }
+
+            Vector3 currentMousePos = Input.mousePosition;
+            Vector3 delta = (currentMousePos - mousePosBeginMove);
+            Vector3 cameraPos = new Vector3(-delta.x/nodeAreaPanSensitivity, -delta.y/nodeAreaPanSensitivity, -10);
+            NodeDisplay.instance.nodeCamera.transform.position = cameraPos + cameraPosAtPanStart;
+        }
+        else if(cameraCanBePanned == true)
+        {
+            cameraCanBePanned = false;
         }
         #endregion
     }
