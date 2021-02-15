@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using System.Data;
+using System;
 
 public class NodeAffect : Nodes
 {
     private string input;
 
-    private string varAffect;
+    private VarsManager.Var var;
 
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
@@ -16,7 +18,12 @@ public class NodeAffect : Nodes
         if(ValidateInput())
         {
             Debug.LogError("wrong input");
+            ChangeBorderColor(errorColor);
+            Manager.instance.canExecute = false;
+            return;
         }
+        Manager.instance.canExecute = true;
+        ChangeBorderColor(defaultColor);
     }
 
     private bool ValidateInput()
@@ -24,9 +31,21 @@ public class NodeAffect : Nodes
         string[] inputSplited = input.Split(' ');
         if(!inputSplited[0].Any(char.IsDigit))
         {
-            varAffect = inputSplited[0];
-            if (inputSplited[1] == "=")
-                return true;
+            try
+            {
+                var = VarsManager.Instance.getVar(inputSplited[0]);
+                if (inputSplited[1] == "=")
+                {
+                    for (int i = 0; 2 < inputSplited.Length-1; i++)
+                    {
+
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
         return false;
     }
@@ -41,6 +60,12 @@ public class NodeAffect : Nodes
     }
     public override void Execute()
     {
+        // calculate and set the var
+        string[] inputSplited = input.Split(' ');
+        string expression = string.Join("", inputSplited, 2, inputSplited.Length - 2).Trim();
+        var.Value = Convert.ToInt32(new DataTable().Compute(expression, null));
+        var.Persist();
+        //Debugger.Log($"{var.Name} : {var.Value}");
         throw new System.NotImplementedException();
     }
 }

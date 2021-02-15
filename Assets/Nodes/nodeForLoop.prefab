@@ -2460,7 +2460,7 @@ MonoBehaviour:
   asAParent: 0
   nodeVisual: {fileID: 6739195634193324570}
   canvas: {fileID: 6739195634193324582}
-  layerMask:
+  nodeLayerMask:
     serializedVersion: 2
     m_Bits: 64
   canResize: 1
