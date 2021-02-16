@@ -30,9 +30,10 @@ public class AddNodeScript : MonoBehaviour
                 Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
                 spawnPos.z = 0;
                 GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject;
-                Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
+                GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
                 node.transform.position = spawnPos;
                 RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);
+                instantiatedNode.GetComponent<Nodes>().rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript];
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);
             });

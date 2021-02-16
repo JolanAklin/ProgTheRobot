@@ -21,20 +21,28 @@ public class Robot
     public List<RobotScript> robotScripts = new List<RobotScript>();
 
 
-    public Robot(Color color, string name, uint power)
+    /// <summary>
+    /// Robot constructor
+    /// </summary>
+    /// <param name="color">Color of the robot</param>
+    /// <param name="name">Name of the robot</param>
+    /// <param name="power">Power of the robot</param>
+    /// <param name="justCreated">If justCreated is at true, a Principal script will be created.</param>
+    public Robot(Color color, string name, uint power, bool justCreated = false)
     {
         this.color = color;
         this.robotName = name;
         this.power = power;
-        Init();
+        Init(justCreated);
     }
 
-    private void Init()
+    private void Init(bool justCreated = false)
     {
         // All robots have a different id
         id = nextid;
         nextid++;
         robots.Add(id, this);
+        CreateScript("Principal");
     }
 
     public static void DeleteRobot(int id)
@@ -52,7 +60,7 @@ public class Robot
 
     public List.ListElement CreateScript(string name)
     {
-       return AddScript(new RobotScript(name));
+       return AddScript(new RobotScript(name, this));
     }
 
     // convert all scripts to a displayable list element

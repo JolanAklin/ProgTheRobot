@@ -28,7 +28,7 @@ public class NodeIf : Nodes
     {
         string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
         inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        if (inputSplited.Length > 2)
+        if (inputSplited.Length > 2 || inputSplited.Length == 1)
             return false;
         return true;
     }

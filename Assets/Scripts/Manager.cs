@@ -73,7 +73,7 @@ public class Manager : MonoBehaviour
         List<Robot> robots = new List<Robot>();
         for (int i = 0; i < 3; i++)
         {
-            Robot robot = new Robot(Color.blue, "Testbot", 100);
+            Robot robot = new Robot(Color.blue, "Testbot", 100, true);
             robots.Add(robot);
             List<RobotScript> robotScripts = new List<RobotScript>();
             for (int j = 0; j < 10; j++)
@@ -83,7 +83,7 @@ public class Manager : MonoBehaviour
         }
         Dictionary<int, ListRobot.ListElement> robotElements = new Dictionary<int, ListRobot.ListElement>();
         robotElements.Add(-1, new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => {
-            Robot robot = new Robot(Color.red, "", 2000);
+            Robot robot = new Robot(Color.red, "", 2000, true);
             listRobot.AddChoice(robot.id, robot.ConvertToListElement());
             listRobot.Select(robot.id);
             ChangeRobotSettings();
@@ -172,9 +172,10 @@ public class Manager : MonoBehaviour
     }
 
     // show and destroy nodes
-    public void CreateNodeObject(GameObject node)
+    public void CreateNodeObject(GameObject node, RobotScript rs)
     {
-        Instantiate(node, node.transform.position, Quaternion.identity,nodeHolder.transform);
+        GameObject instantiatedNode = Instantiate(node, node.transform.position, Quaternion.identity,nodeHolder.transform);
+        instantiatedNode.GetComponent<Nodes>().rs = rs;
     }
     public void DeleteNodes()
     {

@@ -48,32 +48,34 @@ public class NodeForLoop : Nodes
         // For i = 0 UpTo 10 Step 2
         // Pour i = var1 Jusque var2 Step var3
         // Pour i = 0 Jusque 3
-        try
-        {
-            if(inputSplited[0] == "Pour" || inputSplited[0] == "For")
-                if(VarsManager.CheckVarName(inputSplited[1]))
-                    if (inputSplited[2] == "=")
-                        if (inputSplited[4] == "Jusque" || inputSplited[4] == "UpTo")
-                        { 
-                            varStep = 1;
-                            if(inputSplited.Length == 8)
-                            {
-                                if (!(inputSplited[6] == "Pas" || inputSplited[6] == "Step"))
+        if(inputSplited.Length != 0)
+            try
+            {
+                if(inputSplited[0] == "Pour" || inputSplited[0] == "For")
+                    if(VarsManager.CheckVarName(inputSplited[1]))
+                        if (inputSplited[2] == "=")
+                            if (inputSplited[4] == "Jusque" || inputSplited[4] == "UpTo")
+                            { 
+                                varStep = 1;
+                                if(inputSplited.Length == 8)
                                 {
-                                    return false;
+                                    if (!(inputSplited[6] == "Pas" || inputSplited[6] == "Step"))
+                                    {
+                                        return false;
+                                    }
                                 }
+                                if (inputSplited.Length > 6 && inputSplited.Length != 8)
+                                    return false;
+                                TranslateText(this, EventArgs.Empty);
+                                return true;
                             }
-                            if (inputSplited.Length > 6 && inputSplited.Length != 8)
-                                return false;
-                            TranslateText(this, EventArgs.Empty);
-                            return true;
-                        }
-                return false;
+                    return false;
 
-        }catch
-        {
-            return false;
-        }
+            }catch
+            {
+                return false;
+            }
+        return true;
     }
 
     // translate the text inside the node
@@ -155,10 +157,19 @@ public class NodeForLoop : Nodes
             }
         }
 
-        // logic goes there
+        if(varIncrement.Value <= varEnd)
+        {
+            varIncrement.Value += varStep;
+            varIncrement.Persist();
+
+            // other code will go here
+        }
     }
     public override void PostExecutionCleanUp()
     {
-        throw new System.NotImplementedException();
+        varStep = 1;
+        varEnd = 0;
+        varIncrement = null;
+        varStart = 0;
     }
 }

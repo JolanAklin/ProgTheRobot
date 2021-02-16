@@ -6,10 +6,30 @@ using TMPro;
 public class NodeMethod : Nodes
 {
     private string input;
-    public void ChangeInput(TMP_InputField tMP_InputField)
+    public TMP_Dropdown tMP_Dropdown;
+    private RobotScript nextScript;
+
+    new private void Start()
     {
-        input = tMP_InputField.text;
+        base.Start();
+        UpdateScriptList();
     }
+
+    private void UpdateScriptList()
+    {
+        List<string> options = new List<string>();
+        for (int i = 1; i < rs.robot.robotScripts.Count; i++)
+        {
+            options.Add(rs.robot.robotScripts[i].name);
+        }
+        tMP_Dropdown.AddOptions(options);
+    }
+
+    public void ChangeSelected()
+    {
+        nextScript = rs.robot.robotScripts[tMP_Dropdown.value + 1];
+    }
+
     public override void SerializeNode()
     {
         throw new System.NotImplementedException();

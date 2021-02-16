@@ -13,17 +13,18 @@ public class RobotScript
 
     public List<GameObject> nodes = new List<GameObject>();
 
-    public RobotScript(string name)
+    public RobotScript(string name, Robot robot)
     {
         this.name = name;
-        Init();
+        Init(robot);
     }
 
-    private void Init()
+    private void Init(Robot robot)
     {
         // All robotscripts have a different id
         id = nextid;
         nextid++;
+        this.robot = robot;
         robotScripts.Add(id, this);
     }
 
@@ -59,7 +60,7 @@ public class RobotScript
         Manager.instance.currentlySelectedScript = this.id;
         foreach (GameObject node in nodes)
         {
-            Manager.instance.CreateNodeObject(node);
+            Manager.instance.CreateNodeObject(node, this);
         }
         Debug.Log($"Loaded Script {id}");
     }
