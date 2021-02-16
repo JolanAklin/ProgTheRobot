@@ -8,7 +8,7 @@ public class ExecManager : MonoBehaviour
 
     public static ExecManager Instance { get => instance; private set => instance = value; }
 
-    public Nodes nodeStart;
+    
 
     private void Awake()
     {
@@ -25,6 +25,9 @@ public class ExecManager : MonoBehaviour
 
     public void StartExec()
     {
-        nodeStart.Execute();
+        foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+        {
+            robot.Value.MainScript.nodeStart.Execute();
+        }
     }
 }

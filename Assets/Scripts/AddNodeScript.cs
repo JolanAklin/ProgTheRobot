@@ -9,8 +9,6 @@ public class AddNodeScript : MonoBehaviour
     private Transform scriptPanel;
     public List<nodeObject> nodeObjects = new List<nodeObject>();
 
-    private static bool canAddStartNode = true;
-
     // object used to fill the list in the inspector
     [Serializable]
     public class nodeObject
@@ -29,7 +27,7 @@ public class AddNodeScript : MonoBehaviour
         {
             AddAction(nodeType.ToString(), () =>
             {
-                if(!canAddStartNode && nodeType.ToString() == "start")
+                if(RobotScript.robotScripts[Manager.instance.currentlySelectedScript].hasAStartNode && nodeType.ToString() == "start")
                 {
                     Debugger.Log("Il ne peut y avoir qu'un seul bloc de départ");
                 }else
@@ -40,8 +38,8 @@ public class AddNodeScript : MonoBehaviour
                     GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
                     if (nodeType.ToString() == "start")
                     {
-                        ExecManager.Instance.nodeStart = instantiatedNode.GetComponent<Nodes>();
-                        canAddStartNode = false;
+                        RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodeStart = instantiatedNode.GetComponent<Nodes>();
+                        RobotScript.robotScripts[Manager.instance.currentlySelectedScript].hasAStartNode = true;
                     }
                     node.transform.position = spawnPos;
                     RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);

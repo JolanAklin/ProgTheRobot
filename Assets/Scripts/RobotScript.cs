@@ -11,6 +11,9 @@ public class RobotScript
     public string name;
     public Robot robot;
 
+    public bool hasAStartNode = false;
+    public Nodes nodeStart;
+
     public List<GameObject> nodes = new List<GameObject>();
 
     public RobotScript(string name, Robot robot)

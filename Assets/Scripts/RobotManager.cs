@@ -52,10 +52,15 @@ public class RobotManager : MonoBehaviour
         if (actionOnUpdate == null)
         {
             actionOnUpdate = TurnRight;
-            targetRotation = transform.rotation.eulerAngles + new Vector3(0, -90, 0);
+            targetRotation = transform.rotation.eulerAngles + new Vector3(0,90,0);
         }
-        transform.Rotate(-Vector3.up * execSpeed * Time.deltaTime * 40);
-        if (targetRotation.y - transform.rotation.eulerAngles.y > 0)
+        transform.Rotate(Vector3.up * execSpeed * Time.deltaTime * 40);
+        Vector3 robotRot = transform.rotation.eulerAngles;
+        if(robotRot.y == 0)
+        {
+            robotRot = new Vector3(0, 360, 0);
+        }
+        if (robotRot.y - targetRotation.y > 0)
         {
             transform.rotation = Quaternion.Euler(targetRotation);
             actionOnUpdate = null;
@@ -73,15 +78,10 @@ public class RobotManager : MonoBehaviour
         if (actionOnUpdate == null)
         {
             actionOnUpdate = TurnLeft;
-            targetRotation = transform.rotation.eulerAngles + new Vector3(0,90,0);
+            targetRotation = transform.rotation.eulerAngles + new Vector3(0, -90, 0);
         }
-        transform.Rotate(Vector3.up * execSpeed * Time.deltaTime * 40);
-        Vector3 robotRot = transform.rotation.eulerAngles;
-        if(robotRot.y == 0)
-        {
-            robotRot = new Vector3(0, 360, 0);
-        }
-        if (robotRot.y - targetRotation.y > 0)
+        transform.Rotate(-Vector3.up * execSpeed * Time.deltaTime * 40);
+        if (targetRotation.y - transform.rotation.eulerAngles.y > 0)
         {
             transform.rotation = Quaternion.Euler(targetRotation);
             actionOnUpdate = null;

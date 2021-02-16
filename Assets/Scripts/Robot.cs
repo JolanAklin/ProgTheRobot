@@ -19,7 +19,12 @@ public class Robot
     public static int idSelected;
     public int id;
 
+
+    private RobotScript mainScript;
+    public RobotScript MainScript { get => mainScript; private set => mainScript = value; }
+
     public List<RobotScript> robotScripts = new List<RobotScript>();
+
 
 
     /// <summary>
@@ -45,7 +50,8 @@ public class Robot
         id = nextid;
         nextid++;
         robots.Add(id, this);
-        CreateScript("Principal");
+        MainScript = new RobotScript("Principal", this);
+        AddScript(MainScript);
     }
 
     public static void DeleteRobot(int id)

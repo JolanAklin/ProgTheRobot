@@ -14,7 +14,7 @@ public class NodeEnd : Nodes
     }
     public override void Execute()
     {
-        throw new System.NotImplementedException();
+        CallNextNode();
     }
 
     public override void CallNextNode()

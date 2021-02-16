@@ -7,14 +7,21 @@ public class ConnectHandle : MonoBehaviour
 {
     public Nodes node;
     public bool isInput = false;
-    public Image inputImage;
+    private Image image;
 
     private void Start()
     {
+        image = GetComponent<Image>();
         if (isInput)
             Manager.instance.OnSpline += ShowHide;
-        if (inputImage != null)
-            inputImage.enabled = false;
+        if (image != null && isInput)
+            image.enabled = false;
+    }
+
+    private void OnDestroy()
+    {
+        if (isInput)
+            Manager.instance.OnSpline -= ShowHide;
     }
 
     // when the handle is clicked, will ask the manager.
@@ -28,14 +35,18 @@ public class ConnectHandle : MonoBehaviour
             nextNode = null;
             Manager.instance.node = null;
         }
+        if(!isInput)
+        {
+            image.enabled = false;
+        }
     }
 
     // show and hide the input image (red dot)
     public void ShowHide(object sender, Manager.OnSplineEventArgs e)
     {
         if (e.splineStarted)
-            inputImage.enabled = true;
+            image.enabled = true;
         else
-            inputImage.enabled = false;
+            image.enabled = false;
     }
 }

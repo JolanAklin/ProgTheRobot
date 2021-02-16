@@ -168,7 +168,6 @@ public class Manager : MonoBehaviour
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);
             node.nextNodeId = sender.id;
-            Debug.Log(node.gameObject.name + " " + sender.gameObject.name);
             splineManager = null;
             return node;
         }

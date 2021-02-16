@@ -21,8 +21,6 @@ public class NodeStart : Nodes
     {
         if (NodesDict.ContainsKey(nextNodeId))
         {
-
-            Debug.Log("there");
             NodesDict[nextNodeId].Execute();
         }
     }

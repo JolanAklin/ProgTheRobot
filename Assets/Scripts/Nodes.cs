@@ -98,7 +98,6 @@ public abstract class Nodes : MonoBehaviour
         // All nodes have a different id
         id = nextid;
         nextid++;
-        Debug.Log(nextid);
         nodes.Add(id, this);
     }
 

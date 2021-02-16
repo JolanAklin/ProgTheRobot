@@ -23,7 +23,6 @@ public class NodeCommande : Nodes
 
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
-        Debug.Log("change input");
         inputField = tMP_InputField;
         input = tMP_InputField.text;
         if (!ValidateInput())
