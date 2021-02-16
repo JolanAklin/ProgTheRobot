@@ -10,6 +10,7 @@ public class NodeIf : Nodes
 {
     private string input;
     private string[] inputSplited;
+    public int nextNodeIdFalse;
 
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
@@ -51,7 +52,8 @@ public class NodeIf : Nodes
         {
             if (value1 == value2)
             {
-
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
             }
 
         }else if (input.Contains("<"))
@@ -93,8 +95,7 @@ public class NodeIf : Nodes
 
     public override void CallNextNode()
     {
-        if (NodesDict.ContainsKey(nextNodeId))
-            NodesDict[nextNodeId].Execute();
+        //unused
     }
 
     public override void PostExecutionCleanUp()

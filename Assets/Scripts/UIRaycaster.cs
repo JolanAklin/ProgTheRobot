@@ -161,6 +161,14 @@ public class UIRaycaster : MonoBehaviour
         {
             cameraCanBePanned = false;
         }
+
+        if(Input.GetKey(KeyCode.LeftControl) && rayCastResults.Count == 0)
+        {
+            float zoom = NodeDisplay.instance.nodeCamera.orthographicSize - Input.mouseScrollDelta.y;
+            if (zoom < 1)
+                zoom = 1f;
+            NodeDisplay.instance.nodeCamera.orthographicSize = zoom;
+        }
         #endregion
     }
 }

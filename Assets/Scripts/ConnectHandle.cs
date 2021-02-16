@@ -9,6 +9,8 @@ public class ConnectHandle : MonoBehaviour
     public bool isInput = false;
     private Image image;
 
+    public bool ifFalse;
+
     private void Start()
     {
         image = GetComponent<Image>();
@@ -27,15 +29,20 @@ public class ConnectHandle : MonoBehaviour
     // when the handle is clicked, will ask the manager.
     public void Click()
     {
-        Nodes nextNode = Manager.instance.ConnectNode(isInput, transform, node);
-        if(nextNode != null)
+        Nodes nextNode;
+        if (ifFalse)
+            nextNode = Manager.instance.ConnectNode(isInput, transform, node, ref node.gameObject.GetComponent<NodeIf>().nextNodeIdFalse);
+        else
+            nextNode = Manager.instance.ConnectNode(isInput, transform, node, ref node.nextNodeId);
+
+        if (nextNode != null)
         {
-            node.nextNodeId = nextNode.id;
-            node.nextGameObject = nextNode.gameObject;
+            //node.nextNodeId = nextNode.id;
+            //node.nextGameObject = nextNode.gameObject;
             nextNode = null;
             Manager.instance.node = null;
         }
-        if(!isInput)
+        if (!isInput)
         {
             image.enabled = false;
         }

@@ -151,7 +151,7 @@ public class Manager : MonoBehaviour
     {
         public bool splineStarted;
     }
-    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender)
+    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender, ref int idToSet)
     {
         if(node == null && !isInput)
         {
@@ -167,7 +167,8 @@ public class Manager : MonoBehaviour
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);
-            node.nextNodeId = sender.id;
+            //node.nextNodeId = sender.id;
+            idToSet = sender.id;
             splineManager = null;
             return node;
         }
