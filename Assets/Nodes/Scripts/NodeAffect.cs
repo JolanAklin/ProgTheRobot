@@ -67,12 +67,12 @@ public class NodeAffect : Nodes
     public override void Execute()
     {
         // calculate and set the var
-        string[] inputSplited = VarsManager.Instance.ReplaceStringByVar(input.Split(' '));
+        string[] inputSplited = rs.robot.varsManager.ReplaceStringByVar(input.Split(' '));
         if (inputSplited != null)
         {
             if (var == null)
             {
-                var = VarsManager.Instance.GetVar(inputSplited[0]);
+                var = rs.robot.varsManager.GetVar(inputSplited[0]);
                 if (var == null)
                 {
                     Debugger.LogError("Une erreur est survenue");
@@ -90,6 +90,12 @@ public class NodeAffect : Nodes
             Debugger.LogError("La variable spécifiée n'est pas connue");
             ChangeBorderColor(errorColor);
         }
+    }
+
+    public override void CallNextNode()
+    {
+        if (NodesDict.ContainsKey(nextNodeId))
+            NodesDict[nextNodeId].Execute();
     }
 
     public override void PostExecutionCleanUp()

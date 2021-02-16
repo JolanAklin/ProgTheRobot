@@ -11,6 +11,7 @@ public class Robot
     public uint power;
 
     public RobotManager robotManager;
+    public VarsManager varsManager;
 
     public static int nextid = 0;
     // store all the robot in this dictionnary
@@ -33,6 +34,8 @@ public class Robot
         this.color = color;
         this.robotName = name;
         this.power = power;
+        varsManager = new VarsManager();
+        robotManager = Manager.instance.CreateRobot(color);
         Init(justCreated);
     }
 

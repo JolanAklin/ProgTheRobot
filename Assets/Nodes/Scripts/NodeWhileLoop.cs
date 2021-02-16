@@ -25,8 +25,9 @@ public class NodeWhileLoop : Nodes
         ChangeBorderColor(defaultColor);
     }
 
-    private void Awake()
+    new private void Awake()
     {
+        base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
     }
 
@@ -75,6 +76,13 @@ public class NodeWhileLoop : Nodes
     {
         throw new System.NotImplementedException();
     }
+
+    public override void CallNextNode()
+    {
+        if (NodesDict.ContainsKey(nextNodeId))
+            NodesDict[nextNodeId].Execute();
+    }
+
     public override void PostExecutionCleanUp()
     {
         throw new System.NotImplementedException();

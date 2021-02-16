@@ -16,6 +16,12 @@ public class NodeEnd : Nodes
     {
         throw new System.NotImplementedException();
     }
+
+    public override void CallNextNode()
+    {
+        Debug.Log("its the end");
+    }
+
     public override void PostExecutionCleanUp()
     {
         throw new System.NotImplementedException();

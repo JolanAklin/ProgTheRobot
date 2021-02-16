@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class NodeStart : Nodes
 {
-    
-
-
-
     public override void SerializeNode()
     {
         throw new System.NotImplementedException();
@@ -18,8 +14,19 @@ public class NodeStart : Nodes
     }
     public override void Execute()
     {
-        throw new System.NotImplementedException();
+        CallNextNode();
     }
+
+    public override void CallNextNode()
+    {
+        if (NodesDict.ContainsKey(nextNodeId))
+        {
+
+            Debug.Log("there");
+            NodesDict[nextNodeId].Execute();
+        }
+    }
+
     public override void PostExecutionCleanUp()
     {
         throw new System.NotImplementedException();

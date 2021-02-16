@@ -10,8 +10,9 @@ public class NodeCommande : Nodes
     private string input;
     private TMP_InputField inputField;
 
-    private void Awake()
+    new private void Awake()
     {
+        base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
     }
 
@@ -129,15 +130,15 @@ public class NodeCommande : Nodes
                 break;
             case "Avancer":
             case "GoForward":
-                rs.robot.robotManager.GoForward();
+                rs.robot.robotManager.GoForward(() => { CallNextNode(); });
                 break;
             case "TournerADroite":
             case "TurnRight":
-                rs.robot.robotManager.TurnRight();
+                rs.robot.robotManager.TurnRight(() => { CallNextNode(); });
                 break;
             case "TournerAGauche":
             case "TurnLeft":
-                rs.robot.robotManager.TurnLeft();
+                rs.robot.robotManager.TurnLeft(() => { CallNextNode(); });
                 break;
             case "Marquer":
             case "Mark":
@@ -168,6 +169,12 @@ public class NodeCommande : Nodes
                 Debugger.LogError("Commande inconnue");
                 break;
         }
+    }
+
+    public override void CallNextNode()
+    {
+        if (NodesDict.ContainsKey(nextNodeId))
+            NodesDict[nextNodeId].Execute();
     }
 
     public override void PostExecutionCleanUp()

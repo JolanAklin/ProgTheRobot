@@ -33,6 +33,7 @@ public class NodeForLoop : Nodes
 
     private void Awake()
     {
+        base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
     }
 
@@ -110,7 +111,7 @@ public class NodeForLoop : Nodes
     {
         if(varIncrement == null)
         {
-            varIncrement = VarsManager.Instance.GetVar(inputSplited[0]);
+            varIncrement = rs.robot.varsManager.GetVar(inputSplited[0]);
             if(varIncrement == null)
             {
                 Debugger.LogError("Une erreur est survenue");
@@ -118,7 +119,7 @@ public class NodeForLoop : Nodes
             }
             if(!int.TryParse(inputSplited[3], out varStart))
             {
-                VarsManager.Var tempVar = VarsManager.Instance.GetVar(inputSplited[3]);
+                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[3]);
                 if(tempVar != null)
                 {
                     varStart = tempVar.Value;
@@ -131,7 +132,7 @@ public class NodeForLoop : Nodes
             }
             if (!int.TryParse(inputSplited[5], out varEnd))
             {
-                VarsManager.Var tempVar = VarsManager.Instance.GetVar(inputSplited[5]);
+                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[5]);
                 if (tempVar != null)
                 {
                     varEnd = tempVar.Value;
@@ -144,7 +145,7 @@ public class NodeForLoop : Nodes
             }
             if (!int.TryParse(inputSplited[7], out varStep))
             {
-                VarsManager.Var tempVar = VarsManager.Instance.GetVar(inputSplited[7]);
+                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[7]);
                 if (tempVar != null)
                 {
                     varStep = tempVar.Value;
@@ -165,6 +166,13 @@ public class NodeForLoop : Nodes
             // other code will go here
         }
     }
+
+    public override void CallNextNode()
+    {
+        if (NodesDict.ContainsKey(nextNodeId))
+            NodesDict[nextNodeId].Execute();
+    }
+
     public override void PostExecutionCleanUp()
     {
         varStep = 1;

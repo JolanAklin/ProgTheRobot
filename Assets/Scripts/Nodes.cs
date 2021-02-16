@@ -40,6 +40,8 @@ public abstract class Nodes : MonoBehaviour
     /// </summary>
     public abstract void Execute();
 
+    public abstract void CallNextNode();
+
     /// <summary>
     /// Clean the node when the execution of the script is completed
     /// </summary>
@@ -48,6 +50,8 @@ public abstract class Nodes : MonoBehaviour
     // id stuff
     public int id;
     public static int nextid = 0;
+    private static Dictionary<int, Nodes> nodes = new Dictionary<int, Nodes>();
+    public static Dictionary<int, Nodes> NodesDict { get => nodes; private set => nodes = value; }
 
     public RobotScript rs;
 
@@ -89,11 +93,13 @@ public abstract class Nodes : MonoBehaviour
     public Color selectedColor;
     public Color errorColor;
 
-    private void Awake()
+    public void Awake()
     {
         // All nodes have a different id
         id = nextid;
         nextid++;
+        Debug.Log(nextid);
+        nodes.Add(id, this);
     }
 
     public void Start()

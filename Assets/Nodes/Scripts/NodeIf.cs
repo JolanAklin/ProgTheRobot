@@ -91,6 +91,12 @@ public class NodeIf : Nodes
         }
     }
 
+    public override void CallNextNode()
+    {
+        if (NodesDict.ContainsKey(nextNodeId))
+            NodesDict[nextNodeId].Execute();
+    }
+
     public override void PostExecutionCleanUp()
     {
         throw new System.NotImplementedException();

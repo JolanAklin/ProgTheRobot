@@ -9,6 +9,8 @@ public class AddNodeScript : MonoBehaviour
     private Transform scriptPanel;
     public List<nodeObject> nodeObjects = new List<nodeObject>();
 
+    private static bool canAddStartNode = true;
+
     // object used to fill the list in the inspector
     [Serializable]
     public class nodeObject
@@ -22,18 +24,29 @@ public class AddNodeScript : MonoBehaviour
     {
         scriptPanel = GameObject.FindGameObjectWithTag("NodeHolder").transform;
 
+        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
         foreach (Nodes.NodeTypes nodeType in (Nodes.NodeTypes[])Enum.GetValues(typeof(Nodes.NodeTypes)))
         {
-            GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
             AddAction(nodeType.ToString(), () =>
             {
-                Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
-                spawnPos.z = 0;
-                GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject;
-                GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
-                node.transform.position = spawnPos;
-                RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);
-                instantiatedNode.GetComponent<Nodes>().rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript];
+                if(!canAddStartNode && nodeType.ToString() == "start")
+                {
+                    Debugger.Log("Il ne peut y avoir qu'un seul bloc de départ");
+                }else
+                {
+                    Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
+                    spawnPos.z = 0;
+                    GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject;
+                    GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
+                    if (nodeType.ToString() == "start")
+                    {
+                        ExecManager.Instance.nodeStart = instantiatedNode.GetComponent<Nodes>();
+                        canAddStartNode = false;
+                    }
+                    node.transform.position = spawnPos;
+                    RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);
+                    instantiatedNode.GetComponent<Nodes>().rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript];
+                }
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);
             });

@@ -4,29 +4,15 @@ using UnityEngine;
 using System;
 using System.Linq;
 
-public class VarsManager : MonoBehaviour
+public class VarsManager
 {
-    private static VarsManager instance;
-    public static VarsManager Instance { get => instance; private set => instance = value; }
-
     private Dictionary<string, int> vars = new Dictionary<string, int>();
-
-    private void Awake()
-    {
-        if(Instance == null)
-            Instance = this;
-        else
-        {
-            Destroy(this);
-            Debug.Log("Destroying, instance already exist");
-        }
-    }
 
     public Var GetVar(string name, int value)
     {
-        if (Instance.vars.ContainsKey(name))
+        if (vars.ContainsKey(name))
         {
-            Var var = new Var(name);
+            Var var = new Var(name, this);
             var.Value = value;
             var.Persist();
             return var;
@@ -35,8 +21,8 @@ public class VarsManager : MonoBehaviour
         {
             if(CheckVarName(name))
             {
-                Instance.vars.Add(name, value);
-                Var var = new Var(name);
+                vars.Add(name, value);
+                Var var = new Var(name, this);
                 return var;
             }
             return null;
@@ -45,9 +31,9 @@ public class VarsManager : MonoBehaviour
 
     public Var GetVar(string name)
     {
-        if (Instance.vars.ContainsKey(name))
+        if (vars.ContainsKey(name))
         {
-            Var var = new Var(name);
+            Var var = new Var(name, this);
             return var;
         }
         return null;
@@ -187,17 +173,20 @@ public class VarsManager : MonoBehaviour
         private int value;
         public int Value { get => value; set => this.value = value; }
 
+        private VarsManager varsManager;
 
-        public Var(string name)
+
+        public Var(string name, VarsManager varsManager)
         {
             Name = name;
-            Value = Instance.vars[Name];
+            Value = varsManager.vars[Name];
+            this.varsManager = varsManager;
         }
 
         // save the value in the dictionnary
         public void Persist()
         {
-            Instance.vars[name] = Value;
+            varsManager.vars[name] = Value;
         }
     }
 }

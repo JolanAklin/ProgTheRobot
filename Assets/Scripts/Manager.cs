@@ -32,6 +32,8 @@ public class Manager : MonoBehaviour
     public int currentlySelectedScript = -1;
     public GameObject nodeHolder; // all the nodes and spline are children of this object
 
+    public GameObject robotPrefab;
+
     private void Awake()
     {
         if (instance == null)
@@ -71,7 +73,7 @@ public class Manager : MonoBehaviour
 
         // fill robots and scripts lists to test, will be removed
         List<Robot> robots = new List<Robot>();
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 1; i++)
         {
             Robot robot = new Robot(Color.blue, "Testbot", 100, true);
             robots.Add(robot);
@@ -165,6 +167,8 @@ public class Manager : MonoBehaviour
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);
+            node.nextNodeId = sender.id;
+            Debug.Log(node.gameObject.name + " " + sender.gameObject.name);
             splineManager = null;
             return node;
         }
@@ -183,5 +187,10 @@ public class Manager : MonoBehaviour
         {
             Destroy(transform.gameObject);
         }
+    }
+
+    public RobotManager CreateRobot(Color color)
+    {
+        return Instantiate(robotPrefab, new Vector3(0, 1, 0), Quaternion.identity, transform.root).GetComponent<RobotManager>();
     }
 }
