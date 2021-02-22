@@ -55,18 +55,6 @@ public class Manager : MonoBehaviour
         res.width = Screen.width;
         canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
     }
-
-    private void Update()
-    {
-        // change the canvas resolution to match the screen size
-        if (res.height != Screen.height || res.width != Screen.width)
-        {
-            canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
-            res.height = Screen.height;
-            res.width = Screen.width;
-        }
-    }
-
     private void Start()
     {
         // load the translation
@@ -99,6 +87,23 @@ public class Manager : MonoBehaviour
         }
         listRobot.Init(robotElements, 1);
     }
+
+    private void Update()
+    {
+        // change the canvas resolution to match the screen size
+        if (res.height != Screen.height || res.width != Screen.width)
+        {
+            canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
+            res.height = Screen.height;
+            res.width = Screen.width;
+        }
+    }
+
+    public void ChangeSpeedSettings(Slider slider)
+    {
+        execSpeed = slider.value;
+    }
+
 
     // robot customization
     public void ChangeRobotSettings()

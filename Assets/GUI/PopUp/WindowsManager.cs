@@ -22,6 +22,8 @@ public class WindowsManager : MonoBehaviour
         public string popUpType;
     }
 
+    public GameObject editWindow;
+
     public popUpClass[] popUpWindows;
     [HideInInspector]
     public Dictionary<int, GameObject> popUpWindowsDict = new Dictionary<int, GameObject>();
@@ -53,5 +55,15 @@ public class WindowsManager : MonoBehaviour
     public static GameObject InstantiateWindow(int WindowType, Transform parentTransform)
     {
         return Instantiate(instance.popUpWindowsDict[WindowType], parentTransform);
+    }
+
+    public void ShowMain()
+    {
+        editWindow.SetActive(false);
+    }
+
+    public void ShowEdit()
+    {
+        editWindow.SetActive(true);
     }
 }
