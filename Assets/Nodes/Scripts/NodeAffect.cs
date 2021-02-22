@@ -86,14 +86,6 @@ public class NodeAffect : Nodes
         return false;
     }
 
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -160,4 +152,20 @@ public class NodeAffect : Nodes
         ChangeBorderColor(defaultColor);
         var = null;
     }
+
+    #region save stuff
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeAffect serializedNodeAffect = new SerializedNodeAffect() { id = id, nextNodeId = nextNodeId, input = input };
+        return serializedNodeAffect;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    public class SerializedNodeAffect : SerializableNode
+    {
+        public string input;
+    }
+    #endregion
 }

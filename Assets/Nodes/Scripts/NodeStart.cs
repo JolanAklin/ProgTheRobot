@@ -5,14 +5,6 @@ using System;
 
 public class NodeStart : Nodes
 {
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -55,4 +47,20 @@ public class NodeStart : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+
+    #region save stuff
+    public class SerializedStart : SerializableNode
+    {
+
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedStart serializedStart = new SerializedStart() { id = id, nextNodeId = nextNodeId };
+        return serializedStart;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

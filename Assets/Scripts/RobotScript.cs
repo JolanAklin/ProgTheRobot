@@ -35,17 +35,6 @@ public class RobotScript
         robotScripts.Add(id, this);
     }
 
-    // convert this class to json
-    public void SerializeScript()
-    {
-
-    }
-
-    // convert json to this class
-    public void DeSerializeScript()
-    {
-
-    }
 
     // convert node script to displayable element in list
     public List.ListElement ConvertToListElement()
@@ -77,4 +66,32 @@ public class RobotScript
         endCallBack?.Invoke();
         onStop?.Invoke(this, EventArgs.Empty);
     }
+
+    #region save stuff
+    [Serializable]
+    public class SerializedRobotScript
+    {
+        public int id;
+        public string name;
+        public List<Nodes.SerializableNode> serializedNode = new List<Nodes.SerializableNode>();
+    }
+
+    // convert this class to json
+    public string SerializeScript()
+    {
+        List<Nodes.SerializableNode> serializedNode = new List<Nodes.SerializableNode>();
+        foreach (GameObject node in nodes)
+        {
+            serializedNode.Add(node.GetComponent<Nodes>().SerializeNode());
+        }
+        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, name = name, serializedNode = serializedNode};
+        return JsonUtility.ToJson(serializedRobotScript);
+    }
+
+    // convert json to this class
+    public void DeSerializeScript()
+    {
+
+    }
+    #endregion
 }

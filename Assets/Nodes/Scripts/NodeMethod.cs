@@ -7,7 +7,6 @@ using System;
 
 public class NodeMethod : Nodes
 {
-    private string input;
     public TMP_Dropdown tMP_Dropdown;
     private RobotScript nextScript;
     Dictionary<int, string> options = new Dictionary<int, string>();
@@ -73,14 +72,6 @@ public class NodeMethod : Nodes
     }
 
 
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -126,4 +117,19 @@ public class NodeMethod : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+    #region save stuff
+    public class SerializedNodeMethod : SerializableNode
+    {
+        public int dropDownValue;
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeMethod serializedNodeMethod = new SerializedNodeMethod() { id = id, nextNodeId = nextNodeId, dropDownValue = tMP_Dropdown.value };
+        return serializedNodeMethod;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

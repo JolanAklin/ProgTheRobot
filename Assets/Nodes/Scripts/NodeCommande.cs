@@ -73,14 +73,6 @@ public class NodeCommande : Nodes
         }
         return false;
     }
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
 
     public void TranslateText(object sender, EventArgs e)
     {
@@ -209,4 +201,20 @@ public class NodeCommande : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+
+    #region save stuff
+    public class SerializedNodeCommand : SerializableNode
+    {
+        public string input;
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeCommand serializedNodeCommand = new SerializedNodeCommand() { id = id, nextNodeId = nextNodeId, input = input };
+        return serializedNodeCommand;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

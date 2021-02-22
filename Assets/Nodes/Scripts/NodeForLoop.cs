@@ -108,14 +108,6 @@ public class NodeForLoop : Nodes
         inputField.text = input;
     }
 
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -239,4 +231,21 @@ public class NodeForLoop : Nodes
         varIncrement = null;
         varStart = 0;
     }
+
+    #region save stuff
+    public class SerializedNodeForLoop : SerializableNode
+    {
+        public int nextNodeInside;
+        public string input;
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeForLoop serializedNodeForLoop = new SerializedNodeForLoop() { id = id, nextNodeId = nextNodeId, input = input, nextNodeInside = nextNodeInside};
+        return serializedNodeForLoop;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

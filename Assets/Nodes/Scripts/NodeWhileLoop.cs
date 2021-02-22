@@ -76,14 +76,6 @@ public class NodeWhileLoop : Nodes
         inputField.text = input;
     }
 
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -227,4 +219,21 @@ public class NodeWhileLoop : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+
+    #region save stuff
+    public class SerializedNodeWhileLoop : SerializableNode
+    {
+        public int nextNodeInside;
+        public string input;
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeWhileLoop serializedNodeWhileLoop = new SerializedNodeWhileLoop() { id = id, nextNodeId = nextNodeId, input = input,nextNodeInside = nextNodeInside };
+        return serializedNodeWhileLoop;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

@@ -29,13 +29,6 @@ public abstract class Nodes : MonoBehaviour
     }
 
     /// <summary>
-    /// Will convert the node to json
-    /// </summary>
-    public abstract void SerializeNode();
-
-    public abstract void DeSerializeNode();
-
-    /// <summary>
     /// Execute the node
     /// </summary>
     public abstract void Execute();
@@ -246,4 +239,20 @@ public abstract class Nodes : MonoBehaviour
     {
         return new Vector3(Math.Abs(vector3.x), Math.Abs(vector3.y), Math.Abs(vector3.z));
     }
+
+    #region Save stuff
+    [Serializable]
+    public class SerializableNode
+    {
+        public int id;
+        public int nextNodeId;
+    }
+    /// <summary>
+    /// Will convert the node to json
+    /// </summary>
+    public abstract SerializableNode SerializeNode();
+
+    public abstract void DeSerializeNode();
+
+    #endregion
 }

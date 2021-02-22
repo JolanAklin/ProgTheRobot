@@ -85,14 +85,6 @@ public class NodeReadWrite : Nodes
         inputField.text = input;
     }
 
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -154,4 +146,20 @@ public class NodeReadWrite : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+
+    #region save stuff
+    public class SerializedNodeReadWrite : SerializableNode
+    {
+        public string input;
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeReadWrite serializedNodeReadWrite = new SerializedNodeReadWrite() { id = id, nextNodeId = nextNodeId, input = input };
+        return serializedNodeReadWrite;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }

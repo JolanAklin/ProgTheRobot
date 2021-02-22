@@ -52,14 +52,6 @@ public class NodeIf : Nodes
         return true;
     }
 
-    public override void SerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
-    public override void DeSerializeNode()
-    {
-        throw new System.NotImplementedException();
-    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)
@@ -202,4 +194,21 @@ public class NodeIf : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+
+    #region save stuff
+    public class SerializedNodeIf : SerializableNode
+    {
+        public int nextNodeIdFalse;
+        public string input;
+    }
+    public override SerializableNode SerializeNode()
+    {
+        SerializedNodeIf serializedNodeIf = new SerializedNodeIf() { id = id, nextNodeId = nextNodeId, input = input, nextNodeIdFalse = nextNodeIdFalse };
+        return serializedNodeIf;
+    }
+    public override void DeSerializeNode()
+    {
+        throw new System.NotImplementedException();
+    }
+    #endregion
 }
