@@ -79,6 +79,8 @@ public class NodeWhileLoop : Nodes
     }
     public override void Execute()
     {
+        ChangeBorderColor(currentExecutedNode);
+
         string[] delimiters = new string[] { " ", "While", "TantQue" };
         string[] expressionSplited1 = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         string expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited1));
@@ -101,17 +103,17 @@ public class NodeWhileLoop : Nodes
         int value2 = Convert.ToInt32(new DataTable().Compute(expr, null));
 
 
+        IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
+        ChangeBorderColor(defaultColor);
         if (input.Contains("="))
         {
             if (value1 == value2)
             {
-                if (NodesDict.ContainsKey(nextNodeInside))
-                    NodesDict[nextNodeInside].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine(coroutine);
             }
 
         }
@@ -119,73 +121,76 @@ public class NodeWhileLoop : Nodes
         {
             if (value1 < value2)
             {
-                if (NodesDict.ContainsKey(nextNodeInside))
-                    NodesDict[nextNodeInside].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if (input.Contains(">"))
         {
             if (value1 > value2)
             {
-                if (NodesDict.ContainsKey(nextNodeInside))
-                    NodesDict[nextNodeInside].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if (input.Contains(">="))
         {
             if (value1 >= value2)
             {
-                if (NodesDict.ContainsKey(nextNodeInside))
-                    NodesDict[nextNodeInside].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if (input.Contains("<="))
         {
             if (value1 <= value2)
             {
-                if (NodesDict.ContainsKey(nextNodeInside))
-                    NodesDict[nextNodeInside].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if (input.Contains("<>"))
         {
             if (value1 != value2)
             {
-                if (NodesDict.ContainsKey(nextNodeInside))
-                    NodesDict[nextNodeInside].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine(coroutine);
             }
         }
     }
 
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        CallNextNode();
+    }
+
+    IEnumerator WaitBeforeCallingNextNode(int nodeId)
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        NodesDict[nodeId].Execute();
+    }
+
     public override void CallNextNode()
     {
-        if (NodesDict.ContainsKey(nextNodeId))
-            NodesDict[nextNodeId].Execute();
+        //unused
     }
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)

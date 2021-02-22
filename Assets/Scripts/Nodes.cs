@@ -92,6 +92,8 @@ public abstract class Nodes : MonoBehaviour
     public Color defaultColor;
     public Color selectedColor;
     public Color errorColor;
+    public Color currentExecutedNode;
+    protected float executedColorTime = 1;
 
     public void Awake()
     {

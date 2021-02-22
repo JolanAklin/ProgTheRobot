@@ -78,6 +78,7 @@ public class NodeAffect : Nodes
     }
     public override void Execute()
     {
+        ChangeBorderColor(currentExecutedNode);
         // calculate and set the var
         string[] inputVarReplaced = rs.robot.varsManager.ReplaceStringsByVar((string[])inputSplited.Clone());
         if (inputVarReplaced != null)
@@ -107,6 +108,13 @@ public class NodeAffect : Nodes
             rs.robot.varsManager.GetVar(inputSplited[0], 0);
             Execute();
         }
+        StartCoroutine("WaitBeforeCallingNextNode");
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
         CallNextNode();
     }
 

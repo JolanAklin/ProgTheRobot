@@ -88,6 +88,8 @@ public class NodeReadWrite : Nodes
     }
     public override void Execute()
     {
+        ChangeBorderColor(currentExecutedNode);
+
         string[] delimiters = new string[] { " " };
         inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         PopUpReadWrite rw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "readWrite"), Manager.instance.canvas.transform).GetComponent<PopUpReadWrite>();
@@ -117,6 +119,7 @@ public class NodeReadWrite : Nodes
 
     public override void CallNextNode()
     {
+        ChangeBorderColor(defaultColor);
         if (NodesDict.ContainsKey(nextNodeId))
             NodesDict[nextNodeId].Execute();
     }

@@ -118,6 +118,7 @@ MonoBehaviour:
   node: {fileID: 6334978323922036880}
   isInput: 1
   ifFalse: 0
+  inLoopOut: 0
 --- !u!1 &396479144608984716
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,6 +892,7 @@ MonoBehaviour:
   defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
+  currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
   tMP_Dropdown: {fileID: 7294859057803665673}
 --- !u!1 &3168512351046951637
 GameObject:
@@ -2030,6 +2032,7 @@ MonoBehaviour:
   node: {fileID: 6334978323922036880}
   isInput: 0
   ifFalse: 0
+  inLoopOut: 0
 --- !u!1 &8623466811322456206
 GameObject:
   m_ObjectHideFlags: 0

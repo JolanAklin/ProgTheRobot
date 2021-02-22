@@ -111,7 +111,9 @@ public class NodeForLoop : Nodes
     }
     public override void Execute()
     {
-        if(varIncrement == null)
+        ChangeBorderColor(currentExecutedNode);
+
+        if (varIncrement == null)
         {
             if(!int.TryParse(inputSplited[3], out varStart))
             {
@@ -169,12 +171,27 @@ public class NodeForLoop : Nodes
             varIncrement.Persist();
 
             // other code will go here
-            NodesDict[nextNodeInside].Execute();
+            IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
+            StartCoroutine(coroutine);
         }
         else
         {
-            CallNextNode();
+            StartCoroutine("WaitBeforeCallingNextNode");
         }
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        CallNextNode();
+    }
+
+    IEnumerator WaitBeforeCallingNextNode(int nodeId)
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        NodesDict[nodeId].Execute();
     }
 
     public override void CallNextNode()

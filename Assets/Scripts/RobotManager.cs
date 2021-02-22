@@ -5,9 +5,6 @@ using System;
 
 public class RobotManager : MonoBehaviour
 {
-
-    public float execSpeed;
-
     private Action actionOnUpdate;
     private Action callBack;
 
@@ -41,7 +38,7 @@ public class RobotManager : MonoBehaviour
             actionOnUpdate = GoForward;
             targetPos = transform.position + transform.forward;
         }
-        transform.position += transform.forward * Time.deltaTime * execSpeed;
+        transform.position += transform.forward * Time.deltaTime * Manager.instance.execSpeed;
         if(Mathf.Abs(targetPos.x) - Mathf.Abs(transform.position.x) < Vector3.zero.x || Mathf.Abs(targetPos.y) - Mathf.Abs(transform.position.y) < Vector3.zero.y || Mathf.Abs(targetPos.z) - Mathf.Abs(transform.position.z) < Vector3.zero.z)
         {
             transform.position = targetPos;
@@ -63,7 +60,7 @@ public class RobotManager : MonoBehaviour
             actionOnUpdate = TurnRight;
             targetRotation = transform.rotation.eulerAngles + new Vector3(0,90,0);
         }
-        transform.Rotate(Vector3.up * execSpeed * Time.deltaTime * 40);
+        transform.Rotate(Vector3.up * Manager.instance.execSpeed * Time.deltaTime * 40);
         Vector3 robotRot = transform.rotation.eulerAngles;
         if(robotRot.y == 0)
         {
@@ -89,7 +86,7 @@ public class RobotManager : MonoBehaviour
             actionOnUpdate = TurnLeft;
             targetRotation = transform.rotation.eulerAngles + new Vector3(0, -90, 0);
         }
-        transform.Rotate(-Vector3.up * execSpeed * Time.deltaTime * 40);
+        transform.Rotate(-Vector3.up * Manager.instance.execSpeed * Time.deltaTime * 40);
         if (targetRotation.y - transform.rotation.eulerAngles.y > 0)
         {
             transform.rotation = Quaternion.Euler(targetRotation);

@@ -67,15 +67,24 @@ public class NodeMethod : Nodes
     }
     public override void Execute()
     {
-        if(nextScript.nodeStart != null)
+        ChangeBorderColor(currentExecutedNode);
+
+        if (nextScript.nodeStart != null)
         {
-            rs.endCallBack = () => { CallNextNode(); };
+            rs.endCallBack = () => { StartCoroutine("WaitBeforeCallingNextNode"); };
             nextScript.nodeStart.Execute();
         }
         else
         {
             Debugger.Log("Il n'y a pas de bloc de départ dans le script spécifié");
         }
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        CallNextNode();
     }
 
     public override void CallNextNode()

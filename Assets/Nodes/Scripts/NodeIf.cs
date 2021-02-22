@@ -44,6 +44,8 @@ public class NodeIf : Nodes
     }
     public override void Execute()
     {
+        ChangeBorderColor(currentExecutedNode);
+
         //string expression = inputSplited[0].Replace(" ", string.Empty).Trim();
         string[] delimiters = new string[] { " " };
         string[] expressionSplited1 = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
@@ -65,83 +67,88 @@ public class NodeIf : Nodes
             return;
         }
         int value2 = Convert.ToInt32(new DataTable().Compute(expr, null));
+
+        IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeIdFalse);
         if (input.Contains("="))
         {
             if (value1 == value2)
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
-            }else
+                StartCoroutine("WaitBeforeCallingNextNode");
+            }
+            else
             {
-                if (NodesDict.ContainsKey(nextNodeIdFalse))
-                    NodesDict[nextNodeIdFalse].Execute();
+                StartCoroutine(coroutine);
             }
 
         }else if (input.Contains("<"))
         {
             if (value1 < value2)
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeIdFalse))
-                    NodesDict[nextNodeIdFalse].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if(input.Contains(">"))
         {
             if (value1 > value2)
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeIdFalse))
-                    NodesDict[nextNodeIdFalse].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if(input.Contains(">="))
         {
             if (value1 >= value2)
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeIdFalse))
-                    NodesDict[nextNodeIdFalse].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if(input.Contains("<="))
         {
             if (value1 <= value2)
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeIdFalse))
-                    NodesDict[nextNodeIdFalse].Execute();
+                StartCoroutine(coroutine);
             }
         }
         else if(input.Contains("<>"))
         {
             if (value1 != value2)
             {
-                if (NodesDict.ContainsKey(nextNodeId))
-                    NodesDict[nextNodeId].Execute();
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
             else
             {
-                if (NodesDict.ContainsKey(nextNodeIdFalse))
-                    NodesDict[nextNodeIdFalse].Execute();
+                StartCoroutine(coroutine);
             }
         }
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        CallNextNode();
+    }
+
+    IEnumerator WaitBeforeCallingNextNode(int nodeId)
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        NodesDict[nodeId].Execute();
     }
 
     public override void CallNextNode()

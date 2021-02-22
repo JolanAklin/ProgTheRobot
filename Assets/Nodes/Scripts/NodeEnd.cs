@@ -15,12 +15,20 @@ public class NodeEnd : Nodes
     }
     public override void Execute()
     {
+
+        ChangeBorderColor(currentExecutedNode);
+        StartCoroutine("WaitBeforeCallingNextNode");
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
         CallNextNode();
     }
 
     public override void CallNextNode()
     {
-        //ExecManager.Instance.isRunning = false;
         ExecManager.Instance.isRunning = false;
         rs.End();
         Debug.Log("its the end");

@@ -34,6 +34,9 @@ public class Manager : MonoBehaviour
 
     public GameObject robotPrefab;
 
+    // define the execution speed of the script
+    public float execSpeed;
+
     private void Awake()
     {
         if (instance == null)

@@ -123,21 +123,23 @@ public class NodeCommande : Nodes
 
     public override void Execute()
     {
+        ChangeBorderColor(currentExecutedNode);
+
         switch (input)
         {
             case "":
                 break;
             case "Avancer":
             case "GoForward":
-                rs.robot.robotManager.GoForward(() => { CallNextNode(); });
+                rs.robot.robotManager.GoForward(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
                 break;
             case "TournerADroite":
             case "TurnRight":
-                rs.robot.robotManager.TurnRight(() => { CallNextNode(); });
+                rs.robot.robotManager.TurnRight(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
                 break;
             case "TournerAGauche":
             case "TurnLeft":
-                rs.robot.robotManager.TurnLeft(() => { CallNextNode(); });
+                rs.robot.robotManager.TurnLeft(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
                 break;
             case "Marquer":
             case "Mark":
@@ -168,6 +170,13 @@ public class NodeCommande : Nodes
                 Debugger.LogError("Commande inconnue");
                 break;
         }
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
+        CallNextNode();
     }
 
     public override void CallNextNode()

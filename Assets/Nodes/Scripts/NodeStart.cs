@@ -18,10 +18,19 @@ public class NodeStart : Nodes
     }
     public override void Execute()
     {
+        ChangeBorderColor(currentExecutedNode);
+
         rs.robot.robotManager.transform.position = rs.robot.robotManager.robotStartPos;
         rs.robot.robotManager.transform.rotation = rs.robot.robotManager.robotStartRot;
         rs.robot.varsManager.Clean();
         OnStart?.Invoke(this, EventArgs.Empty);
+        StartCoroutine("WaitBeforeCallingNextNode");
+    }
+
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+        ChangeBorderColor(defaultColor);
         CallNextNode();
     }
 
