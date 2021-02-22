@@ -8,17 +8,24 @@ using System;
 public class NodeCommande : Nodes
 {
     private string input;
-    private TMP_InputField inputField;
+    public TMP_InputField inputField;
 
     new private void Awake()
     {
         base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
+        ExecManager.onExecutionBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        inputField.interactable = !e.started;
     }
 
     public void ChangeInput(TMP_InputField tMP_InputField)
@@ -123,6 +130,8 @@ public class NodeCommande : Nodes
 
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         switch (input)
@@ -174,9 +183,20 @@ public class NodeCommande : Nodes
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     public override void CallNextNode()
@@ -187,6 +207,6 @@ public class NodeCommande : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        Debug.Log("Node commande cleanup do nothing");
+        ChangeBorderColor(defaultColor);
     }
 }

@@ -18,6 +18,22 @@ public class NodeMethod : Nodes
         UpdateScriptList();
     }
 
+    new private void Awake()
+    {
+        base.Awake();
+        ExecManager.onExecutionBegin += LockAllInput;
+    }
+
+    public void OnDestroy()
+    {
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        tMP_Dropdown.interactable = !e.started;
+    }
+
     private bool ValidateInput()
     {
         //if(nextScript != null)
@@ -67,6 +83,8 @@ public class NodeMethod : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         if (nextScript.nodeStart != null)
@@ -82,9 +100,20 @@ public class NodeMethod : Nodes
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     public override void CallNextNode()
@@ -95,6 +124,6 @@ public class NodeMethod : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        Debug.Log("node methode clean up do nothing");
+        ChangeBorderColor(defaultColor);
     }
 }

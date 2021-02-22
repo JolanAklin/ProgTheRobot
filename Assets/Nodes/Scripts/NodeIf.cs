@@ -12,6 +12,24 @@ public class NodeIf : Nodes
     private string[] inputSplited;
     public int nextNodeIdFalse;
 
+    public TMP_InputField inputField;
+
+    new private void Awake()
+    {
+        base.Awake();
+        ExecManager.onExecutionBegin += LockAllInput;
+    }
+
+    public void OnDestroy()
+    {
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        inputField.interactable = !e.started;
+    }
+
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         input = tMP_InputField.text;
@@ -44,6 +62,8 @@ public class NodeIf : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         //string expression = inputSplited[0].Replace(" ", string.Empty).Trim();
@@ -139,16 +159,38 @@ public class NodeIf : Nodes
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     IEnumerator WaitBeforeCallingNextNode(int nodeId)
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        NodesDict[nodeId].Execute();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            NodesDict[nodeId].Execute();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                NodesDict[nodeId].Execute();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     public override void CallNextNode()
@@ -158,6 +200,6 @@ public class NodeIf : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        Debug.Log("Node if clean up do nothing");
+        ChangeBorderColor(defaultColor);
     }
 }

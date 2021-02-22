@@ -16,6 +16,8 @@ public class RobotScript
 
     public Nodes nodeStart;
 
+    public event EventHandler onStop;
+
     public List<GameObject> nodes = new List<GameObject>();
 
     public RobotScript(string name, Robot robot)
@@ -73,5 +75,6 @@ public class RobotScript
     public void End()
     {
         endCallBack?.Invoke();
+        onStop?.Invoke(this, EventArgs.Empty);
     }
 }

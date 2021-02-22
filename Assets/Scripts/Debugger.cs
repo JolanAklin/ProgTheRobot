@@ -21,4 +21,9 @@ public class Debugger : MonoBehaviour
     {
         debugList.AddChoice(new List.ListElement() { displayedText = text });
     }
+
+    public static void ClearDebug()
+    {
+        debugList.Clear();
+    }
 }

@@ -8,6 +8,17 @@ public class VarsManager
 {
     private Dictionary<string, int> vars = new Dictionary<string, int>();
 
+    public string[] GetAllVars()
+    {
+        string[] allVars = new string[vars.Count];
+        int i = 0;
+        foreach (KeyValuePair<string,int> var in vars)
+        {
+            allVars[i] = $"{var.Key} : {var.Value}";
+        }
+        return allVars;
+    }
+
     public Var GetVar(string name, int value)
     {
         if (vars.ContainsKey(name))

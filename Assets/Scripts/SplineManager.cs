@@ -35,10 +35,10 @@ public class SplineManager : MonoBehaviour
     // will update point and handle position when a node is moved or resized
     private void ChangeSpline(object sender, EventArgs e)
     {
-        splineMaker.splineSegments[0].splineStart.point = new Vector3(startPos.position.x, startPos.position.y, 0);
-        splineMaker.splineSegments[0].splineStart.handle = new Vector3(startPos.position.x, startPos.position.y, 0) + Vector3.down;
-        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = new Vector3(endPos.position.x, endPos.position.y, 0);
-        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, 0) + Vector3.up;
+        splineMaker.splineSegments[0].splineStart.point = new Vector3(startPos.position.x, startPos.position.y, -0.15f);
+        splineMaker.splineSegments[0].splineStart.handle = new Vector3(startPos.position.x, startPos.position.y, -0.15f) + Vector3.down;
+        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = new Vector3(endPos.position.x, endPos.position.y, -0.15f);
+        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, -0.15f) + Vector3.up;
 
         splineMaker.GenerateMesh();
     }

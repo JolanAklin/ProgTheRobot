@@ -13,6 +13,24 @@ public class NodeAffect : Nodes
 
     private VarsManager.Var var;
 
+    public TMP_InputField inputField;
+
+    new private void Awake()
+    {
+        base.Awake();
+        ExecManager.onExecutionBegin += LockAllInput;
+    }
+
+    public void OnDestroy()
+    {
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        inputField.interactable = !e.started;
+    }
+
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         input = tMP_InputField.text;
@@ -78,6 +96,8 @@ public class NodeAffect : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
         // calculate and set the var
         string[] inputVarReplaced = rs.robot.varsManager.ReplaceStringsByVar((string[])inputSplited.Clone());
@@ -113,9 +133,20 @@ public class NodeAffect : Nodes
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if(!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+            
+        }
     }
 
     public override void CallNextNode()
@@ -126,6 +157,7 @@ public class NodeAffect : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
+        ChangeBorderColor(defaultColor);
         var = null;
     }
 }

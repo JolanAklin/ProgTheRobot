@@ -8,7 +8,7 @@ using Language;
 public class NodeReadWrite : Nodes
 {
     private string input;
-    private TMP_InputField inputField;
+    public TMP_InputField inputField;
     private string[] inputSplited;
 
     public void ChangeInput(TMP_InputField tMP_InputField)
@@ -29,11 +29,18 @@ public class NodeReadWrite : Nodes
     {
         base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
+        ExecManager.onExecutionBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        inputField.interactable = !e.started;
     }
 
     private bool ValidateInput()
@@ -88,6 +95,8 @@ public class NodeReadWrite : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         string[] delimiters = new string[] { " " };
@@ -100,7 +109,7 @@ public class NodeReadWrite : Nodes
                 rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]).Value.ToString());
                 rw.SetOkAction(() => { 
                     rw.DestroyPopup();
-                    CallNextNode();
+                    StartCoroutine("WaitBeforeCallingNextNode");
                 });
                 break;
             case "Lire":
@@ -111,9 +120,26 @@ public class NodeReadWrite : Nodes
                     var.Value = rw.value();
                     var.Persist();
                     rw.DestroyPopup();
-                    CallNextNode();
+                    StartCoroutine("WaitBeforeCallingNextNode");
                 });
                 break;
+        }
+    }
+    IEnumerator WaitBeforeCallingNextNode()
+    {
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
         }
     }
 
@@ -126,6 +152,6 @@ public class NodeReadWrite : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        Debug.Log("node read write clean up do nothing");
+        ChangeBorderColor(defaultColor);
     }
 }

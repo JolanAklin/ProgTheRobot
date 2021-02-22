@@ -10,7 +10,7 @@ public class NodeWhileLoop : Nodes
 {
     private string input;
     private string[] inputSplited;
-    private TMP_InputField inputField;
+    public TMP_InputField inputField;
 
     public int nextNodeInside = -1;
 
@@ -32,11 +32,18 @@ public class NodeWhileLoop : Nodes
     {
         base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
+        ExecManager.onExecutionBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        inputField.interactable = !e.started;
     }
 
     private bool ValidateInput()
@@ -79,6 +86,8 @@ public class NodeWhileLoop : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         string[] delimiters = new string[] { " ", "While", "TantQue" };
@@ -176,16 +185,37 @@ public class NodeWhileLoop : Nodes
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     IEnumerator WaitBeforeCallingNextNode(int nodeId)
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        NodesDict[nodeId].Execute();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            NodesDict[nodeId].Execute();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                NodesDict[nodeId].Execute();
+                ChangeBorderColor(defaultColor);
+            };
+        }
     }
 
     public override void CallNextNode()
@@ -195,6 +225,6 @@ public class NodeWhileLoop : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        Debug.Log("node while clean up do nothing");
+        ChangeBorderColor(defaultColor);
     }
 }

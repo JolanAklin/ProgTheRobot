@@ -8,7 +8,7 @@ using Language;
 public class NodeForLoop : Nodes
 {
     private string input;
-    private TMP_InputField inputField;
+    public TMP_InputField inputField;
     private string[] inputSplited;
 
     public int nextNodeInside = -1;
@@ -37,11 +37,18 @@ public class NodeForLoop : Nodes
     {
         base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
+        ExecManager.onExecutionBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
+        ExecManager.onExecutionBegin -= LockAllInput;
+    }
+
+    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    {
+        inputField.interactable = !e.started;
     }
 
     public bool ValidateInput()
@@ -111,6 +118,8 @@ public class NodeForLoop : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         if (varIncrement == null)
@@ -182,16 +191,38 @@ public class NodeForLoop : Nodes
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     IEnumerator WaitBeforeCallingNextNode(int nodeId)
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        NodesDict[nodeId].Execute();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            NodesDict[nodeId].Execute();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                NodesDict[nodeId].Execute();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     public override void CallNextNode()
@@ -202,6 +233,7 @@ public class NodeForLoop : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
+        ChangeBorderColor(defaultColor);
         varStep = 1;
         varEnd = 0;
         varIncrement = null;

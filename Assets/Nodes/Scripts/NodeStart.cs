@@ -5,9 +5,6 @@ using System;
 
 public class NodeStart : Nodes
 {
-
-    public static event EventHandler OnStart;
-
     public override void SerializeNode()
     {
         throw new System.NotImplementedException();
@@ -18,20 +15,32 @@ public class NodeStart : Nodes
     }
     public override void Execute()
     {
+        if (!ExecManager.Instance.isRunning)
+            return;
         ChangeBorderColor(currentExecutedNode);
 
         rs.robot.robotManager.transform.position = rs.robot.robotManager.robotStartPos;
         rs.robot.robotManager.transform.rotation = rs.robot.robotManager.robotStartRot;
         rs.robot.varsManager.Clean();
-        OnStart?.Invoke(this, EventArgs.Empty);
         StartCoroutine("WaitBeforeCallingNextNode");
     }
 
     IEnumerator WaitBeforeCallingNextNode()
     {
-        yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
-        ChangeBorderColor(defaultColor);
-        CallNextNode();
+        if (!ExecManager.Instance.debugOn)
+        {
+            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
+            ChangeBorderColor(defaultColor);
+            CallNextNode();
+        }
+        else
+        {
+            ExecManager.Instance.buttonNextAction = () => {
+                CallNextNode();
+                ChangeBorderColor(defaultColor);
+            };
+
+        }
     }
 
     public override void CallNextNode()
@@ -44,6 +53,6 @@ public class NodeStart : Nodes
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        Debug.Log("node start cleanup do nothing");
+        ChangeBorderColor(defaultColor);
     }
 }

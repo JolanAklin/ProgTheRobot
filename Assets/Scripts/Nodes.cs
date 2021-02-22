@@ -101,12 +101,11 @@ public abstract class Nodes : MonoBehaviour
         id = nextid;
         nextid++;
         nodes.Add(id, this);
-        NodeStart.OnStart += PostExecutionCleanUp;
     }
 
     private void OnDestroy()
     {
-        NodeStart.OnStart -= PostExecutionCleanUp;
+        rs.onStop -= PostExecutionCleanUp;
     }
 
     public void Start()
@@ -115,6 +114,7 @@ public abstract class Nodes : MonoBehaviour
         Manager.instance.CheckNode += isConnected;
         // set the event camera of the canvas
         canvas.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        rs.onStop += PostExecutionCleanUp;
     }
 
     public void ChangeBorderColor(Color color)

@@ -2638,6 +2638,7 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  inputField: {fileID: 1159343116539730625}
   nextNodeInside: -1
 --- !u!1 &5355865931366499773
 GameObject:
