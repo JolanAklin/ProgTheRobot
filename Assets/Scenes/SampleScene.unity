@@ -200,6 +200,8 @@ MonoBehaviour:
     popUpType: saveWarning
   - popUpObj: {fileID: 2149542840406885528, guid: 180165895d6b1a545b13e8757afa92ee, type: 3}
     popUpType: addScript
+  - popUpObj: {fileID: 7976142400588302817, guid: f11b6da4f0e795541b960d4b304ccba5, type: 3}
+    popUpType: readWrite
 --- !u!114 &34865
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +214,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb3be87f171680a429bb19e6f88b91ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  nodeStart: {fileID: 0}
+  isRunning: 0
 --- !u!1 &4418599
 GameObject:
   m_ObjectHideFlags: 0
@@ -721,7 +723,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Vitesse d''exlcution : '
+  m_text: "Vitesse d'ex\xE9cution : "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2699,7 +2701,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 0
-    m_Right: 0
+    m_Right: 5
     m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 3
@@ -9080,7 +9082,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Padding:
     m_Left: 5
-    m_Right: 5
+    m_Right: 0
     m_Top: 5
     m_Bottom: 5
   m_ChildAlignment: 3

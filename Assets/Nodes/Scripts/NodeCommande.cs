@@ -176,8 +176,8 @@ public class NodeCommande : Nodes
             NodesDict[nextNodeId].Execute();
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Node commande cleanup do nothing");
     }
 }

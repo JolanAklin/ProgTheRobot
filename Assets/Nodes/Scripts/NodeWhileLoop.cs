@@ -4,12 +4,15 @@ using UnityEngine;
 using TMPro;
 using System;
 using Language;
+using System.Data;
 
 public class NodeWhileLoop : Nodes
 {
     private string input;
     private string[] inputSplited;
     private TMP_InputField inputField;
+
+    public int nextNodeInside = -1;
 
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
@@ -40,6 +43,8 @@ public class NodeWhileLoop : Nodes
     {
         string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
         inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        if (!(inputSplited[0].IndexOf("TantQue") == 0 || inputSplited[0].IndexOf("While") == 0))
+            return false;
         if (inputSplited.Length > 2 || inputSplited.Length == 1)
             return false;
         delimiters = new string[] { "While", "TantQue" };
@@ -74,7 +79,107 @@ public class NodeWhileLoop : Nodes
     }
     public override void Execute()
     {
-        throw new System.NotImplementedException();
+        string[] delimiters = new string[] { " ", "While", "TantQue" };
+        string[] expressionSplited1 = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        string expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited1));
+        if (expr == null)
+        {
+            Debugger.Log("Variable inconnue");
+            ChangeBorderColor(errorColor);
+            return;
+        }
+        int value1 = Convert.ToInt32(new DataTable().Compute(expr, null));
+        //expression = inputSplited[1].Replace(" ", string.Empty).Trim();
+        string[] expressionSplited2 = inputSplited[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited2));
+        if (expr == null)
+        {
+            Debugger.Log("Variable inconnue");
+            ChangeBorderColor(errorColor);
+            return;
+        }
+        int value2 = Convert.ToInt32(new DataTable().Compute(expr, null));
+
+
+        if (input.Contains("="))
+        {
+            if (value1 == value2)
+            {
+                if (NodesDict.ContainsKey(nextNodeInside))
+                    NodesDict[nextNodeInside].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+
+        }
+        else if (input.Contains("<"))
+        {
+            if (value1 < value2)
+            {
+                if (NodesDict.ContainsKey(nextNodeInside))
+                    NodesDict[nextNodeInside].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+        }
+        else if (input.Contains(">"))
+        {
+            if (value1 > value2)
+            {
+                if (NodesDict.ContainsKey(nextNodeInside))
+                    NodesDict[nextNodeInside].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+        }
+        else if (input.Contains(">="))
+        {
+            if (value1 >= value2)
+            {
+                if (NodesDict.ContainsKey(nextNodeInside))
+                    NodesDict[nextNodeInside].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+        }
+        else if (input.Contains("<="))
+        {
+            if (value1 <= value2)
+            {
+                if (NodesDict.ContainsKey(nextNodeInside))
+                    NodesDict[nextNodeInside].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+        }
+        else if (input.Contains("<>"))
+        {
+            if (value1 != value2)
+            {
+                if (NodesDict.ContainsKey(nextNodeInside))
+                    NodesDict[nextNodeInside].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+        }
     }
 
     public override void CallNextNode()
@@ -83,8 +188,8 @@ public class NodeWhileLoop : Nodes
             NodesDict[nextNodeId].Execute();
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("node while clean up do nothing");
     }
 }

@@ -27,7 +27,7 @@ public class AddNodeScript : MonoBehaviour
         {
             AddAction(nodeType.ToString(), () =>
             {
-                if(RobotScript.robotScripts[Manager.instance.currentlySelectedScript].hasAStartNode && nodeType.ToString() == "start")
+                if(RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodeStart != false && nodeType.ToString() == "start")
                 {
                     Debugger.Log("Il ne peut y avoir qu'un seul bloc de départ");
                 }else
@@ -39,7 +39,6 @@ public class AddNodeScript : MonoBehaviour
                     if (nodeType.ToString() == "start")
                     {
                         RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodeStart = instantiatedNode.GetComponent<Nodes>();
-                        RobotScript.robotScripts[Manager.instance.currentlySelectedScript].hasAStartNode = true;
                     }
                     node.transform.position = spawnPos;
                     RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(node);

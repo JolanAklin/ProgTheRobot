@@ -88,7 +88,31 @@ public class NodeReadWrite : Nodes
     }
     public override void Execute()
     {
-        throw new System.NotImplementedException();
+        string[] delimiters = new string[] { " " };
+        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        PopUpReadWrite rw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "readWrite"), Manager.instance.canvas.transform).GetComponent<PopUpReadWrite>();
+        switch (inputSplited[0])
+        {
+            case "Afficher":
+            case "Display":
+                rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]).Value.ToString());
+                rw.SetOkAction(() => { 
+                    rw.DestroyPopup();
+                    CallNextNode();
+                });
+                break;
+            case "Lire":
+            case "Read":
+                rw.Init($"Lecture de {inputSplited[1]}");
+                rw.SetOkAction(() => {
+                    VarsManager.Var var = rs.robot.varsManager.GetVar(inputSplited[1],0);
+                    var.Value = rw.value();
+                    var.Persist();
+                    rw.DestroyPopup();
+                    CallNextNode();
+                });
+                break;
+        }
     }
 
     public override void CallNextNode()
@@ -97,8 +121,8 @@ public class NodeReadWrite : Nodes
             NodesDict[nextNodeId].Execute();
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("node read write clean up do nothing");
     }
 }

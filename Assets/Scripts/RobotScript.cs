@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 // will handle the loading of nodes
 public class RobotScript
@@ -11,7 +12,8 @@ public class RobotScript
     public string name;
     public Robot robot;
 
-    public bool hasAStartNode = false;
+    public Action endCallBack;
+
     public Nodes nodeStart;
 
     public List<GameObject> nodes = new List<GameObject>();
@@ -66,5 +68,10 @@ public class RobotScript
             Manager.instance.CreateNodeObject(node, this);
         }
         Debug.Log($"Loaded Script {id}");
+    }
+
+    public void End()
+    {
+        endCallBack?.Invoke();
     }
 }

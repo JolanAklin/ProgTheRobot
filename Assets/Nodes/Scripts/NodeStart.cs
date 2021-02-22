@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class NodeStart : Nodes
 {
+
+    public static event EventHandler OnStart;
+
     public override void SerializeNode()
     {
         throw new System.NotImplementedException();
@@ -14,6 +18,10 @@ public class NodeStart : Nodes
     }
     public override void Execute()
     {
+        rs.robot.robotManager.transform.position = rs.robot.robotManager.robotStartPos;
+        rs.robot.robotManager.transform.rotation = rs.robot.robotManager.robotStartRot;
+        rs.robot.varsManager.Clean();
+        OnStart?.Invoke(this, EventArgs.Empty);
         CallNextNode();
     }
 
@@ -25,8 +33,8 @@ public class NodeStart : Nodes
         }
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("node start cleanup do nothing");
     }
 }

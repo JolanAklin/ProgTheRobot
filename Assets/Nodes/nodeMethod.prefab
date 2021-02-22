@@ -117,7 +117,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 6334978323922036880}
   isInput: 1
-  inputImage: {fileID: 2391075626254292675}
+  ifFalse: 0
 --- !u!1 &396479144608984716
 GameObject:
   m_ObjectHideFlags: 0
@@ -827,7 +827,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168512350998371172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.9, y: -2, z: 0}
+  m_LocalPosition: {x: -3.3, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3168512352252033726}
@@ -1382,7 +1382,9 @@ MonoBehaviour:
   m_ItemImage: {fileID: 0}
   m_Value: 0
   m_Options:
-    m_Options: []
+    m_Options:
+    - m_Text: 
+      m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -2027,7 +2029,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 6334978323922036880}
   isInput: 0
-  inputImage: {fileID: 0}
+  ifFalse: 0
 --- !u!1 &8623466811322456206
 GameObject:
   m_ObjectHideFlags: 0

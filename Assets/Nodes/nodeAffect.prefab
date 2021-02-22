@@ -117,7 +117,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 6509419568736403958}
   isInput: 1
-  inputImage: {fileID: 874347562543048307}
+  ifFalse: 0
+  inLoopOut: 0
 --- !u!1 &3277559386851771450
 GameObject:
   m_ObjectHideFlags: 0
@@ -764,7 +765,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 6509419568736403958}
   isInput: 0
-  inputImage: {fileID: 0}
+  ifFalse: 0
+  inLoopOut: 0
 --- !u!1 &5034817157852479458
 GameObject:
   m_ObjectHideFlags: 0
@@ -956,7 +958,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5034817158100937439}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1, y: -0.7, z: 0}
+  m_LocalPosition: {x: -0.4, y: -4.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5034817159356517125}

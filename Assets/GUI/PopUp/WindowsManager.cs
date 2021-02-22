@@ -12,6 +12,7 @@ public class WindowsManager : MonoBehaviour
         colorPicker,
         saveWarning,
         addScript,
+        readWrite
     }
 
     [Serializable]

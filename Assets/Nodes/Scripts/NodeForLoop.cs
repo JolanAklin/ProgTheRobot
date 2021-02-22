@@ -11,6 +11,8 @@ public class NodeForLoop : Nodes
     private TMP_InputField inputField;
     private string[] inputSplited;
 
+    public int nextNodeInside = -1;
+
     private VarsManager.Var varIncrement;
     private int varStart = 0;
     private int varEnd;
@@ -31,7 +33,7 @@ public class NodeForLoop : Nodes
         Manager.instance.canExecute = true;
     }
 
-    private void Awake()
+    new private void Awake()
     {
         base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
@@ -111,12 +113,6 @@ public class NodeForLoop : Nodes
     {
         if(varIncrement == null)
         {
-            varIncrement = rs.robot.varsManager.GetVar(inputSplited[0]);
-            if(varIncrement == null)
-            {
-                Debugger.LogError("Une erreur est survenue");
-                return;
-            }
             if(!int.TryParse(inputSplited[3], out varStart))
             {
                 VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[3]);
@@ -129,6 +125,12 @@ public class NodeForLoop : Nodes
                     Debugger.LogError("Une erreur est survenue");
                     return;
                 }
+            }
+            varIncrement = rs.robot.varsManager.GetVar(inputSplited[1],varStart);
+            if(varIncrement == null)
+            {
+                Debugger.LogError("Une erreur est survenue");
+                return;
             }
             if (!int.TryParse(inputSplited[5], out varEnd))
             {
@@ -143,17 +145,20 @@ public class NodeForLoop : Nodes
                     return;
                 }
             }
-            if (!int.TryParse(inputSplited[7], out varStep))
+            if(inputSplited.Length > 6)
             {
-                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[7]);
-                if (tempVar != null)
+                if (!int.TryParse(inputSplited[7], out varStep))
                 {
-                    varStep = tempVar.Value;
-                }
-                else
-                {
-                    Debugger.LogError("Une erreur est survenue");
-                    return;
+                    VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[7]);
+                    if (tempVar != null)
+                    {
+                        varStep = tempVar.Value;
+                    }
+                    else
+                    {
+                        Debugger.LogError("Une erreur est survenue");
+                        return;
+                    }
                 }
             }
         }
@@ -164,6 +169,11 @@ public class NodeForLoop : Nodes
             varIncrement.Persist();
 
             // other code will go here
+            NodesDict[nextNodeInside].Execute();
+        }
+        else
+        {
+            CallNextNode();
         }
     }
 
@@ -173,7 +183,7 @@ public class NodeForLoop : Nodes
             NodesDict[nextNodeId].Execute();
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
         varStep = 1;
         varEnd = 0;

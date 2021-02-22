@@ -45,7 +45,7 @@ public abstract class Nodes : MonoBehaviour
     /// <summary>
     /// Clean the node when the execution of the script is completed
     /// </summary>
-    public abstract void PostExecutionCleanUp();
+    public abstract void PostExecutionCleanUp(object sender, EventArgs e);
 
     // id stuff
     public int id;
@@ -99,6 +99,12 @@ public abstract class Nodes : MonoBehaviour
         id = nextid;
         nextid++;
         nodes.Add(id, this);
+        NodeStart.OnStart += PostExecutionCleanUp;
+    }
+
+    private void OnDestroy()
+    {
+        NodeStart.OnStart -= PostExecutionCleanUp;
     }
 
     public void Start()

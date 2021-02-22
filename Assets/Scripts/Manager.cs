@@ -147,15 +147,17 @@ public class Manager : MonoBehaviour
     public GameObject SplineObject; // spline prefab
     private GameObject spline; // the current spline
     public EventHandler<OnSplineEventArgs> OnSpline; // is used to show the input of all the nodes
+    private Action<int> actionWhenConnectionFinished;
     public class OnSplineEventArgs : EventArgs
     {
         public bool splineStarted;
     }
-    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender, ref int idToSet)
+    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender, Action<int> action)
     {
         if(node == null && !isInput)
         {
             // output. Where the spline is created
+            actionWhenConnectionFinished = action;
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
             instance.spline = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
             instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender);
@@ -168,7 +170,7 @@ public class Manager : MonoBehaviour
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender);
             //node.nextNodeId = sender.id;
-            idToSet = sender.id;
+            actionWhenConnectionFinished(sender.id);
             splineManager = null;
             return node;
         }
@@ -191,6 +193,6 @@ public class Manager : MonoBehaviour
 
     public RobotManager CreateRobot(Color color)
     {
-        return Instantiate(robotPrefab, new Vector3(0, 1, 0), Quaternion.identity, transform.root).GetComponent<RobotManager>();
+        return Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity, transform.root).GetComponent<RobotManager>();
     }
 }

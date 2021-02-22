@@ -44,51 +44,102 @@ public class NodeIf : Nodes
     }
     public override void Execute()
     {
-        string expression = inputSplited[0].Replace(" ", string.Empty).Trim();
-        int value1 = Convert.ToInt32(new DataTable().Compute(expression, null));
-        expression = inputSplited[1].Replace(" ", string.Empty).Trim();
-        int value2 = Convert.ToInt32(new DataTable().Compute(expression, null));
+        //string expression = inputSplited[0].Replace(" ", string.Empty).Trim();
+        string[] delimiters = new string[] { " " };
+        string[] expressionSplited1 = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        string expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited1));
+        if(expr == null)
+        {
+            Debugger.Log("Variable inconnue");
+            ChangeBorderColor(errorColor);
+            return;
+        }
+        int value1 = Convert.ToInt32(new DataTable().Compute(expr, null));
+        //expression = inputSplited[1].Replace(" ", string.Empty).Trim();
+        string[] expressionSplited2 = inputSplited[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited2));
+        if (expr == null)
+        {
+            Debugger.Log("Variable inconnue");
+            ChangeBorderColor(errorColor);
+            return;
+        }
+        int value2 = Convert.ToInt32(new DataTable().Compute(expr, null));
         if (input.Contains("="))
         {
             if (value1 == value2)
             {
                 if (NodesDict.ContainsKey(nextNodeId))
                     NodesDict[nextNodeId].Execute();
+            }else
+            {
+                if (NodesDict.ContainsKey(nextNodeIdFalse))
+                    NodesDict[nextNodeIdFalse].Execute();
             }
 
         }else if (input.Contains("<"))
         {
-            if(value1 < value2)
+            if (value1 < value2)
             {
-
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeIdFalse))
+                    NodesDict[nextNodeIdFalse].Execute();
             }
         }
         else if(input.Contains(">"))
         {
             if (value1 > value2)
             {
-
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeIdFalse))
+                    NodesDict[nextNodeIdFalse].Execute();
             }
         }
         else if(input.Contains(">="))
         {
             if (value1 >= value2)
             {
-
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeIdFalse))
+                    NodesDict[nextNodeIdFalse].Execute();
             }
         }
         else if(input.Contains("<="))
         {
             if (value1 <= value2)
             {
-
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeIdFalse))
+                    NodesDict[nextNodeIdFalse].Execute();
             }
         }
         else if(input.Contains("<>"))
         {
             if (value1 != value2)
             {
-
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
+            }
+            else
+            {
+                if (NodesDict.ContainsKey(nextNodeIdFalse))
+                    NodesDict[nextNodeIdFalse].Execute();
             }
         }
     }
@@ -98,8 +149,8 @@ public class NodeIf : Nodes
         //unused
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Node if clean up do nothing");
     }
 }

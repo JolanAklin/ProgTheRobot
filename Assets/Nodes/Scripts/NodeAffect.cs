@@ -42,7 +42,19 @@ public class NodeAffect : Nodes
                     {
                         if (!(inputSplited[i].Any(Char.IsDigit) || inputSplited[i].Any(Char.IsLetter)))
                         {
-                            return VarsManager.CheckVarName(inputSplited[i]);
+                            //return VarsManager.CheckVarName(inputSplited[i]);
+                            switch (inputSplited[i])
+                            {
+                                case "+":
+                                case "-":
+                                case "*":
+                                case "/":
+                                case "(":
+                                case ")":
+                                    break;
+                                default:
+                                    return false;
+                            }
                         }
                     }
                     return true;
@@ -67,29 +79,35 @@ public class NodeAffect : Nodes
     public override void Execute()
     {
         // calculate and set the var
-        string[] inputSplited = rs.robot.varsManager.ReplaceStringByVar(input.Split(' '));
-        if (inputSplited != null)
+        string[] inputVarReplaced = rs.robot.varsManager.ReplaceStringsByVar((string[])inputSplited.Clone());
+        if (inputVarReplaced != null)
         {
             if (var == null)
             {
-                var = rs.robot.varsManager.GetVar(inputSplited[0]);
-                if (var == null)
+                if(VarsManager.CheckVarName(inputSplited[0]))
                 {
-                    Debugger.LogError("Une erreur est survenue");
-                    return;
+                    var = rs.robot.varsManager.GetVar(inputSplited[0]);
+                    if (var == null)
+                    {
+                        Debugger.LogError("Une erreur est survenue");
+                        return;
+                    }
                 }
             }
 
-            string expression = string.Join("", inputSplited, 2, inputSplited.Length - 2).Trim();
+            string expression = string.Join("", inputVarReplaced, 2, inputVarReplaced.Length - 2).Trim();
             var.Value = Convert.ToInt32(new DataTable().Compute(expression, null));
             var.Persist();
         }
         else
         {
             // stop execution
-            Debugger.LogError("La variable spécifiée n'est pas connue");
-            ChangeBorderColor(errorColor);
+            //Debugger.LogError("La variable spécifiée n'est pas connue");
+            //ChangeBorderColor(errorColor);
+            rs.robot.varsManager.GetVar(inputSplited[0], 0);
+            Execute();
         }
+        CallNextNode();
     }
 
     public override void CallNextNode()
@@ -98,7 +116,7 @@ public class NodeAffect : Nodes
             NodesDict[nextNodeId].Execute();
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
         var = null;
     }

@@ -8,6 +8,11 @@ public class ExecManager : MonoBehaviour
 
     public static ExecManager Instance { get => instance; private set => instance = value; }
 
+    [HideInInspector]
+    public bool isRunning = false;
+
+    
+
     
 
     private void Awake()
@@ -25,9 +30,13 @@ public class ExecManager : MonoBehaviour
 
     public void StartExec()
     {
-        foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+        if(!isRunning)
         {
-            robot.Value.MainScript.nodeStart.Execute();
+            isRunning = true;
+            foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+            {
+                robot.Value.MainScript.nodeStart.Execute();
+            }
         }
     }
 }

@@ -141,21 +141,33 @@ public class VarsManager
         return false;
     }
 
-    public string[] ReplaceStringByVar(string[] expression)
+    public string[] ReplaceStringsByVar(string[] expression)
     {
         for (int i = 0; i < expression.Length; i++)
         {
-            string item = expression[i];
-            if(item.Any(Char.IsLetter))
-                if(vars.ContainsKey(item))
+            if(expression[i].Any(Char.IsLetter))
+                if(vars.ContainsKey(expression[i]))
                 {
-                    item = vars[item].ToString();
+                    expression[i] = vars[expression[i]].ToString();
                 }
                 else
                 {
                     return null;
                 }
         }
+        return expression;
+    }
+    public string ReplaceStringByVar(string expression)
+    {
+        if (expression.Any(Char.IsLetter))
+            if (vars.ContainsKey(expression))
+            {
+                expression = vars[expression].ToString();
+            }
+            else
+            {
+                return null;
+            }
         return expression;
     }
 

@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System.Linq;
+using System;
 
 public class NodeMethod : Nodes
 {
     private string input;
     public TMP_Dropdown tMP_Dropdown;
     private RobotScript nextScript;
+    Dictionary<int, string> options = new Dictionary<int, string>();
 
     new private void Start()
     {
@@ -15,20 +18,44 @@ public class NodeMethod : Nodes
         UpdateScriptList();
     }
 
-    private void UpdateScriptList()
+    private bool ValidateInput()
     {
-        List<string> options = new List<string>();
-        for (int i = 1; i < rs.robot.robotScripts.Count; i++)
-        {
-            options.Add(rs.robot.robotScripts[i].name);
-        }
-        tMP_Dropdown.AddOptions(options);
+        //if(nextScript != null)
+        //{
+        //    Debug.Log("there");
+        //    if (nextScript.nodeStart != null)
+        //    {
+        //        Debug.Log("there1");
+        //        return true;
+        //    }
+        //}
+        //return false;
+        return true;
     }
 
     public void ChangeSelected()
     {
-        nextScript = rs.robot.robotScripts[tMP_Dropdown.value + 1];
+        // there is one more script in the list and one more in the dropdown. dropdown.value return a one based index, so -1
+        nextScript = rs.robot.robotScripts[options.ElementAt(tMP_Dropdown.value-1).Key];
+        if (!ValidateInput())
+        {
+            ChangeBorderColor(errorColor);
+            Manager.instance.canExecute = false;
+            return;
+        }
+        Manager.instance.canExecute = true;
+        ChangeBorderColor(defaultColor);
     }
+
+    private void UpdateScriptList()
+    {
+        for (int i = 1; i < rs.robot.robotScripts.Count; i++)
+        {
+            options.Add(rs.robot.robotScripts[i].id, rs.robot.robotScripts[i].name);
+            tMP_Dropdown.options.Add(new TMP_Dropdown.OptionData() { text = options.ElementAt(i-1).Value, });
+        }
+    }
+
 
     public override void SerializeNode()
     {
@@ -40,7 +67,15 @@ public class NodeMethod : Nodes
     }
     public override void Execute()
     {
-        throw new System.NotImplementedException();
+        if(nextScript.nodeStart != null)
+        {
+            rs.endCallBack = () => { CallNextNode(); };
+            nextScript.nodeStart.Execute();
+        }
+        else
+        {
+            Debugger.Log("Il n'y a pas de bloc de départ dans le script spécifié");
+        }
     }
 
     public override void CallNextNode()
@@ -49,8 +84,8 @@ public class NodeMethod : Nodes
             NodesDict[nextNodeId].Execute();
     }
 
-    public override void PostExecutionCleanUp()
+    public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
-        throw new System.NotImplementedException();
+        Debug.Log("node methode clean up do nothing");
     }
 }

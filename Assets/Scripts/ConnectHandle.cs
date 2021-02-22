@@ -7,17 +7,27 @@ public class ConnectHandle : MonoBehaviour
 {
     public Nodes node;
     public bool isInput = false;
+    private bool canBeClicked = true;
     private Image image;
+    private BoxCollider2D boxCollider2d;
 
     public bool ifFalse;
+    public bool inLoopOut = false;
 
     private void Start()
     {
+        canBeClicked = true;
         image = GetComponent<Image>();
+        boxCollider2d = GetComponent<BoxCollider2D>();
         if (isInput)
+        {
             Manager.instance.OnSpline += ShowHide;
-        if (image != null && isInput)
+        }
+        if (image != null && boxCollider2d != null && isInput)
+        {
             image.enabled = false;
+            boxCollider2d.enabled = false;
+        }
     }
 
     private void OnDestroy()
@@ -29,11 +39,31 @@ public class ConnectHandle : MonoBehaviour
     // when the handle is clicked, will ask the manager.
     public void Click()
     {
-        Nodes nextNode;
-        if (ifFalse)
-            nextNode = Manager.instance.ConnectNode(isInput, transform, node, ref node.gameObject.GetComponent<NodeIf>().nextNodeIdFalse);
-        else
-            nextNode = Manager.instance.ConnectNode(isInput, transform, node, ref node.nextNodeId);
+        Nodes nextNode = null;
+        if(!isInput)
+        {
+            if(canBeClicked)
+            {
+                if (ifFalse)
+                    nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.gameObject.GetComponent<NodeIf>().nextNodeIdFalse = id; }) ;
+                else if(inLoopOut)
+                {
+                    NodeForLoop nodeForLoop;
+                    if(node.gameObject.TryGetComponent(out nodeForLoop))
+                        nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { nodeForLoop.nextNodeInside = id; });
+                    NodeWhileLoop nodeWhileLoop;
+                    if (node.gameObject.TryGetComponent(out nodeWhileLoop))
+                        nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { nodeWhileLoop.nextNodeInside = id; });
+                }
+                else
+                    nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.nextNodeId = id; });
+
+                canBeClicked = false;
+            }
+        }else
+        {
+            nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => {});
+        }
 
         if (nextNode != null)
         {
@@ -52,8 +82,14 @@ public class ConnectHandle : MonoBehaviour
     public void ShowHide(object sender, Manager.OnSplineEventArgs e)
     {
         if (e.splineStarted)
+        {
             image.enabled = true;
+            boxCollider2d.enabled = true;
+        }
         else
+        {
             image.enabled = false;
+            boxCollider2d.enabled = false;
+        }
     }
 }
