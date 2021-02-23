@@ -233,15 +233,20 @@ public class NodeForLoop : Nodes
     }
 
     #region save stuff
-    public class SerializedNodeForLoop : SerializableNode
-    {
-        public int nextNodeInside;
-        public string input;
-    }
+ 
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeForLoop serializedNodeForLoop = new SerializedNodeForLoop() { id = id, nextNodeId = nextNodeId, input = input, nextNodeInside = nextNodeInside};
-        return serializedNodeForLoop;
+        SerializableNode serializableNode = new SerializableNode()
+        {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "forLoop",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>()
+        };
+        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nextNodeInside.ToString());
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {

@@ -105,4 +105,38 @@ public class Robot
             idSelected = this.id;
             Manager.instance.list.ChangeList(ScriptToList(),1); } };
     }
+
+    #region Save 
+    [Serializable]
+    public class SerializedRobot
+    {
+        public int id;
+        public string robotName;
+        public uint power;
+        public float[] robotColor;
+
+        [SerializeField]
+        public List<RobotScript.SerializedRobotScript> serializedRobotScripts;
+    }
+
+    public SerializedRobot SerializeRobot()
+    {
+        List<RobotScript.SerializedRobotScript> serializedRobotScripts = new List<RobotScript.SerializedRobotScript>();
+        foreach (RobotScript rs in robotScripts)
+        {
+            serializedRobotScripts.Add(rs.SerializeScript());
+        }
+        SerializedRobot serializedRobot = new SerializedRobot()
+        {
+            id = id,
+            robotName = robotName,
+            power = power,
+            robotColor = new float[4] { color.r, color.g, color.b, color.a },
+
+            serializedRobotScripts = serializedRobotScripts,
+        };
+        return serializedRobot;
+    }
+    #endregion
 }
+

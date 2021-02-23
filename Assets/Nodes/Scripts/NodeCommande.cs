@@ -203,14 +203,16 @@ public class NodeCommande : Nodes
     }
 
     #region save stuff
-    public class SerializedNodeCommand : SerializableNode
-    {
-        public string input;
-    }
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeCommand serializedNodeCommand = new SerializedNodeCommand() { id = id, nextNodeId = nextNodeId, input = input };
-        return serializedNodeCommand;
+        SerializableNode serializableNode = new SerializableNode() {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "execute",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>() };
+        serializableNode.nodeSettings.Add(input);
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {

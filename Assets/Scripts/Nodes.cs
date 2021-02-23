@@ -246,6 +246,11 @@ public abstract class Nodes : MonoBehaviour
     {
         public int id;
         public int nextNodeId;
+        public string type;
+        [SerializeField]
+        public float[] position;
+        [SerializeField]
+        public List<string> nodeSettings;
     }
     /// <summary>
     /// Will convert the node to json

@@ -6,6 +6,9 @@ using System;
 // manages a spline maker
 public class SplineManager : MonoBehaviour
 {
+
+    public static List<SplineManager> splineManagers = new List<SplineManager>();
+
     private SplineMaker splineMaker;
 
     private SplineMaker.SplineSegment currentSegment;
@@ -26,6 +29,9 @@ public class SplineManager : MonoBehaviour
     // the node parameter only serve to subscibe to the change/resize event
     public void Init(Transform startPos, Nodes node)
     {
+        splineManagers.Add(this);
+        RobotScript.robotScripts[Manager.instance.currentlySelectedScript].splines.Add(this.gameObject);
+
         splineMaker = GetComponent<SplineMaker>();
         currentSegment = CreateNewSplineSegment(startPos.position);
         node.OnNodeModified += ChangeSpline;
@@ -153,4 +159,23 @@ public class SplineManager : MonoBehaviour
     {
         return new Vector3((float)Math.Round(vector3.x, decimals), (float)Math.Round(vector3.y, decimals), (float)Math.Round(vector3.z, decimals));
     }
+
+    #region save stuff
+    [Serializable]
+    public class SerializedSpline
+    {
+        public int idNodeStart;
+        public int idNodeEnd;
+    }
+
+    public SerializedSpline SerializeSpline()
+    {
+        SerializedSpline serializedSpline = new SerializedSpline()
+        {
+            idNodeStart = startPos.gameObject.GetComponent<ConnectHandle>().node.id,
+            idNodeEnd = endPos.gameObject.GetComponent<ConnectHandle>().node.id,
+        };
+        return serializedSpline;
+    }
+    #endregion
 }

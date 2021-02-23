@@ -117,15 +117,20 @@ public class NodeMethod : Nodes
     {
         ChangeBorderColor(defaultColor);
     }
+
     #region save stuff
-    public class SerializedNodeMethod : SerializableNode
-    {
-        public int dropDownValue;
-    }
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeMethod serializedNodeMethod = new SerializedNodeMethod() { id = id, nextNodeId = nextNodeId, dropDownValue = tMP_Dropdown.value };
-        return serializedNodeMethod;
+        SerializableNode serializableNode = new SerializableNode()
+        {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "subProgram",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>()
+        };
+        serializableNode.nodeSettings.Add(tMP_Dropdown.value.ToString());
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {

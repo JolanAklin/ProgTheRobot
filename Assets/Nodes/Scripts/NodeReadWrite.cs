@@ -148,14 +148,18 @@ public class NodeReadWrite : Nodes
     }
 
     #region save stuff
-    public class SerializedNodeReadWrite : SerializableNode
-    {
-        public string input;
-    }
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeReadWrite serializedNodeReadWrite = new SerializedNodeReadWrite() { id = id, nextNodeId = nextNodeId, input = input };
-        return serializedNodeReadWrite;
+        SerializableNode serializableNode = new SerializableNode()
+        {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "readWrite",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>()
+        };
+        serializableNode.nodeSettings.Add(input);
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {

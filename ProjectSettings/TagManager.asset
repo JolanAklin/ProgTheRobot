@@ -12,6 +12,7 @@ TagManager:
   - ResizeHandle
   - Node
   - ConnectHandle
+  - Spline
   layers:
   - Default
   - TransparentFX

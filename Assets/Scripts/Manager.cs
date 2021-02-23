@@ -186,16 +186,14 @@ public class Manager : MonoBehaviour
     }
 
     // show and destroy nodes
-    public void CreateNodeObject(GameObject node, RobotScript rs)
-    {
-        GameObject instantiatedNode = Instantiate(node, node.transform.position, Quaternion.identity,nodeHolder.transform);
-        instantiatedNode.GetComponent<Nodes>().rs = rs;
-    }
-    public void DeleteNodes()
+    public void HideNodes()
     {
         foreach (Transform transform in nodeHolder.transform)
         {
-            Destroy(transform.gameObject);
+            if(transform.gameObject.tag == "Node")
+                transform.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            if (transform.gameObject.tag == "Spline")
+                transform.gameObject.SetActive(false);
         }
     }
 

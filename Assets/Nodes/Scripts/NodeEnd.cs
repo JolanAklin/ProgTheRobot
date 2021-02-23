@@ -33,14 +33,17 @@ public class NodeEnd : Nodes
     }
 
     #region save stuff
-    public class SerializedNodeEnd : SerializableNode
-    {
-
-    }
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeEnd serializedNodeEnd = new SerializedNodeEnd() { id = id, nextNodeId = nextNodeId };
-        return serializedNodeEnd;
+        SerializableNode serializableNode = new SerializableNode()
+        {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "end",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>()
+        };
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {

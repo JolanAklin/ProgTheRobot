@@ -19,6 +19,7 @@ public class RobotScript
     public event EventHandler onStop;
 
     public List<GameObject> nodes = new List<GameObject>();
+    public List<GameObject> splines = new List<GameObject>();
 
     public RobotScript(string name, Robot robot)
     {
@@ -52,11 +53,15 @@ public class RobotScript
         //    oldSelectedScript.nodes.Clear();
         //    oldSelectedScript.nodes = Manager.instance.DeleteNodes();
         //}
-        Manager.instance.DeleteNodes();
+        Manager.instance.HideNodes();
         Manager.instance.currentlySelectedScript = this.id;
         foreach (GameObject node in nodes)
         {
-            Manager.instance.CreateNodeObject(node, this);
+            node.transform.GetChild(0).gameObject.SetActive(true);
+        }
+        foreach (GameObject spline in splines)
+        {
+            spline.SetActive(true);
         }
         Debug.Log($"Loaded Script {id}");
     }
@@ -73,22 +78,23 @@ public class RobotScript
     {
         public int id;
         public string name;
+        public int robotId;
         [SerializeField]
-        public List<string> serializedNode = new List<string>();
+        public List<Nodes.SerializableNode> serializedNode = new List<NodeEnd.SerializableNode>();
     }
 
     // convert this class to json
-    public string SerializeScript()
+    public SerializedRobotScript SerializeScript()
     {
-        List<string> serializedNode = new List<string>();
+        // add all the nodes inside of the script
+        List<Nodes.SerializableNode> serializedNode = new List<Nodes.SerializableNode>();
         foreach (GameObject node in nodes)
         {
-            Nodes test = nodeStart.GetComponent<Nodes>();
             Nodes nodeScript = node.GetComponent<Nodes>();
-            serializedNode.Add(JsonUtility.ToJson(nodeScript.SerializeNode()));
+            serializedNode.Add(nodeScript.SerializeNode());
         }
-        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, name = name, serializedNode = serializedNode};
-        return JsonUtility.ToJson(serializedRobotScript);
+        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, name = name, robotId = robot.id, serializedNode = serializedNode};
+        return serializedRobotScript;
     }
 
     // convert json to this class

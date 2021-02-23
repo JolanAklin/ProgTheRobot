@@ -196,15 +196,19 @@ public class NodeIf : Nodes
     }
 
     #region save stuff
-    public class SerializedNodeIf : SerializableNode
-    {
-        public int nextNodeIdFalse;
-        public string input;
-    }
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeIf serializedNodeIf = new SerializedNodeIf() { id = id, nextNodeId = nextNodeId, input = input, nextNodeIdFalse = nextNodeIdFalse };
-        return serializedNodeIf;
+        SerializableNode serializableNode = new SerializableNode()
+        {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "test",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>()
+        };
+        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nextNodeIdFalse.ToString());
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {

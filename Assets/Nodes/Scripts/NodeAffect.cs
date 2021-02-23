@@ -156,16 +156,18 @@ public class NodeAffect : Nodes
     #region save stuff
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeAffect serializedNodeAffect = new SerializedNodeAffect() { id = id, nextNodeId = nextNodeId, input = input };
-        return serializedNodeAffect;
+        SerializableNode serializableNode = new SerializableNode() {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "execute",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>() };
+        serializableNode.nodeSettings.Add(input);
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {
         throw new System.NotImplementedException();
-    }
-    public class SerializedNodeAffect : SerializableNode
-    {
-        public string input;
     }
     #endregion
 }

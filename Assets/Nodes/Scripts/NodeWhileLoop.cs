@@ -221,15 +221,19 @@ public class NodeWhileLoop : Nodes
     }
 
     #region save stuff
-    public class SerializedNodeWhileLoop : SerializableNode
-    {
-        public int nextNodeInside;
-        public string input;
-    }
     public override SerializableNode SerializeNode()
     {
-        SerializedNodeWhileLoop serializedNodeWhileLoop = new SerializedNodeWhileLoop() { id = id, nextNodeId = nextNodeId, input = input,nextNodeInside = nextNodeInside };
-        return serializedNodeWhileLoop;
+        SerializableNode serializableNode = new SerializableNode()
+        {
+            id = id,
+            nextNodeId = nextNodeId,
+            type = "whileLoop",
+            position = new float[] { transform.position.x, transform.position.y, transform.position.z },
+            nodeSettings = new List<string>()
+        };
+        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nextNodeInside.ToString());
+        return serializableNode;
     }
     public override void DeSerializeNode()
     {
