@@ -73,16 +73,19 @@ public class RobotScript
     {
         public int id;
         public string name;
-        public List<Nodes.SerializableNode> serializedNode = new List<Nodes.SerializableNode>();
+        [SerializeField]
+        public List<string> serializedNode = new List<string>();
     }
 
     // convert this class to json
     public string SerializeScript()
     {
-        List<Nodes.SerializableNode> serializedNode = new List<Nodes.SerializableNode>();
+        List<string> serializedNode = new List<string>();
         foreach (GameObject node in nodes)
         {
-            serializedNode.Add(node.GetComponent<Nodes>().SerializeNode());
+            Nodes test = nodeStart.GetComponent<Nodes>();
+            Nodes nodeScript = node.GetComponent<Nodes>();
+            serializedNode.Add(JsonUtility.ToJson(nodeScript.SerializeNode()));
         }
         SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, name = name, serializedNode = serializedNode};
         return JsonUtility.ToJson(serializedRobotScript);

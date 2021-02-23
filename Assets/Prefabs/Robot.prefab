@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 9c6bb17892be23e4b89e7b4f411c27ac, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -110,7 +110,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83199050de625344aebfd1340eb55c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  execSpeed: 1
+  robotStartPos: {x: 0, y: 0, z: 0}
+  robotStartRot: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &3547055597719073563
 GameObject:
   m_ObjectHideFlags: 0

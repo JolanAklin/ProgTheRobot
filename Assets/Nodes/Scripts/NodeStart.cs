@@ -53,9 +53,10 @@ public class NodeStart : Nodes
     {
 
     }
+
     public override SerializableNode SerializeNode()
     {
-        SerializedStart serializedStart = new SerializedStart() { id = id, nextNodeId = nextNodeId };
+        SerializedStart serializedStart = new SerializedStart() {id = id, nextNodeId = nextNodeId };
         return serializedStart;
     }
     public override void DeSerializeNode()
