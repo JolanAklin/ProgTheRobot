@@ -26,6 +26,8 @@ public class SaveManager : MonoBehaviour
         savePath = Application.persistentDataPath + savePath;
         extractPath = Application.persistentDataPath + extractPath;
 
+        DontDestroyOnLoad(this.gameObject);
+
         // create the directory if they don't exist
         if (!Directory.Exists(extractPath))
         {
@@ -222,8 +224,35 @@ public class SaveManager : MonoBehaviour
 
         SplineManager.splineManagers = new List<SplineManager>();
 
+        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList);
+        StartCoroutine(coroutine);
+    }
+
+    private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
+    {
+        foreach (Robot.SerializedRobot serializedRobot in serializedRobots)
+        {
+            Robot robot = new Robot(serializedRobot.id, serializedRobot.power, serializedRobot.robotColor, serializedRobot.robotName, serializedRobot.serializedRobotScripts);
+            Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
+            Manager.instance.listRobot.Select(robot.id);
+        }
+
+        RobotScript.nextid = saveId.robotScriptNextId;
+        Robot.nextid = saveId.robotNextId;
+        Nodes.nextid = saveId.nodeNextId;
+    }
+
+    private IEnumerator LoadScene(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
+    {
+        // Start loading the scene
         Scene scene = SceneManager.GetActiveScene();
-        SceneManager.LoadScene(scene.name);
+        AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(scene.name, LoadSceneMode.Single);
+        // Wait until the level finish loading
+        while (!asyncLoadLevel.isDone)
+            yield return null;
+        // Wait a frame so every Awake and Start method is called
+        yield return new WaitForEndOfFrame();
+        LoadObject(saveId, serializedRobots, splineList);
     }
 
 

@@ -44,6 +44,17 @@ public class Robot
         Init(justCreated);
     }
 
+    public Robot(int id, uint power, float[] robotColor, string robotName, List<RobotScript.SerializedRobotScript> serializedRobotScripts)
+    {
+        this.id = id;
+        this.power = power;
+        this.color = new Color(robotColor[0], robotColor[1], robotColor[2], robotColor[3]);
+        this.robotName = robotName;
+        varsManager = new VarsManager();
+        robotManager = Manager.instance.CreateRobot(color);
+        robots.Add(id, this);
+    }
+
     private void Init(bool justCreated = false)
     {
         // All robots have a different id
