@@ -177,5 +177,13 @@ public class SplineManager : MonoBehaviour
         };
         return serializedSpline;
     }
+
+    public void DestroyAllSplines()
+    {
+        foreach (SplineManager splineManager in splineManagers)
+        {
+            Destroy(splineManager.gameObject);
+        }
+    }
     #endregion
 }

@@ -72,6 +72,19 @@ public class RobotScript
         onStop?.Invoke(this, EventArgs.Empty);
     }
 
+    ~RobotScript()
+    {
+        Debug.Log($"Script {name} was destroyed");
+    }
+
+    public void Clear()
+    {
+        robot = null;
+        nodeStart = null;
+        nodes.Clear();
+        splines.Clear();
+    }
+
     #region save stuff
     [Serializable]
     public class SerializedRobotScript

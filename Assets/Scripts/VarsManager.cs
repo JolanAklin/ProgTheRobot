@@ -212,4 +212,9 @@ public class VarsManager
             varsManager.vars[name] = Value;
         }
     }
+
+    ~VarsManager()
+    {
+        Debug.Log("Var manager has been destroyed");
+    }
 }

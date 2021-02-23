@@ -24,8 +24,8 @@ public class ListRobot : MonoBehaviour
     public ColorBlock colorBlockBase;
     public ColorBlock colorBlockSelected;
     private Button currentSelectedButton;
-    public GameObject Content;
     private Button addButton;
+    public GameObject Content;
 
     public void Init(Dictionary<int, ListElement> listChoices, uint defaulSelected)
     {
@@ -122,5 +122,18 @@ public class ListRobot : MonoBehaviour
     public int Count()
     {
         return buttons.Count;
+    }
+
+    public void Clear()
+    {
+        foreach (Transform child in Content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        buttons.Clear();
+        choices.Clear();
+        defaultSelectedIndex = 0;
+        addButton = null;
+        currentSelectedButton = null;
     }
 }

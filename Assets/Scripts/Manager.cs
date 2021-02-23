@@ -39,15 +39,7 @@ public class Manager : MonoBehaviour
 
     private void Awake()
     {
-        if (instance == null)
-        {
-            instance = this;
-        }
-        else if (instance != this)
-        {
-            Debug.Log("Instance already exists, destroying object!");
-            Destroy(this);
-        }
+        instance = this;
 
         // change the canvas resolution to match the screen size
         canvasScaler = canvas.GetComponent<CanvasScaler>();
@@ -63,28 +55,19 @@ public class Manager : MonoBehaviour
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
 
         // fill robots and scripts lists to test, will be removed
-        List<Robot> robots = new List<Robot>();
-        for (int i = 0; i < 1; i++)
-        {
-            Robot robot = new Robot(Color.blue, "Testbot", 100, true);
-            robots.Add(robot);
-            List<RobotScript> robotScripts = new List<RobotScript>();
-            for (int j = 0; j < 10; j++)
-            {
-                robot.CreateScript($"Script {i}, {j}");
-            }
-        }
         Dictionary<int, ListRobot.ListElement> robotElements = new Dictionary<int, ListRobot.ListElement>();
-        robotElements.Add(-1, new ListRobot.ListElement() { isAddRobot = true, actionOnClick = () => {
-            Robot robot = new Robot(Color.red, "", 2000, true);
-            listRobot.AddChoice(robot.id, robot.ConvertToListElement());
-            listRobot.Select(robot.id);
-            ChangeRobotSettings();
-        } });
-        foreach (Robot robot in robots)
+        robotElements.Add(-1, new ListRobot.ListElement()
         {
-            robotElements.Add(robot.id, robot.ConvertToListElement());
-        }
+            isAddRobot = true,
+            actionOnClick = () =>
+            {
+                Robot robot = new Robot(Color.red, "", 2000, true);
+                listRobot.AddChoice(robot.id, robot.ConvertToListElement());
+                listRobot.Select(robot.id);
+                ChangeRobotSettings();
+            }
+        });
+        //robotElements.Add(robot.id, robot.ConvertToListElement());
         listRobot.Init(robotElements, 1);
     }
 

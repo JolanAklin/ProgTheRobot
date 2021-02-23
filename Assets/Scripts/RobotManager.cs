@@ -129,4 +129,9 @@ public class RobotManager : MonoBehaviour
         if (actionOnUpdate != null)
             actionOnUpdate();
     }
+
+    public void DestroyRobotManager()
+    {
+        Destroy(this.gameObject);
+    }
 }

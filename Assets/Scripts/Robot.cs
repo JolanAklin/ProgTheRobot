@@ -106,6 +106,24 @@ public class Robot
             Manager.instance.list.ChangeList(ScriptToList(),1); } };
     }
 
+    public void ClearRobot()
+    {
+        robotScripts.Clear();
+        mainScript = null;
+        robotManager.DestroyRobotManager();
+        varsManager.Clean();
+        foreach (RobotScript rs in robotScripts)
+        {
+            rs.Clear();
+        }
+        robotScripts.Clear();
+    }
+
+    ~Robot()
+    {
+        Debug.Log($"{robotName} was destroyed");
+    }
+
     #region Save 
     [Serializable]
     public class SerializedRobot

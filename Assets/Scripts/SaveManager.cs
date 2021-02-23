@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
-using ICSharpCode;
 using ICSharpCode.SharpZipLib.GZip;
 using ICSharpCode.SharpZipLib.Tar;
+using System.Linq;
+using UnityEngine.SceneManagement;
+using Language;
 
 public class SaveManager : MonoBehaviour
 {
@@ -15,6 +17,8 @@ public class SaveManager : MonoBehaviour
     public string savePath;
     [Tooltip("Extract the save file in this directory. Put / before and a / after")]
     public string extractPath;
+
+    public string destroyerScene;
 
     private void Awake()
     {
@@ -42,6 +46,12 @@ public class SaveManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.S))
         {
             Save();
+        }
+
+        if(Input.GetKeyDown(KeyCode.L))
+        {
+            JsonToObj(savePath + "save.pr");
+            //CleanDir(extractPath);
         }
     }
 
@@ -104,8 +114,6 @@ public class SaveManager : MonoBehaviour
 
         CreateTarGZ(savePath + "save.pr", files);
         CleanDir(tmpSavePath);
-        JsonToObj(savePath + "save.pr");
-        //CleanDir(extractPath);
     }
 
 
@@ -117,9 +125,9 @@ public class SaveManager : MonoBehaviour
     {
         ExtractTGZ(archivePath, extractPath);
 
-        SaveId saveId;
+        SaveId saveId = null;
         List<Robot.SerializedRobot> serializedRobots = new List<Robot.SerializedRobot>();
-        SplineList splineList;
+        SplineList splineList = null;
 
         foreach (string file in Directory.EnumerateFiles(extractPath))
         {
@@ -137,6 +145,7 @@ public class SaveManager : MonoBehaviour
                 serializedRobots.Add(JsonUtility.FromJson<Robot.SerializedRobot>(fileContent));
             }
         }
+        ClearGame(saveId, serializedRobots, splineList);
     }
 
     //https://stackoverflow.com/questions/31836519/how-to-create-tar-gz-file-in-c-sharp modified by me
@@ -190,6 +199,31 @@ public class SaveManager : MonoBehaviour
         {
             File.Delete(file);
         }
+    }
+
+    /// <summary>
+    /// clear the app before loading
+    /// </summary>
+    public void ClearGame(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
+    {
+        //reset all the static vars
+        RobotScript.nextid = 0;
+        RobotScript.robotScripts = new Dictionary<int, RobotScript>();
+
+        Robot.nextid = 0;
+        Robot.robots = new Dictionary<int, Robot>();
+        Robot.idSelected = 0;
+
+        RobotScript.nextid = 0;
+        RobotScript.robotScripts = new Dictionary<int, RobotScript>();
+
+        Nodes.nextid = 0;
+        Nodes.NodesDict = new Dictionary<int, Nodes>();
+
+        SplineManager.splineManagers = new List<SplineManager>();
+
+        Scene scene = SceneManager.GetActiveScene();
+        SceneManager.LoadScene(scene.name);
     }
 
 

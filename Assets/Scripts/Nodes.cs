@@ -44,7 +44,7 @@ public abstract class Nodes : MonoBehaviour
     public int id;
     public static int nextid = 0;
     private static Dictionary<int, Nodes> nodes = new Dictionary<int, Nodes>();
-    public static Dictionary<int, Nodes> NodesDict { get => nodes; private set => nodes = value; }
+    public static Dictionary<int, Nodes> NodesDict { get => nodes; set => nodes = value; }
 
     public RobotScript rs;
 
@@ -238,6 +238,14 @@ public abstract class Nodes : MonoBehaviour
     private Vector3 Absolute(Vector3 vector3)
     {
         return new Vector3(Math.Abs(vector3.x), Math.Abs(vector3.y), Math.Abs(vector3.z));
+    }
+
+    public void DestroyAllNodes()
+    {
+        foreach (KeyValuePair<int, Nodes> node in nodes)
+        {
+            Destroy(node.Value.gameObject);
+        }
     }
 
     #region Save stuff

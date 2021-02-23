@@ -85,6 +85,9 @@ public class List : MonoBehaviour
         }
         buttons.Clear();
         choices.Clear();
+        defaultSelectedIndex = 0;
+        addButton = null;
+        currentSelectedButton = null;
     }
 
     // create all button from the choices list
