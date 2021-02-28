@@ -8,6 +8,10 @@ public class VarsManager
 {
     private Dictionary<string, int> vars = new Dictionary<string, int>();
 
+    /// <summary>
+    /// Get all the vars stored in this manager
+    /// </summary>
+    /// <returns>string array in this form : var name : var value</returns>
     public string[] GetAllVars()
     {
         string[] allVars = new string[vars.Count];
@@ -19,6 +23,12 @@ public class VarsManager
         return allVars;
     }
 
+    /// <summary>
+    /// Create or set a var
+    /// </summary>
+    /// <param name="name">The name of the var</param>
+    /// <param name="value">The value to set</param>
+    /// <returns></returns>
     public Var GetVar(string name, int value)
     {
         if (vars.ContainsKey(name))
@@ -40,6 +50,11 @@ public class VarsManager
         }
     }
 
+    /// <summary>
+    /// Get the var with the specified name
+    /// </summary>
+    /// <param name="name">Var name</param>
+    /// <returns>Return a var object. Return null if nothing was found</returns>
     public Var GetVar(string name)
     {
         if (vars.ContainsKey(name))
@@ -152,6 +167,11 @@ public class VarsManager
         return false;
     }
 
+    /// <summary>
+    /// Replace var's name with the number of the var
+    /// </summary>
+    /// <param name="expression">The mathematic expression that need to be transformed</param>
+    /// <returns></returns>
     public string[] ReplaceStringsByVar(string[] expression)
     {
         for (int i = 0; i < expression.Length; i++)
@@ -168,6 +188,12 @@ public class VarsManager
         }
         return expression;
     }
+
+    /// <summary>
+    /// Replace the string by the corresponding var value
+    /// </summary>
+    /// <param name="expression">The string that need to be converted to the var number</param>
+    /// <returns></returns>
     public string ReplaceStringByVar(string expression)
     {
         if (expression.Any(Char.IsLetter))
@@ -181,6 +207,7 @@ public class VarsManager
             }
         return expression;
     }
+
 
     public void Clean()
     {

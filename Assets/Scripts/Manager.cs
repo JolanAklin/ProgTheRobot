@@ -54,20 +54,19 @@ public class Manager : MonoBehaviour
         Translation.LoadData("fr");
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
 
-        // fill robots and scripts lists to test, will be removed
+        // add the plus tab to the robot list
         Dictionary<int, ListRobot.ListElement> robotElements = new Dictionary<int, ListRobot.ListElement>();
         robotElements.Add(-1, new ListRobot.ListElement()
         {
             isAddRobot = true,
             actionOnClick = () =>
             {
-                Robot robot = new Robot(Color.red, "", 2000, true);
+                Robot robot = new Robot(Color.red, "", 2000);
                 listRobot.AddChoice(robot.id, robot.ConvertToListElement());
                 listRobot.Select(robot.id);
                 ChangeRobotSettings();
             }
         });
-        //robotElements.Add(robot.id, robot.ConvertToListElement());
         listRobot.Init(robotElements, 1);
     }
 
@@ -82,6 +81,7 @@ public class Manager : MonoBehaviour
         }
     }
 
+    // called when the speed slider is changed
     public void ChangeSpeedSettings(Slider slider)
     {
         execSpeed = slider.value;
@@ -162,13 +162,11 @@ public class Manager : MonoBehaviour
             splineManager.EndSpline(handleTransform, sender);
             //node.nextNodeId = sender.id;
             actionWhenConnectionFinished(sender.id);
-            splineManager = null;
             return node;
         }
         return null;
     }
 
-    // show and destroy nodes
     public void HideNodes()
     {
         foreach (Transform transform in nodeHolder.transform)

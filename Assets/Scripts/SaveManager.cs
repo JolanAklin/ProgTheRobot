@@ -18,8 +18,6 @@ public class SaveManager : MonoBehaviour
     [Tooltip("Extract the save file in this directory. Put / before and a / after")]
     public string extractPath;
 
-    public string destroyerScene;
-
     private void Awake()
     {
         tmpSavePath = Application.persistentDataPath + tmpSavePath;
@@ -228,6 +226,7 @@ public class SaveManager : MonoBehaviour
         StartCoroutine(coroutine);
     }
 
+    // create usable objects from the saved form
     private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
     {
         foreach (Robot.SerializedRobot serializedRobot in serializedRobots)
@@ -242,6 +241,7 @@ public class SaveManager : MonoBehaviour
         Nodes.nextid = saveId.nodeNextId;
     }
 
+    // reload the current scene to remove all unwanted object on the load of a new file
     private IEnumerator LoadScene(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
     {
         // Start loading the scene

@@ -33,15 +33,14 @@ public class Robot
     /// <param name="color">Color of the robot</param>
     /// <param name="name">Name of the robot</param>
     /// <param name="power">Power of the robot</param>
-    /// <param name="justCreated">If justCreated is at true, a Principal script will be created.</param>
-    public Robot(Color color, string name, uint power, bool justCreated = false)
+    public Robot(Color color, string name, uint power)
     {
         this.color = color;
         this.robotName = name;
         this.power = power;
         varsManager = new VarsManager();
         robotManager = Manager.instance.CreateRobot(color);
-        Init(justCreated);
+        Init();
     }
 
     public Robot(int id, uint power, float[] robotColor, string robotName, List<RobotScript.SerializedRobotScript> serializedRobotScripts)
@@ -55,7 +54,7 @@ public class Robot
         robots.Add(id, this);
     }
 
-    private void Init(bool justCreated = false)
+    private void Init()
     {
         // All robots have a different id
         id = nextid;

@@ -5,12 +5,13 @@ using UnityEngine.UI;
 
 public class ConnectHandle : MonoBehaviour
 {
-    public Nodes node;
+    public Nodes node; // which is his parent
     public bool isInput = false;
     private bool canBeClicked = true;
     private Image image;
     private BoxCollider2D boxCollider2d;
 
+    // used when the node is a loop or a if node
     public bool ifFalse;
     public bool inLoopOut = false;
 
@@ -21,7 +22,7 @@ public class ConnectHandle : MonoBehaviour
         boxCollider2d = GetComponent<BoxCollider2D>();
         if (isInput)
         {
-            Manager.instance.OnSpline += ShowHide;
+            Manager.instance.OnSpline += ShowHide; // this event while be triggered when a spline is created or ended
         }
         if (image != null && boxCollider2d != null && isInput)
         {
@@ -44,6 +45,7 @@ public class ConnectHandle : MonoBehaviour
         {
             if(canBeClicked)
             {
+                // call a function in the manager script and give a delegate to perform the right action to set the node id
                 if (ifFalse)
                     nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.gameObject.GetComponent<NodeIf>().nextNodeIdFalse = id; }) ;
                 else if(inLoopOut)
@@ -67,8 +69,6 @@ public class ConnectHandle : MonoBehaviour
 
         if (nextNode != null)
         {
-            //node.nextNodeId = nextNode.id;
-            //node.nextGameObject = nextNode.gameObject;
             nextNode = null;
             Manager.instance.node = null;
         }

@@ -64,7 +64,7 @@ public class SplineMaker : MonoBehaviour
             for (int i = 0; i <= 100; i++)
             {
                 Vector3 startPos = CubicLerp(splineSegment.splineStart.point, splineSegment.splineStart.handle, splineSegment.splineEnd.handle, splineSegment.splineEnd.point, ((float)i) / 100);
-                Vector3 dir = Vector3.zero;
+                Vector3 dir;
                 if(i == 100)
                     dir = startPos - CubicLerp(splineSegment.splineStart.point, splineSegment.splineStart.handle, splineSegment.splineEnd.handle, splineSegment.splineEnd.point, ((float)i - 1) / 100);
                 else

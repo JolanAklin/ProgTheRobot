@@ -5,11 +5,11 @@ using System;
 
 public class AddNodeScript : MonoBehaviour
 {
-    private Dictionary<int, Action> nodes = new Dictionary<int, Action>();
-    private Transform scriptPanel;
+    private Dictionary<int, Action> nodes = new Dictionary<int, Action>(); // define which action is done for what node when clicked on the menu
+    private Transform nodeHolder; // nodes will be children of this object
     public List<nodeObject> nodeObjects = new List<nodeObject>();
 
-    // object used to fill the list in the inspector
+    // object used to fill the list of node object in the inspector
     [Serializable]
     public class nodeObject
     {
@@ -20,9 +20,10 @@ public class AddNodeScript : MonoBehaviour
     // create the add node panel and sets it's actions
     private void Start()
     {
-        scriptPanel = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+        nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
 
         GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+        // enumerate over the node type enum in the Nodes class
         foreach (Nodes.NodeTypes nodeType in (Nodes.NodeTypes[])Enum.GetValues(typeof(Nodes.NodeTypes)))
         {
             AddAction(nodeType.ToString(), () =>
@@ -34,15 +35,18 @@ public class AddNodeScript : MonoBehaviour
                 {
                     Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
                     spawnPos.z = 0;
-                    GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject;
-                    GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, scriptPanel);
+                    GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject; // find the correct gameobject to instantiate
+                    GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, nodeHolder);
+
+                    // add the start node to the right robotscript for execution purposes
                     if (nodeType.ToString() == "start")
                     {
                         RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodeStart = instantiatedNode.GetComponent<Nodes>();
                     }
+
                     node.transform.position = spawnPos;
                     RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(instantiatedNode);
-                    instantiatedNode.GetComponent<Nodes>().rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript];
+                    instantiatedNode.GetComponent<Nodes>().rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript]; // make the node aware in which robotScript he is
                 }
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);

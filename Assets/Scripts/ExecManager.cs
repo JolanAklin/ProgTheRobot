@@ -13,15 +13,15 @@ public class ExecManager : MonoBehaviour
     [HideInInspector]
     public bool isRunning = false;
 
-    public static EventHandler<onExecutionBeginEventArgs> onExecutionBegin;
+    public static EventHandler<onChangeBeginEventArgs> onChangeBegin; // triggered when the execution is started or stopped
 
-    public class onExecutionBeginEventArgs : EventArgs
+    public class onChangeBeginEventArgs : EventArgs
     {
         public bool started;
     }
 
 
-    //debugging stuff
+    // debugging stuff
     public Action buttonNextAction;
     [HideInInspector]
     public bool debugOn = false;
@@ -34,7 +34,7 @@ public class ExecManager : MonoBehaviour
 
     public void StartExec()
     {
-        onExecutionBegin?.Invoke(this, new onExecutionBeginEventArgs() { started = true });
+        onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = true });
         if(!isRunning)
         {
             isRunning = true;
@@ -47,7 +47,7 @@ public class ExecManager : MonoBehaviour
     public void StopExec()
     {
         Instance.isRunning = false;
-        onExecutionBegin?.Invoke(this, new onExecutionBeginEventArgs() { started = false });
+        onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = false });
         buttonNextAction = null;
     }
 
@@ -58,6 +58,7 @@ public class ExecManager : MonoBehaviour
         debugOn = toggle.Value;
         Debug.Log($"debug {debugOn}");
     }
+    // called when the next button is clicked when in debug mode
     public void NextInDebug()
     {
         if(debugOn)
