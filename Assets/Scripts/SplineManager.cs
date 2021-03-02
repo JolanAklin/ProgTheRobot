@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 
 // manages a spline maker
+
+// this class need some cleanup. Need to see whats will get removed when the spline making will be completely defined
 public class SplineManager : MonoBehaviour
 {
 

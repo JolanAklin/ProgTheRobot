@@ -126,6 +126,7 @@ public class UIRaycaster : MonoBehaviour
             }
         }
 
+
         if(Input.GetMouseButtonDown(0))
         {
             if (rayCastResults.Count == 0 && nodeToMove == null)
@@ -143,6 +144,7 @@ public class UIRaycaster : MonoBehaviour
             }
         }
 
+        // script panel panning
         if(Input.GetMouseButton(2) && rayCastResults.Count == 0)
         {
             if(!cameraCanBePanned)
@@ -162,6 +164,7 @@ public class UIRaycaster : MonoBehaviour
             cameraCanBePanned = false;
         }
 
+        // script panel zoom
         if(Input.GetKey(KeyCode.LeftControl) && rayCastResults.Count == 0)
         {
             float zoom = NodeDisplay.instance.nodeCamera.orthographicSize - Input.mouseScrollDelta.y;

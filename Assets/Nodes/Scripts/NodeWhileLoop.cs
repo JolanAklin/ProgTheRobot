@@ -32,16 +32,16 @@ public class NodeWhileLoop : Nodes
     {
         base.Awake();
         Manager.instance.OnLanguageChanged += TranslateText;
-        ExecManager.onExecutionBegin += LockAllInput;
+        ExecManager.onChangeBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
-        ExecManager.onExecutionBegin -= LockAllInput;
+        ExecManager.onChangeBegin -= LockAllInput;
     }
 
-    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         inputField.interactable = !e.started;
     }

@@ -5,14 +5,18 @@ using System;
 
 public class RobotManager : MonoBehaviour
 {
-    private Action actionOnUpdate;
-    private Action callBack;
+    private Action actionOnUpdate; // hold the action (like turning), it while be executed on Update
+    private Action callBack; // call the delegate when the movement (like turning) stops
 
-    private Vector3 targetPos;
-    private Vector3 targetRotation;
+    private Vector3 startMovementPos; // the pos of the robot a the start of the movement
+    private Quaternion startMovementRot; // the rotation of the robot at the start of the rotation
 
+    // hold the data to reset the robot to its original position
     public Vector3 robotStartPos;
     public Quaternion robotStartRot;
+
+
+    private float t; // interpolation factor
 
     private void Start()
     {
@@ -33,15 +37,16 @@ public class RobotManager : MonoBehaviour
 
     private void GoForward()
     {
-        if(actionOnUpdate == null)
+        if (actionOnUpdate == null)
         {
             actionOnUpdate = GoForward;
-            targetPos = transform.position + transform.forward;
+            startMovementPos = transform.position;
+            t = 0f;
         }
-        transform.position += transform.forward * Time.deltaTime * Manager.instance.execSpeed;
-        if(Mathf.Abs(targetPos.x) - Mathf.Abs(transform.position.x) < Vector3.zero.x || Mathf.Abs(targetPos.y) - Mathf.Abs(transform.position.y) < Vector3.zero.y || Mathf.Abs(targetPos.z) - Mathf.Abs(transform.position.z) < Vector3.zero.z)
+        t += 1 * Time.deltaTime * Manager.instance.execSpeed;
+        transform.position = Vector3.Lerp(startMovementPos, startMovementPos + transform.forward, t);
+        if(t > 1)
         {
-            transform.position = targetPos;
             actionOnUpdate = null;
             callBack();
         }
@@ -58,18 +63,15 @@ public class RobotManager : MonoBehaviour
         if (actionOnUpdate == null)
         {
             actionOnUpdate = TurnRight;
-            targetRotation = transform.rotation.eulerAngles + new Vector3(0,90,0);
+            startMovementRot = transform.rotation;
+            t = 0f;
         }
-        transform.Rotate(Vector3.up * Manager.instance.execSpeed * Time.deltaTime * 40);
-        Vector3 robotRot = transform.rotation.eulerAngles;
-        if(robotRot.y == 0)
+        t += 1 * Time.deltaTime * Manager.instance.execSpeed;
+        transform.rotation = Quaternion.Lerp(startMovementRot, startMovementRot * Quaternion.Euler(0, 90, 0), t);
+        if (t > 1)
         {
-            robotRot = new Vector3(0, 360, 0);
-        }
-        if (robotRot.y - targetRotation.y > 0)
-        {
-            transform.rotation = Quaternion.Euler(targetRotation);
             actionOnUpdate = null;
+            callBack();
         }
     }
 
@@ -84,13 +86,15 @@ public class RobotManager : MonoBehaviour
         if (actionOnUpdate == null)
         {
             actionOnUpdate = TurnLeft;
-            targetRotation = transform.rotation.eulerAngles + new Vector3(0, -90, 0);
+            startMovementRot = transform.rotation;
+            t = 0f;
         }
-        transform.Rotate(-Vector3.up * Manager.instance.execSpeed * Time.deltaTime * 40);
-        if (targetRotation.y - transform.rotation.eulerAngles.y > 0)
+        t += 1 * Time.deltaTime * Manager.instance.execSpeed;
+        transform.rotation = Quaternion.Lerp(startMovementRot, startMovementRot * Quaternion.Euler(0, -90, 0), t);
+        if (t > 1)
         {
-            transform.rotation = Quaternion.Euler(targetRotation);
             actionOnUpdate = null;
+            callBack();
         }
     }
 

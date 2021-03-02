@@ -260,11 +260,15 @@ public abstract class Nodes : MonoBehaviour
         [SerializeField]
         public List<string> nodeSettings;
     }
+
     /// <summary>
     /// Will convert the node to json
     /// </summary>
     public abstract SerializableNode SerializeNode();
 
+    /// <summary>
+    /// Will convert the json to a usable node object
+    /// </summary>
     public abstract void DeSerializeNode();
 
     #endregion

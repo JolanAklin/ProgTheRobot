@@ -17,15 +17,15 @@ public class NodeIf : Nodes
     new private void Awake()
     {
         base.Awake();
-        ExecManager.onExecutionBegin += LockAllInput;
+        ExecManager.onChangeBegin += LockAllInput;
     }
 
     public void OnDestroy()
     {
-        ExecManager.onExecutionBegin -= LockAllInput;
+        ExecManager.onChangeBegin -= LockAllInput;
     }
 
-    public void LockAllInput(object sender, ExecManager.onExecutionBeginEventArgs e)
+    public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         inputField.interactable = !e.started;
     }
