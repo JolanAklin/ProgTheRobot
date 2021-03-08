@@ -304,4 +304,10 @@ public class SaveManager : MonoBehaviour
         [SerializeField]
         public List<SplineManager.SerializedSpline> serializedSplines;
     }
+
+    [Serializable]
+    public class Settings
+    {
+
+    }
 }
