@@ -1195,7 +1195,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 875088045}
+        m_TargetAssemblyTypeName: TerrainManager, Assembly-CSharp
+        m_MethodName: ChangeX
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 198379529}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
@@ -1944,8 +1956,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -485.28165}
-  m_SizeDelta: {x: 1920, y: 970.5633}
+  m_AnchoredPosition: {x: 960, y: -449.65802}
+  m_SizeDelta: {x: 1920, y: 899.31604}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &352747903
 MonoBehaviour:
@@ -4962,6 +4974,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 875088044}
+  - component: {fileID: 875088045}
   m_Layer: 7
   m_Name: Terrain
   m_TagString: Untagged
@@ -4977,13 +4990,26 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875088043}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: 0, z: 0.5}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1599440472}
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &875088045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 875088043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 889f0bfe112536245af1a13f65fbe7ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainPart: {fileID: 4548120657582116972, guid: b8aed6e8b7aabec4f9866af5319f24c7, type: 3}
 --- !u!1 &893782384
 GameObject:
   m_ObjectHideFlags: 0
@@ -5580,7 +5606,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -980.5633}
+  m_AnchoredPosition: {x: 960, y: -909.31604}
   m_SizeDelta: {x: 1920, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1066799576
@@ -6194,7 +6220,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 1070.684}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1203312624
 MonoBehaviour:
@@ -7237,7 +7263,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -943.0633}
+  m_AnchoredPosition: {x: 960, y: -871.81604}
   m_SizeDelta: {x: 1910, y: 45}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1347930320
@@ -8257,7 +8283,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1599440472
 Transform:
   m_ObjectHideFlags: 0
@@ -9219,8 +9245,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 960, y: -460.28165}
-  m_SizeDelta: {x: 1910, y: 910.5633}
+  m_AnchoredPosition: {x: 960, y: -424.65802}
+  m_SizeDelta: {x: 1910, y: 839.31604}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1850733234
 MonoBehaviour:
@@ -9903,7 +9929,19 @@ MonoBehaviour:
   m_CharacterLimit: 0
   m_OnEndEdit:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 875088045}
+        m_TargetAssemblyTypeName: TerrainManager, Assembly-CSharp
+        m_MethodName: ChangeY
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 2075361356}
+          m_ObjectArgumentAssemblyTypeName: TMPro.TMP_InputField, Unity.TextMeshPro
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_OnSubmit:
     m_PersistentCalls:
       m_Calls: []
