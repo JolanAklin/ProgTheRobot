@@ -13,6 +13,8 @@ TagManager:
   - Node
   - ConnectHandle
   - Spline
+  - ModifyTerrain
+  - Terrain
   layers:
   - Default
   - TransparentFX
