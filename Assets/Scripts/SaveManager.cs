@@ -8,6 +8,7 @@ using ICSharpCode.SharpZipLib.Tar;
 using System.Linq;
 using UnityEngine.SceneManagement;
 using Language;
+using UnityEngine.Events;
 
 public class SaveManager : MonoBehaviour
 {
@@ -17,6 +18,18 @@ public class SaveManager : MonoBehaviour
     public string savePath;
     [Tooltip("Extract the save file in this directory. Put / before and a / after")]
     public string extractPath;
+
+    public GameObject splineLink;
+
+    public List<nodeObject> nodeObjects = new List<nodeObject>();
+    // object used to fill the list of node object in the inspector
+    [Serializable]
+    public class nodeObject
+    {
+        public string nodeType;
+        public GameObject gameObject;
+    }
+
 
     private void Awake()
     {
@@ -41,17 +54,19 @@ public class SaveManager : MonoBehaviour
         }
     }
 
+    bool cleanDirNextUpdate = false;
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S) && Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.S) && Input.GetKey(KeyCode.LeftAlt))
         {
             Save();
         }
 
-        if(Input.GetKeyDown(KeyCode.L) && Input.GetKeyDown(KeyCode.LeftControl))
+        if(Input.GetKeyDown(KeyCode.L) && Input.GetKey(KeyCode.LeftControl))
         {
+            CleanDir(extractPath);
             JsonToObj(savePath + "save.pr");
-            //CleanDir(extractPath);
         }
     }
 
@@ -210,6 +225,10 @@ public class SaveManager : MonoBehaviour
         RobotScript.nextid = 0;
         RobotScript.robotScripts = new Dictionary<int, RobotScript>();
 
+        foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+        {
+            Destroy(robot.Value.robotManager);
+        }
         Robot.nextid = 0;
         Robot.robots = new Dictionary<int, Robot>();
         Robot.idSelected = 0;
@@ -231,14 +250,29 @@ public class SaveManager : MonoBehaviour
     {
         foreach (Robot.SerializedRobot serializedRobot in serializedRobots)
         {
-            Robot robot = new Robot(serializedRobot.id, serializedRobot.power, serializedRobot.robotColor, serializedRobot.robotName, serializedRobot.serializedRobotScripts);
+            Vector3 position = new Vector3(serializedRobot.position[0], serializedRobot.position[1], serializedRobot.position[2]);
+            Quaternion rotation = new Quaternion(serializedRobot.rotation[0], serializedRobot.rotation[1], serializedRobot.rotation[2], serializedRobot.rotation[3]);
+
+            Robot robot = new Robot(serializedRobot.id, serializedRobot.power, serializedRobot.robotColor, serializedRobot.robotName, position, rotation, serializedRobot.serializedRobotScripts, this);
             Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
             Manager.instance.listRobot.Select(robot.id);
+        }
+        Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+        foreach (SplineManager.SerializedSpline serializedSpline in splineList.serializedSplines)
+        {
+            GameObject splineLinkInstance = Instantiate(splineLink, Vector3.zero, Quaternion.identity, nodeHolder);
+            SplineManager splineManager = splineLinkInstance.GetComponent<SplineManager>();
+            splineManager.DeSerializeSpline(serializedSpline);
         }
 
         RobotScript.nextid = saveId.robotScriptNextId;
         Robot.nextid = saveId.robotNextId;
         Nodes.nextid = saveId.nodeNextId;
+    }
+
+    public GameObject InstantiateSavedObj(GameObject gameObject, Vector3 position, Quaternion rotation, Transform parent)
+    {
+        return Instantiate(gameObject, position, rotation, parent);
     }
 
     // reload the current scene to remove all unwanted object on the load of a new file

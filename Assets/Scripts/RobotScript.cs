@@ -27,6 +27,11 @@ public class RobotScript
         Init(robot);
     }
 
+    public RobotScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager, bool isMain)
+    {
+        DeSerializeScript(serializedRobotScript, saveManager, isMain);
+    }
+
     private void Init(Robot robot)
     {
         // All robotscripts have a different id
@@ -104,9 +109,33 @@ public class RobotScript
     }
 
     // convert json to this class
-    public void DeSerializeScript()
+    public void DeSerializeScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager, bool isMain)
     {
+        id = serializedRobotScript.id;
+        name = serializedRobotScript.name;
+        robot = Robot.robots[serializedRobotScript.robotId];
+        robotScripts.Add(id, this);
+        robot.robotScripts.Add(this);
+        if (isMain)
+            robot.MainScript = this;
 
+        Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+        foreach (Nodes.SerializableNode serializableNode in serializedRobotScript.serializedNode)
+        {
+            GameObject node = saveManager.nodeObjects.Find(x => x.nodeType == serializableNode.type.ToString()).gameObject; // find the correct gameobject to instantiate
+            GameObject nodeInstance = saveManager.InstantiateSavedObj(node, new Vector3(serializableNode.position[0], serializableNode.position[1], serializableNode.position[2]), Quaternion.identity, nodeHolder);
+
+            nodes.Add(nodeInstance);
+            Nodes nodeInstanceScript = nodeInstance.GetComponent<Nodes>();
+            nodeInstanceScript.rs = this;
+
+            nodeInstanceScript.DeSerializeNode(serializableNode);
+
+            if (serializableNode.type == "start")
+            {
+                nodeStart = nodeInstance.GetComponent<Nodes>();
+            }
+        }
     }
     #endregion
 }

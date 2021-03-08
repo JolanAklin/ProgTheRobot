@@ -21,7 +21,7 @@ public class Robot
 
 
     private RobotScript mainScript;
-    public RobotScript MainScript { get => mainScript; private set => mainScript = value; }
+    public RobotScript MainScript { get => mainScript; set => mainScript = value; }
 
     public List<RobotScript> robotScripts = new List<RobotScript>();
 
@@ -43,15 +43,22 @@ public class Robot
         Init();
     }
 
-    public Robot(int id, uint power, float[] robotColor, string robotName, List<RobotScript.SerializedRobotScript> serializedRobotScripts)
+    public Robot(int id, uint power, float[] robotColor, string robotName, Vector3 position, Quaternion rotation, List<RobotScript.SerializedRobotScript> serializedRobotScripts, SaveManager saveManager)
     {
         this.id = id;
         this.power = power;
         this.color = new Color(robotColor[0], robotColor[1], robotColor[2], robotColor[3]);
         this.robotName = robotName;
         varsManager = new VarsManager();
-        robotManager = Manager.instance.CreateRobot(color);
+        robotManager = Manager.instance.CreateRobot(color, position, rotation);
         robots.Add(id, this);
+        bool isMain = true;
+        foreach (RobotScript.SerializedRobotScript serializedRobotScript in serializedRobotScripts)
+        {
+            RobotScript robotScript = new RobotScript(serializedRobotScript, saveManager, isMain);
+            if (isMain)
+                isMain = false;
+        }
     }
 
     private void Init()
@@ -143,6 +150,9 @@ public class Robot
         public uint power;
         public float[] robotColor;
 
+        public float[] position;
+        public float[] rotation;
+
         [SerializeField]
         public List<RobotScript.SerializedRobotScript> serializedRobotScripts;
     }
@@ -163,6 +173,8 @@ public class Robot
 
             serializedRobotScripts = serializedRobotScripts,
         };
+        serializedRobot.position = new float[3] { robotManager.robotStartPos.x, robotManager.robotStartPos.y, robotManager.robotStartPos.z };
+        serializedRobot.rotation = new float[4] { robotManager.robotStartRot.x, robotManager.robotStartRot.y, robotManager.robotStartRot.z, robotManager.robotStartRot.w };
         return serializedRobot;
     }
     #endregion

@@ -15,6 +15,8 @@ public class ConnectHandle : MonoBehaviour
     public bool ifFalse;
     public bool inLoopOut = false;
 
+    public int handleNumber;
+
     private void Start()
     {
         canBeClicked = true;

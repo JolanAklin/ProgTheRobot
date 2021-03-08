@@ -41,6 +41,7 @@ public class Manager : MonoBehaviour
     {
         instance = this;
 
+
         // change the canvas resolution to match the screen size
         canvasScaler = canvas.GetComponent<CanvasScaler>();
         res.height = Screen.height;
@@ -178,6 +179,10 @@ public class Manager : MonoBehaviour
         }
     }
 
+    public RobotManager CreateRobot(Color color, Vector3 position, Quaternion rotation)
+    {
+        return Instantiate(robotPrefab, position, rotation, transform.root).GetComponent<RobotManager>();
+    }
     public RobotManager CreateRobot(Color color)
     {
         return Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity, transform.root).GetComponent<RobotManager>();

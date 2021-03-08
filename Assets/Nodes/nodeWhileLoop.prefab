@@ -2623,6 +2623,12 @@ MonoBehaviour:
   nodeLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  handleStartArray:
+  - {fileID: 8993160322650077964}
+  - {fileID: 3012832301632454266}
+  handleEndArray:
+  - {fileID: 5355865931366499773}
+  - {fileID: 1213038791730483112}
   canResize: 1
   ResizeHandle: {fileID: 2198036974579868831}
   canMove: 1

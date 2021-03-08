@@ -49,7 +49,7 @@ public class SplineMaker : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
         GenerateMesh();
@@ -74,7 +74,8 @@ public class SplineMaker : MonoBehaviour
                 lines.Add(line);
             }
         }
-        meshFilter.mesh = CreateMeshFromLine(lines);
+        if(lines.Count > 0)
+            meshFilter.mesh = CreateMeshFromLine(lines);
     }
 
 
@@ -96,7 +97,7 @@ public class SplineMaker : MonoBehaviour
         }
         mesh.vertices = vertices;
 
-        // create triangles between thos points
+        // create triangles between those points
         int[] tris = new int[(lines.Count - 1) * 6];
         i = 0;
         int k = 0;

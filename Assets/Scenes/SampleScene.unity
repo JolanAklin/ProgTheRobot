@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.7302238, g: 0.7889745, b: 0.8498578, a: 1}
+  m_IndirectSpecularColor: {r: 0.7302384, g: 0.7889801, b: 0.84985816, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -234,7 +234,26 @@ MonoBehaviour:
   tmpSavePath: /tmp/save/
   savePath: /saves/
   extractPath: /tmp/extract/
-  destroyerScene: 
+  splineLink: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
+  nodeObjects:
+  - nodeType: start
+    gameObject: {fileID: 1052317501531756442, guid: cfd4db6e417201f4ca1940f351d1ece8, type: 3}
+  - nodeType: end
+    gameObject: {fileID: 8120454241257089932, guid: 24eb43d5068bdf04bb0e717861bd0bae, type: 3}
+  - nodeType: execute
+    gameObject: {fileID: 8025506041070510845, guid: ffb47afa5bfd77a4fa47c71a07266a9f, type: 3}
+  - nodeType: readWrite
+    gameObject: {fileID: 6743916129687385063, guid: 84e91ca727e8ae54481919ecc08a8b03, type: 3}
+  - nodeType: test
+    gameObject: {fileID: 702956444976196924, guid: ac8a307a8665d924b91dff6a8f5714a6, type: 3}
+  - nodeType: subProgram
+    gameObject: {fileID: 3168512350998371172, guid: f34e347290aae49429ea3073e22c8af7, type: 3}
+  - nodeType: affectation
+    gameObject: {fileID: 5034817158100937439, guid: 96eaf0cefd6fcf848961b0ac5c11518f, type: 3}
+  - nodeType: whileLoop
+    gameObject: {fileID: 5158547176770619525, guid: 486fc60dc23b9ae40a875bb40a2c761f, type: 3}
+  - nodeType: forLoop
+    gameObject: {fileID: 6739195634499042300, guid: f9d65dd1d08870a4c80ed2f9b4ed0b36, type: 3}
 --- !u!1 &4418599
 GameObject:
   m_ObjectHideFlags: 0

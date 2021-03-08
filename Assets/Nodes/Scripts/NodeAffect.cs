@@ -158,16 +158,22 @@ public class NodeAffect : Nodes
     {
         SerializableNode serializableNode = new SerializableNode() {
             id = id,
-            nextNodeId = nextNodeId,
+            nextNodeId = nextNodeId, //this is the next node in the execution order
             type = "execute",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
-            nodeSettings = new List<string>() };
+            nodeSettings = new List<string>(),
+            size = new float[] { canvas.sizeDelta.x, canvas.sizeDelta.y },
+        };
         serializableNode.nodeSettings.Add(input);
         return serializableNode;
     }
-    public override void DeSerializeNode()
+    public override void DeSerializeNode(SerializableNode serializableNode)
     {
-        throw new System.NotImplementedException();
+        id = serializableNode.id;
+        nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        input = serializableNode.nodeSettings[0];
+        inputField.text = input;
+        Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
     }
     #endregion
 }

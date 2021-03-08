@@ -917,7 +917,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8120454241257089932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.2, y: -2.7, z: 0}
+  m_LocalPosition: {x: -1.9, y: -1.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8120454241193560662}
@@ -971,6 +971,9 @@ MonoBehaviour:
   nodeLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  handleStartArray: []
+  handleEndArray:
+  - {fileID: 5786985527918085667}
   canResize: 1
   ResizeHandle: {fileID: 2666394107578352649}
   canMove: 1

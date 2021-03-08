@@ -21,6 +21,11 @@ public class SplineManager : MonoBehaviour
     [HideInInspector]
     public Transform startPos, endPos;
 
+    private int robotScriptId;
+
+    private int handleStartNumber;
+    private int handleEndNumber;
+
     // last segment direction. not used yet
     private bool up;
     private bool down;
@@ -33,6 +38,17 @@ public class SplineManager : MonoBehaviour
     {
         splineManagers.Add(this);
         RobotScript.robotScripts[Manager.instance.currentlySelectedScript].splines.Add(this.gameObject);
+        robotScriptId = Manager.instance.currentlySelectedScript;
+
+        splineMaker = GetComponent<SplineMaker>();
+        currentSegment = CreateNewSplineSegment(startPos.position);
+        node.OnNodeModified += ChangeSpline;
+        this.startPos = startPos;
+    }
+    public void Init(Transform startPos, Nodes node, RobotScript robotScript)
+    {
+        splineManagers.Add(this);
+        robotScript.splines.Add(this.gameObject);
 
         splineMaker = GetComponent<SplineMaker>();
         currentSegment = CreateNewSplineSegment(startPos.position);
@@ -167,7 +183,10 @@ public class SplineManager : MonoBehaviour
     public class SerializedSpline
     {
         public int idNodeStart;
+        public int handleStart; // number in an array on the node
         public int idNodeEnd;
+        public int handleEnd;
+        public int robotScriptId;
     }
 
     public SerializedSpline SerializeSpline()
@@ -175,9 +194,18 @@ public class SplineManager : MonoBehaviour
         SerializedSpline serializedSpline = new SerializedSpline()
         {
             idNodeStart = startPos.gameObject.GetComponent<ConnectHandle>().node.id,
+            handleStart = handleStartNumber,
             idNodeEnd = endPos.gameObject.GetComponent<ConnectHandle>().node.id,
+            handleEnd = handleEndNumber,
+            robotScriptId = robotScriptId,
         };
         return serializedSpline;
+    }
+
+    public void DeSerializeSpline(SerializedSpline serializedSpline)
+    {
+        Init(Nodes.NodesDict[serializedSpline.idNodeStart].handleStartArray[serializedSpline.handleStart].transform, Nodes.NodesDict[serializedSpline.idNodeStart], RobotScript.robotScripts[serializedSpline.robotScriptId]);
+        EndSpline(Nodes.NodesDict[serializedSpline.idNodeEnd].handleEndArray[serializedSpline.handleEnd].transform, Nodes.NodesDict[serializedSpline.idNodeEnd]);
     }
 
     public void DestroyAllSplines()

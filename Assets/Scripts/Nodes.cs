@@ -62,6 +62,9 @@ public abstract class Nodes : MonoBehaviour
     // use to test if a node collide with an other
     public LayerMask nodeLayerMask;
 
+    public GameObject[] handleStartArray;
+    public GameObject[] handleEndArray;
+
     //resize
     private bool resize = false;
     [HideInInspector]
@@ -94,6 +97,15 @@ public abstract class Nodes : MonoBehaviour
         id = nextid;
         nextid++;
         nodes.Add(id, this);
+
+        for (int i = 0; i < handleStartArray.Length; i++)
+        {
+            handleStartArray[i].GetComponent<ConnectHandle>().handleNumber = i;
+        }
+        for (int i = 0; i < handleEndArray.Length; i++)
+        {
+            handleEndArray[i].GetComponent<ConnectHandle>().handleNumber = i;
+        }
     }
 
     private void OnDestroy()
@@ -209,6 +221,11 @@ public abstract class Nodes : MonoBehaviour
         canResize = true;
     }
 
+    public void Resize(Vector2 size)
+    {
+        canvas.sizeDelta = size;
+    }
+
     public void Move()
     {
         // round the mouse position
@@ -258,6 +275,8 @@ public abstract class Nodes : MonoBehaviour
         [SerializeField]
         public float[] position;
         [SerializeField]
+        public float[] size;
+        [SerializeField]
         public List<string> nodeSettings;
     }
 
@@ -269,7 +288,7 @@ public abstract class Nodes : MonoBehaviour
     /// <summary>
     /// Will convert the json to a usable node object
     /// </summary>
-    public abstract void DeSerializeNode();
+    public abstract void DeSerializeNode(SerializableNode serializableNode);
 
     #endregion
 }
