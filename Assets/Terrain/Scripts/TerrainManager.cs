@@ -41,6 +41,12 @@ public class TerrainManager : MonoBehaviour
 
     private Action addObjectActionOnUpdate;
 
+
+    // robot placement stuff
+    public ListRobot listRobot;
+    public LayerMask robotPlacementLayer;
+    private GameObject robotToMove;
+
     public class terrainPart
     {
         public GameObject block;
@@ -48,21 +54,6 @@ public class TerrainManager : MonoBehaviour
         public GameObject[] fencePlacement;
     }
 
-    [Serializable]
-    public class FencePostion
-    {
-        public int[] position;
-        public int rot; // this number multiplied by 90
-
-        public int fenceLook;
-    }
-
-    [Serializable]
-    public class ObjectPosition
-    {
-        public int[] position;
-        public int objectType;
-    }
 
     private List<FencePostion> fencePostions = new List<FencePostion>();
     private List<ObjectPosition> objectPositions = new List<ObjectPosition>();
@@ -127,8 +118,66 @@ public class TerrainManager : MonoBehaviour
                     Destroy(currentObject);
             }
         });
+
     }
 
+    public void LoadRobotList()
+    {
+        listRobot.Clear();
+        Dictionary<int, ListRobot.ListElement> listElements = new Dictionary<int, ListRobot.ListElement>();
+        foreach (KeyValuePair<int, ListRobot.ListElement> listElement in Manager.instance.listRobot.getChoices())
+        {
+            if (!listElement.Value.isAddRobot)
+                listElements.Add(listElement.Key, new ListRobot.ListElement() { isAddRobot = false, robotColor = listElement.Value.robotColor, actionOnClick = () => { robotToMove = Robot.robots[listElement.Key].robotManager.gameObject; } });
+        }
+        listRobot.Init(listElements, 0);
+        listRobot.UpdateButtonColor();
+    }
+
+    public void RotateRobot(int dir) // 1 or -1
+    {
+        if (robotToMove != null)
+        {
+            robotToMove.transform.Rotate(new Vector3(0, dir * 90, 0));
+            robotToMove.GetComponent<RobotManager>().SetDefaultPos(robotToMove.transform.rotation);
+        }
+    }
+
+    public void MoveRobotButtonClicked()
+    {
+        addObjectActionOnUpdate = () => { MoveRobot(); };
+    }
+
+    private void MoveRobot()
+    {
+        if(robotToMove != null)
+        {
+            RaycastHit hit;
+            Ray ray = terrainCam.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, robotPlacementLayer))
+            {
+                robotToMove.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
+                if(Input.GetKeyDown(KeyCode.Mouse1))
+                {
+                    addObjectActionOnUpdate = null;
+                    robotToMove.GetComponent<RobotManager>().SetDefaultPos(robotToMove.transform);
+                }
+            }
+        }else
+        {
+            addObjectActionOnUpdate = null;
+        }
+    }
+
+    public void ShowRobot()
+    {
+        if(robotToMove != null)
+        {
+            robotToMove.SetActive(!robotToMove.activeSelf);
+        }
+    }
+
+    // match the render texture to the app size
     private void MatchRTToScreen()
     {
         terrainCam.targetTexture.Release();
@@ -280,7 +329,6 @@ public class TerrainManager : MonoBehaviour
     #endregion
 
 
-    #region add object to the terrain
     private void Update()
     {
         pointerevent = new PointerEventData(eventsystem);
@@ -321,6 +369,7 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
+    #region add object to the terrain
     private void AddFence()
     {
         RaycastHit hit;
@@ -440,6 +489,23 @@ public class TerrainManager : MonoBehaviour
     }
     #endregion
 
+
+    #region save and load
+    [Serializable]
+    public class FencePostion
+    {
+        public int[] position;
+        public int rot; // this number multiplied by 90
+
+        public int fenceLook;
+    }
+
+    [Serializable]
+    public class ObjectPosition
+    {
+        public int[] position;
+        public int objectType;
+    }
     [Serializable]
     public class SerializedTerrain
     {
@@ -469,4 +535,5 @@ public class TerrainManager : MonoBehaviour
         changeSizeYInputField.text = terrainSize[1].ToString();
         CreateTerrain(terrainSize);
     }
+    #endregion
 }

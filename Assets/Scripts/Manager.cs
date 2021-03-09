@@ -181,10 +181,10 @@ public class Manager : MonoBehaviour
 
     public RobotManager CreateRobot(Color color, Vector3 position, Quaternion rotation)
     {
-        return Instantiate(robotPrefab, position, rotation, transform.root).GetComponent<RobotManager>();
+        return Instantiate(robotPrefab, position, rotation).GetComponent<RobotManager>();
     }
     public RobotManager CreateRobot(Color color)
     {
-        return Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity, transform.root).GetComponent<RobotManager>();
+        return Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity).GetComponent<RobotManager>();
     }
 }

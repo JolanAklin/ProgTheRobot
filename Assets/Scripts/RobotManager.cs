@@ -29,6 +29,16 @@ public class RobotManager : MonoBehaviour
         robotStartRot = transform.rotation;
     }
 
+    public void SetDefaultPos(Vector3 position)
+    {
+        robotStartPos = position;
+    }
+
+    public void SetDefaultPos(Quaternion rotation)
+    {
+        robotStartRot = rotation;
+    }
+
     public void GoForward(Action callBack)
     {
         this.callBack = callBack;

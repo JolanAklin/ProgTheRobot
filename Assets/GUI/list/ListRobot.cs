@@ -95,6 +95,13 @@ public class ListRobot : MonoBehaviour
         }
     }
 
+    public Dictionary<int, ListElement> getChoices()
+    {
+
+        Dictionary<int, ListElement> dictChoices = choices.ToDictionary(entry => entry.Key, entry => entry.Value);
+        return dictChoices;
+    }
+
     // Called when a button from the list is clicked
     public void ButtonClicked(Button sender)
     {
