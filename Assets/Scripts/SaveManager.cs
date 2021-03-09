@@ -54,8 +54,6 @@ public class SaveManager : MonoBehaviour
         }
     }
 
-    bool cleanDirNextUpdate = false;
-
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.S) && Input.GetKey(KeyCode.LeftAlt))
@@ -112,10 +110,12 @@ public class SaveManager : MonoBehaviour
         sr.Close();
 
         // save the terrain
-
+        sr = File.CreateText(tmpSavePath + "Terrain");
+        sr.WriteLine(JsonUtility.ToJson(GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().Serialize()));
+        sr.Close();
 
         //convert to a tar archive
-        string[] files = new string[Robot.robots.Count + 2];
+        string[] files = new string[Robot.robots.Count + 3];
         int i = 0;
         foreach (KeyValuePair<int, Robot> robot in Robot.robots)
         {
@@ -125,6 +125,8 @@ public class SaveManager : MonoBehaviour
         files[i] = tmpSavePath + "Splines";
         i++;
         files[i] = tmpSavePath + "Ids";
+        i++;
+        files[i] = tmpSavePath + "Terrain";
 
 
         CreateTarGZ(savePath + "save.pr", files);
@@ -143,6 +145,7 @@ public class SaveManager : MonoBehaviour
         SaveId saveId = null;
         List<Robot.SerializedRobot> serializedRobots = new List<Robot.SerializedRobot>();
         SplineList splineList = null;
+        TerrainManager.SerializedTerrain serializedTerrain = null;
 
         foreach (string file in Directory.EnumerateFiles(extractPath))
         {
@@ -154,13 +157,16 @@ public class SaveManager : MonoBehaviour
             }else if (file.EndsWith("Splines"))
             {
                 splineList = JsonUtility.FromJson<SplineList>(fileContent);
+            }else if (file.EndsWith("Terrain"))
+            {
+                serializedTerrain = JsonUtility.FromJson<TerrainManager.SerializedTerrain>(fileContent);
             }
             else
             {
                 serializedRobots.Add(JsonUtility.FromJson<Robot.SerializedRobot>(fileContent));
             }
         }
-        ClearGame(saveId, serializedRobots, splineList);
+        ClearGame(saveId, serializedRobots, splineList, serializedTerrain);
     }
 
     //https://stackoverflow.com/questions/31836519/how-to-create-tar-gz-file-in-c-sharp modified by me
@@ -219,7 +225,7 @@ public class SaveManager : MonoBehaviour
     /// <summary>
     /// clear the app before loading
     /// </summary>
-    public void ClearGame(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
+    public void ClearGame(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
     {
         //reset all the static vars
         RobotScript.nextid = 0;
@@ -241,12 +247,12 @@ public class SaveManager : MonoBehaviour
 
         SplineManager.splineManagers = new List<SplineManager>();
 
-        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList);
+        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList, serializedTerrain);
         StartCoroutine(coroutine);
     }
 
     // create usable objects from the saved form
-    private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
+    private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
     {
         foreach (Robot.SerializedRobot serializedRobot in serializedRobots)
         {
@@ -265,6 +271,8 @@ public class SaveManager : MonoBehaviour
             splineManager.DeSerializeSpline(serializedSpline);
         }
 
+        GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().DeSerialize(serializedTerrain);
+
         RobotScript.nextid = saveId.robotScriptNextId;
         Robot.nextid = saveId.robotNextId;
         Nodes.nextid = saveId.nodeNextId;
@@ -276,7 +284,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // reload the current scene to remove all unwanted object on the load of a new file
-    private IEnumerator LoadScene(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList)
+    private IEnumerator LoadScene(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
     {
         // Start loading the scene
         Scene scene = SceneManager.GetActiveScene();
@@ -286,7 +294,7 @@ public class SaveManager : MonoBehaviour
             yield return null;
         // Wait a frame so every Awake and Start method is called
         yield return new WaitForEndOfFrame();
-        LoadObject(saveId, serializedRobots, splineList);
+        LoadObject(saveId, serializedRobots, splineList, serializedTerrain);
     }
 
 

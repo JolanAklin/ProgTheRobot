@@ -440,4 +440,33 @@ public class TerrainManager : MonoBehaviour
     }
     #endregion
 
+    [Serializable]
+    public class SerializedTerrain
+    {
+        public uint[] terrainSize;
+        [SerializeField]
+        public List<FencePostion> fences = new List<FencePostion>();
+        [SerializeField]
+        public List<ObjectPosition> objects = new List<ObjectPosition>();
+    }
+
+    public SerializedTerrain Serialize()
+    {
+        return new SerializedTerrain()
+        {
+            terrainSize = terrainSize,
+            fences = fencePostions,
+            objects = objectPositions,
+        };
+    }
+
+    public void DeSerialize(SerializedTerrain serializedTerrain)
+    {
+        terrainSize = serializedTerrain.terrainSize;
+        fencePostions = serializedTerrain.fences;
+        objectPositions = serializedTerrain.objects;
+        changeSizeXInputField.text = terrainSize[0].ToString();
+        changeSizeYInputField.text = terrainSize[1].ToString();
+        CreateTerrain(terrainSize);
+    }
 }
