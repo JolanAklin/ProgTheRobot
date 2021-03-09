@@ -15,6 +15,7 @@ TagManager:
   - Spline
   - ModifyTerrain
   - Terrain
+  - PlacementOccupied
   layers:
   - Default
   - TransparentFX
@@ -25,8 +26,8 @@ TagManager:
   - Node
   - Terrain
   - Robot
-  - 
-  - 
+  - FencePlacement
+  - ObjectPlacement
   - 
   - 
   - 
