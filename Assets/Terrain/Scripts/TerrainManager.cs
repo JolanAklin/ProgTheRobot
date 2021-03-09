@@ -131,7 +131,6 @@ public class TerrainManager : MonoBehaviour
                 listElements.Add(listElement.Key, new ListRobot.ListElement() { isAddRobot = false, robotColor = listElement.Value.robotColor, actionOnClick = () => { robotToMove = Robot.robots[listElement.Key].robotManager.gameObject; } });
         }
         listRobot.Init(listElements, 0);
-        listRobot.UpdateButtonColor();
     }
 
     public void RotateRobot(int dir) // 1 or -1

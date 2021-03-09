@@ -104,6 +104,7 @@ public class Manager : MonoBehaviour
                 robotToChange.robotName = rm.robotName;
                 robotToChange.power = rm.power;
                 listRobot.UpdateButtonColor();
+                listRobot.ChangeChoiceColor(robotToChange.id, rm.robotColor);
                 rm.PopUpClose();
             });
             rm.SetCancelAction(() =>

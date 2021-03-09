@@ -126,6 +126,11 @@ public class ListRobot : MonoBehaviour
             button.onClick?.Invoke();
     }
 
+    public void ChangeChoiceColor(int id, Color color)
+    {
+        choices[id].robotColor = color;
+    }
+
     public int Count()
     {
         return buttons.Count;

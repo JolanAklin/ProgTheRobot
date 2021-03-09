@@ -40,7 +40,8 @@ public class ExecManager : MonoBehaviour
             isRunning = true;
             foreach (KeyValuePair<int,Robot> robot in Robot.robots)
             {
-                robot.Value.MainScript.nodeStart.Execute();
+                if(robot.Value.MainScript.nodeStart != null)
+                    robot.Value.MainScript.nodeStart.Execute();
             }
         }
     }
