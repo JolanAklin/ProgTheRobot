@@ -174,7 +174,10 @@ public class Manager : MonoBehaviour
         foreach (Transform transform in nodeHolder.transform)
         {
             if(transform.gameObject.tag == "Node")
+            {
                 transform.gameObject.transform.GetChild(0).gameObject.SetActive(false);
+                transform.GetComponent<BoxCollider2D>().enabled = false;
+            }
             if (transform.gameObject.tag == "Spline")
                 transform.gameObject.SetActive(false);
         }

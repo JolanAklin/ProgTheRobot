@@ -56,6 +56,8 @@ public class RobotScript
         foreach (GameObject node in nodes)
         {
             node.transform.GetChild(0).gameObject.SetActive(true);
+            node.transform.GetComponent<BoxCollider2D>().enabled = true;
+
         }
         foreach (GameObject spline in splines)
         {
