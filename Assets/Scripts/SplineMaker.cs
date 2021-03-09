@@ -58,6 +58,8 @@ public class SplineMaker : MonoBehaviour
     // Interpolate along the spline and create points around it.
     public void GenerateMesh()
     {
+        if(meshFilter == null)
+            meshFilter = GetComponent<MeshFilter>();
         List<Line> lines = new List<Line>();
         foreach (SplineSegment splineSegment in splineSegments)
         {
