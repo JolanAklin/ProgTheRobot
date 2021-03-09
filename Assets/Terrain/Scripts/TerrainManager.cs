@@ -49,7 +49,7 @@ public class TerrainManager : MonoBehaviour
     }
 
     [Serializable]
-    private class FencePostion
+    public class FencePostion
     {
         public int[] position;
         public int rot; // this number multiplied by 90
@@ -58,7 +58,7 @@ public class TerrainManager : MonoBehaviour
     }
 
     [Serializable]
-    private class ObjectPosition
+    public class ObjectPosition
     {
         public int[] position;
         public int objectType;
@@ -199,12 +199,19 @@ public class TerrainManager : MonoBehaviour
             {
                 GameObject objPlacement = Instantiate(objectPlacement, new Vector3(i, 0, j), Quaternion.identity, this.transform);
 
+                // create a fence if it was there on the terrain before
                 ObjectPosition objectPosition = Array.Find(objectPositionsCopy, x => x.position[0] == i && x.position[1] == j);
                 if(objectPosition != null)
                 {
-                    objectPositions.Add(new ObjectPosition() { position = new int[] { i, j }, objectType = objectPosition.objectType });
-                    GenerateObject(objectPosition.objectType, new Vector3(objectPosition.position[0], 0, objectPosition.position[1]));
+                    ObjectPlacement objectPlacementScript = objPlacement.GetComponentInChildren<ObjectPlacement>();
+                    ObjectPosition objPosition = new ObjectPosition() { position = new int[] { i, j }, objectType = objectPosition.objectType };
+                    objectPositions.Add(objPosition);
+                    objectPlacementScript.terrainObject = GenerateObject(objectPosition.objectType, new Vector3(objectPosition.position[0], 0, objectPosition.position[1]));
+                    objectPlacementScript.objectPosition = objPosition;
                     objPlacement.transform.GetChild(0).tag = "PlacementOccupied";
+
+
+                    
                 }
 
                 GameObject[] fencesPlacement = new GameObject[4];
@@ -219,9 +226,12 @@ public class TerrainManager : MonoBehaviour
                     FencePostion fencePos = Array.Find(fencePostionsCopy, x => x.position[0] == i && x.position[1] == j && x.rot == k);
                     if(fencePos != null)
                     {
-                        fencePostions.Add(new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook });
-                        GenerateFence(fencePos.fenceLook, fencesPlacement[k].transform.GetChild(0).transform.position, k);
+                        FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook };
+                        fencePostions.Add(fencePosition);
+                        fencePlacementScript.fence = GenerateFence(fencePos.fenceLook, fencesPlacement[k].transform.GetChild(0).transform.position, k);
                         fencesPlacement[k].transform.GetChild(0).tag = "PlacementOccupied";
+
+                        fencePlacementScript.fencePos = fencePosition;
                     }
 
                 }
@@ -236,9 +246,11 @@ public class TerrainManager : MonoBehaviour
                     FencePostion fencePos = Array.Find(fencePostionsCopy, x => x.position[0] == i && x.position[1] == j && x.rot == 3);
                     if (fencePos != null)
                     {
-                        fencePostions.Add(new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook });
-                        GenerateFence(fencePos.fenceLook, fencesPlacement[2].transform.GetChild(0).transform.position, 3);
+                        FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook };
+                        fencePostions.Add(fencePosition);
+                        fencePlacementScript.fence = GenerateFence(fencePos.fenceLook, fencesPlacement[2].transform.GetChild(0).transform.position, 3);
                         fencesPlacement[2].transform.GetChild(0).tag = "PlacementOccupied";
+                        fencePlacementScript.fencePos = fencePosition;
                     }
 
                 }
@@ -253,9 +265,11 @@ public class TerrainManager : MonoBehaviour
                     FencePostion fencePos = Array.Find(fencePostionsCopy, x => x.position[0] == i && x.position[1] == j && x.rot == 2);
                     if (fencePos != null)
                     {
-                        fencePostions.Add(new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook });
-                        GenerateFence(fencePos.fenceLook, fencesPlacement[3].transform.GetChild(0).transform.position, 2);
+                        FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook };
+                        fencePostions.Add(fencePosition);
+                        fencePlacementScript.fence = GenerateFence(fencePos.fenceLook, fencesPlacement[3].transform.GetChild(0).transform.position, 2);
                         fencesPlacement[3].transform.GetChild(0).tag = "PlacementOccupied";
+                        fencePlacementScript.fencePos = fencePosition;
                     }
 
                 }
@@ -277,6 +291,33 @@ public class TerrainManager : MonoBehaviour
         if (rayCastResults.Find(X => X.gameObject.tag == "ModifyTerrain").gameObject != null)
         {
             addObjectActionOnUpdate?.Invoke();
+
+            if(Input.GetKeyDown(KeyCode.Mouse1))
+            {
+                RaycastHit hit;
+                Ray ray = terrainCam.ScreenPointToRay(Input.mousePosition);
+                if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, fencePlacementLayer))
+                {
+                    // remove the fence GameObject and remove the fence on the list
+                    if (hit.transform.gameObject.tag == "PlacementOccupied")
+                    {
+                        fencePlacement fencePlacementScript = hit.transform.GetComponent<fencePlacement>();
+                        Destroy(fencePlacementScript.fence);
+                        fencePostions.Remove(fencePlacementScript.fencePos);
+                        hit.transform.gameObject.tag = "Untagged";
+                    }
+                }else if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, objectPlacementLayer))
+                {
+                    // remove the fence GameObject and remove the fence on the list
+                    if (hit.transform.gameObject.tag == "PlacementOccupied")
+                    {
+                        ObjectPlacement objectPlacement = hit.transform.GetComponent<ObjectPlacement>();
+                        Destroy(objectPlacement.terrainObject);
+                        objectPositions.Remove(objectPlacement.objectPosition);
+                        hit.transform.gameObject.tag = "Untagged";
+                    }
+                }
+            }
         }
     }
 
@@ -300,7 +341,12 @@ public class TerrainManager : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
                         fencePlacement fencePlacementScript = hit.transform.GetComponent<fencePlacement>();
-                        fencePostions.Add(new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = currentLook });
+                        FencePostion fencePostion = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = currentLook };
+                        fencePostions.Add(fencePostion);
+
+                        fencePlacementScript.fence = currentFence;
+                        fencePlacementScript.fencePos = fencePostion;
+
                         hit.transform.gameObject.tag = "PlacementOccupied";
                         PlaceObject(currentFence);
                         currentFence = CreateFence();
@@ -328,7 +374,14 @@ public class TerrainManager : MonoBehaviour
 
                     if (Input.GetKeyDown(KeyCode.Mouse0))
                     {
-                        objectPositions.Add(new ObjectPosition() { position = new int[] { Mathf.RoundToInt(hit.transform.parent.position.x), Mathf.RoundToInt(hit.transform.parent.position.z) }, objectType = type });
+
+                        ObjectPlacement objectPlacement = hit.transform.GetComponent<ObjectPlacement>();
+                        ObjectPosition objPosition = new ObjectPosition() { position = new int[] { Mathf.RoundToInt(hit.transform.parent.position.x), Mathf.RoundToInt(hit.transform.parent.position.z) }, objectType = type };
+                        objectPositions.Add(objPosition);
+
+                        objectPlacement.terrainObject = currentObject;
+                        objectPlacement.objectPosition = objPosition;
+
                         hit.transform.gameObject.tag = "PlacementOccupied";
                         PlaceObject(currentObject);
                         currentObject = CreateObject(prefab);
@@ -358,14 +411,14 @@ public class TerrainManager : MonoBehaviour
         return fence;
     }
 
-    private void GenerateFence(int look, Vector3 position, int rotation)
+    private GameObject GenerateFence(int look, Vector3 position, int rotation)
     {
-        GameObject fence = Instantiate(fences[look], position, Quaternion.Euler(0, rotation * 90, 0), GameObject.FindGameObjectWithTag("Terrain").transform);
+        return Instantiate(fences[look], position, Quaternion.Euler(0, rotation * 90, 0), GameObject.FindGameObjectWithTag("Terrain").transform);
     }
 
-    private void GenerateObject(int objectType, Vector3 position)
+    private GameObject GenerateObject(int objectType, Vector3 position)
     {
-        Instantiate(objects[objectType], position, Quaternion.identity, GameObject.FindGameObjectWithTag("Terrain").transform);
+        return Instantiate(objects[objectType], position, Quaternion.identity, GameObject.FindGameObjectWithTag("Terrain").transform);
     }
 
     public GameObject CreateObject(GameObject prefab)
