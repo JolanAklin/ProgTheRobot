@@ -126,6 +126,16 @@ public class ListRobot : MonoBehaviour
             button.onClick?.Invoke();
     }
 
+    public void SelectFirst()
+    {
+        int id = buttons.ElementAt(1).Key;
+        Button button = buttons[id];
+        ListElement choice = choices[id];
+        ButtonClicked(button);
+        if (!choice.isAddRobot)
+            button.onClick?.Invoke();
+    }
+
     public void ChangeChoiceColor(int id, Color color)
     {
         choices[id].robotColor = color;

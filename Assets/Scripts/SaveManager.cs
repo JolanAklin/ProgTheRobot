@@ -75,17 +75,27 @@ public class SaveManager : MonoBehaviour
     public void Save()
     {
         StreamWriter sr;
-        
-        // save the robot with his script and their nodes
-        foreach (KeyValuePair<int,Robot> robot in Robot.robots)
-        {
-            string jsonRobot = JsonUtility.ToJson(robot.Value.SerializeRobot());
-            // check if the directory exist if not creates it
 
-            sr = File.CreateText(tmpSavePath + robot.Value.robotName);
-            sr.WriteLine(jsonRobot);
-            sr.Close();
+        // save the robot with his script and their nodes
+        //foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+        //{
+        //    string jsonRobot = JsonUtility.ToJson(robot.Value.SerializeRobot());
+        //    // check if the directory exist if not creates it
+
+        //    sr = File.CreateText(tmpSavePath + robot.Value.robotName);
+        //    sr.WriteLine(jsonRobot);
+        //    sr.Close();
+        //}
+        SerializedRobotList serializedRobotList = new SerializedRobotList();
+        serializedRobotList.serializedRobots = new List<Robot.SerializedRobot>();
+        foreach (KeyValuePair<int, Robot> robot in Robot.robots)
+        {
+            serializedRobotList.serializedRobots.Add(robot.Value.SerializeRobot());
         }
+
+        sr = File.CreateText(tmpSavePath + "Robots");
+        sr.WriteLine(JsonUtility.ToJson(serializedRobotList));
+        sr.Close();
 
         // save next id
         sr = File.CreateText(tmpSavePath + "Ids");
@@ -115,19 +125,25 @@ public class SaveManager : MonoBehaviour
         sr.Close();
 
         //convert to a tar archive
-        string[] files = new string[Robot.robots.Count + 3];
-        int i = 0;
-        foreach (KeyValuePair<int, Robot> robot in Robot.robots)
+        //string[] files = new string[Robot.robots.Count + 3];
+        //int i = 0;
+        //foreach (KeyValuePair<int, Robot> robot in Robot.robots)
+        //{
+        //    files[i] = tmpSavePath + robot.Value.robotName;
+        //    i++;
+        //}
+        //files[i] = tmpSavePath + "Splines";
+        //i++;
+        //files[i] = tmpSavePath + "Ids";
+        //i++;
+        //files[i] = tmpSavePath + "Terrain";
+        string[] files = new string[]
         {
-            files[i] = tmpSavePath + robot.Value.robotName;
-            i++;
-        }
-        files[i] = tmpSavePath + "Splines";
-        i++;
-        files[i] = tmpSavePath + "Ids";
-        i++;
-        files[i] = tmpSavePath + "Terrain";
-
+            tmpSavePath + "Robots",
+            tmpSavePath + "Splines",
+            tmpSavePath + "Ids",
+            tmpSavePath + "Terrain"
+        };
 
         CreateTarGZ(savePath + "save.pr", files);
         CleanDir(tmpSavePath);
@@ -142,8 +158,8 @@ public class SaveManager : MonoBehaviour
     {
         ExtractTGZ(archivePath, extractPath);
 
+        SerializedRobotList serializedRobotList = null;
         SaveId saveId = null;
-        List<Robot.SerializedRobot> serializedRobots = new List<Robot.SerializedRobot>();
         SplineList splineList = null;
         TerrainManager.SerializedTerrain serializedTerrain = null;
 
@@ -161,11 +177,18 @@ public class SaveManager : MonoBehaviour
             {
                 serializedTerrain = JsonUtility.FromJson<TerrainManager.SerializedTerrain>(fileContent);
             }
-            else
+            else if(file.EndsWith("Robots"))
             {
-                serializedRobots.Add(JsonUtility.FromJson<Robot.SerializedRobot>(fileContent));
+                //serializedRobots.Add(JsonUtility.FromJson<Robot.SerializedRobot>(fileContent));
+                serializedRobotList = JsonUtility.FromJson<SerializedRobotList>(fileContent);
             }
         }
+        List<Robot.SerializedRobot> serializedRobots = new List<Robot.SerializedRobot>();
+        foreach (Robot.SerializedRobot serializedRobot in serializedRobotList.serializedRobots)
+        {
+            serializedRobots.Add(serializedRobot);
+        }
+
         ClearGame(saveId, serializedRobots, splineList, serializedTerrain);
     }
 
@@ -271,6 +294,8 @@ public class SaveManager : MonoBehaviour
             splineManager.DeSerializeSpline(serializedSpline);
         }
 
+        Manager.instance.listRobot.SelectFirst();
+
         GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().DeSerialize(serializedTerrain);
 
         RobotScript.nextid = saveId.robotScriptNextId;
@@ -311,6 +336,13 @@ public class SaveManager : MonoBehaviour
     {
         [SerializeField]
         public List<SplineManager.SerializedSpline> serializedSplines;
+    }
+
+    [Serializable]
+    public class SerializedRobotList
+    {
+        [SerializeField]
+        public List<Robot.SerializedRobot> serializedRobots;
     }
 
     [Serializable]
