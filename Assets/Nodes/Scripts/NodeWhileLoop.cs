@@ -105,16 +105,15 @@ public class NodeWhileLoop : Nodes
 
 
         IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
-        ChangeBorderColor(defaultColor);
         if (input.Contains("="))
         {
             if (value1 == value2)
             {
-                StartCoroutine("WaitBeforeCallingNextNode");
+                StartCoroutine(coroutine);
             }
             else
             {
-                StartCoroutine(coroutine);
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
 
         }
@@ -122,55 +121,55 @@ public class NodeWhileLoop : Nodes
         {
             if (value1 < value2)
             {
-                StartCoroutine("WaitBeforeCallingNextNode");
+                StartCoroutine(coroutine);
             }
             else
             {
-                StartCoroutine(coroutine);
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
         }
         else if (input.Contains(">"))
         {
             if (value1 > value2)
             {
-                StartCoroutine("WaitBeforeCallingNextNode");
+                StartCoroutine(coroutine);
             }
             else
             {
-                StartCoroutine(coroutine);
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
         }
         else if (input.Contains(">="))
         {
             if (value1 >= value2)
             {
-                StartCoroutine("WaitBeforeCallingNextNode");
+                StartCoroutine(coroutine);
             }
             else
             {
-                StartCoroutine(coroutine);
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
         }
         else if (input.Contains("<="))
         {
             if (value1 <= value2)
             {
-                StartCoroutine("WaitBeforeCallingNextNode");
+                StartCoroutine(coroutine);
             }
             else
             {
-                StartCoroutine(coroutine);
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
         }
         else if (input.Contains("<>"))
         {
             if (value1 != value2)
             {
-                StartCoroutine("WaitBeforeCallingNextNode");
+                StartCoroutine(coroutine);
             }
             else
             {
-                StartCoroutine(coroutine);
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
         }
     }
@@ -212,7 +211,9 @@ public class NodeWhileLoop : Nodes
 
     public override void CallNextNode()
     {
-        //unused
+        ChangeBorderColor(defaultColor);
+        if (NodesDict.ContainsKey(nextNodeId))
+            NodesDict[nextNodeId].Execute();
     }
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
@@ -245,6 +246,7 @@ public class NodeWhileLoop : Nodes
         inputField.text = input;
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        ValidateInput();
     }
     #endregion
 }

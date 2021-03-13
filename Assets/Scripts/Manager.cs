@@ -145,7 +145,7 @@ public class Manager : MonoBehaviour
     {
         public bool splineStarted;
     }
-    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender, Action<int> action)
+    public Nodes ConnectNode(bool isInput, Transform handleTransform, Nodes sender, Action<int> action, int handleId)
     {
         if(node == null && !isInput)
         {
@@ -153,7 +153,7 @@ public class Manager : MonoBehaviour
             actionWhenConnectionFinished = action;
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
             instance.spline = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
-            instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender);
+            instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender, handleId);
             node = sender;
         }
         if (isInput)
@@ -161,7 +161,7 @@ public class Manager : MonoBehaviour
             // input. Where the spline ends
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
-            splineManager.EndSpline(handleTransform, sender);
+            splineManager.EndSpline(handleTransform, sender, handleId);
             //node.nextNodeId = sender.id;
             actionWhenConnectionFinished(sender.id);
             return node;

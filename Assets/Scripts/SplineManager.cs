@@ -34,7 +34,7 @@ public class SplineManager : MonoBehaviour
 
     // start pos will be used when a node is moved or rized.
     // the node parameter only serve to subscibe to the change/resize event
-    public void Init(Transform startPos, Nodes node)
+    public void Init(Transform startPos, Nodes node, int handleId)
     {
         splineManagers.Add(this);
         RobotScript.robotScripts[Manager.instance.currentlySelectedScript].splines.Add(this.gameObject);
@@ -44,8 +44,11 @@ public class SplineManager : MonoBehaviour
         currentSegment = CreateNewSplineSegment(startPos.position);
         node.OnNodeModified += ChangeSpline;
         this.startPos = startPos;
+        handleStartNumber = handleId;
     }
-    public void Init(Transform startPos, Nodes node, RobotScript robotScript)
+
+    // create spline from files
+    public void Init(Transform startPos, Nodes node, RobotScript robotScript, int handleId)
     {
         splineManagers.Add(this);
         robotScript.splines.Add(this.gameObject);
@@ -53,6 +56,7 @@ public class SplineManager : MonoBehaviour
         splineMaker = GetComponent<SplineMaker>();
         currentSegment = CreateNewSplineSegment(startPos.position);
         node.OnNodeModified += ChangeSpline;
+        handleStartNumber = handleId;
         this.startPos = startPos;
     }
 
@@ -159,15 +163,17 @@ public class SplineManager : MonoBehaviour
     }
 
     // finishes the spline
-    public void EndSpline(Transform handleTransform, Nodes node)
+    public void EndSpline(Transform handleTransform, Nodes node, int handleId)
     {
         if(splineMaker != null)
         {
             endSpline = true;
+            handleEndNumber = handleId;
             currentSegment.splineEnd.point = handleTransform.position;
             currentSegment.splineEnd.handle = new Vector3(0, 1, 0) + currentSegment.splineEnd.point;
             splineMaker.GenerateMesh();
             endPos = handleTransform;
+            handleEndNumber = handleId;
             node.OnNodeModified += ChangeSpline;
         }
     }
@@ -204,8 +210,8 @@ public class SplineManager : MonoBehaviour
 
     public void DeSerializeSpline(SerializedSpline serializedSpline)
     {
-        Init(Nodes.NodesDict[serializedSpline.idNodeStart].handleStartArray[serializedSpline.handleStart].transform, Nodes.NodesDict[serializedSpline.idNodeStart], RobotScript.robotScripts[serializedSpline.robotScriptId]);
-        EndSpline(Nodes.NodesDict[serializedSpline.idNodeEnd].handleEndArray[serializedSpline.handleEnd].transform, Nodes.NodesDict[serializedSpline.idNodeEnd]);
+        Init(Nodes.NodesDict[serializedSpline.idNodeStart].handleStartArray[serializedSpline.handleStart].transform, Nodes.NodesDict[serializedSpline.idNodeStart], RobotScript.robotScripts[serializedSpline.robotScriptId], serializedSpline.handleStart);
+        EndSpline(Nodes.NodesDict[serializedSpline.idNodeEnd].handleEndArray[serializedSpline.handleEnd].transform, Nodes.NodesDict[serializedSpline.idNodeEnd], serializedSpline.handleEnd);
     }
 
     public void DestroyAllSplines()

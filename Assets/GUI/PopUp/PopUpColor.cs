@@ -23,11 +23,6 @@ public class PopUpColor : MonoBehaviour
     private Action cancelAction;
     private Action OkAction;
 
-    private void Start()
-    {
-        Init(Color.white);
-    }
-
     // set the color and the slider and the text
     public void Init(Color color)
     {
@@ -36,9 +31,9 @@ public class PopUpColor : MonoBehaviour
         textRed.text = Math.Round((255f * color.r), 0).ToString();
         textGreen.text = Math.Round((255f * color.g), 0).ToString();
         textBlue.text = Math.Round((255f * color.b), 0).ToString();
-        sliderRed.value = 255;
-        sliderGreen.value = 255;
-        sliderBlue.value = 255;
+        sliderRed.value = color.r;
+        sliderGreen.value = color.g;
+        sliderBlue.value = color.b;
         ShowNewColor();
     }
 

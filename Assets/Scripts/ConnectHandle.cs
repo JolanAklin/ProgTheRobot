@@ -16,7 +16,7 @@ public class ConnectHandle : MonoBehaviour
     public bool inLoopOut = false;
 
     public int handleNumber;
-
+    
     private void Start()
     {
         canBeClicked = true;
@@ -49,24 +49,24 @@ public class ConnectHandle : MonoBehaviour
             {
                 // call a function in the manager script and give a delegate to perform the right action to set the node id
                 if (ifFalse)
-                    nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.gameObject.GetComponent<NodeIf>().nextNodeIdFalse = id; }) ;
+                    nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.gameObject.GetComponent<NodeIf>().nextNodeIdFalse = id; }, handleNumber) ;
                 else if(inLoopOut)
                 {
                     NodeForLoop nodeForLoop;
                     if(node.gameObject.TryGetComponent(out nodeForLoop))
-                        nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { nodeForLoop.nextNodeInside = id; });
+                        nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { nodeForLoop.nextNodeInside = id; }, handleNumber);
                     NodeWhileLoop nodeWhileLoop;
                     if (node.gameObject.TryGetComponent(out nodeWhileLoop))
-                        nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { nodeWhileLoop.nextNodeInside = id; });
+                        nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { nodeWhileLoop.nextNodeInside = id; }, handleNumber);
                 }
                 else
-                    nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.nextNodeId = id; });
+                    nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => { node.nextNodeId = id; }, handleNumber);
 
                 canBeClicked = false;
             }
         }else
         {
-            nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => {});
+            nextNode = Manager.instance.ConnectNode(isInput, transform, node, (id) => {}, handleNumber);
         }
 
         if (nextNode != null)

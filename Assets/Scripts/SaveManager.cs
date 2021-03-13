@@ -75,17 +75,6 @@ public class SaveManager : MonoBehaviour
     public void Save()
     {
         StreamWriter sr;
-
-        // save the robot with his script and their nodes
-        //foreach (KeyValuePair<int,Robot> robot in Robot.robots)
-        //{
-        //    string jsonRobot = JsonUtility.ToJson(robot.Value.SerializeRobot());
-        //    // check if the directory exist if not creates it
-
-        //    sr = File.CreateText(tmpSavePath + robot.Value.robotName);
-        //    sr.WriteLine(jsonRobot);
-        //    sr.Close();
-        //}
         SerializedRobotList serializedRobotList = new SerializedRobotList();
         serializedRobotList.serializedRobots = new List<Robot.SerializedRobot>();
         foreach (KeyValuePair<int, Robot> robot in Robot.robots)
@@ -124,19 +113,6 @@ public class SaveManager : MonoBehaviour
         sr.WriteLine(JsonUtility.ToJson(GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().Serialize()));
         sr.Close();
 
-        //convert to a tar archive
-        //string[] files = new string[Robot.robots.Count + 3];
-        //int i = 0;
-        //foreach (KeyValuePair<int, Robot> robot in Robot.robots)
-        //{
-        //    files[i] = tmpSavePath + robot.Value.robotName;
-        //    i++;
-        //}
-        //files[i] = tmpSavePath + "Splines";
-        //i++;
-        //files[i] = tmpSavePath + "Ids";
-        //i++;
-        //files[i] = tmpSavePath + "Terrain";
         string[] files = new string[]
         {
             tmpSavePath + "Robots",
