@@ -156,7 +156,7 @@ public class TerrainManager : MonoBehaviour
             if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, robotPlacementLayer))
             {
                 robotToMove.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
-                if(Input.GetKeyDown(KeyCode.Mouse1))
+                if(Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     addObjectActionOnUpdate = null;
                     robotToMove.GetComponent<RobotManager>().SetDefaultPos(robotToMove.transform);
