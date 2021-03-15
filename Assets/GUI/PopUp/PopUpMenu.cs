@@ -24,13 +24,31 @@ public class PopUpMenu : MonoBehaviour
     public MenuSettingsClass[] menuSettings;
     [HideInInspector]
     public Dictionary<int, GameObject> menuSettingsDict = new Dictionary<int, GameObject>();
+    public string[] choicesName;
+    public List list;
+    public GameObject content;
 
     private void Start()
     {
+        List<List.ListElement> choices = new List<List.ListElement>();
         foreach (MenuSettingsClass menuSetting in menuSettings)
         {
-            menuSettingsDict.Add((int)Enum.Parse(typeof(MenuSettings), menuSetting.menuType), menuSetting.menuObj);
+            int id = (int)Enum.Parse(typeof(MenuSettings), menuSetting.menuType);
+            menuSettingsDict.Add(id, menuSetting.menuObj);
+            choices.Add(new List.ListElement() { displayedText = choicesName[id], actionOnClick = () => { 
+                InstantiateSubMenu(id); 
+            } });
         }
+        list.Init(choices, 0);
+    }
+
+    public GameObject InstantiateSubMenu(int subMenuType)
+    {
+        foreach (Transform child in content.transform)
+        {
+            Destroy(child.gameObject);
+        }
+        return Instantiate(menuSettings[subMenuType].menuObj, content.transform);
     }
 
     public void Quit()

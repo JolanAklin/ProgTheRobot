@@ -41,7 +41,6 @@ public class WindowsManager : MonoBehaviour
         {
             popUpWindowsDict.Add((int)((popUp)Enum.Parse(typeof(popUp), popUp.popUpType)), popUp.popUpObj);
         }
-        
     }
 
     public static GameObject InstantiateWindow(int WindowType, Transform parentTransform)
@@ -57,5 +56,10 @@ public class WindowsManager : MonoBehaviour
     public void ShowEdit()
     {
         editWindow.SetActive(true);
+    }
+
+    public void ShowMainMenu()
+    {
+        PopUpMenu pm = InstantiateWindow((int)Enum.Parse(typeof(popUp), "menu"), Manager.instance.canvas.transform).GetComponent<PopUpMenu>();
     }
 }
