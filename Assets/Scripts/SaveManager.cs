@@ -21,6 +21,10 @@ public class SaveManager : MonoBehaviour
 
     public GameObject splineLink;
 
+    public string fileName;
+
+    public static SaveManager instance;
+
     public List<nodeObject> nodeObjects = new List<nodeObject>();
     // object used to fill the list of node object in the inspector
     [Serializable]
@@ -33,6 +37,15 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
+        if(instance == null)
+        {
+            instance = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+
         tmpSavePath = Application.persistentDataPath + tmpSavePath;
         savePath = Application.persistentDataPath + savePath;
         extractPath = Application.persistentDataPath + extractPath;
@@ -60,12 +73,13 @@ public class SaveManager : MonoBehaviour
         {
             Save();
         }
+    }
 
-        if(Input.GetKeyDown(KeyCode.L) && Input.GetKey(KeyCode.LeftControl))
-        {
-            CleanDir(extractPath);
-            JsonToObj(savePath + "save.pr");
-        }
+    public void LoadFile(string filename)
+    {
+        fileName = filename;
+        CleanDir(extractPath);
+        JsonToObj(savePath + filename);
     }
 
 
@@ -121,7 +135,7 @@ public class SaveManager : MonoBehaviour
             tmpSavePath + "Terrain"
         };
 
-        CreateTarGZ(savePath + "save.pr", files);
+        CreateTarGZ(savePath + $"{fileName}.pr", files);
         CleanDir(tmpSavePath);
     }
 
@@ -226,11 +240,21 @@ public class SaveManager : MonoBehaviour
     /// </summary>
     public void ClearGame(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
     {
+        NewProject();
+        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList, serializedTerrain);
+        StartCoroutine(coroutine);
+    }
+
+    /// <summary>
+    /// Prepare the app for a new project
+    /// </summary>
+    private void NewProject()
+    {
         //reset all the static vars
         RobotScript.nextid = 0;
         RobotScript.robotScripts = new Dictionary<int, RobotScript>();
 
-        foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+        foreach (KeyValuePair<int, Robot> robot in Robot.robots)
         {
             Destroy(robot.Value.robotManager);
         }
@@ -245,9 +269,12 @@ public class SaveManager : MonoBehaviour
         Nodes.NodesDict = new Dictionary<int, Nodes>();
 
         SplineManager.splineManagers = new List<SplineManager>();
+    }
 
-        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList, serializedTerrain);
-        StartCoroutine(coroutine);
+    public void New()
+    {
+        NewProject();
+        StartCoroutine("LoadScene");
     }
 
     // create usable objects from the saved form
@@ -297,6 +324,17 @@ public class SaveManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         LoadObject(saveId, serializedRobots, splineList, serializedTerrain);
     }
+    private IEnumerator LoadScene()
+    {
+        // Start loading the scene
+        Scene scene = SceneManager.GetActiveScene();
+        AsyncOperation asyncLoadLevel = SceneManager.LoadSceneAsync(scene.name, LoadSceneMode.Single);
+        // Wait until the level finish loading
+        while (!asyncLoadLevel.isDone)
+            yield return null;
+        // Wait a frame so every Awake and Start method is called
+        yield return new WaitForEndOfFrame();
+    }
 
 
     [Serializable]
@@ -324,6 +362,6 @@ public class SaveManager : MonoBehaviour
     [Serializable]
     public class Settings
     {
-
+        public string savePath;
     }
 }

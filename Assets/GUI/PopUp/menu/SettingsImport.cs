@@ -5,8 +5,18 @@ using System;
 
 public class SettingsImport : MonoBehaviour
 {
+    private PopUpMenu menu;
     public Action cancelAction;
     public Action importAction;
+
+    private void Start()
+    {
+        menu = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<PopUpMenu>();
+        cancelAction = () =>
+        {
+            menu.Close();
+        };
+    }
 
     #region buttons action
     public void SetCancelAction(Action action)

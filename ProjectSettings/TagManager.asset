@@ -17,6 +17,7 @@ TagManager:
   - Terrain
   - PlacementOccupied
   - SplineMoveHandle
+  - MainMenu
   layers:
   - Default
   - TransparentFX

@@ -51,6 +51,11 @@ public class PopUpMenu : MonoBehaviour
         return Instantiate(menuSettings[subMenuType].menuObj, content.transform);
     }
 
+    public void Close()
+    {
+        Destroy(this.gameObject);
+    }
+
     public void Quit()
     {
         // test if there is changes before exiting
