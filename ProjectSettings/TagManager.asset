@@ -18,6 +18,7 @@ TagManager:
   - PlacementOccupied
   - SplineMoveHandle
   - MainMenu
+  - ResizePanel
   layers:
   - Default
   - TransparentFX

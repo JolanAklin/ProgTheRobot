@@ -30,6 +30,10 @@ public class UIRaycaster : MonoBehaviour
     private bool cameraCanBePanned;
     public float nodeAreaPanSensitivity;
 
+
+    // cursor
+    public Texture2D ResizePanelCursor;
+
     void Start()
     {
         graphicraycaster = GetComponent<GraphicRaycaster>();
@@ -61,11 +65,23 @@ public class UIRaycaster : MonoBehaviour
                 panelOpen = false;
             }
         }
+        GameObject resizePanel = rayCastResults.Find(X => X.gameObject.tag == "ResizePanel").gameObject;
+        if(resizePanel != null)
+        {
+            Cursor.SetCursor(ResizePanelCursor, new Vector2(16,16), CursorMode.Auto);
+        }else
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+        }
+        if (Input.GetMouseButtonDown(0) && !panelOpen && resizePanel != null)
+        {
+            resizePanel.GetComponent<ResizePanel>().StartMove();
+        }
         #endregion
 
         // only do raycast in the 3D/2D world
         #region On nodes
-        if(Input.GetMouseButtonUp(0))
+        if (Input.GetMouseButtonUp(0))
         {
             //end resize
             if(resizeHandle != null && resizeHandle.node.canResize)
