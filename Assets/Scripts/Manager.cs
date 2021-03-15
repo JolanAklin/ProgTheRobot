@@ -138,7 +138,8 @@ public class Manager : MonoBehaviour
     [HideInInspector]
     public Nodes node = null; // the node where the spline starts
     public GameObject SplineObject; // spline prefab
-    private GameObject spline; // the current spline
+    [HideInInspector]
+    public GameObject spline; // the current spline
     public EventHandler<OnSplineEventArgs> OnSpline; // is used to show the input of all the nodes
     private Action<int> actionWhenConnectionFinished;
     public class OnSplineEventArgs : EventArgs

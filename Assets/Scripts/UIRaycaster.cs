@@ -127,16 +127,19 @@ public class UIRaycaster : MonoBehaviour
             }
         }
 
-
         if(Input.GetMouseButtonDown(0))
         {
+            // move spline
             if (rayCastResults.Count == 0 && nodeToMove == null)
             {
                 RaycastHit2D hit;
                 Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
                 if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
                 {
-                    if (hit.collider.gameObject.tag == "ConnectHandle")
+                    if (hit.collider.gameObject.tag == "SplineMoveHandle")
+                    {
+                        hit.collider.GetComponent<MoveLinkHandle>().SplineLink.GetComponent<SplineManager>().MoveSpline();
+                    }else if (hit.collider.gameObject.tag == "ConnectHandle")
                     {
                         ConnectHandle connect = hit.collider.gameObject.GetComponent<ConnectHandle>();
                         connect.Click();
@@ -145,8 +148,9 @@ public class UIRaycaster : MonoBehaviour
             }
         }
 
+
         // script panel panning
-        if(Input.GetMouseButton(2) && rayCastResults.Count == 0)
+        if (Input.GetMouseButton(2) && rayCastResults.Count == 0)
         {
             if(!cameraCanBePanned)
             {

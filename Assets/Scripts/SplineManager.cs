@@ -32,6 +32,10 @@ public class SplineManager : MonoBehaviour
     private bool right;
     private bool left;
 
+    public GameObject MoveHandle;
+
+    private Nodes nodeStart, nodeEnd;
+
     // start pos will be used when a node is moved or rized.
     // the node parameter only serve to subscibe to the change/resize event
     public void Init(Transform startPos, Nodes node, int handleId)
@@ -45,6 +49,7 @@ public class SplineManager : MonoBehaviour
         node.OnNodeModified += ChangeSpline;
         this.startPos = startPos;
         handleStartNumber = handleId;
+        nodeStart = node;
     }
 
     // create spline from files
@@ -58,6 +63,7 @@ public class SplineManager : MonoBehaviour
         node.OnNodeModified += ChangeSpline;
         handleStartNumber = handleId;
         this.startPos = startPos;
+        nodeStart = node;
     }
 
     // will update point and handle position when a node is moved or resized
@@ -67,6 +73,9 @@ public class SplineManager : MonoBehaviour
         splineMaker.splineSegments[0].splineStart.handle = new Vector3(startPos.position.x, startPos.position.y, -0.15f) + Vector3.down;
         splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = new Vector3(endPos.position.x, endPos.position.y, -0.15f);
         splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, -0.15f) + Vector3.up;
+
+        if(MoveHandle != null)
+            MoveHandle.transform.position = new Vector3(endPos.position.x, endPos.position.y, -0.2f);
 
         splineMaker.GenerateMesh();
     }
@@ -98,6 +107,8 @@ public class SplineManager : MonoBehaviour
         Vector3 splineEndPos = Vector3.zero;
         if (!endSpline)
         {
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Destroy(this.gameObject);
             MousePos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition), 1);
             splineEndPos = new Vector3(MousePos.x, MousePos.y, 0);
 
@@ -165,7 +176,7 @@ public class SplineManager : MonoBehaviour
     // finishes the spline
     public void EndSpline(Transform handleTransform, Nodes node, int handleId)
     {
-        if(splineMaker != null)
+        if (splineMaker != null)
         {
             endSpline = true;
             handleEndNumber = handleId;
@@ -175,7 +186,40 @@ public class SplineManager : MonoBehaviour
             endPos = handleTransform;
             handleEndNumber = handleId;
             node.OnNodeModified += ChangeSpline;
+            MoveHandle.transform.position = new Vector3(handleTransform.position.x, handleTransform.position.y, -0.2f); ;
+            MoveHandle.SetActive(true);
+            nodeEnd = node;
         }
+    }
+
+    public void MoveSpline()
+    {
+        if(!ExecManager.Instance.isRunning)
+        {
+            Destroy(this.gameObject);
+            ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
+            connect.canBeClicked = true;
+            connect.Click();
+
+        }
+    }
+
+    private void OnDestroy()
+    {
+        Manager.instance.node = null;
+        nodeStart.OnNodeModified -= ChangeSpline;
+        try
+        {
+            nodeEnd.OnNodeModified -= ChangeSpline;
+        }catch(Exception e)
+        {
+
+        }
+
+        ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
+        connect.canBeClicked = true;
+        connect.image.enabled = true;
+        connect.boxCollider2d.enabled = true;
     }
 
     // round vector3
