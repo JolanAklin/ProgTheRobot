@@ -58,7 +58,7 @@ public class NodeCommande : Nodes
             case "TurnLeft":
             case "Marquer":
             case "Mark":
-            case "Démarquer":
+            case "Demarquer":
             case "Unmark":
             case "Recharger":
             case "Reload":
@@ -96,7 +96,7 @@ public class NodeCommande : Nodes
             case "Mark":
                 input = Translation.Get("Mark");
                 break;
-            case "Démarquer":
+            case "Demarquer":
             case "Unmark":
                 input = Translation.Get("Unmark");
                 break;
@@ -146,7 +146,7 @@ public class NodeCommande : Nodes
             case "Mark":
                 rs.robot.robotManager.Mark();
                 break;
-            case "Démarquer":
+            case "Demarquer":
             case "Unmark":
                 rs.robot.robotManager.Unmark();
                 break;

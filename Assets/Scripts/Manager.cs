@@ -37,6 +37,8 @@ public class Manager : MonoBehaviour
     // define the execution speed of the script
     public float execSpeed;
 
+    public int selectedNodeId = -1;
+
     private void Awake()
     {
         instance = this;
@@ -79,6 +81,27 @@ public class Manager : MonoBehaviour
             canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
             res.height = Screen.height;
             res.width = Screen.width;
+        }
+        Nodes nodeInfo;
+        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.I))
+        {
+            if(Nodes.NodesDict.TryGetValue(selectedNodeId, out nodeInfo))
+            {
+                ShowInfo(nodeInfo);
+            }
+        }
+    }
+
+    private PopUpNodeInfo ni;
+    public void ShowInfo(Nodes node)
+    {
+        if(ni == null)
+        {
+            ni = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "nodeInfo"), instance.canvas.transform).GetComponent<PopUpNodeInfo>();
+            ni.init(node.infoTextTitle, node.infoText);
+        }else
+        {
+            ni.Close();
         }
     }
 

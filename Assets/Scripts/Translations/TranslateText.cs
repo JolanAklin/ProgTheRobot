@@ -17,7 +17,6 @@ public class TranslateText : MonoBehaviour
         Manager.instance.OnLanguageChanged += ChangeLanguage;
         if (translateAtStart)
             ChangeLanguage(this, EventArgs.Empty);
-
     }
 
     private void ChangeLanguage(object sender, EventArgs e)

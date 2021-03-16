@@ -69,7 +69,7 @@ public class SaveManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S) && Input.GetKey(KeyCode.LeftAlt))
+        if (Input.GetKeyDown(KeyCode.S) && Input.GetKey(KeyCode.LeftControl))
         {
             Save();
         }

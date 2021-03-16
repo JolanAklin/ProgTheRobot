@@ -112,7 +112,7 @@ public class VarsManager
                 case "TurnLeft":
                 case "Marquer":
                 case "Mark":
-                case "Démarquer":
+                case "Demarquer":
                 case "Unmark":
                 case "Recharger":
                 case "Reload":

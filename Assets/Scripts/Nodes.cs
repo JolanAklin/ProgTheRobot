@@ -91,6 +91,10 @@ public abstract class Nodes : MonoBehaviour
     public Color currentExecutedNode;
     protected float executedColorTime = 1;
 
+    public string infoTextTitle;
+    [TextArea]
+    public string infoText;
+
     public void Awake()
     {
         // All nodes have a different id
@@ -247,6 +251,7 @@ public abstract class Nodes : MonoBehaviour
                 return;
             }
         }
+        Manager.instance.selectedNodeId = -1;
         ChangeBorderColor(defaultColor);
         canMove = true;
     }

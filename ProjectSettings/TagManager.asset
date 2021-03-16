@@ -19,6 +19,8 @@ TagManager:
   - SplineMoveHandle
   - MainMenu
   - ResizePanel
+  - RobotSmallWindow
+  - RobotBigWindow
   layers:
   - Default
   - TransparentFX

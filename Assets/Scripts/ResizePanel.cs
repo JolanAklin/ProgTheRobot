@@ -14,6 +14,8 @@ public class ResizePanel : MonoBehaviour
 
     private Action moveAction;
 
+    public string cursorType;
+
     private void Start()
     {
         layoutElement = panelToResize.GetComponent<LayoutElement>();

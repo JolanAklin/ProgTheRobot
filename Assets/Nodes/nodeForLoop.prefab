@@ -2162,6 +2162,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 9002901330238707547}
   isInput: 0
+  canBeClicked: 1
+  image: {fileID: 0}
+  boxCollider2d: {fileID: 0}
   ifFalse: 0
   inLoopOut: 1
   handleNumber: 0
@@ -2282,6 +2285,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 9002901330238707547}
   isInput: 0
+  canBeClicked: 1
+  image: {fileID: 0}
+  boxCollider2d: {fileID: 0}
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
@@ -2402,6 +2408,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 9002901330238707547}
   isInput: 1
+  canBeClicked: 1
+  image: {fileID: 0}
+  boxCollider2d: {fileID: 0}
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
@@ -2728,6 +2737,11 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  infoTextTitle: Bloc pour
+  infoText: "Ce bloc est une boucle, les blocs \xE0 l'int\xE9rieur seront ex\xE9cuter
+    un certain nombre de fois.\n\nPour i = 0 Jusque 10 Pas 2\n\ni est une variable
+    quelconque\n0 est le chiffre de d\xE9part de la variable\n10 est le nombre auxquel
+    i va s'arr\xEAter\n2 est l'incr\xE9mentation de i \xE0 chaque passage"
   inputField: {fileID: 722380815501715896}
   nextNodeInside: -1
 --- !u!1 &6739195634838728957
@@ -2885,6 +2899,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 9002901330238707547}
   isInput: 1
+  canBeClicked: 1
+  image: {fileID: 0}
+  boxCollider2d: {fileID: 0}
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0

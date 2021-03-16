@@ -13,6 +13,7 @@ public class WindowsManager : MonoBehaviour
         saveWarning,
         addScript,
         readWrite,
+        nodeInfo,
     }
 
     [Serializable]

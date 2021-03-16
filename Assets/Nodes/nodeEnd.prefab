@@ -921,7 +921,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8120454241257089932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.1, y: -3.6, z: 0}
+  m_LocalPosition: {x: -2, y: 0.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8120454241193560662}
@@ -989,6 +989,8 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  infoTextTitle: Bloc de fin
+  infoText: "Ce bloc d\xE9fini la fin d'un organigramme."
 --- !u!1 &8120454241339052605
 GameObject:
   m_ObjectHideFlags: 0

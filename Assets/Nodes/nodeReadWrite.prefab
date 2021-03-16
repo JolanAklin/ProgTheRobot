@@ -596,6 +596,10 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  infoTextTitle: "Bloc de lecture/\xE9criture"
+  infoText: "Ce bloc affiche ou lit une entr\xE9e utilisateur\n\nex : Lire test\n\nTest
+    prendra donc la valeur sp\xE9cifi\xE9e par l'utilisateur\n\nValeur possible :\n-
+    Lire\n - Afficher"
   inputField: {fileID: 7082423944652430489}
 --- !u!1 &6743916129740016214
 GameObject:

@@ -117,6 +117,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 6509419568736403958}
   isInput: 1
+  canBeClicked: 1
+  image: {fileID: 0}
+  boxCollider2d: {fileID: 0}
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
@@ -766,6 +769,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   node: {fileID: 6509419568736403958}
   isInput: 0
+  canBeClicked: 1
+  image: {fileID: 0}
+  boxCollider2d: {fileID: 0}
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
@@ -1031,6 +1037,9 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  infoTextTitle: Bloc d'affectation
+  infoText: "Ce bloc permet d'assigner des valeurs \xE0 des variables.\n\nex : maVar
+    = monAutreVar * 2"
   inputField: {fileID: 8791487679252678049}
 --- !u!1 &5034817158148821870
 GameObject:

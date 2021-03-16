@@ -520,7 +520,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052317501531756442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.5, y: 1.5, z: 0}
+  m_LocalPosition: {x: -2.5, y: 1.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052317501844846144}
@@ -588,6 +588,9 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  infoTextTitle: "Bloc de d\xE9but"
+  infoText: "Ce bloc est le d\xE9part de l'organigramme. Il peut y en avoir un seul
+    par organigramme."
 --- !u!1 &1052317501700690350
 GameObject:
   m_ObjectHideFlags: 0

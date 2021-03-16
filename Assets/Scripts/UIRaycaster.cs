@@ -30,9 +30,10 @@ public class UIRaycaster : MonoBehaviour
     private bool cameraCanBePanned;
     public float nodeAreaPanSensitivity;
 
+    // info bar
+    public GameObject infoBar;
 
-    // cursor
-    public Texture2D ResizePanelCursor;
+    private Nodes selectedNode = null;
 
     void Start()
     {
@@ -66,16 +67,27 @@ public class UIRaycaster : MonoBehaviour
             }
         }
         GameObject resizePanel = rayCastResults.Find(X => X.gameObject.tag == "ResizePanel").gameObject;
+
         if(resizePanel != null)
         {
-            Cursor.SetCursor(ResizePanelCursor, new Vector2(16,16), CursorMode.Auto);
+            CursorManager.instance.ChangeCursor(resizePanel.GetComponent<ResizePanel>().cursorType);
         }else
         {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            CursorManager.instance.ChangeCursor("default");
         }
+
         if (Input.GetMouseButtonDown(0) && !panelOpen && resizePanel != null)
         {
             resizePanel.GetComponent<ResizePanel>().StartMove();
+        }
+
+        if(rayCastResults.Count == 0)
+        {
+            infoBar.GetComponent<InfoBar>().ChangeInfos("ScriptInfo");
+        }
+        if(rayCastResults.Find(X => X.gameObject.tag == "RobotSmallWindow").gameObject != null)
+        {
+            infoBar.GetComponent<InfoBar>().ChangeInfos("RobotSmallWindow");
         }
         #endregion
 
@@ -108,7 +120,7 @@ public class UIRaycaster : MonoBehaviour
                 Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
                 if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
                 {
-                    if(hit.collider.gameObject.tag == "ResizeHandle")
+                    if (hit.collider.gameObject.tag == "ResizeHandle")
                     {
                         resizeHandle = hit.collider.GetComponent<ResizeHandle>();
                         resizeHandle.NodeResize();
@@ -130,8 +142,51 @@ public class UIRaycaster : MonoBehaviour
                     }
                 }
             }
+            if (rayCastResults.Count == 0)
+            {
+                RaycastHit2D hit;
+                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
+                {
+                    if (hit.collider.gameObject.tag == "Node")
+                    {
+                        if (selectedNode != null)
+                        {
+                            selectedNode.ChangeBorderColor(selectedNode.defaultColor);
+                        }
+                        selectedNode = hit.collider.GetComponent<Nodes>();
+                        Manager.instance.selectedNodeId = selectedNode.id;
+                        selectedNode.ChangeBorderColor(selectedNode.selectedColor);
+                    }
+                    else
+                    {
+                        Manager.instance.selectedNodeId = -1;
+                        if (selectedNode != null)
+                        {
+                            selectedNode.ChangeBorderColor(selectedNode.defaultColor);
+                            selectedNode = null;
+                        }
+                    }
+                }else
+                {
+                    Manager.instance.selectedNodeId = -1;
+                    if (selectedNode != null)
+                    {
+                        selectedNode.ChangeBorderColor(selectedNode.defaultColor);
+                        selectedNode = null;
+                    }
+                }
+            }else
+            {
+                Manager.instance.selectedNodeId = -1;
+                if(selectedNode != null)
+                {
+                    selectedNode.ChangeBorderColor(selectedNode.defaultColor);
+                    selectedNode = null;
+                }
+            }
         }
-        // only start moving a node if the cursor was moved pas 1 unit
+        // only start moving a node if the cursor was moved more than 1 unit
         if(nodeToMove != null)
         {
             if(!nodeToMove.isMoving)
@@ -173,6 +228,7 @@ public class UIRaycaster : MonoBehaviour
                 mousePosBeginMove = Input.mousePosition;
                 cameraCanBePanned = true;
                 cameraPosAtPanStart = NodeDisplay.instance.nodeCamera.transform.position;
+                CursorManager.instance.ChangeCursor("move");
             }
 
             Vector3 currentMousePos = Input.mousePosition;
@@ -183,6 +239,7 @@ public class UIRaycaster : MonoBehaviour
         else if(cameraCanBePanned == true)
         {
             cameraCanBePanned = false;
+            CursorManager.instance.ChangeCursor("default");
         }
 
         // script panel zoom
