@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1789321027082665408}
   - component: {fileID: 1682313004251882024}
   - component: {fileID: 2634724226025249494}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: resizeHandle
   m_TagString: ResizeHandle
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 7989914216400686714}
   - component: {fileID: 9183879060156646505}
   - component: {fileID: 3588298106718515584}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ConnectIn
   m_TagString: ConnectHandle
   m_Icon: {fileID: 0}
@@ -250,7 +250,7 @@ GameObject:
   - component: {fileID: 8025506040851281859}
   - component: {fileID: 8025506040851281861}
   - component: {fileID: 8025506040851281858}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: inside
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -425,7 +425,7 @@ GameObject:
   - component: {fileID: 8025506041546081049}
   - component: {fileID: 8025506041546081062}
   - component: {fileID: 8025506041546081051}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -546,7 +546,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8025506041627761100}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: middle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -584,7 +584,7 @@ GameObject:
   - component: {fileID: 8025506041639392760}
   - component: {fileID: 8025506041639392762}
   - component: {fileID: 8025506041639392763}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -662,7 +662,7 @@ GameObject:
   - component: {fileID: 2433220480984454049}
   - component: {fileID: 7870189246054635919}
   - component: {fileID: 5991924893435548591}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ConnectOut
   m_TagString: ConnectHandle
   m_Icon: {fileID: 0}
@@ -898,6 +898,22 @@ PrefabInstance:
     - target: {fileID: 2629133257769889747, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_Name
       value: nodeInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889747, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133258190438902, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133258646867519, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133258701133600, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontSize

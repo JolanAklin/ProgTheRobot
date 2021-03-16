@@ -66,7 +66,18 @@ public class UIRaycaster : MonoBehaviour
                 panelOpen = false;
             }
         }
-        GameObject resizePanel = rayCastResults.Find(X => X.gameObject.tag == "ResizePanel").gameObject;
+        GameObject resizePanel = null;
+        if (rayCastResults.Count > 0)
+        {
+            resizePanel = rayCastResults[0].gameObject;
+            if(resizePanel != null)
+            {
+                if(resizePanel.tag != "ResizePanel")
+                {
+                    resizePanel = null;
+                }
+            }
+        }
 
         if(resizePanel != null)
         {
@@ -84,10 +95,18 @@ public class UIRaycaster : MonoBehaviour
         if(rayCastResults.Count == 0)
         {
             infoBar.GetComponent<InfoBar>().ChangeInfos("ScriptInfo");
-        }
-        if(rayCastResults.Find(X => X.gameObject.tag == "RobotSmallWindow").gameObject != null)
+        }else if(rayCastResults.Find(X => X.gameObject.tag == "RobotSmallWindow").gameObject != null)
         {
             infoBar.GetComponent<InfoBar>().ChangeInfos("RobotSmallWindow");
+            CameraController.instance.SetCanMove(true);
+        }else if (rayCastResults.Find(X => X.gameObject.tag == "RobotBigWindow").gameObject != null)
+        {
+            CameraController.instance.SetCanMove(true);
+        }
+        else
+        {
+            CameraController.instance.SetCanMove(false);
+
         }
         #endregion
 

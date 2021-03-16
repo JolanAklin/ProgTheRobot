@@ -73,9 +73,6 @@ public class TerrainManager : MonoBehaviour
         changeSizeYInputField.text = terrainSize[1].ToString();
         CreateTerrain(terrainSize);
 
-
-        MatchRTToScreen();
-
         // fill the object list
         objectList.AddChoice(new List.ListElement()
         {
@@ -177,7 +174,7 @@ public class TerrainManager : MonoBehaviour
     }
 
     // match the render texture to the app size
-    private void MatchRTToScreen()
+    public void MatchRTToScreen()
     {
         terrainCam.targetTexture.Release();
         rt.width = Screen.width;
