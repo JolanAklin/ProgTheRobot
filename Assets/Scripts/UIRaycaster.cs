@@ -228,7 +228,7 @@ public class UIRaycaster : MonoBehaviour
                 mousePosBeginMove = Input.mousePosition;
                 cameraCanBePanned = true;
                 cameraPosAtPanStart = NodeDisplay.instance.nodeCamera.transform.position;
-                CursorManager.instance.ChangeCursor("move");
+                CursorManager.instance.ChangeCursor("move", true);
             }
 
             Vector3 currentMousePos = Input.mousePosition;
@@ -239,6 +239,7 @@ public class UIRaycaster : MonoBehaviour
         else if(cameraCanBePanned == true)
         {
             cameraCanBePanned = false;
+            CursorManager.instance.UnLockCursorTexture();
             CursorManager.instance.ChangeCursor("default");
         }
 

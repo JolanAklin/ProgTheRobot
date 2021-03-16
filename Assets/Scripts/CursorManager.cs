@@ -9,6 +9,9 @@ public class CursorManager : MonoBehaviour
 
     public static CursorManager instance;
 
+    private bool lockCurTexture = false;
+    private string currentCurName = "";
+
     [Serializable]
     public class CursorDef
     {
@@ -23,9 +26,20 @@ public class CursorManager : MonoBehaviour
         ChangeCursor("default");
     }
 
-    public void ChangeCursor(string curName)
+    public void ChangeCursor(string curName, bool lockCurTexture = false)
     {
-        CursorDef def = cursors.Find(x => x.curName == curName);
-        Cursor.SetCursor(def.curTexture, def.hotSpot, CursorMode.Auto);
+        if(!this.lockCurTexture && currentCurName != curName)
+        {
+            this.lockCurTexture = lockCurTexture;
+            currentCurName = curName;
+            CursorDef def = cursors.Find(x => x.curName == curName);
+            if(def != null)
+                Cursor.SetCursor(def.curTexture, def.hotSpot, CursorMode.Auto);
+        }
+    }
+
+    public void UnLockCursorTexture()
+    {
+        lockCurTexture = false;
     }
 }
