@@ -163,6 +163,7 @@ MonoBehaviour:
   nodeHolder: {fileID: 397547265}
   robotPrefab: {fileID: 3547055596659527068, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
   execSpeed: 5
+  selectedNodeId: -1
   node: {fileID: 0}
   SplineObject: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
   spline: {fileID: 0}
@@ -2953,7 +2954,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 365, y: 0}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &568890601
@@ -3227,6 +3228,7 @@ MonoBehaviour:
   tmpSavePath: /tmp/save/
   savePath: /saves/
   extractPath: /tmp/extract/
+  settingsPath: /AppSettings/
   splineLink: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
   fileName: 
   nodeObjects:
@@ -5730,7 +5732,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 225, y: 0}
   m_SizeDelta: {x: 0, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009728105

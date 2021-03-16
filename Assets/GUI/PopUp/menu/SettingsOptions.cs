@@ -30,6 +30,7 @@ public class SettingsOptions : MonoBehaviour
                 {
                     
                     SaveManager.instance.savePath = filePath.EndsWith("/") ? filePath : filePath + "/";
+                    SaveManager.instance.SaveSettings();
                     menu.Close();
                 }else
                 {

@@ -18,6 +18,8 @@ public class SaveManager : MonoBehaviour
     public string savePath;
     [Tooltip("Extract the save file in this directory. Put / before and a / after")]
     public string extractPath;
+    [Tooltip("Path to the saved app settings. Put / before and a / after")]
+    public string settingsPath;
 
     public GameObject splineLink;
 
@@ -46,9 +48,11 @@ public class SaveManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+
         tmpSavePath = Application.persistentDataPath + tmpSavePath;
         savePath = Application.persistentDataPath + savePath;
         extractPath = Application.persistentDataPath + extractPath;
+        settingsPath = Application.persistentDataPath + settingsPath;
 
         DontDestroyOnLoad(this.gameObject);
 
@@ -65,6 +69,12 @@ public class SaveManager : MonoBehaviour
         {
             Directory.CreateDirectory(savePath);
         }
+        if(!Directory.Exists(settingsPath))
+        {
+            Directory.CreateDirectory(settingsPath);
+        }
+
+        LoadSettings();
     }
 
     private void Update()
@@ -140,6 +150,25 @@ public class SaveManager : MonoBehaviour
     }
 
 
+    public void SaveSettings()
+    {
+        StreamWriter sr = File.CreateText(settingsPath + "settings");
+        sr.WriteLine(JsonUtility.ToJson(new Settings() { savePath = savePath}));
+        sr.Close();
+    }
+
+    public void LoadSettings()
+    {
+        if(File.Exists(settingsPath + "settings"))
+        {
+            StreamReader sr = File.OpenText(settingsPath + "settings");
+            string content = sr.ReadToEnd();
+            Settings settings = JsonUtility.FromJson<Settings>(content);
+
+            savePath = settings.savePath;
+        }
+    }
+
     /// <summary>
     /// Create obj from the json file stored in the archive
     /// </summary>
@@ -203,6 +232,9 @@ public class SaveManager : MonoBehaviour
 
                 tarArchive.WriteEntry(tarEntry, true);
             }
+            tarArchive.Close();
+            gzoStream.Close();
+            outStream.Close();
         }
     }
 
