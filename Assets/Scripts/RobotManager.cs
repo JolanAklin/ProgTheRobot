@@ -50,17 +50,24 @@ public class RobotManager : MonoBehaviour
 
     private void GoForward()
     {
-        if (actionOnUpdate == null)
+        if(!WallInFront())
         {
-            actionOnUpdate = GoForward;
-            startMovementPos = transform.position;
-            t = 0f;
-        }
-        t += 1 * Time.deltaTime * Manager.instance.execSpeed;
-        transform.position = Vector3.Lerp(startMovementPos, startMovementPos + transform.forward, t);
-        if(t > 1)
+            if (actionOnUpdate == null)
+            {
+                actionOnUpdate = GoForward;
+                startMovementPos = transform.position;
+                t = 0f;
+            }
+            t += 1 * Time.deltaTime * Manager.instance.execSpeed;
+            transform.position = Vector3.Lerp(startMovementPos, startMovementPos + transform.forward, t);
+            if(t > 1)
+            {
+                actionOnUpdate = null;
+                callBack();
+            }
+        }else
         {
-            actionOnUpdate = null;
+            Debugger.Log($"Le robot est bloqué");
             callBack();
         }
     }

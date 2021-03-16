@@ -254,9 +254,6 @@ public class TerrainManager : MonoBehaviour
                     objectPlacementScript.terrainObject = GenerateObject(objectPosition.objectType, new Vector3(objectPosition.position[0], 0, objectPosition.position[1]));
                     objectPlacementScript.objectPosition = objPosition;
                     objPlacement.transform.GetChild(0).tag = "PlacementOccupied";
-
-
-                    
                 }
 
                 GameObject[] fencesPlacement = new GameObject[4];
@@ -269,7 +266,7 @@ public class TerrainManager : MonoBehaviour
 
                     // create a fence if it was there on the terrain before
                     FencePostion fencePos = Array.Find(fencePostionsCopy, x => x.position[0] == i && x.position[1] == j && x.rot == k);
-                    if(fencePos != null)
+                    if(fencePos != null && !fencePos.isMapEdge)
                     {
                         FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook };
                         fencePostions.Add(fencePosition);
@@ -277,6 +274,18 @@ public class TerrainManager : MonoBehaviour
                         fencesPlacement[k].transform.GetChild(0).tag = "PlacementOccupied";
 
                         fencePlacementScript.fencePos = fencePosition;
+                    }else
+                    {
+                        if(j == size[1]-1 && k == 0 || i == size[0]-1 && k == 1)
+                        {
+                            int look = UnityEngine.Random.Range(0, fences.Length);
+                            FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = look, isMapEdge = true };
+                            fencePostions.Add(fencePosition);
+                            fencePlacementScript.fence = GenerateFence(look, fencesPlacement[k].transform.GetChild(0).transform.position, k);
+                            fencesPlacement[k].transform.GetChild(0).tag = "PlacementOccupied";
+
+                            fencePlacementScript.fencePos = fencePosition;
+                        }
                     }
 
                 }
@@ -289,12 +298,21 @@ public class TerrainManager : MonoBehaviour
 
                     // create a fence if it was there on the terrain before
                     FencePostion fencePos = Array.Find(fencePostionsCopy, x => x.position[0] == i && x.position[1] == j && x.rot == 3);
-                    if (fencePos != null)
+                    if (fencePos != null && !fencePos.isMapEdge)
                     {
                         FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook };
                         fencePostions.Add(fencePosition);
                         fencePlacementScript.fence = GenerateFence(fencePos.fenceLook, fencesPlacement[2].transform.GetChild(0).transform.position, 3);
                         fencesPlacement[2].transform.GetChild(0).tag = "PlacementOccupied";
+                        fencePlacementScript.fencePos = fencePosition;
+                    }else
+                    {
+                        int look = UnityEngine.Random.Range(0, fences.Length);
+                        FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = look, isMapEdge = true };
+                        fencePostions.Add(fencePosition);
+                        fencePlacementScript.fence = GenerateFence(look, fencesPlacement[2].transform.GetChild(0).transform.position, fencePlacementScript.rot);
+                        fencesPlacement[2].transform.GetChild(0).tag = "PlacementOccupied";
+
                         fencePlacementScript.fencePos = fencePosition;
                     }
 
@@ -308,12 +326,22 @@ public class TerrainManager : MonoBehaviour
 
                     // create a fence if it was there on the terrain before
                     FencePostion fencePos = Array.Find(fencePostionsCopy, x => x.position[0] == i && x.position[1] == j && x.rot == 2);
-                    if (fencePos != null)
+                    if (fencePos != null && !fencePos.isMapEdge)
                     {
                         FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = fencePos.fenceLook };
                         fencePostions.Add(fencePosition);
                         fencePlacementScript.fence = GenerateFence(fencePos.fenceLook, fencesPlacement[3].transform.GetChild(0).transform.position, 2);
                         fencesPlacement[3].transform.GetChild(0).tag = "PlacementOccupied";
+                        fencePlacementScript.fencePos = fencePosition;
+                    }
+                    else
+                    {
+                        int look = UnityEngine.Random.Range(0, fences.Length);
+                        FencePostion fencePosition = new FencePostion() { position = new int[] { fencePlacementScript.pos.x, fencePlacementScript.pos.y }, rot = fencePlacementScript.rot, fenceLook = look, isMapEdge = true };
+                        fencePostions.Add(fencePosition);
+                        fencePlacementScript.fence = GenerateFence(look, fencesPlacement[3].transform.GetChild(0).transform.position, fencePlacementScript.rot);
+                        fencesPlacement[3].transform.GetChild(0).tag = "PlacementOccupied";
+
                         fencePlacementScript.fencePos = fencePosition;
                     }
 
@@ -494,6 +522,8 @@ public class TerrainManager : MonoBehaviour
         public int rot; // this number multiplied by 90
 
         public int fenceLook;
+
+        public bool isMapEdge = false;
     }
 
     [Serializable]
