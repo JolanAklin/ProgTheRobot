@@ -933,7 +933,7 @@ GameObject:
   - component: {fileID: 4438653623227214997}
   - component: {fileID: 1059584989182728402}
   - component: {fileID: 9107401012898178666}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: resizeHandle
   m_TagString: ResizeHandle
   m_Icon: {fileID: 0}
@@ -1049,7 +1049,7 @@ GameObject:
   - component: {fileID: 6688749083357716445}
   - component: {fileID: 7530249059855510182}
   - component: {fileID: 4598383870703989396}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: ConnectOut
   m_TagString: ConnectHandle
   m_Icon: {fileID: 0}
@@ -1470,7 +1470,7 @@ GameObject:
   - component: {fileID: 8451932813541222105}
   - component: {fileID: 8027625622787006773}
   - component: {fileID: 7750613654143988939}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: ConnectIn
   m_TagString: ConnectHandle
   m_Icon: {fileID: 0}
@@ -2136,7 +2136,7 @@ GameObject:
   - component: {fileID: 6590974845256809307}
   - component: {fileID: 1325179020752342322}
   - component: {fileID: 4497324397499816899}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: ConnectOut (1)
   m_TagString: ConnectHandle
   m_Icon: {fileID: 0}

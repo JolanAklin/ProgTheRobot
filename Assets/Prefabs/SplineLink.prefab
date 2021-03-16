@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4270617083649012007}
   - component: {fileID: 917842348732581504}
   - component: {fileID: 917842348732581507}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: SplineLink
   m_TagString: Spline
   m_Icon: {fileID: 0}
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 2084918558807860522}
   - component: {fileID: 1562759925207006649}
   - component: {fileID: 1438793966468640284}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: moveLinkHandle
   m_TagString: SplineMoveHandle
   m_Icon: {fileID: 0}

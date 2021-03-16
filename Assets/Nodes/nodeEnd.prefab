@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2421036868846633170}
   - component: {fileID: 3320691183220973370}
   - component: {fileID: 2152116386263312324}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: resizeHandle
   m_TagString: ResizeHandle
   m_Icon: {fileID: 0}
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 2374208532277256149}
   - component: {fileID: 4137485718127824026}
   - component: {fileID: 7752796421315654932}
-  m_Layer: 6
+  m_Layer: 12
   m_Name: ConnectIn
   m_TagString: ConnectHandle
   m_Icon: {fileID: 0}
@@ -921,7 +921,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8120454241257089932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2, y: 0.3, z: 0}
+  m_LocalPosition: {x: -3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8120454241193560662}

@@ -8,6 +8,14 @@ public class VarsManager
 {
     private Dictionary<string, int> vars = new Dictionary<string, int>();
 
+    public VarsManager()
+    {
+        GetVar("Faux", 0);
+        GetVar("False", 0);
+        GetVar("Vrai", 1);
+        GetVar("True", 1);
+    }
+
     /// <summary>
     /// Get all the vars stored in this manager
     /// </summary>
