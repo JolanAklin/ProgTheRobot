@@ -36,10 +36,12 @@ public class NodeAffect : Nodes
         input = tMP_InputField.text;
         if(!ValidateInput())
         {
+            nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             return;
         }
+        nodeErrorCode = ErrorCode.ok;
         Manager.instance.canExecute = true;
         ChangeBorderColor(defaultColor);
     }

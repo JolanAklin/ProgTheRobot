@@ -7,9 +7,13 @@ using System.Linq;
 public class VarsManager
 {
     private Dictionary<string, int> vars = new Dictionary<string, int>();
+    private RobotManager rm;
+    private Robot robot;
 
-    public VarsManager()
+    public VarsManager(RobotManager robotManager, Robot robot)
     {
+        this.robot = robot;
+        rm = robotManager;
         GetVar("Faux", 0);
         GetVar("False", 0);
         GetVar("Vrai", 1);
@@ -173,6 +177,69 @@ public class VarsManager
             return true;
         }
         return false;
+    }
+
+    public bool GetBoolFunction(string funcName)
+    {
+        switch (funcName)
+        {
+            case "MurEnFace":
+            case "WallInFront":
+                return rm.WallInFront();
+            case "MurADroite":
+            case "WallRight":
+                return rm.WallRight();
+            case "MurAGauche":
+            case "WallLeft":
+                return rm.WallLeft();
+            case "Sorti":
+            case "Out":
+                return rm.IsOut();
+            case "RobotSurUnePrise":
+            case "RobotOnAnOutlet":
+                return rm.IsOnAnOutlet();
+            case "CaseMarqué":
+            case "TileMarked":
+                return rm.IsCaseMarked();
+            //case "CaseDevantOccupée":
+            //case "TileInFrontOccupied":
+            //    return false;
+            //case "BallonSurLeSol":
+            //case "BallOnTheGround":
+            //    return false;
+            case "Vrai":
+            case "True":
+                return true;
+            case "Faux":
+            case "False":
+                return false;
+
+            default:
+                return false;
+        }
+    }
+
+    public int GetFunction(string funcName)
+    {
+        switch (funcName)
+        {
+            case "Energie":
+            case "Power":
+                return (int)robot.power;
+            case "xRobot":
+                return Mathf.RoundToInt(rm.transform.position.x);
+            case "yRobot":
+                return Mathf.RoundToInt(rm.transform.position.z);
+            //case "dxRobot":
+            //case "dyRobot":
+            //    if(rm.transform.rotation.z == 0)
+            //        return 1
+            //case "yBallon":
+            //case "xBallon":
+
+            default:
+                return 0;
+        }
     }
 
     /// <summary>

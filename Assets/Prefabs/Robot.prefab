@@ -113,6 +113,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   robotStartPos: {x: 0, y: 0, z: 0}
   robotStartRot: {x: 0, y: 0, z: 0, w: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 16384
+  objectLayer:
+    serializedVersion: 2
+    m_Bits: 32768
 --- !u!1 &3547055597719073563
 GameObject:
   m_ObjectHideFlags: 0

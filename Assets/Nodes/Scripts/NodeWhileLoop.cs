@@ -20,10 +20,12 @@ public class NodeWhileLoop : Nodes
         inputField = tMP_InputField;
         if (!ValidateInput())
         {
+            nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             return;
         }
+        nodeErrorCode = ErrorCode.ok;
         Manager.instance.canExecute = true;
         ChangeBorderColor(defaultColor);
     }
@@ -48,18 +50,24 @@ public class NodeWhileLoop : Nodes
 
     private bool ValidateInput()
     {
-        string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
-        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        if (!(inputSplited[0].IndexOf("TantQue") == 0 || inputSplited[0].IndexOf("While") == 0))
+        try
+        {
+            string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
+            inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            if (!(inputSplited[0].IndexOf("TantQue") == 0 || inputSplited[0].IndexOf("While") == 0))
+                return false;
+            if (inputSplited.Length > 2 || inputSplited.Length == 1)
+                return false;
+            delimiters = new string[] { "While", "TantQue" };
+            string[] inputSplitedFirstPart = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            if (inputSplitedFirstPart.Length > 1 || inputSplitedFirstPart[0] == "TantQue" || inputSplitedFirstPart[0] == "While")
+                return false;
+            TranslateText(this, EventArgs.Empty);
+            return true;
+        }catch(Exception e)
+        {
             return false;
-        if (inputSplited.Length > 2 || inputSplited.Length == 1)
-            return false;
-        delimiters = new string[] { "While", "TantQue" };
-        string[] inputSplitedFirstPart = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        if (inputSplitedFirstPart.Length > 1 || inputSplitedFirstPart[0] == "TantQue" || inputSplitedFirstPart[0] == "While")
-            return false;
-        TranslateText(this, EventArgs.Empty);
-        return true;
+        }
     }
 
     private void TranslateText(object sender, EventArgs e)

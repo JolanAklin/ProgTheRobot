@@ -24,11 +24,12 @@ public class NodeForLoop : Nodes
         inputSplited = input.Split(' ');
         if (!ValidateInput())
         {
-            nodeErrorCode = (int)Nodes.ErrorCode.wrongInput;
+            nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             return;
         }
+        nodeErrorCode = ErrorCode.ok;
         ChangeBorderColor(defaultColor);
         Manager.instance.canExecute = true;
     }

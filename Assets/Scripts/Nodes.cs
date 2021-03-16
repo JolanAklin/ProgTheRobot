@@ -80,8 +80,8 @@ public abstract class Nodes : MonoBehaviour
 
 
     // errors
-    protected int nodeErrorCode;
-    public int NodeErrorCode { get => nodeErrorCode;}
+    protected ErrorCode nodeErrorCode = ErrorCode.ok;
+    public ErrorCode NodeErrorCode { get => nodeErrorCode;}
 
     // border, will change color when there is an error or when selected
     public List<Image> borders = new List<Image>();
@@ -128,9 +128,20 @@ public abstract class Nodes : MonoBehaviour
 
     public void ChangeBorderColor(Color color)
     {
-        foreach (Image image in borders)
+        if(color != defaultColor || NodeErrorCode == ErrorCode.ok)
         {
-            image.color = color;
+            foreach (Image image in borders)
+            {
+                image.color = color;
+            }
+            return;
+        }
+        if(NodeErrorCode != ErrorCode.ok)
+        {
+            foreach (Image image in borders)
+            {
+                image.color = errorColor;
+            }
         }
     }
 
@@ -141,7 +152,7 @@ public abstract class Nodes : MonoBehaviour
         {
             if(nextNodeId >= 0)
             {
-                if(nodeErrorCode == (int)ErrorCode.notConnected)
+                if(nodeErrorCode == ErrorCode.notConnected)
                 {
                     nodeErrorCode = (int)ErrorCode.ok;
                     ChangeBorderColor(defaultColor);
@@ -150,7 +161,7 @@ public abstract class Nodes : MonoBehaviour
                 return;
             }
         }
-        nodeErrorCode = (int)ErrorCode.notConnected;
+        nodeErrorCode = ErrorCode.notConnected;
         ChangeBorderColor(errorColor);
         Manager.instance.canExecute = false;
         return;

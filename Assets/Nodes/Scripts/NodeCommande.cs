@@ -34,12 +34,13 @@ public class NodeCommande : Nodes
         input = tMP_InputField.text;
         if (!ValidateInput())
         {
-            nodeErrorCode = (int)Nodes.ErrorCode.wrongInput;
+            nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             Debugger.LogError("Commande inconnue");
             return;
         }
+        nodeErrorCode = ErrorCode.ok;
         Manager.instance.canExecute = true;
         ChangeBorderColor(defaultColor);
     }

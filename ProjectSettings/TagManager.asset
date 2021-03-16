@@ -21,6 +21,9 @@ TagManager:
   - ResizePanel
   - RobotSmallWindow
   - RobotBigWindow
+  - EndFlag
+  - Outlet
+  - Marking
   layers:
   - Default
   - TransparentFX
@@ -36,8 +39,8 @@ TagManager:
   - TerrainBloc
   - Handle
   - Line
-  - 
-  - 
+  - Fence
+  - TerrainObject
   - 
   - 
   - 

@@ -17,10 +17,12 @@ public class NodeReadWrite : Nodes
         inputField = tMP_InputField;
         if (!ValidateInput())
         {
+            nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
             return;
         }
+        nodeErrorCode = ErrorCode.ok;
         Manager.instance.canExecute = true;
         ChangeBorderColor(defaultColor);
     }

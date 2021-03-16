@@ -15,6 +15,9 @@ public class RobotManager : MonoBehaviour
     public Vector3 robotStartPos;
     public Quaternion robotStartRot;
 
+    public LayerMask wallLayer;
+    public LayerMask objectLayer;
+
 
     private float t; // interpolation factor
 
@@ -147,5 +150,66 @@ public class RobotManager : MonoBehaviour
     public void DestroyRobotManager()
     {
         Destroy(this.gameObject);
+    }
+
+    public bool WallInFront()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out hit, 1, wallLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool WallLeft()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.left), out hit, 1, wallLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+    public bool WallRight()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), out hit, 1, wallLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+
+    public bool IsOut()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
+        {
+            if(hit.collider.gameObject.tag == "EndFlag")
+                return true;
+        }
+        return false;
+    }
+
+    public bool IsOnAnOutlet()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
+        {
+            if (hit.collider.gameObject.tag == "Outlet")
+                return true;
+        }
+        return false;
+    }
+
+    public bool IsCaseMarked()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
+        {
+            if (hit.collider.gameObject.tag == "Marking")
+                return true;
+        }
+        return false;
     }
 }
