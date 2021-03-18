@@ -832,7 +832,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168512350998371172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.5, y: -4.1, z: 0}
+  m_LocalPosition: {x: 0.5, y: -4.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3168512352252033726}
@@ -898,7 +898,7 @@ MonoBehaviour:
   - {fileID: 3168512351837322834}
   - {fileID: 3168512350739779074}
   defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
-  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  selectedColor: {r: 0, g: 0.3882353, b: 0.6117647, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
   infoTextTitle: Bloc sous programme

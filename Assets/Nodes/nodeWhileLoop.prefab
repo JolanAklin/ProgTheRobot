@@ -2577,7 +2577,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5158547176770619525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.7, y: -1.5, z: 0}
+  m_LocalPosition: {x: 2.9, y: -3.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5158547174704327007}
@@ -2649,7 +2649,7 @@ MonoBehaviour:
   - {fileID: 3776935317167323749}
   - {fileID: 3776935315845456865}
   defaultColor: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
-  selectedColor: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
+  selectedColor: {r: 0, g: 0.3882353, b: 0.6117647, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
   infoTextTitle: Bloc tant que

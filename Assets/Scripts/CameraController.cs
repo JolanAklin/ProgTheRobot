@@ -20,7 +20,8 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        moveSpeed = mouseSensitivity / 90;
+        mouseSensitivity *= Time.deltaTime;
+        moveSpeed = mouseSensitivity * 2;
     }
 
     private void Update()
@@ -39,9 +40,9 @@ public class CameraController : MonoBehaviour
                 }
                 else
                 {
-                    horizontalLookRotation += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
+                    horizontalLookRotation += Input.GetAxis("Mouse X") * mouseSensitivity;
 
-                    verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+                    verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity;
                     verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90, 90);
 
                     transform.localEulerAngles = new Vector3(-1 * verticalLookRotation, 1 * horizontalLookRotation, 0);
@@ -53,7 +54,7 @@ public class CameraController : MonoBehaviour
         }
         if(Input.mouseScrollDelta.y != 0 && canMove && !inMove)
         {
-            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y);
+            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * moveSpeed);
         }
     }
 
