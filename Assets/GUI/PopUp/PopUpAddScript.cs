@@ -8,10 +8,15 @@ public class PopUpAddScript : MonoBehaviour
 {
     [HideInInspector]
     public string scriptName;
+
     //a voir pour les items pour la liste 
 
     private Action cancelAction;
     private Action okAction;
+
+    private void Start()
+    {
+    }
 
     public void PopUpClose()
     {
@@ -39,6 +44,21 @@ public class PopUpAddScript : MonoBehaviour
     }
     public void Ok()
     {
+        if(scriptName.Length == 0)
+        {
+            gameObject.SetActive(false);
+            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+            sw.warningText.text = "Veuillez entrer un nom pour l'organigramme";
+            sw.quitButton.gameObject.SetActive(false);
+            sw.saveButton.gameObject.SetActive(false);
+            sw.SetCancelAction(() =>
+            {
+                sw.Close();
+
+                gameObject.SetActive(true);
+            });
+            return;
+        }
         okAction();
     }
     #endregion

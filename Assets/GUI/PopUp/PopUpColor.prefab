@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2766626529144483213}
   - component: {fileID: 2766626529144483214}
   - component: {fileID: 2766626529144483212}
+  - component: {fileID: 7312121688764032741}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -103,6 +104,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!95 &7312121688764032741
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766626529144483200}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b3244fcb35f58d542a7c2798311c4609, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2766626530290848416
 GameObject:
   m_ObjectHideFlags: 0
@@ -115,6 +135,7 @@ GameObject:
   - component: {fileID: 2766626530290848429}
   - component: {fileID: 2766626530290848430}
   - component: {fileID: 2766626530290848428}
+  - component: {fileID: 2934264636102024722}
   m_Layer: 5
   m_Name: Box
   m_TagString: Untagged
@@ -201,6 +222,25 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!95 &2934264636102024722
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2766626530290848416}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 30d8e5cd17b642242ad94f097189ee80, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2766626530558450154
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,6 +291,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   showColor: {fileID: 3517817243620354762}
+  color: {r: 0, g: 0, b: 0, a: 0}
   colorSliders:
   - {fileID: 3517817244137352109}
   - {fileID: 3517817244041095173}

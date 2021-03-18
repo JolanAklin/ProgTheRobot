@@ -92,6 +92,34 @@ public class PopUpRobot : MonoBehaviour
     }
     public void Ok()
     {
+        if(robotName.Length == 0)
+        {
+            gameObject.SetActive(false);
+            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+            sw.warningText.text = "Veuillez entrer un nom pour le robot";
+            sw.quitButton.gameObject.SetActive(false);
+            sw.saveButton.gameObject.SetActive(false);
+            sw.SetCancelAction(() =>
+            {
+                sw.Close();
+                gameObject.SetActive(true);
+            });
+            return;
+        }
+        if(power <= 0)
+        {
+            gameObject.SetActive(false);
+            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+            sw.warningText.text = "Veuillez entrer une énergie plus grande que 0";
+            sw.quitButton.gameObject.SetActive(false);
+            sw.saveButton.gameObject.SetActive(false);
+            sw.SetCancelAction(() =>
+            {
+                sw.Close();
+                gameObject.SetActive(true);
+            });
+            return;
+        }
         OkAction();
     }
     #endregion

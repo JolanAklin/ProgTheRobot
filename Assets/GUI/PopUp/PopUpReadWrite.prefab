@@ -500,6 +500,7 @@ GameObject:
   - component: {fileID: 7976142400853410470}
   - component: {fileID: 7976142400853410469}
   - component: {fileID: 7976142400853410471}
+  - component: {fileID: 2246888261978098220}
   m_Layer: 5
   m_Name: Box
   m_TagString: Untagged
@@ -586,6 +587,25 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!95 &2246888261978098220
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7976142400853410475}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 30d8e5cd17b642242ad94f097189ee80, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &7976142400948329794
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,6 +682,7 @@ GameObject:
   - component: {fileID: 7976142402101509510}
   - component: {fileID: 7976142402101509509}
   - component: {fileID: 7976142402101509511}
+  - component: {fileID: 1127004087875119632}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -753,6 +774,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!95 &1127004087875119632
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7976142402101509515}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b3244fcb35f58d542a7c2798311c4609, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &6013495211287538564
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -760,6 +800,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7976142400948329795}
     m_Modifications:
+    - target: {fileID: 610925775881135534, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_text
+      value: "0\u200B"
+      objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -844,9 +888,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3714975414175854491, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_Name
       value: InputField
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_Text
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_ContentType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_KeyboardType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size

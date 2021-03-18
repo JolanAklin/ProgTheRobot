@@ -298,6 +298,7 @@ GameObject:
   - component: {fileID: 6621357214327886247}
   - component: {fileID: 6621357214327886244}
   - component: {fileID: 6621357214327886246}
+  - component: {fileID: 6391777804461878587}
   m_Layer: 5
   m_Name: Box
   m_TagString: Untagged
@@ -384,6 +385,25 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!95 &6391777804461878587
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6621357214327886250}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 30d8e5cd17b642242ad94f097189ee80, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6621357214349364803
 GameObject:
   m_ObjectHideFlags: 0
@@ -614,8 +634,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 689, y: 0}
+  m_SizeDelta: {x: 878, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6621357215352892223
 MonoBehaviour:
@@ -689,6 +709,7 @@ GameObject:
   - component: {fileID: 6621357215503068807}
   - component: {fileID: 6621357215503068804}
   - component: {fileID: 6621357215503068806}
+  - component: {fileID: 8655017738256149520}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -780,6 +801,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!95 &8655017738256149520
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6621357215503068810}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b3244fcb35f58d542a7c2798311c4609, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6621357215657367099
 GameObject:
   m_ObjectHideFlags: 0
@@ -1655,6 +1695,18 @@ PrefabInstance:
       value: InputField
       objectReference: {fileID: 0}
     - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_ContentType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_KeyboardType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -1688,16 +1740,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efffd370187d7804985f5e14902939e6, type: 3}
---- !u!224 &5057146333377138698 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
-  m_PrefabInstance: {fileID: 5194253283988620566}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &749612223321758983 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
-  m_PrefabInstance: {fileID: 5194253283988620566}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &414715384088638314 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
@@ -1709,6 +1751,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &749612223321758983 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
+  m_PrefabInstance: {fileID: 5194253283988620566}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &5057146333377138698 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
+  m_PrefabInstance: {fileID: 5194253283988620566}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6621357215433745726
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2223,6 +2275,18 @@ PrefabInstance:
       value: InputField
       objectReference: {fileID: 0}
     - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_ContentType
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_KeyboardType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -2268,14 +2332,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: efffd370187d7804985f5e14902939e6, type: 3}
---- !u!1 &1842342514116777674 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
-  m_PrefabInstance: {fileID: 6621357216147033819}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &6185957227098577863 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
+  m_PrefabInstance: {fileID: 6621357216147033819}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1842342514116777674 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
   m_PrefabInstance: {fileID: 6621357216147033819}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1600789874567002279 stripped

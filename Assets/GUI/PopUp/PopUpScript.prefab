@@ -162,6 +162,7 @@ GameObject:
   - component: {fileID: 2149542840137158623}
   - component: {fileID: 2149542840137158620}
   - component: {fileID: 2149542840137158622}
+  - component: {fileID: 4820904439141692640}
   m_Layer: 5
   m_Name: Box
   m_TagString: Untagged
@@ -248,6 +249,25 @@ MonoBehaviour:
   m_FlexibleWidth: 0
   m_FlexibleHeight: 0
   m_LayoutPriority: 1
+--- !u!95 &4820904439141692640
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149542840137158610}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 30d8e5cd17b642242ad94f097189ee80, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &2149542840406885528
 GameObject:
   m_ObjectHideFlags: 0
@@ -310,6 +330,7 @@ GameObject:
   - component: {fileID: 2149542841282490623}
   - component: {fileID: 2149542841282490620}
   - component: {fileID: 2149542841282490622}
+  - component: {fileID: 4737525380451715658}
   m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
@@ -401,6 +422,25 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!95 &4737525380451715658
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2149542841282490610}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b3244fcb35f58d542a7c2798311c4609, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &3574637316318037929
 GameObject:
   m_ObjectHideFlags: 0
@@ -1440,6 +1480,18 @@ PrefabInstance:
     - target: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_Name
       value: InputField
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_ContentType
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_KeyboardType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_CharacterValidation
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
