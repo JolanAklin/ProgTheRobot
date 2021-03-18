@@ -115,65 +115,12 @@ public class SplineManager : MonoBehaviour
             MousePos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition), 1);
             splineEndPos = new Vector3(MousePos.x, MousePos.y, 0);
 
-            // rotate the end handle of the last segment and the start handle of the current segment. it could be done so that the handle is not stuck in only 4 direction
-            // could also implement movement only on x or y axis
-            //if(lastSegment != null)
-            //{
-            //    // test if the mouse pos x is greater than y
-            //    if (Mathf.Abs(MousePos.y - currentSegment.splineStart.point.y) < Mathf.Abs(MousePos.x - currentSegment.splineStart.point.x))
-            //    {
-            //        if (MousePos.x > currentSegment.splineStart.point.x && !left)
-            //        {
-            //            lastSegment.splineEnd.handle = new Vector3(-1, 0, 0) + lastSegment.splineEnd.point;
-            //            currentSegment.splineStart.handle = new Vector3(1, 0, 0) + currentSegment.splineStart.point;
-            //        }
-
-            //        if (MousePos.x < currentSegment.splineStart.point.x && !right)
-            //        {
-            //            lastSegment.splineEnd.handle = new Vector3(1, 0, 0) + lastSegment.splineEnd.point;
-            //            currentSegment.splineStart.handle = new Vector3(-1, 0, 0) + currentSegment.splineStart.point;
-            //        }
-            //        //splineEndPos = new Vector3(splineEndPos.x, lastSegment.splineEnd.point.y, 0);
-            //    }
-
-            //    // test if the mouse pos y is greater than x
-            //    if (Mathf.Abs(MousePos.y - currentSegment.splineStart.point.y) > Mathf.Abs(MousePos.x - currentSegment.splineStart.point.x))
-            //    {
-            //        if (MousePos.y > currentSegment.splineStart.point.y && !down)
-            //        {
-            //            lastSegment.splineEnd.handle = new Vector3(0, -1, 0) + lastSegment.splineEnd.point;
-            //            currentSegment.splineStart.handle = new Vector3(0, 1, 0) + currentSegment.splineStart.point;
-            //        }
-
-            //        if (MousePos.y < currentSegment.splineStart.point.y && !up)
-            //        {
-            //            lastSegment.splineEnd.handle = new Vector3(0, 1, 0) + lastSegment.splineEnd.point;
-            //            currentSegment.splineStart.handle = new Vector3(0, -1, 0) + currentSegment.splineStart.point;
-
-            //        }
-            //        //splineEndPos = new Vector3(lastSegment.splineEnd.point.x, splineEndPos.y, 0);
-            //    }
-
-            //}
-
             // update the pos of current spline's point
             currentSegment.splineEnd.point = splineEndPos;
             currentSegment.splineEnd.handle = currentSegment.splineEnd.point + Vector3.down;
 
             splineMaker.GenerateMesh();
         }
-        // create a new segment or end the spline
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    lastSegment = currentSegment;
-        //    if (!endSpline)
-        //    {
-        //        currentSegment = CreateNewSplineSegment(new Vector3(MousePos.x, MousePos.y, 0));
-        //    }else
-        //    {
-        //        currentSegment = null;
-        //    }
-        //}
     }
 
     // finishes the spline
@@ -194,16 +141,16 @@ public class SplineManager : MonoBehaviour
             nodeEnd = node;
         }
     }
-
+    private bool willBeMoved = false;
     public void MoveSpline()
     {
         if(!ExecManager.Instance.isRunning)
         {
+            willBeMoved = true;
             Destroy(this.gameObject);
             ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
             connect.canBeClicked = true;
             connect.Click();
-
         }
     }
 
@@ -219,10 +166,13 @@ public class SplineManager : MonoBehaviour
 
         }
 
-        ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
-        connect.canBeClicked = true;
-        connect.image.enabled = true;
-        connect.boxCollider2d.enabled = true;
+        if(!willBeMoved)
+        {
+            ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
+            connect.canBeClicked = true;
+            connect.image.enabled = true;
+            connect.boxCollider2d.enabled = true;
+        }
     }
 
     // round vector3
