@@ -108,7 +108,10 @@ public class SplineManager : MonoBehaviour
         if (!endSpline)
         {
             if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                splineManagers.Remove(this);
                 Destroy(this.gameObject);
+            }
             MousePos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition), 1);
             splineEndPos = new Vector3(MousePos.x, MousePos.y, 0);
 
