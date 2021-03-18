@@ -209,6 +209,8 @@ MonoBehaviour:
     popUpType: readWrite
   - popUpObj: {fileID: 99494690002525165, guid: c2e8312011d8c4f4d992396b3be3abd8, type: 3}
     popUpType: nodeInfo
+  - popUpObj: {fileID: 7710222323493602805, guid: 5d77a244f6a242540ba7a7c2bbb3cac4, type: 3}
+    popUpType: wait
 --- !u!114 &34865
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,6 +14,7 @@ public class WindowsManager : MonoBehaviour
         addScript,
         readWrite,
         nodeInfo,
+        wait,
     }
 
     [Serializable]

@@ -215,4 +215,50 @@ public class Manager : MonoBehaviour
     {
         return Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity).GetComponent<RobotManager>();
     }
+
+
+    private static bool quit = false;
+
+    // used as described here https://docs.unity3d.com/ScriptReference/Application-wantsToQuit.html
+    [RuntimeInitializeOnLoadMethod]
+    static void RunOnStart()
+    {
+        Application.wantsToQuit += WantsToQuit;
+    }
+    static bool WantsToQuit()
+    {
+        if(!quit)
+        {
+            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), instance.canvas.transform).GetComponent<PopUpWarning>();
+            sw.warningText.text = "Des changement ne sont peut-être pas sauvegarder";
+            sw.SetCancelAction(() =>
+            {
+                sw.Close();
+                quit = false;
+            });
+            sw.SetSaveAction(() =>
+            {
+                SaveManager.instance.Save();
+                quit = true;
+                sw.Close();
+                PopUpWait w = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "wait"), instance.canvas.transform).GetComponent<PopUpWait>();
+                w.init("Quitting...", () =>
+                {
+                    Application.Quit();
+                });
+            });
+            sw.SetQuitAction(() =>
+            {
+                quit = true;
+                sw.Close();
+                PopUpWait w = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "wait"), instance.canvas.transform).GetComponent<PopUpWait>();
+                w.init("Quitting...", () =>
+                {
+                    Application.Quit();
+                });
+            });
+            return false;
+        }
+        return true;
+    }
 }
