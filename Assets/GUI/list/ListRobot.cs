@@ -114,7 +114,7 @@ public class ListRobot : MonoBehaviour
     public void UpdateButtonColor()
     {
         Image buttonImage = buttons[Robot.idSelected].transform.GetChild(0).GetChild(0).GetComponentInChildren<Image>();
-        buttonImage.color = Robot.robots[Robot.idSelected].color;
+        buttonImage.color = Robot.robots[Robot.idSelected].Color;
     }
 
     public void Select(int id)

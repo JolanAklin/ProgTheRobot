@@ -11,6 +11,8 @@ public class RobotManager : MonoBehaviour
     private Vector3 startMovementPos; // the pos of the robot a the start of the movement
     private Quaternion startMovementRot; // the rotation of the robot at the start of the rotation
 
+    public Renderer[] renderers;
+
     // hold the data to reset the robot to its original position
     public Vector3 robotStartPos;
     public Quaternion robotStartRot;
@@ -30,6 +32,14 @@ public class RobotManager : MonoBehaviour
     {
         robotStartPos = transform.position;
         robotStartRot = transform.rotation;
+    }
+
+    public void SetRobotColor(Color color)
+    {
+        foreach (Renderer renderer in renderers)
+        {
+            renderer.material.color = color;
+        }
     }
 
     public void SetDefaultPos(Vector3 position)

@@ -112,6 +112,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b83199050de625344aebfd1340eb55c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderers:
+  - {fileID: 8227779188896342331}
+  - {fileID: 7331695397585151699}
+  - {fileID: 990837292537351089}
+  - {fileID: 5382292659459940079}
+  - {fileID: 1432175378008136420}
   robotStartPos: {x: 0, y: 0, z: 0}
   robotStartRot: {x: 0, y: 0, z: 0, w: 0}
   wallLayer:
@@ -339,5 +345,30 @@ PrefabInstance:
 --- !u!4 &8793436277496540521 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+  m_PrefabInstance: {fileID: 9043851238991170178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &8227779188896342331 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1129496810705857465, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+  m_PrefabInstance: {fileID: 9043851238991170178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &7331695397585151699 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 1746654310787607633, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+  m_PrefabInstance: {fileID: 9043851238991170178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &990837292537351089 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 8089062573417005363, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+  m_PrefabInstance: {fileID: 9043851238991170178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &5382292659459940079 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 3977672846792381549, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+  m_PrefabInstance: {fileID: 9043851238991170178}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &1432175378008136420 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: 7953969516004233318, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
   m_PrefabInstance: {fileID: 9043851238991170178}
   m_PrefabAsset: {fileID: 0}

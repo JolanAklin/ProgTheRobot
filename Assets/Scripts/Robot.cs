@@ -6,7 +6,13 @@ using System;
 public class Robot
 {
     // robot params
-    public Color color;
+    private Color color;
+    public Color Color { get => color; set {
+            color = value;
+            if (robotManager != null)
+                robotManager.SetRobotColor(color);
+        } }
+
     public string robotName;
     public uint power;
 
@@ -35,21 +41,21 @@ public class Robot
     /// <param name="power">Power of the robot</param>
     public Robot(Color color, string name, uint power)
     {
-        this.color = color;
+        robotManager = Manager.instance.CreateRobot(color);
+        this.Color = color;
         this.robotName = name;
         this.power = power;
-        robotManager = Manager.instance.CreateRobot(color);
         varsManager = new VarsManager(robotManager, this);
         Init();
     }
 
     public Robot(int id, uint power, float[] robotColor, string robotName, Vector3 position, Quaternion rotation, List<RobotScript.SerializedRobotScript> serializedRobotScripts, SaveManager saveManager)
     {
+        robotManager = Manager.instance.CreateRobot(Color, position, rotation);
         this.id = id;
         this.power = power;
-        this.color = new Color(robotColor[0], robotColor[1], robotColor[2], robotColor[3]);
+        this.Color = new Color(robotColor[0], robotColor[1], robotColor[2], robotColor[3]);
         this.robotName = robotName;
-        robotManager = Manager.instance.CreateRobot(color, position, rotation);
         varsManager = new VarsManager(robotManager, this);
         robots.Add(id, this);
         bool isMain = true;
@@ -118,7 +124,7 @@ public class Robot
     // convert the robot to a displayable list element
     public ListRobot.ListElement ConvertToListElement()
     {
-        return new ListRobot.ListElement() { isAddRobot = false, robotColor = color, actionOnClick = () => {
+        return new ListRobot.ListElement() { isAddRobot = false, robotColor = Color, actionOnClick = () => {
             idSelected = this.id;
             Manager.instance.list.ChangeList(ScriptToList(),1); } };
     }
@@ -169,7 +175,7 @@ public class Robot
             id = id,
             robotName = robotName,
             power = power,
-            robotColor = new float[4] { color.r, color.g, color.b, color.a },
+            robotColor = new float[4] { Color.r, Color.g, Color.b, Color.a },
 
             serializedRobotScripts = serializedRobotScripts,
         };

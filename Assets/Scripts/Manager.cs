@@ -120,10 +120,10 @@ public class Manager : MonoBehaviour
             Robot robotToChange = Robot.robots[Robot.idSelected];
             // instantiate a popup to modify the robot. Set all actions of the popup
             PopUpRobot rm = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif"), canvas.transform).GetComponent<PopUpRobot>();
-            rm.Init(robotToChange.color, robotToChange.robotName, robotToChange.power);
+            rm.Init(robotToChange.Color, robotToChange.robotName, robotToChange.power);
             rm.SetOkAction(() =>
             {
-                robotToChange.color = rm.robotColor;
+                robotToChange.Color = rm.robotColor;
                 robotToChange.robotName = rm.robotName;
                 robotToChange.power = rm.power;
                 listRobot.UpdateButtonColor();
