@@ -22,12 +22,15 @@ public class SettingsLoad : MonoBehaviour
         List<List.ListElement> choices = new List<List.ListElement>();
         foreach (string file in Directory.EnumerateFiles(SaveManager.instance.savePath))
         {
-            string[] fileSplit = file.Split('/');
-            string fileName = fileSplit[fileSplit.Length - 1];
-            choices.Add(new List.ListElement() { displayedText = fileName, actionOnClick = () =>
+            if(file.EndsWith(".pr"))
             {
-                fileNameToLoad = fileName;
-            } });
+                string[] fileSplit = file.Split('/');
+                string fileName = fileSplit[fileSplit.Length - 1];
+                choices.Add(new List.ListElement() { displayedText = fileName, actionOnClick = () =>
+                {
+                    fileNameToLoad = fileName;
+                } });
+            }
         }
         projectList.Init(choices, 0);
 
