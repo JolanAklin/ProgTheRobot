@@ -565,12 +565,15 @@ MonoBehaviour:
     menuType: newFile
   - menuObj: {fileID: 3338094231214622999, guid: 8d247a5527e8b8249a7c8b23648db8e5, type: 3}
     menuType: options
+  - menuObj: {fileID: 8841277359254904896, guid: bba36c35569a86447b5999cc847d8ab9, type: 3}
+    menuType: credits
   choicesName:
   - Sauvegarder
   - Charger
   - Importer
   - Nouveau
   - Options
+  - "Cr\xE9dits"
   list: {fileID: 1161308864541580859}
   content: {fileID: 670467975169048392}
 --- !u!114 &670467976094099859

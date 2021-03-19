@@ -12,6 +12,7 @@ public class PopUpMenu : MonoBehaviour
         import,
         newFile,
         options,
+        credits
     }
 
     [Serializable]

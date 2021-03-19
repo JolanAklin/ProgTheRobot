@@ -64,13 +64,13 @@ public class Manager : MonoBehaviour
             isAddRobot = true,
             actionOnClick = () =>
             {
-                Robot robot = new Robot(Color.red, "", 2000);
+                Robot robot = new Robot(Color.red, "Robot", 2000);
                 listRobot.AddChoice(robot.id, robot.ConvertToListElement());
                 listRobot.Select(robot.id);
                 ChangeRobotSettings();
             }
         });
-        listRobot.Init(robotElements, 1);
+        listRobot.Init(robotElements, 0);
     }
 
     private void Update()

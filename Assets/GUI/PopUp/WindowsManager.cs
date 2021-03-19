@@ -35,10 +35,6 @@ public class WindowsManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-    }
-
-    private void Start()
-    {
         foreach (popUpClass popUp in popUpWindows)
         {
             popUpWindowsDict.Add((int)((popUp)Enum.Parse(typeof(popUp), popUp.popUpType)), popUp.popUpObj);
