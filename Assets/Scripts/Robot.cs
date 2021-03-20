@@ -14,6 +14,7 @@ public class Robot
         } }
 
     public string robotName;
+    public uint defaultPower;
     public uint power;
 
     public RobotManager robotManager;
@@ -41,19 +42,19 @@ public class Robot
     /// <param name="power">Power of the robot</param>
     public Robot(Color color, string name, uint power)
     {
-        robotManager = Manager.instance.CreateRobot(color);
+        robotManager = Manager.instance.CreateRobot(color, this);
         this.Color = color;
         this.robotName = name;
-        this.power = power;
+        this.defaultPower = power;
         varsManager = new VarsManager(robotManager, this);
         Init();
     }
 
     public Robot(int id, uint power, float[] robotColor, string robotName, Vector3 position, Quaternion rotation, List<RobotScript.SerializedRobotScript> serializedRobotScripts, SaveManager saveManager)
     {
-        robotManager = Manager.instance.CreateRobot(Color, position, rotation);
+        robotManager = Manager.instance.CreateRobot(Color, this, position, rotation);
         this.id = id;
-        this.power = power;
+        this.defaultPower = power;
         this.Color = new Color(robotColor[0], robotColor[1], robotColor[2], robotColor[3]);
         this.robotName = robotName;
         varsManager = new VarsManager(robotManager, this);
@@ -174,7 +175,7 @@ public class Robot
         {
             id = id,
             robotName = robotName,
-            power = power,
+            power = defaultPower,
             robotColor = new float[4] { Color.r, Color.g, Color.b, Color.a },
 
             serializedRobotScripts = serializedRobotScripts,

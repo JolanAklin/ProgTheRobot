@@ -25,6 +25,8 @@ public class ExecManager : MonoBehaviour
     public Action buttonNextAction;
     [HideInInspector]
     public bool debugOn = false;
+
+    private int numberOfStopExecReceived = 0;
     
 
     private void Awake()
@@ -37,19 +39,30 @@ public class ExecManager : MonoBehaviour
         onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = true });
         if(!isRunning)
         {
+            Debugger.ClearDebug();
             isRunning = true;
             foreach (KeyValuePair<int,Robot> robot in Robot.robots)
             {
                 if(robot.Value.MainScript.nodeStart != null)
+                {
+                    robot.Value.power = robot.Value.defaultPower;
                     robot.Value.MainScript.nodeStart.Execute();
+                }
             }
         }
     }
     public void StopExec()
     {
-        Instance.isRunning = false;
-        onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = false });
-        buttonNextAction = null;
+        // test if all the robot have finished their program, if yes, inputs field can be modified again
+        numberOfStopExecReceived++;
+        if(numberOfStopExecReceived == Robot.robots.Count)
+        {
+            numberOfStopExecReceived = 0;
+
+            Instance.isRunning = false;
+            onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = false });
+            buttonNextAction = null;
+        }
     }
 
 

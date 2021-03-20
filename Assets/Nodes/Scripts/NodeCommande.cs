@@ -133,15 +133,15 @@ public class NodeCommande : Nodes
                 break;
             case "Avancer":
             case "GoForward":
-                rs.robot.robotManager.GoForward(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
+                rs.robot.robotManager.GoForward(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "TournerADroite":
             case "TurnRight":
-                rs.robot.robotManager.TurnRight(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
+                rs.robot.robotManager.TurnRight(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "TournerAGauche":
             case "TurnLeft":
-                rs.robot.robotManager.TurnLeft(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
+                rs.robot.robotManager.TurnLeft(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "Marquer":
             case "Mark":
@@ -172,6 +172,16 @@ public class NodeCommande : Nodes
                 Debugger.LogError("Commande inconnue");
                 break;
         }
+    }
+
+    // get called by the robotmanager when an action require more power than the robot has
+    private void noPower()
+    {
+        ExecManager.Instance.StopExec();
+        rs.End();
+        ChangeBorderColor(defaultColor);
+        Debugger.Log($"Le robot {rs.robot.robotName} n'a plus assez d'énergie");
+        Debug.Log("there");
     }
 
     IEnumerator WaitBeforeCallingNextNode()

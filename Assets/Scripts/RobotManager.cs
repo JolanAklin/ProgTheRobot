@@ -7,9 +7,13 @@ public class RobotManager : MonoBehaviour
 {
     private Action actionOnUpdate; // hold the action (like turning), it while be executed on Update
     private Action callBack; // call the delegate when the movement (like turning) stops
+    private Action noPower;
 
     private Vector3 startMovementPos; // the pos of the robot a the start of the movement
     private Quaternion startMovementRot; // the rotation of the robot at the start of the rotation
+
+    [HideInInspector]
+    public Robot robot;
 
     public Renderer[] renderers;
 
@@ -19,6 +23,9 @@ public class RobotManager : MonoBehaviour
 
     public LayerMask wallLayer;
     public LayerMask objectLayer;
+
+    public uint goForwardPower = 20;
+    public uint turnPower = 15;
 
 
     private float t; // interpolation factor
@@ -52,10 +59,18 @@ public class RobotManager : MonoBehaviour
         robotStartRot = rotation;
     }
 
-    public void GoForward(Action callBack)
+    public void GoForward(Action callBack, Action noPower)
     {
-        this.callBack = callBack;
-        GoForward();
+        if (robot.power >= goForwardPower)
+        {
+            this.noPower = noPower;
+            this.callBack = callBack;
+            GoForward();
+        }
+        else
+        {
+            noPower();
+        }
     }
 
     private void GoForward()
@@ -66,6 +81,7 @@ public class RobotManager : MonoBehaviour
             {
                 actionOnUpdate = GoForward;
                 startMovementPos = transform.position;
+                robot.power -= goForwardPower;
                 t = 0f;
             }
             t += 1 * Time.deltaTime * Manager.instance.execSpeed;
@@ -77,15 +93,23 @@ public class RobotManager : MonoBehaviour
             }
         }else
         {
-            Debugger.Log($"Le robot est bloqué");
+            Debugger.Log($"Le robot {robot.robotName} est bloqué");
             callBack();
         }
     }
 
-    public void TurnRight(Action callBack)
+    public void TurnRight(Action callBack, Action noPower)
     {
-        this.callBack = callBack;
-        TurnRight();
+        if (robot.power >= turnPower)
+        {
+            this.noPower = noPower;
+            this.callBack = callBack;
+            TurnRight();
+        }
+        else
+        {
+            noPower();
+        }
     }
 
     private void TurnRight()
@@ -94,6 +118,7 @@ public class RobotManager : MonoBehaviour
         {
             actionOnUpdate = TurnRight;
             startMovementRot = transform.rotation;
+            robot.power -= turnPower;
             t = 0f;
         }
         t += 1 * Time.deltaTime * Manager.instance.execSpeed;
@@ -105,10 +130,18 @@ public class RobotManager : MonoBehaviour
         }
     }
 
-    public void TurnLeft(Action callBack)
+    public void TurnLeft(Action callBack, Action noPower)
     {
-        this.callBack = callBack;
-        TurnLeft();
+        if (robot.power >= turnPower)
+        {
+            this.noPower = noPower;
+            this.callBack = callBack;
+            TurnLeft();
+        }
+        else
+        {
+            noPower();
+        }
     }
 
     private void TurnLeft()
@@ -117,6 +150,7 @@ public class RobotManager : MonoBehaviour
         {
             actionOnUpdate = TurnLeft;
             startMovementRot = transform.rotation;
+            robot.power -= turnPower;
             t = 0f;
         }
         t += 1 * Time.deltaTime * Manager.instance.execSpeed;

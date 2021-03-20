@@ -64,7 +64,7 @@ public class Manager : MonoBehaviour
             isAddRobot = true,
             actionOnClick = () =>
             {
-                Robot robot = new Robot(Color.red, "Robot", 2000);
+                Robot robot = new Robot(Color.red, "Robot", 1000);
                 listRobot.AddChoice(robot.id, robot.ConvertToListElement());
                 listRobot.Select(robot.id);
                 ChangeRobotSettings();
@@ -120,12 +120,12 @@ public class Manager : MonoBehaviour
             Robot robotToChange = Robot.robots[Robot.idSelected];
             // instantiate a popup to modify the robot. Set all actions of the popup
             PopUpRobot rm = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif"), canvas.transform).GetComponent<PopUpRobot>();
-            rm.Init(robotToChange.Color, robotToChange.robotName, robotToChange.power);
+            rm.Init(robotToChange.Color, robotToChange.robotName, robotToChange.defaultPower);
             rm.SetOkAction(() =>
             {
                 robotToChange.Color = rm.robotColor;
                 robotToChange.robotName = rm.robotName;
-                robotToChange.power = rm.power;
+                robotToChange.defaultPower = rm.power;
                 listRobot.UpdateButtonColor();
                 listRobot.ChangeChoiceColor(robotToChange.id, rm.robotColor);
                 rm.PopUpClose();
@@ -207,13 +207,17 @@ public class Manager : MonoBehaviour
         }
     }
 
-    public RobotManager CreateRobot(Color color, Vector3 position, Quaternion rotation)
+    public RobotManager CreateRobot(Color color, Robot robot, Vector3 position, Quaternion rotation)
     {
-        return Instantiate(robotPrefab, position, rotation).GetComponent<RobotManager>();
+        RobotManager robotManager = Instantiate(robotPrefab, position, rotation).GetComponent<RobotManager>();
+        robotManager.robot = robot;
+        return robotManager;
     }
-    public RobotManager CreateRobot(Color color)
+    public RobotManager CreateRobot(Color color, Robot robot)
     {
-        return Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity).GetComponent<RobotManager>();
+        RobotManager robotManager = Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity).GetComponent<RobotManager>();
+        robotManager.robot = robot;
+        return robotManager;
     }
 
 

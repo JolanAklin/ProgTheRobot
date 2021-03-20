@@ -78,6 +78,8 @@ public abstract class Nodes : MonoBehaviour
     public bool canMove = true;
     public EventHandler OnNodeModified;
 
+    public uint nodeExecPower = 5;
+
 
     // errors
     protected ErrorCode nodeErrorCode = ErrorCode.ok;

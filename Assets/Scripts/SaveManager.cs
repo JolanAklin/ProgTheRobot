@@ -145,7 +145,10 @@ public class SaveManager : MonoBehaviour
             tmpSavePath + "Terrain"
         };
 
-        CreateTarGZ(savePath + $"{fileName}.pr", files);
+        if(fileName.EndsWith(".pr"))
+            CreateTarGZ(savePath + $"{fileName}", files);
+        else
+            CreateTarGZ(savePath + $"{fileName}.pr", files);
         CleanDir(tmpSavePath);
     }
 
