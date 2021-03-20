@@ -67,6 +67,8 @@ public class TerrainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        WindowResized.instance.onWindowResized += MatchRTToScreen;
+
 
         terrainSize = new uint[] { 10, 10 };
         changeSizeXInputField.text = terrainSize[0].ToString();
@@ -174,13 +176,14 @@ public class TerrainManager : MonoBehaviour
     }
 
     // match the render texture to the app size
-    public void MatchRTToScreen()
+    private void MatchRTToScreen(object sender, WindowResized.WindowResizedEventArgs e)
     {
-        terrainCam.targetTexture.Release();
-        rt.width = Screen.width;
-        rt.height = Screen.height;
+        rt.Release();
+        terrainCam.targetTexture = null;
+        rt.width = e.screenWidth;
+        rt.height = e.screenHeight;
         rt.Create();
-        robotImage.sizeDelta = new Vector2(Screen.width, Screen.height);
+        robotImage.sizeDelta = new Vector2(e.screenWidth, e.screenHeight);
         terrainCam.targetTexture = rt;
     }
 
@@ -424,6 +427,7 @@ public class TerrainManager : MonoBehaviour
             }
         }
     }
+
 
     private void AddObject(GameObject prefab, int type)
     {

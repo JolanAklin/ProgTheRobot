@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 34864}
   - component: {fileID: 34865}
   - component: {fileID: 34866}
+  - component: {fileID: 34867}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -157,6 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canExecute: 1
   canvas: {fileID: 1754670295}
+  smallRobotViewAspectRation: {fileID: 709903615}
   list: {fileID: 76269666}
   listRobot: {fileID: 1122293913}
   currentlySelectedScript: -1
@@ -250,6 +252,18 @@ MonoBehaviour:
   - curName: move
     curTexture: {fileID: 2800000, guid: 51d4614670db943478c7f690da5bb7db, type: 3}
     hotSpot: {x: 16, y: 16}
+--- !u!114 &34867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5311b874bf1c1844886c98f7fe4f5426, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4418599
 GameObject:
   m_ObjectHideFlags: 0
@@ -3582,7 +3596,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -3633,8 +3647,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86710e43de46f6f4bac7c8e50813a599, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_AspectMode: 1
-  m_AspectRatio: 1
+  m_AspectMode: 4
+  m_AspectRatio: 1.49
 --- !u!1 &719922677
 GameObject:
   m_ObjectHideFlags: 0
@@ -6698,7 +6712,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3836112871224389965, guid: 59311e00662c88640a825c2ea2502106, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3836112871224389965, guid: 59311e00662c88640a825c2ea2502106, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode

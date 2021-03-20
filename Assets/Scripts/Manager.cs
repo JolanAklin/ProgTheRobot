@@ -19,6 +19,7 @@ public class Manager : MonoBehaviour
 
     // the canvas with all the UI
     public GameObject canvas;
+    public AspectRatioFitter smallRobotViewAspectRation;
 
     //List used to display script and robot
     public List list;
@@ -26,7 +27,6 @@ public class Manager : MonoBehaviour
 
     //change the resolution of the canvas when screen resolution changes
     private CanvasScaler canvasScaler;
-    private Resolution res;
 
     [HideInInspector]
     public int currentlySelectedScript = -1;
@@ -39,23 +39,17 @@ public class Manager : MonoBehaviour
 
     public int selectedNodeId = -1;
 
-    private void Awake()
-    {
-        instance = this;
-
-
-        // change the canvas resolution to match the screen size
-        canvasScaler = canvas.GetComponent<CanvasScaler>();
-        res.height = Screen.height;
-        res.width = Screen.width;
-        canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
-    }
     private void Start()
     {
         // load the translation
         Translation.Init();
         Translation.LoadData("fr");
         OnLanguageChanged?.Invoke(instance, EventArgs.Empty);
+
+        canvasScaler = canvas.GetComponent<CanvasScaler>();
+
+        // sub to the custom window resized event
+        WindowResized.instance.onWindowResized += ResizeCanvas;
 
         // add the plus tab to the robot list
         Dictionary<int, ListRobot.ListElement> robotElements = new Dictionary<int, ListRobot.ListElement>();
@@ -73,15 +67,15 @@ public class Manager : MonoBehaviour
         listRobot.Init(robotElements, 0);
     }
 
-    private void Update()
+    private void ResizeCanvas(object sender, WindowResized.WindowResizedEventArgs e)
     {
         // change the canvas resolution to match the screen size
-        if (res.height != Screen.height || res.width != Screen.width)
-        {
-            canvasScaler.referenceResolution = new Vector2(Screen.width, Screen.height);
-            res.height = Screen.height;
-            res.width = Screen.width;
-        }
+        canvasScaler.referenceResolution = new Vector2(e.screenWidth, e.screenHeight);
+        smallRobotViewAspectRation.aspectRatio = (float)e.screenWidth / (float)e.screenHeight;
+    }
+
+    private void Update()
+    {
         Nodes nodeInfo;
         if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.I))
         {
