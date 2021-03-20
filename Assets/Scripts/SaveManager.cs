@@ -36,7 +36,6 @@ public class SaveManager : MonoBehaviour
         public GameObject gameObject;
     }
 
-
     private void Awake()
     {
         if(instance == null)
@@ -309,7 +308,7 @@ public class SaveManager : MonoBehaviour
     public void New()
     {
         NewProject();
-        StartCoroutine("LoadScene");
+        StartCoroutine("LoadSceneSimple");
     }
 
     // create usable objects from the saved form
@@ -359,7 +358,7 @@ public class SaveManager : MonoBehaviour
         yield return new WaitForEndOfFrame();
         LoadObject(saveId, serializedRobots, splineList, serializedTerrain);
     }
-    private IEnumerator LoadScene()
+    private IEnumerator LoadSceneSimple()
     {
         // Start loading the scene
         Scene scene = SceneManager.GetActiveScene();
