@@ -381,11 +381,16 @@ public class TerrainManager : MonoBehaviour
         if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, fencePlacementLayer))
         {
             if (currentFence == null && hit.transform.gameObject.tag != "PlacementOccupied")
+            {
                 currentFence = CreateFence();
+            }
             else
             {
                 if (hit.transform.gameObject.tag != "PlacementOccupied")
                 {
+                    if(!currentFence.activeSelf)
+                        currentFence.SetActive(true);
+
                     currentFence.transform.rotation = hit.transform.rotation;
                     currentFence.transform.position = hit.transform.position;
 
@@ -403,6 +408,19 @@ public class TerrainManager : MonoBehaviour
                         currentFence = CreateFence();
                     }
                 }
+                else
+                {
+                    if (currentFence.activeSelf)
+                        currentFence.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            if(currentFence != null)
+            {
+                if (currentFence.activeSelf)
+                    currentFence.SetActive(false);
             }
         }
     }
@@ -415,11 +433,16 @@ public class TerrainManager : MonoBehaviour
         if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, objectPlacementLayer))
         {
             if (currentObject == null && hit.transform.gameObject.tag != "PlacementOccupied")
+            {
                 currentObject = CreateObject(prefab);
+            }
             else
             {
                 if (hit.transform.gameObject.tag != "PlacementOccupied")
                 {
+                    if(!currentFence.activeSelf)
+                        currentObject.SetActive(true);
+
                     currentObject.transform.rotation = hit.transform.rotation;
                     currentObject.transform.position = hit.transform.position;
 
@@ -438,6 +461,20 @@ public class TerrainManager : MonoBehaviour
                         currentObject = CreateObject(prefab);
                     }
                 }
+                else
+                {
+                    if(currentObject.activeSelf)
+                        currentObject.SetActive(false);
+                }
+            }
+        }
+        else
+        {
+            if(currentObject != null)
+            {
+                if (currentObject.activeSelf)
+                    currentObject.SetActive(false);
+
             }
         }
     }
@@ -455,6 +492,7 @@ public class TerrainManager : MonoBehaviour
     {
         currentLook = UnityEngine.Random.Range(0, fences.Length);
         GameObject fence = Instantiate(fences[currentLook], transform.position, transform.rotation, GameObject.FindGameObjectWithTag("Terrain").transform);
+        fence.SetActive(false);
         foreach (MeshRenderer meshRenderer in fence.transform.GetComponentsInChildren<MeshRenderer>())
         {
             meshRenderer.material = showMat;
@@ -475,6 +513,7 @@ public class TerrainManager : MonoBehaviour
     public GameObject CreateObject(GameObject prefab)
     {
         GameObject instance = Instantiate(prefab, transform.position, transform.rotation, GameObject.FindGameObjectWithTag("Terrain").transform);
+        instance.SetActive(false);
         foreach (MeshRenderer meshRenderer in instance.transform.GetComponentsInChildren<MeshRenderer>())
         {
             meshRenderer.material = showMat;

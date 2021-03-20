@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
 {
     // from https://pastebin.com/YBbFGZzD, modified by me
     public float mouseSensitivity = 250;
-    private float moveSpeed;
+    public float moveSpeed;
 
     private float verticalLookRotation;
     private float horizontalLookRotation;
@@ -21,7 +21,7 @@ public class CameraController : MonoBehaviour
     {
         instance = this;
         mouseSensitivity *= Time.deltaTime;
-        moveSpeed = mouseSensitivity * 2;
+        moveSpeed *= Time.deltaTime;
     }
 
     private void Update()
@@ -54,7 +54,7 @@ public class CameraController : MonoBehaviour
         }
         if(Input.mouseScrollDelta.y != 0 && canMove && !inMove)
         {
-            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * moveSpeed);
+            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * moveSpeed / 4);
         }
     }
 
