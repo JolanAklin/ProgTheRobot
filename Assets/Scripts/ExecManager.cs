@@ -37,18 +37,25 @@ public class ExecManager : MonoBehaviour
     public void StartExec()
     {
         onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = true });
-        if(!isRunning)
+        if(Manager.instance.canExecute)
         {
-            Debugger.ClearDebug();
-            isRunning = true;
-            foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+            if(!isRunning)
             {
-                if(robot.Value.MainScript.nodeStart != null)
+                Debugger.ClearDebug();
+                isRunning = true;
+                foreach (KeyValuePair<int,Robot> robot in Robot.robots)
                 {
-                    robot.Value.power = robot.Value.defaultPower;
-                    robot.Value.MainScript.nodeStart.Execute();
+                    if(robot.Value.MainScript.nodeStart != null)
+                    {
+                        robot.Value.power = robot.Value.defaultPower;
+                        robot.Value.MainScript.nodeStart.Execute();
+                    }
                 }
             }
+        }
+        else
+        {
+            Debugger.Log("Pas tout les blocs ont une configuration valide");
         }
     }
     public void StopExec()

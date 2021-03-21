@@ -39,6 +39,11 @@ public class Manager : MonoBehaviour
 
     public int selectedNodeId = -1;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     private void Start()
     {
         // load the translation
