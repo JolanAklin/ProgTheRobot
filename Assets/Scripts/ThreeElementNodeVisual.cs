@@ -15,8 +15,15 @@ public class ThreeElementNodeVisual : MonoBehaviour
     public RectTransform rightSide; // or bottom
     public RectTransform middleSide; // middleSide is dumb but changing it will imply that I have to change all the nodes middle object reference in the inspector 
 
+    public GameObject[] objectWithAdaptScript;
+    private List<AdaptCollider> adaptColliders = new List<AdaptCollider>();
+
     private void Start()
     {
+        foreach (GameObject obj in objectWithAdaptScript)
+        {
+            adaptColliders.AddRange(obj.GetComponents<AdaptCollider>());
+        }
         Resize();
     }
 
@@ -33,7 +40,13 @@ public class ThreeElementNodeVisual : MonoBehaviour
                 middleSide.sizeDelta = new Vector2(canvas.rect.width - (rightSide.rect.width + leftSide.rect.width), 0);
             }
         }
-        nodeCollider.size = new Vector2(canvas.rect.width*canvas.localScale.x, middleSide.rect.height*canvas.localScale.y);
+        if(nodeCollider != null)
+            nodeCollider.size = new Vector2(canvas.rect.width*canvas.localScale.x, middleSide.rect.height*canvas.localScale.y);
         //canvas.position = new Vector2(nodeRoot.position.x, nodeRoot.position.y);
+
+        foreach (AdaptCollider adaptCollider in adaptColliders)
+        {
+            adaptCollider.Resize();
+        }
     }
 }

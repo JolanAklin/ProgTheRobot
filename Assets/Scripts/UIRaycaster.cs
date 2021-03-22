@@ -35,6 +35,7 @@ public class UIRaycaster : MonoBehaviour
 
     private Nodes selectedNode = null;
 
+
     void Start()
     {
         graphicraycaster = GetComponent<GraphicRaycaster>();
@@ -125,7 +126,8 @@ public class UIRaycaster : MonoBehaviour
             //end move
             if (nodeToMove != null && nodeToMove.canMove)
             {
-                nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0f);
+                if(!Mathf.Approximately(nodeToMove.gameObject.transform.position.z, -0.5f))
+                    nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0f);
                 nodeToMove.EndMove();
                 nodeToMove = null;
             }

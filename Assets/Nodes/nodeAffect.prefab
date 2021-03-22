@@ -966,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5034817158100937439}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.7, y: -2.7, z: 0}
+  m_LocalPosition: {x: -4.2, y: -2.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5034817159356517125}
@@ -1027,6 +1027,8 @@ MonoBehaviour:
   canResize: 1
   ResizeHandle: {fileID: 7167858784301427573}
   canMove: 1
+  gameObjectsToIgnore: []
+  nodeExecPower: 5
   borders:
   - {fileID: 5034817159747689945}
   - {fileID: 3277559388067887695}
@@ -1293,6 +1295,7 @@ MonoBehaviour:
   leftSide: {fileID: 5034817158003305706}
   rightSide: {fileID: 5034817158148821869}
   middleSide: {fileID: 5034817159694307822}
+  objectWithAdaptScript: []
 --- !u!1 &5034817159694307823
 GameObject:
   m_ObjectHideFlags: 0

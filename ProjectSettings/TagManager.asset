@@ -24,6 +24,7 @@ TagManager:
   - EndFlag
   - Outlet
   - Marking
+  - LoopArea
   layers:
   - Default
   - TransparentFX

@@ -54,7 +54,7 @@ public abstract class Nodes : MonoBehaviour
     [HideInInspector]
     public GameObject nextGameObject; // will simplify script execution. It's not vital to have
     [HideInInspector]
-    public bool asAParent; // as another node higher in the hierarchy
+    public int parentId = -1; // as another node higher in the hierarchy
     public ThreeElementNodeVisual nodeVisual; // change the node element to look good when resized
 
     public RectTransform canvas; // the node canvas
@@ -76,7 +76,9 @@ public abstract class Nodes : MonoBehaviour
     public bool isMoving { get => move;}
     [HideInInspector]
     public bool canMove = true;
+    public List<BoxCollider2D> collidersToIgnore;
     public EventHandler OnNodeModified;
+    private GameObject nodeHolder;
 
     public uint nodeExecPower = 5;
 
@@ -112,6 +114,7 @@ public abstract class Nodes : MonoBehaviour
         {
             handleEndArray[i].GetComponent<ConnectHandle>().handleNumber = i;
         }
+        UpdateIgnoreColliderList();
     }
 
     private void OnDestroy()
@@ -126,6 +129,8 @@ public abstract class Nodes : MonoBehaviour
         // set the event camera of the canvas
         canvas.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rs.onStop += PostExecutionCleanUp;
+
+        nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder");
     }
 
     public void ChangeBorderColor(Color color)
@@ -150,18 +155,15 @@ public abstract class Nodes : MonoBehaviour
     // will return true only if there is no error and the node is connected correctly
     private void isConnected(object sender, EventArgs e)
     {
-        if(asAParent)
+        if(nextNodeId >= 0)
         {
-            if(nextNodeId >= 0)
+            if(nodeErrorCode == ErrorCode.notConnected)
             {
-                if(nodeErrorCode == ErrorCode.notConnected)
-                {
-                    nodeErrorCode = (int)ErrorCode.ok;
-                    ChangeBorderColor(defaultColor);
-                    Manager.instance.canExecute = true;
-                }
-                return;
+                nodeErrorCode = (int)ErrorCode.ok;
+                ChangeBorderColor(defaultColor);
+                Manager.instance.canExecute = true;
             }
+            return;
         }
         nodeErrorCode = ErrorCode.notConnected;
         ChangeBorderColor(errorColor);
@@ -200,6 +202,14 @@ public abstract class Nodes : MonoBehaviour
         move = true;
     }
 
+    private void UpdateIgnoreColliderList()
+    {
+        collidersToIgnore.Clear();
+        collidersToIgnore.AddRange(GetComponents<BoxCollider2D>());
+        BoxCollider2D[] boxCollider2Ds = GetComponentsInChildren<BoxCollider2D>();
+        collidersToIgnore.AddRange(boxCollider2Ds);
+    }
+
     public void EndMove()
     {
         if (canMove)
@@ -227,7 +237,16 @@ public abstract class Nodes : MonoBehaviour
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, resizeAmount, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject != this.gameObject)
+            canResize = false;
+            foreach (BoxCollider2D collider2D in collidersToIgnore)
+            {
+                if (collider == collider2D)
+                {
+                    canResize = true;
+                    break;
+                }
+            }
+            if (!canMove)
             {
                 canResize = false;
                 ChangeBorderColor(errorColor);
@@ -254,16 +273,62 @@ public abstract class Nodes : MonoBehaviour
         // change the spline
         OnNodeModified?.Invoke(this, EventArgs.Empty);
 
+        bool blocInLoop = false;
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
         {
-            if (collider.gameObject != this.gameObject)
+            canMove = false;
+            foreach (BoxCollider2D collider2D in collidersToIgnore)
             {
+                if (collider == collider2D)
+                {
+                    canMove = true;
+                    break;
+                }
+                if (collider.gameObject.tag == "LoopArea")
+                {
+                    canMove = true;
+                    blocInLoop = true;
+                }
+            }
+            if(blocInLoop)
+            {
+                LoopArea loopArea;
+                if(collider.gameObject.TryGetComponent(out loopArea))
+                {
+                    if (transform.parent != loopArea.parent.transform)
+                    {
+                        transform.parent = loopArea.parent.transform;
+                        transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
+                        Nodes parentNode = loopArea.parent.transform.GetComponent<Nodes>();
+                        parentId = parentNode.id;
+                        parentNode.collidersToIgnore.AddRange(GetComponents<BoxCollider2D>());
+                    }
+                }
+            }
+            else
+            {
+                transform.parent = nodeHolder.transform;
+                transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+                if(parentId != -1)
+                {
+                    Nodes parentNode = NodesDict[parentId].GetComponent<Nodes>();
+                    parentId = -1;
+                    foreach (BoxCollider2D boxCollider2D in GetComponents<BoxCollider2D>())
+                    {
+                        parentNode.collidersToIgnore.Remove(boxCollider2D);
+                    }
+                }
+            }
+            if(!canMove)
+            {
+
                 canMove = false;
                 ChangeBorderColor(errorColor);
                 return;
             }
         }
+
         Manager.instance.selectedNodeId = -1;
         ChangeBorderColor(defaultColor);
         canMove = true;
