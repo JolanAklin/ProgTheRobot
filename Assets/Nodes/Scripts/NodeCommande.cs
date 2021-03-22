@@ -153,7 +153,7 @@ public class NodeCommande : Nodes
                 break;
             case "Recharger":
             case "Reload":
-                rs.robot.robotManager.Reload();
+                rs.robot.robotManager.Charge(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
                 break;
             case "PoserBallon":
             case "PlaceBall":

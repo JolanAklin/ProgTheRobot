@@ -174,9 +174,43 @@ public class RobotManager : MonoBehaviour
 
     }
 
-    public void Reload()
+    public void Charge(Action callBack)
     {
+        this.callBack = callBack;
+        Charge();
+    }
 
+    private void Charge()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
+        {
+            TerrainInteractableObj powerOutlet;
+            if (hit.collider.gameObject.TryGetComponent(out powerOutlet))
+            {
+                if(powerOutlet.type == TerrainInteractableObj.ObjectType.PowerPlug)
+                {
+                    IEnumerator coroutine = Charge((PowerOutlet)powerOutlet);
+                    StartCoroutine(coroutine);
+                    return;
+                }
+            }
+        }
+        Debugger.Log("Impossible de charger, le robot n'est pas sur une prise");
+        callBack?.Invoke();
+    }
+
+    private IEnumerator Charge(PowerOutlet powerOutlet)
+    {
+        while(robot.power < robot.defaultPower)
+        {
+            if(robot.power + powerOutlet.PowerPerTick <= robot.defaultPower)
+                robot.power += powerOutlet.PowerPerTick;
+            else
+                robot.power = robot.defaultPower;
+            yield return new WaitForSeconds(3/Manager.instance.execSpeed);
+        }
+        callBack?.Invoke();
     }
 
     public void TakeBall()
