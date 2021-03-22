@@ -61,7 +61,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.6392157, b: 0.019607844, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -184,7 +184,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.6392157, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -305,7 +305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -420,7 +420,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -527,7 +527,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6743916129687385063}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.7, y: -1.2, z: 0}
+  m_LocalPosition: {x: -0.7, y: -1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6743916129884983869}
@@ -575,12 +575,15 @@ MonoBehaviour:
   id: 0
   nextNodeId: -1
   nextGameObject: {fileID: 0}
-  asAParent: 0
+  parentId: -1
   nodeVisual: {fileID: 6743916129884983809}
-  canvas: {fileID: 6743916129884983869}
+  canvasRect: {fileID: 6743916129884983869}
   nodeLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  insideLoopMask:
+    serializedVersion: 2
+    m_Bits: 65536
   handleStartArray:
   - {fileID: 719815665426113205}
   handleEndArray:
@@ -588,6 +591,7 @@ MonoBehaviour:
   canResize: 1
   ResizeHandle: {fileID: 7264466017576503823}
   canMove: 1
+  collidersToIgnore: []
   nodeExecPower: 5
   borders:
   - {fileID: 6743916130263598305}
@@ -597,6 +601,7 @@ MonoBehaviour:
   selectedColor: {r: 0, g: 0.3882353, b: 0.6117647, a: 1}
   errorColor: {r: 0.6392157, g: 0, b: 0, a: 1}
   currentExecutedNode: {r: 0, g: 0.3007675, b: 0.31132078, a: 1}
+  insideNodeColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
   infoTextTitle: "Bloc de lecture/\xE9criture"
   infoText: "Ce bloc affiche ou lit une entr\xE9e utilisateur\n\nex : Lire test\n\nTest
     prendra donc la valeur sp\xE9cifi\xE9e par l'utilisateur\n\nValeur possible :\n-
@@ -778,6 +783,7 @@ MonoBehaviour:
   leftSide: {fileID: 6743916129594045906}
   rightSide: {fileID: 6743916129740016213}
   middleSide: {fileID: 6743916130209892566}
+  objectWithAdaptScript: []
 --- !u!1 &6743916130209892567
 GameObject:
   m_ObjectHideFlags: 0
@@ -874,7 +880,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -950,7 +956,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1041,7 +1047,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.0627451, g: 0.0627451, b: 0.0627451, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1131,7 +1137,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1236,7 +1242,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0.87058824, b: 0.9019608, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1417,6 +1423,10 @@ PrefabInstance:
     - target: {fileID: 2629133257769889747, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_Name
       value: nodeInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889774, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_RaycastTarget
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontSize

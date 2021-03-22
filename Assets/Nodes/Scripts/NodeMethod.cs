@@ -139,7 +139,7 @@ public class NodeMethod : Nodes
             type = "subProgram",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
-            size = new float[] { canvas.sizeDelta.x, canvas.sizeDelta.y },
+            size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
         serializableNode.nodeSettings.Add(tMP_Dropdown.value.ToString());

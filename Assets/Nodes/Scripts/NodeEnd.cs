@@ -42,7 +42,7 @@ public class NodeEnd : Nodes
             type = "end",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
-            size = new float[] { canvas.sizeDelta.x, canvas.sizeDelta.y },
+            size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
         return serializableNode;

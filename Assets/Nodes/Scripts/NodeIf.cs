@@ -172,7 +172,7 @@ public class NodeIf : Nodes
             type = "test",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
-            size = new float[] { canvas.sizeDelta.x, canvas.sizeDelta.y },
+            size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
         serializableNode.nodeSettings.Add(input);

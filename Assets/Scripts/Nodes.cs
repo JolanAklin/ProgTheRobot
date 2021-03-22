@@ -57,10 +57,12 @@ public abstract class Nodes : MonoBehaviour
     public int parentId = -1; // as another node higher in the hierarchy
     public ThreeElementNodeVisual nodeVisual; // change the node element to look good when resized
 
-    public RectTransform canvas; // the node canvas
+    public RectTransform canvasRect; // the node canvas
+    private Canvas canvas;
 
     // use to test if a node collide with an other
     public LayerMask nodeLayerMask;
+    public LayerMask insideLoopMask;
 
     public GameObject[] handleStartArray;
     public GameObject[] handleEndArray;
@@ -79,6 +81,8 @@ public abstract class Nodes : MonoBehaviour
     public List<BoxCollider2D> collidersToIgnore;
     public EventHandler OnNodeModified;
     private GameObject nodeHolder;
+    private LoopArea nodesLoopArea;
+    private Action onMoveEnd;
 
     public uint nodeExecPower = 5;
 
@@ -93,6 +97,7 @@ public abstract class Nodes : MonoBehaviour
     public Color selectedColor;
     public Color errorColor;
     public Color currentExecutedNode;
+    public Color insideNodeColor;
     protected float executedColorTime = 1;
 
     public string infoTextTitle;
@@ -115,6 +120,10 @@ public abstract class Nodes : MonoBehaviour
             handleEndArray[i].GetComponent<ConnectHandle>().handleNumber = i;
         }
         UpdateIgnoreColliderList();
+
+        canvas = canvasRect.GetComponent<Canvas>();
+
+        nodesLoopArea = GetComponentInChildren<LoopArea>();
     }
 
     private void OnDestroy()
@@ -127,7 +136,7 @@ public abstract class Nodes : MonoBehaviour
         // subscribe to the checknode event. The node will check if it is connected correctly
         Manager.instance.CheckNode += isConnected;
         // set the event camera of the canvas
-        canvas.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+        canvasRect.gameObject.GetComponent<Canvas>().worldCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rs.onStop += PostExecutionCleanUp;
 
         nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder");
@@ -212,8 +221,13 @@ public abstract class Nodes : MonoBehaviour
 
     public void EndMove()
     {
+        if(nodesLoopArea != null)
+            nodesLoopArea.collider.enabled = true;
+        if (lastInsideLoopImage != null)
+            lastInsideLoopImage.color = insideNodeColor;
         if (canMove)
             move = false;
+        onMoveEnd?.Invoke();
     }
 
 
@@ -221,14 +235,14 @@ public abstract class Nodes : MonoBehaviour
     public void Resize()
     {
         // round the mouse position
-        transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
+        //transform.position = new Vector3(transform.position.x, transform.position.y, -1f);
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 delta = Absolute(mouseToWorldPoint - transform.position);
 
         // The delta is calculated between the center and the corner. It is multiplied by 2 to have the full height
         resizeAmount = new Vector3((float)Math.Round(delta.x*2, 1), (float)Math.Round(delta.y*2, 1), 0);
         // scale the size by a 100 cause the canvas scale is multiplied by 0.01
-        canvas.sizeDelta = resizeAmount*100;
+        canvasRect.sizeDelta = resizeAmount*100;
 
         nodeVisual.Resize();
         // change the spline
@@ -259,22 +273,23 @@ public abstract class Nodes : MonoBehaviour
 
     public void Resize(Vector2 size)
     {
-        canvas.sizeDelta = size;
+        canvasRect.sizeDelta = size;
     }
 
+    private Image lastInsideLoopImage;
     public void Move()
     {
         // round the mouse position
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
-        Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -0.1f);
+        Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -890);
 
         // change the node position
         transform.position = pos;
         // change the spline
         OnNodeModified?.Invoke(this, EventArgs.Empty);
 
-        bool blocInLoop = false;
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvas.sizeDelta/100, 0f, nodeLayerMask);
+        //bool blocInLoop = false;
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvasRect.sizeDelta/100, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
         {
             canMove = false;
@@ -285,53 +300,67 @@ public abstract class Nodes : MonoBehaviour
                     canMove = true;
                     break;
                 }
-                if (collider.gameObject.tag == "LoopArea")
-                {
-                    canMove = true;
-                    blocInLoop = true;
-                }
-            }
-            if(blocInLoop)
-            {
-                LoopArea loopArea;
-                if(collider.gameObject.TryGetComponent(out loopArea))
-                {
-                    if (transform.parent != loopArea.parent.transform)
-                    {
-                        transform.parent = loopArea.parent.transform;
-                        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-                        Nodes parentNode = loopArea.parent.transform.GetComponent<Nodes>();
-                        parentId = parentNode.id;
-                        parentNode.collidersToIgnore.AddRange(GetComponents<BoxCollider2D>());
-                    }
-                }
-            }
-            else
-            {
-                transform.parent = nodeHolder.transform;
-                transform.position = new Vector3(transform.position.x, transform.position.y, 0);
-                if(parentId != -1)
-                {
-                    Nodes parentNode = NodesDict[parentId].GetComponent<Nodes>();
-                    parentId = -1;
-                    foreach (BoxCollider2D boxCollider2D in GetComponents<BoxCollider2D>())
-                    {
-                        parentNode.collidersToIgnore.Remove(boxCollider2D);
-                    }
-                }
-            }
-            if(!canMove)
-            {
-
-                canMove = false;
-                ChangeBorderColor(errorColor);
-                return;
             }
         }
 
+
+        if (nodesLoopArea != null)
+            nodesLoopArea.collider.enabled = false;
+
+        if (lastInsideLoopImage != null)
+            lastInsideLoopImage.color = insideNodeColor;
+
+        RaycastHit2D hit;
+        Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+        if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, insideLoopMask))
+        {
+            LoopArea loopArea = hit.collider.GetComponent<LoopArea>();
+            if(!loopArea.parent.transform.IsChildOf(transform))
+            {
+                // changing the color
+                Image currentInsideLoop = loopArea.image;
+                currentInsideLoop.color = selectedColor;
+                if (lastInsideLoopImage != null && lastInsideLoopImage != currentInsideLoop)
+                    lastInsideLoopImage.color = insideNodeColor;
+                lastInsideLoopImage = currentInsideLoop;
+
+
+                // changing the sorting order of the canvas to ensure that the node is on the top
+                canvas.sortingOrder = loopArea.nodeCanvas.sortingOrder + 1;
+
+                onMoveEnd = () =>
+                {
+                    transform.parent = loopArea.parent.transform;
+                    float zpos = (loopArea.parent.transform.position.z - 0.001f);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, zpos);
+                };
+            }
+            
+        }
+        else
+        {
+            // changing the color back
+            if (lastInsideLoopImage != null)
+                lastInsideLoopImage.color = insideNodeColor;
+
+            canvas.sortingOrder = 0;
+
+            onMoveEnd = () =>
+            {
+                transform.parent = nodeHolder.transform;
+                transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+            };
+        }
+
         Manager.instance.selectedNodeId = -1;
-        ChangeBorderColor(defaultColor);
-        canMove = true;
+        if(canMove)
+        {
+            ChangeBorderColor(defaultColor);
+        }
+        else
+        {
+            ChangeBorderColor(errorColor);
+        }
     }
 
     // convert a vector3 to absolute value

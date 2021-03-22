@@ -118,7 +118,7 @@ public class UIRaycaster : MonoBehaviour
             //end resize
             if(resizeHandle != null && resizeHandle.node.canResize)
             {
-                resizeHandle.node.gameObject.transform.position = new Vector3(resizeHandle.node.gameObject.transform.position.x, resizeHandle.node.transform.position.y, 0);
+                //resizeHandle.node.gameObject.transform.position = new Vector3(resizeHandle.node.gameObject.transform.position.x, resizeHandle.node.transform.position.y, );
                 resizeHandle.NodeResize();
                 resizeHandle = null;
             }
@@ -126,8 +126,7 @@ public class UIRaycaster : MonoBehaviour
             //end move
             if (nodeToMove != null && nodeToMove.canMove)
             {
-                if(!Mathf.Approximately(nodeToMove.gameObject.transform.position.z, -0.1f))
-                    nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0);
+                //nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0);
                 nodeToMove.EndMove();
                 nodeToMove = null;
             }
@@ -150,7 +149,7 @@ public class UIRaycaster : MonoBehaviour
             }
 
             //move node
-            if (rayCastResults.Count == 0 && nodeToMove == null)
+            if (nodeToMove == null)
             {
                 RaycastHit2D hit;
                 Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
