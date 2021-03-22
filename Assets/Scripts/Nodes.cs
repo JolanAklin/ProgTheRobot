@@ -266,7 +266,7 @@ public abstract class Nodes : MonoBehaviour
     {
         // round the mouse position
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
-        Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -1);
+        Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -0.1f);
 
         // change the node position
         transform.position = pos;
@@ -299,7 +299,7 @@ public abstract class Nodes : MonoBehaviour
                     if (transform.parent != loopArea.parent.transform)
                     {
                         transform.parent = loopArea.parent.transform;
-                        transform.position = new Vector3(transform.position.x, transform.position.y, -0.5f);
+                        transform.position = new Vector3(transform.position.x, transform.position.y, 0);
                         Nodes parentNode = loopArea.parent.transform.GetComponent<Nodes>();
                         parentId = parentNode.id;
                         parentNode.collidersToIgnore.AddRange(GetComponents<BoxCollider2D>());

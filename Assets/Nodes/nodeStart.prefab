@@ -520,7 +520,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052317501531756442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.2, y: 1.8, z: 0}
+  m_LocalPosition: {x: -3.4, y: 1.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052317501844846144}
@@ -568,7 +568,7 @@ MonoBehaviour:
   id: 0
   nextNodeId: -1
   nextGameObject: {fileID: 0}
-  asAParent: 0
+  parentId: -1
   nodeVisual: {fileID: 1052317501844846204}
   canvas: {fileID: 1052317501844846144}
   nodeLayerMask:
@@ -580,7 +580,7 @@ MonoBehaviour:
   canResize: 1
   ResizeHandle: {fileID: 783018540565910690}
   canMove: 1
-  gameObjectsToIgnore: []
+  collidersToIgnore: []
   nodeExecPower: 5
   borders:
   - {fileID: 1052317502103789724}

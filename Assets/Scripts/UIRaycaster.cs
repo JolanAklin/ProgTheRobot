@@ -118,7 +118,7 @@ public class UIRaycaster : MonoBehaviour
             //end resize
             if(resizeHandle != null && resizeHandle.node.canResize)
             {
-                resizeHandle.node.gameObject.transform.position = new Vector3(resizeHandle.node.gameObject.transform.position.x, resizeHandle.node.transform.position.y, 0f);
+                resizeHandle.node.gameObject.transform.position = new Vector3(resizeHandle.node.gameObject.transform.position.x, resizeHandle.node.transform.position.y, 0);
                 resizeHandle.NodeResize();
                 resizeHandle = null;
             }
@@ -126,8 +126,8 @@ public class UIRaycaster : MonoBehaviour
             //end move
             if (nodeToMove != null && nodeToMove.canMove)
             {
-                if(!Mathf.Approximately(nodeToMove.gameObject.transform.position.z, -0.5f))
-                    nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0f);
+                if(!Mathf.Approximately(nodeToMove.gameObject.transform.position.z, -0.1f))
+                    nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0);
                 nodeToMove.EndMove();
                 nodeToMove = null;
             }
@@ -254,7 +254,7 @@ public class UIRaycaster : MonoBehaviour
 
             Vector3 currentMousePos = Input.mousePosition;
             Vector3 delta = (currentMousePos - mousePosBeginMove);
-            Vector3 cameraPos = new Vector3(-delta.x/nodeAreaPanSensitivity, -delta.y/nodeAreaPanSensitivity, -10);
+            Vector3 cameraPos = new Vector3(-delta.x/nodeAreaPanSensitivity, -delta.y/nodeAreaPanSensitivity, 0);
             NodeDisplay.instance.nodeCamera.transform.position = cameraPos + cameraPosAtPanStart;
         }
         else if(cameraCanBePanned == true)
