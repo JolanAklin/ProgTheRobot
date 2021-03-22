@@ -61,39 +61,41 @@ public class RobotManager : MonoBehaviour
 
     public void GoForward(Action callBack, Action noPower)
     {
-        if (robot.power >= goForwardPower)
+        if (!WallInFront())
         {
-            this.noPower = noPower;
-            this.callBack = callBack;
-            GoForward();
+            if (robot.power >= goForwardPower)
+            {
+                this.noPower = noPower;
+                this.callBack = callBack;
+                GoForward();
+            }
+            else
+            {
+                noPower();
+            }
         }
         else
         {
-            noPower();
+            Debugger.Log($"Le robot {robot.robotName} est bloqué");
+            callBack();
         }
     }
 
     private void GoForward()
     {
-        if(!WallInFront())
+        
+        if (actionOnUpdate == null)
         {
-            if (actionOnUpdate == null)
-            {
-                actionOnUpdate = GoForward;
-                startMovementPos = transform.position;
-                robot.power -= goForwardPower;
-                t = 0f;
-            }
-            t += 1 * Time.deltaTime * Manager.instance.execSpeed;
-            transform.position = Vector3.Lerp(startMovementPos, startMovementPos + transform.forward, t);
-            if(t > 1)
-            {
-                actionOnUpdate = null;
-                callBack();
-            }
-        }else
+            actionOnUpdate = GoForward;
+            startMovementPos = transform.position;
+            robot.power -= goForwardPower;
+            t = 0f;
+        }
+        t += 1 * Time.deltaTime * Manager.instance.execSpeed;
+        transform.position = Vector3.Lerp(startMovementPos, startMovementPos + transform.forward, t);
+        if(t > 1)
         {
-            Debugger.Log($"Le robot {robot.robotName} est bloqué");
+            actionOnUpdate = null;
             callBack();
         }
     }

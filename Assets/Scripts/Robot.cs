@@ -100,13 +100,16 @@ public class Robot
     public List<List.ListElement> ScriptToList()
     {
         List<List.ListElement> list = new List<List.ListElement>();
-        // add a "add" button. The button will show a popup asking for the name of the script once clicked
+        // add a "+" button. The button will show a popup asking for the name of the script once clicked
         list.Add(new List.ListElement { isAddScript = true, actionOnClick = () => {
+            // create the add script popup
             PopUpAddScript pas = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "addScript"), Manager.instance.canvas.transform).GetComponent<PopUpAddScript>();
+            // close the popup when the "annuler" button is pressed
             pas.SetCancelAction(() =>
             {
                 pas.PopUpClose();
             });
+            // create the script with the right name and close the window
             pas.SetOkAction(() =>
             {
                 List.ListElement element = this.CreateScript(pas.scriptName);
@@ -115,6 +118,7 @@ public class Robot
                 pas.PopUpClose();
             });
         } });
+        // show all the already created script on the list
         foreach (RobotScript scripts in robotScripts)
         {
             list.Add(scripts.ConvertToListElement());
@@ -126,8 +130,10 @@ public class Robot
     public ListRobot.ListElement ConvertToListElement()
     {
         return new ListRobot.ListElement() { isAddRobot = false, robotColor = Color, actionOnClick = () => {
-            idSelected = this.id;
-            Manager.instance.list.ChangeList(ScriptToList(),1); } };
+                idSelected = this.id;
+                Manager.instance.list.ChangeList(ScriptToList(),1); 
+            } 
+        };
     }
 
     public void ClearRobot()

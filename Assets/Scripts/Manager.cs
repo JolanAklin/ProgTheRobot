@@ -117,9 +117,10 @@ public class Manager : MonoBehaviour
         if(Robot.robots.ContainsKey(Robot.idSelected))
         {
             Robot robotToChange = Robot.robots[Robot.idSelected];
-            // instantiate a popup to modify the robot. Set all actions of the popup
+            // instantiate a popup to modify the robot and set all actions of the popup
             PopUpRobot rm = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif"), canvas.transform).GetComponent<PopUpRobot>();
             rm.Init(robotToChange.Color, robotToChange.robotName, robotToChange.defaultPower);
+            // apply the config to the robot
             rm.SetOkAction(() =>
             {
                 robotToChange.Color = rm.robotColor;
@@ -129,10 +130,12 @@ public class Manager : MonoBehaviour
                 listRobot.ChangeChoiceColor(robotToChange.id, rm.robotColor);
                 rm.PopUpClose();
             });
+            // close the popup
             rm.SetCancelAction(() =>
             {
                 rm.PopUpClose();
             });
+            // delete the robot
             rm.SetDeleteAction(() =>
             {
                 listRobot.RemoveRobot(robotToChange.id);

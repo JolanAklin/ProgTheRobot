@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.Linq;
+using System.Data;
+using System.Text.RegularExpressions;
 
 public class VarsManager
 {
@@ -76,6 +78,7 @@ public class VarsManager
         }
         return null;
     }
+
 
 
     /// <summary>
@@ -179,28 +182,41 @@ public class VarsManager
         return false;
     }
 
-    public bool GetBoolFunction(string funcName)
+    public class BoolFunctionReturn
     {
+        public bool error = false;
+        public bool result;
+    }
+
+    public BoolFunctionReturn GetBoolFunction(string funcName)
+    {
+        bool result;
         switch (funcName)
         {
             case "MurEnFace":
             case "WallInFront":
-                return rm.WallInFront();
+                result = rm.WallInFront();
+                break;
             case "MurADroite":
             case "WallRight":
-                return rm.WallRight();
+                result = rm.WallRight();
+                break;
             case "MurAGauche":
             case "WallLeft":
-                return rm.WallLeft();
+                result = rm.WallLeft();
+                break;
             case "Sorti":
             case "Out":
-                return rm.IsOut();
+                result = rm.IsOut();
+                break;
             case "RobotSurUnePrise":
             case "RobotOnAnOutlet":
-                return rm.IsOnAnOutlet();
+                result = rm.IsOnAnOutlet();
+                break;
             case "CaseMarqué":
             case "TileMarked":
-                return rm.IsCaseMarked();
+                result = rm.IsCaseMarked();
+                break;
             //case "CaseDevantOccupée":
             //case "TileInFrontOccupied":
             //    return false;
@@ -209,27 +225,40 @@ public class VarsManager
             //    return false;
             case "Vrai":
             case "True":
-                return true;
+                result = true;
+                break;
             case "Faux":
             case "False":
-                return false;
+                result = false;
+                break;
 
             default:
-                return false;
+                return new BoolFunctionReturn() { error = true, };
         }
+        return new BoolFunctionReturn() { result = result };
     }
 
-    public int GetFunction(string funcName)
+    public class FunctionReturn
     {
+        public bool error = false;
+        public int result;
+    }
+
+    public FunctionReturn GetFunction(string funcName)
+    {
+        int result;
         switch (funcName)
         {
             case "Energie":
             case "Power":
-                return (int)robot.power;
+                result = (int)robot.power;
+                break;
             case "xRobot":
-                return Mathf.RoundToInt(rm.transform.position.x);
+                result = Mathf.RoundToInt(rm.transform.position.x);
+                break;
             case "yRobot":
-                return Mathf.RoundToInt(rm.transform.position.z);
+                result = Mathf.RoundToInt(rm.transform.position.z);
+                break;
             //case "dxRobot":
             //case "dyRobot":
             //    if(rm.transform.rotation.z == 0)
@@ -238,8 +267,9 @@ public class VarsManager
             //case "xBallon":
 
             default:
-                return 0;
+                return new FunctionReturn() { error = true };
         }
+        return new FunctionReturn() { result = result };
     }
 
     /// <summary>
@@ -251,8 +281,14 @@ public class VarsManager
     {
         for (int i = 0; i < expression.Length; i++)
         {
-            if(expression[i].Any(Char.IsLetter))
-                if(vars.ContainsKey(expression[i]))
+            if(Regex.IsMatch(expression[i], @"^[a-zA-Z]+$"))
+            {
+                FunctionReturn fReturn = GetFunction(expression[i]);
+                if(!fReturn.error)
+                {
+                    expression[i] = fReturn.result.ToString();
+                }
+                else if(vars.ContainsKey(expression[i]))
                 {
                     expression[i] = vars[expression[i]].ToString();
                 }
@@ -260,6 +296,7 @@ public class VarsManager
                 {
                     return null;
                 }
+            }
         }
         return expression;
     }
@@ -271,7 +308,7 @@ public class VarsManager
     /// <returns></returns>
     public string ReplaceStringByVar(string expression)
     {
-        if (expression.Any(Char.IsLetter))
+        if (Regex.IsMatch(expression, @"^[a-zA-Z]+$"))
             if (vars.ContainsKey(expression))
             {
                 expression = vars[expression].ToString();
@@ -281,6 +318,180 @@ public class VarsManager
                 return null;
             }
         return expression;
+    }
+
+    public class Evaluation
+    {
+        public bool error = false;
+        public bool result;
+    }
+
+    public Evaluation Evaluate(string expression)
+    {
+        string[] stringsToFind = new string[] { "Ou", "Or", "Et", "And" };
+
+        List<string> findOrder = new List<string>();
+
+        // https://stackoverflow.com/questions/17892237/occurrences-of-a-liststring-in-a-string-c-sharp
+        int count = 0;
+        foreach (var stringToFind in stringsToFind)
+        {
+            int currentIndex = 0;
+
+            while ((currentIndex = expression.IndexOf(stringToFind, currentIndex, StringComparison.Ordinal)) != -1)
+            {
+                findOrder.Add(stringToFind);
+                currentIndex++;
+                count++;
+            }
+        }
+
+        string[] exprSplit = expression.Split(stringsToFind, StringSplitOptions.None);
+
+        List<bool> results = new List<bool>();
+
+        foreach (string item in exprSplit)
+        {
+            string[] separators = new string[] { " " };
+            string[] smallExprSplit = item.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+            BoolFunctionReturn fBoolReturn = null;
+            switch (smallExprSplit.Length)
+            {
+                // get the corresponding function, if it exist, and adds it to the result list
+                case 1:
+                    fBoolReturn = GetBoolFunction(smallExprSplit[0]);
+                    if (!fBoolReturn.error)
+                        results.Add(fBoolReturn.result);
+                    else
+                        return new Evaluation() { error = true };
+                    break;
+                // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
+                case 2:
+                    fBoolReturn = GetBoolFunction(smallExprSplit[1]);
+                    if (!fBoolReturn.error)
+                    {
+                        if(smallExprSplit[0] == "Non" || smallExprSplit[0] == "No")
+                        {
+                            results.Add(!fBoolReturn.result);
+                        }else
+                        {
+                            return new Evaluation() { error = true };
+                        }
+                    }
+                    else
+                    {
+                        return new Evaluation() { error = true };
+                    }
+                    break;
+                // evaluate an expression like this : test + 2 = myVar + 4
+                default:
+                    string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
+                    List<string> exprPart1 = new List<string>();
+                    List<string> exprPart2 = new List<string>();
+                    string foundDel = "";
+                    bool findDelimiter = false;
+                    foreach (string exprBits in smallExprSplit)
+                    {
+                        if(!findDelimiter)
+                        {
+                            foreach (string del in delimiters)
+                            {
+                                if(exprBits == del)
+                                {
+                                    findDelimiter = true;
+                                    foundDel = del;
+                                    break;
+                                }
+                            }
+                            if(!findDelimiter)
+                                exprPart1.Add(exprBits);
+                        }
+                        else
+                        {
+                            exprPart2.Add(exprBits);
+                        }
+                    }
+                    // calculate the result of each part of the expression
+                    int value1 = 0;
+                    int value2 = 0;
+                    try
+                    {
+                        value1 = Convert.ToInt32(new DataTable().Compute(string.Join("", robot.varsManager.ReplaceStringsByVar(exprPart1.ToArray())), null));
+                        value2 = Convert.ToInt32(new DataTable().Compute(string.Join("", robot.varsManager.ReplaceStringsByVar(exprPart2.ToArray())), null));
+                    }catch (Exception e)
+                    {
+                        return new Evaluation() { error = true };
+                    }
+                    // find the result of the expression
+                    switch (foundDel)
+                    {
+                        case "=":
+                            results.Add(value1 == value2);
+                            break;
+                        case "<":
+                            results.Add(value1 < value2);
+                            break;
+                        case ">":
+                            results.Add(value1 > value2);
+                            break;
+                        case "<=":
+                            results.Add(value1 <= value2);
+                            break;
+                        case ">=":
+                            results.Add(value1 >= value2);
+                            break;
+                        case "<>":
+                            results.Add(value1 != value2);
+                            break;
+                        default:
+                            return new Evaluation() { error = true };
+                    }
+                    break;
+            }
+        }
+
+        // make the final result
+        bool finalResult = false;
+        if(findOrder.Count > 0)
+        {
+            if(findOrder[0] == "Et" || findOrder[0] == "And")
+            {
+                if (results[0] && results[1])
+                    finalResult = true;
+                else
+                    finalResult = false;
+            }
+            else if (findOrder[0] == "Ou" || findOrder[0] == "Or")
+            {
+                if (results[0] || results[1])
+                    finalResult = true;
+                else
+                    finalResult = false;
+            }
+            for (int i = 2; i < results.Count; i++)
+            {
+                if (findOrder[i-1] == "Et" || findOrder[i-1] == "And")
+                {
+                    if (finalResult && results[i])
+                        finalResult = true;
+                    else
+                        finalResult = false;
+                }
+                else if (findOrder[i-1] == "Ou" || findOrder[i-1] == "Or")
+                {
+                    if (finalResult || results[i])
+                        finalResult = true;
+                    else
+                        finalResult = false;
+                }
+            }
+        }
+        else
+        {
+            finalResult = results[0];
+        }
+        return new Evaluation() { result = finalResult };
     }
 
 

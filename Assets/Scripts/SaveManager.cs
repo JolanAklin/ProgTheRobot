@@ -98,6 +98,8 @@ public class SaveManager : MonoBehaviour
     public void Save()
     {
         StreamWriter sr;
+
+        // create a serializable object to save all the robots
         SerializedRobotList serializedRobotList = new SerializedRobotList();
         serializedRobotList.serializedRobots = new List<Robot.SerializedRobot>();
         foreach (KeyValuePair<int, Robot> robot in Robot.robots)
@@ -105,6 +107,7 @@ public class SaveManager : MonoBehaviour
             serializedRobotList.serializedRobots.Add(robot.Value.SerializeRobot());
         }
 
+        // convert the object to json and write it to a file
         sr = File.CreateText(tmpSavePath + "Robots");
         sr.WriteLine(JsonUtility.ToJson(serializedRobotList));
         sr.Close();
@@ -144,10 +147,12 @@ public class SaveManager : MonoBehaviour
             tmpSavePath + "Terrain"
         };
 
-        if(fileName.EndsWith(".pr"))
-            CreateTarGZ(savePath + $"{fileName}", files);
-        else
-            CreateTarGZ(savePath + $"{fileName}.pr", files);
+        if (!fileName.EndsWith(".pr"))
+            fileName += ".pr";
+
+        // create a targz with the specified files
+        CreateTarGZ(savePath + $"{fileName}", files);
+
         CleanDir(tmpSavePath);
     }
 
@@ -177,6 +182,7 @@ public class SaveManager : MonoBehaviour
     /// <param name="archivePath">Path were the archive is stored</param>
     public void JsonToObj(string archivePath)
     {
+        // extract the archive
         ExtractTGZ(archivePath, extractPath);
 
         SerializedRobotList serializedRobotList = null;
@@ -184,6 +190,7 @@ public class SaveManager : MonoBehaviour
         SplineList splineList = null;
         TerrainManager.SerializedTerrain serializedTerrain = null;
 
+        // read all files and and create object from the json
         foreach (string file in Directory.EnumerateFiles(extractPath))
         {
             StreamReader sr = File.OpenText(file);
@@ -210,6 +217,7 @@ public class SaveManager : MonoBehaviour
             serializedRobots.Add(serializedRobot);
         }
 
+        // clean the app before creating the usable object
         ClearGame(saveId, serializedRobots, splineList, serializedTerrain);
     }
 
@@ -314,16 +322,19 @@ public class SaveManager : MonoBehaviour
     // create usable objects from the saved form
     private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
     {
+        // create all the robot from the json created object
         foreach (Robot.SerializedRobot serializedRobot in serializedRobots)
         {
             Vector3 position = new Vector3(serializedRobot.position[0], serializedRobot.position[1], serializedRobot.position[2]);
             Quaternion rotation = new Quaternion(serializedRobot.rotation[0], serializedRobot.rotation[1], serializedRobot.rotation[2], serializedRobot.rotation[3]);
 
+            // this constructor will also create all scripts
             Robot robot = new Robot(serializedRobot.id, serializedRobot.power, serializedRobot.robotColor, serializedRobot.robotName, position, rotation, serializedRobot.serializedRobotScripts, this);
             Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
             Manager.instance.listRobot.Select(robot.id);
         }
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+        // create all links from the json created object
         foreach (SplineManager.SerializedSpline serializedSpline in splineList.serializedSplines)
         {
             GameObject splineLinkInstance = Instantiate(splineLink, Vector3.zero, Quaternion.identity, nodeHolder);
@@ -333,8 +344,10 @@ public class SaveManager : MonoBehaviour
 
         Manager.instance.listRobot.SelectFirst();
 
+        // create the terrain
         GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().DeSerialize(serializedTerrain);
 
+        // set the next id when a new of this object will be created
         RobotScript.nextid = saveId.robotScriptNextId;
         Robot.nextid = saveId.robotNextId;
         Nodes.nextid = saveId.nodeNextId;

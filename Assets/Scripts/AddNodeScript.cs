@@ -28,6 +28,7 @@ public class AddNodeScript : MonoBehaviour
         {
             AddAction(nodeType.ToString(), () =>
             {
+                // test if there is already a start node on the script, if yes, the script won't allow the creation of another one
                 if(RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodeStart != false && nodeType.ToString() == "start")
                 {
                     Debugger.Log("Il ne peut y avoir qu'un seul bloc de départ");

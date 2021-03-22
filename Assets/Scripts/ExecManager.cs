@@ -36,6 +36,7 @@ public class ExecManager : MonoBehaviour
 
     public void StartExec()
     {
+        // this event is used to lock all the inputs of nodes
         onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = true });
         if(Manager.instance.canExecute)
         {
@@ -43,11 +44,11 @@ public class ExecManager : MonoBehaviour
             {
                 Debugger.ClearDebug();
                 isRunning = true;
+                // call the start node from all main scripts
                 foreach (KeyValuePair<int,Robot> robot in Robot.robots)
                 {
                     if(robot.Value.MainScript.nodeStart != null)
                     {
-                        robot.Value.power = robot.Value.defaultPower;
                         robot.Value.MainScript.nodeStart.Execute();
                     }
                 }
@@ -73,7 +74,7 @@ public class ExecManager : MonoBehaviour
     }
 
 
-    // bugging stuff
+    // debugging stuff
     public void ActivateDebug(ToggleScript toggle)
     {
         debugOn = toggle.Value;

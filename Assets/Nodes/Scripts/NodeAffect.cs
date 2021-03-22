@@ -140,12 +140,14 @@ public class NodeAffect : Nodes
     {
         if(!ExecManager.Instance.debugOn)
         {
+            // wait before calling the next node
             yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
             ChangeBorderColor(defaultColor);
             CallNextNode();
         }
         else
         {
+            // register a lambda to the action of the "next" button when the debuger is on
             ExecManager.Instance.buttonNextAction = () => {
                 CallNextNode();
                 ChangeBorderColor(defaultColor);

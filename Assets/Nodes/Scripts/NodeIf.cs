@@ -47,37 +47,37 @@ public class NodeIf : Nodes
 
     private bool ValidateInput()
     {
-        string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
-        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        if(inputSplited.Length == 1)
-        {
-            switch(inputSplited[0])
-            {
-                case "MurEnFace":
-                case "WallInFront":
-                case "MurADroite":
-                case "WallRight":
-                case "MurAGauche":
-                case "WallLeft":
-                case "Sorti":
-                case "Out":
-                case "RobotSurUnePrise":
-                case "RobotOnAnOutlet":
-                case "CaseMarqué":
-                case "TileMarked":
-                case "CaseDevantOccupée":
-                case "TileInFrontOccupied":
-                case "BallonSurLeSol":
-                case "BallOnTheGround":
-                case "Vrai":
-                case "True":
-                case "Faux":
-                case "False":
-                    return true;
-            }
-        }
-        if (inputSplited.Length > 2 || inputSplited.Length == 1)
-            return false;
+        //string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
+        //inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        //if(inputSplited.Length == 1)
+        //{
+        //    switch(inputSplited[0])
+        //    {
+        //        case "MurEnFace":
+        //        case "WallInFront":
+        //        case "MurADroite":
+        //        case "WallRight":
+        //        case "MurAGauche":
+        //        case "WallLeft":
+        //        case "Sorti":
+        //        case "Out":
+        //        case "RobotSurUnePrise":
+        //        case "RobotOnAnOutlet":
+        //        case "CaseMarqué":
+        //        case "TileMarked":
+        //        case "CaseDevantOccupée":
+        //        case "TileInFrontOccupied":
+        //        case "BallonSurLeSol":
+        //        case "BallOnTheGround":
+        //        case "Vrai":
+        //        case "True":
+        //        case "Faux":
+        //        case "False":
+        //            return true;
+        //    }
+        //}
+        //if (inputSplited.Length > 2 || inputSplited.Length == 1)
+        //    return false;
         return true;
     }
 
@@ -98,89 +98,21 @@ public class NodeIf : Nodes
             return;
         ChangeBorderColor(currentExecutedNode);
 
-        bool result = true;
-
         IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeIdFalse);
 
-        if(inputSplited.Length == 1)
-        {
-            result = rs.robot.varsManager.GetBoolFunction(inputSplited[0]);
-        }else
-        {
-            string[] delimiters = new string[] { " " };
-            string[] expressionSplited1 = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            string expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited1));
-            if(expr == null)
-            {
-                Debugger.Log("Variable inconnue");
-                ChangeBorderColor(errorColor);
-                return;
-            }
-            int value1 = Convert.ToInt32(new DataTable().Compute(expr, null));
+        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(input);
 
-            string[] expressionSplited2 = inputSplited[1].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            expr = string.Join("", rs.robot.varsManager.ReplaceStringsByVar(expressionSplited2));
-            if (expr == null)
+        if (!eval.error)
+            if (eval.result)
             {
-                Debugger.Log("Variable inconnue");
-                ChangeBorderColor(errorColor);
-                return;
+                StartCoroutine("WaitBeforeCallingNextNode");
             }
-            int value2 = Convert.ToInt32(new DataTable().Compute(expr, null));
-
-            if (input.Contains("="))
+            else
             {
-                if (value1 == value2)
-                    result = true;
-                else
-                    result = false;
-
+                StartCoroutine(coroutine);
             }
-            else if (input.Contains("<"))
-            {
-                if (value1 < value2)
-                    result = true;
-                else
-                    result = false;
-            }
-            else if(input.Contains(">"))
-            {
-                if (value1 > value2)
-                    result = true;
-                else
-                    result = false;
-            }
-            else if(input.Contains(">="))
-            {
-                if (value1 >= value2)
-                    result = true;
-                else
-                    result = false;
-            }
-            else if(input.Contains("<="))
-            {
-                if (value1 <= value2)
-                    result = true;
-                else
-                    result = false;
-            }
-            else if(input.Contains("<>"))
-            {
-                if (value1 != value2)
-                    result = true;
-                else
-                    result = false;
-            }
-        }
-
-        if (result)
-        {
-            StartCoroutine("WaitBeforeCallingNextNode");
-        }
         else
-        {
-            StartCoroutine(coroutine);
-        }
+            Debugger.LogError("Une erreur est seurvenue durant l'évaluation de l'expression");
     }
 
     IEnumerator WaitBeforeCallingNextNode()
