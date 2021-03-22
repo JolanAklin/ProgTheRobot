@@ -333,6 +333,11 @@ public class SaveManager : MonoBehaviour
             Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
             Manager.instance.listRobot.Select(robot.id);
         }
+
+        foreach (Nodes node in Nodes.NodesDict.Values)
+        {
+            node.FindParent();
+        }
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
         // create all links from the json created object
         foreach (SplineManager.SerializedSpline serializedSpline in splineList.serializedSplines)

@@ -167,6 +167,7 @@ public class NodeReadWrite : Nodes
         {
             id = id,
             nextNodeId = nextNodeId,
+            parentId = parentId,
             type = "readWrite",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
@@ -180,6 +181,7 @@ public class NodeReadWrite : Nodes
     {
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        parentId = serializableNode.parentId;
         input = serializableNode.nodeSettings[0];
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));

@@ -219,6 +219,7 @@ public class NodeCommande : Nodes
         SerializableNode serializableNode = new SerializableNode() {
             id = id,
             nextNodeId = nextNodeId,
+            parentId = parentId,
             type = "execute",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
@@ -231,6 +232,7 @@ public class NodeCommande : Nodes
     {
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        parentId = serializableNode.parentId;
         input = serializableNode.nodeSettings[0];
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));

@@ -136,6 +136,7 @@ public class NodeMethod : Nodes
         {
             id = id,
             nextNodeId = nextNodeId,
+            parentId = parentId,
             type = "subProgram",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
@@ -149,6 +150,7 @@ public class NodeMethod : Nodes
     {
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        parentId = serializableNode.parentId;
         tMP_Dropdown.value = Convert.ToInt32(serializableNode.nodeSettings[0]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
     }

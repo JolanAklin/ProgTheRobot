@@ -56,6 +56,7 @@ public class NodeStart : Nodes
         {
             id = id,
             nextNodeId = nextNodeId,
+            parentId = parentId,
             type = "start",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
@@ -68,6 +69,7 @@ public class NodeStart : Nodes
     {
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        parentId = serializableNode.parentId;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
     }
     #endregion

@@ -169,6 +169,7 @@ public class NodeIf : Nodes
         {
             id = id,
             nextNodeId = nextNodeId,
+            parentId = parentId,
             type = "test",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
@@ -183,6 +184,7 @@ public class NodeIf : Nodes
     {
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        parentId = serializableNode.parentId;
         input = serializableNode.nodeSettings[0];
         inputField.text = input;
         nextNodeIdFalse = Convert.ToInt32(serializableNode.nodeSettings[1]);

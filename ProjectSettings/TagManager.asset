@@ -62,3 +62,6 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: MoveSplineHandle
+    uniqueID: 2398728121
+    locked: 0

@@ -178,7 +178,7 @@ public class Manager : MonoBehaviour
             // output. Where the spline is created
             actionWhenConnectionFinished = action;
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
-            instance.spline = Instantiate(SplineObject, Vector3.zero, Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
+            instance.spline = Instantiate(SplineObject, new Vector3(0,0,-899), Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
             instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender, handleId);
             node = sender;
         }

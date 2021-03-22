@@ -232,6 +232,7 @@ public abstract class Nodes : MonoBehaviour
 
 
     Vector3 resizeAmount;
+    // resize overlap detection is buggy
     public void Resize()
     {
         // round the mouse position
@@ -248,7 +249,7 @@ public abstract class Nodes : MonoBehaviour
         // change the spline
         OnNodeModified?.Invoke(this, EventArgs.Empty);
 
-        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, resizeAmount, 0f, nodeLayerMask);
+        Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvasRect.sizeDelta / 100, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
         {
             canResize = false;
@@ -260,15 +261,12 @@ public abstract class Nodes : MonoBehaviour
                     break;
                 }
             }
-            if (!canMove)
-            {
-                canResize = false;
-                ChangeBorderColor(errorColor);
-                return;
-            }
         }
-        ChangeBorderColor(defaultColor);
-        canResize = true;
+        Manager.instance.selectedNodeId = -1;
+        if (canResize)
+            ChangeBorderColor(defaultColor);
+        else
+            ChangeBorderColor(errorColor);
     }
 
     public void Resize(Vector2 size)
@@ -327,7 +325,7 @@ public abstract class Nodes : MonoBehaviour
 
                 // changing the sorting order of the canvas to ensure that the node is on the top
                 canvas.sortingOrder = loopArea.nodeCanvas.sortingOrder + 1;
-
+                parentId = loopArea.parent.GetComponent<Nodes>().id;
                 onMoveEnd = () =>
                 {
                     transform.parent = loopArea.parent.transform;
@@ -339,6 +337,8 @@ public abstract class Nodes : MonoBehaviour
         }
         else
         {
+            parentId = -1;
+
             // changing the color back
             if (lastInsideLoopImage != null)
                 lastInsideLoopImage.color = insideNodeColor;
@@ -382,7 +382,8 @@ public abstract class Nodes : MonoBehaviour
     public class SerializableNode
     {
         public int id;
-        public int nextNodeId;
+        public int nextNodeId; // the node after this one
+        public int parentId;
         public string type;
         [SerializeField]
         public float[] position;
@@ -401,6 +402,15 @@ public abstract class Nodes : MonoBehaviour
     /// Will convert the json to a usable node object
     /// </summary>
     public abstract void DeSerializeNode(SerializableNode serializableNode);
+
+    public void FindParent()
+    {
+        if(NodesDict.ContainsKey(parentId))
+        {
+            transform.parent = NodesDict[parentId].transform;
+            canvas.sortingOrder = NodesDict[parentId].GetComponent<Nodes>().canvas.sortingOrder + 1;
+        }
+    }
 
     #endregion
 }

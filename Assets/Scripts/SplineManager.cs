@@ -76,7 +76,7 @@ public class SplineManager : MonoBehaviour
         splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, -0.15f) + Vector3.up;
 
         if(MoveHandle != null)
-            MoveHandle.transform.position = new Vector3(endPos.position.x, endPos.position.y, transform.position.z);
+            MoveHandle.transform.position = new Vector3(endPos.position.x, endPos.position.y, MoveHandle.transform.position.z);
 
         splineMaker.GenerateMesh();
     }
@@ -138,7 +138,7 @@ public class SplineManager : MonoBehaviour
             endPos = handleTransform;
             handleEndNumber = handleId;
             node.OnNodeModified += ChangeSpline;
-            MoveHandle.transform.position = new Vector3(handleTransform.position.x, handleTransform.position.y, transform.position.z); ;
+            MoveHandle.transform.position = new Vector3(handleTransform.position.x, handleTransform.position.y, MoveHandle.transform.position.z); ;
             MoveHandle.SetActive(true);
             nodeEnd = node;
         }

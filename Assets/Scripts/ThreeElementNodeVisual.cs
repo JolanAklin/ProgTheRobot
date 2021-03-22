@@ -41,7 +41,7 @@ public class ThreeElementNodeVisual : MonoBehaviour
             }
         }
         if(nodeCollider != null)
-            nodeCollider.size = new Vector2(canvas.rect.width*canvas.localScale.x, middleSide.rect.height*canvas.localScale.y);
+            nodeCollider.size = new Vector2(canvas.rect.width*canvas.localScale.x, middleSide.rect.height * canvas.localScale.y);
         //canvas.position = new Vector2(nodeRoot.position.x, nodeRoot.position.y);
 
         foreach (AdaptCollider adaptCollider in adaptColliders)

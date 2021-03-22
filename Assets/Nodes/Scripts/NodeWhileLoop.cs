@@ -175,6 +175,7 @@ public class NodeWhileLoop : Nodes
         {
             id = id,
             nextNodeId = nextNodeId,
+            parentId = parentId,
             type = "whileLoop",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
@@ -189,6 +190,7 @@ public class NodeWhileLoop : Nodes
     {
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
+        parentId = serializableNode.parentId;
         input = serializableNode.nodeSettings[0];
         inputField.text = input;
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
