@@ -110,6 +110,7 @@ public class SplineManager : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
+                willBeMoved = false;
                 splineManagers.Remove(this);
                 Destroy(this.gameObject);
             }
@@ -169,6 +170,7 @@ public class SplineManager : MonoBehaviour
 
         if(!willBeMoved)
         {
+            Manager.instance.OnSpline?.Invoke(Manager.instance, new Manager.OnSplineEventArgs() { splineStarted = false});
             ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
             connect.canBeClicked = true;
             connect.image.enabled = true;
