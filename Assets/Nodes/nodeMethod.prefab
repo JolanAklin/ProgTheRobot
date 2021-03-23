@@ -832,7 +832,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3168512350998371172}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.9, y: -2.2, z: 0}
+  m_LocalPosition: {x: -1.2, y: -2.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3168512352252033726}
@@ -882,6 +882,7 @@ MonoBehaviour:
   nextGameObject: {fileID: 0}
   parentId: -1
   nodeVisual: {fileID: 3168512352252033666}
+  numberOfInputConnection: 0
   canvasRect: {fileID: 3168512352252033726}
   nodeLayerMask:
     serializedVersion: 2
@@ -909,6 +910,7 @@ MonoBehaviour:
   insideNodeColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
   infoTextTitle: Bloc sous programme
   infoText: Ce bloc apelle un sous programme.
+  isEndNode: 0
   tMP_Dropdown: {fileID: 7294859057803665673}
 --- !u!1 &3168512351046951637
 GameObject:
@@ -1399,11 +1401,9 @@ MonoBehaviour:
   m_Placeholder: {fileID: 0}
   m_ItemText: {fileID: 1252049340017285702}
   m_ItemImage: {fileID: 0}
-  m_Value: 0
+  m_Value: 1
   m_Options:
-    m_Options:
-    - m_Text: 
-      m_Image: {fileID: 0}
+    m_Options: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

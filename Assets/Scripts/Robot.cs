@@ -115,6 +115,7 @@ public class Robot
                 List.ListElement element = this.CreateScript(pas.scriptName);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
+                Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
                 pas.PopUpClose();
             });
         } });

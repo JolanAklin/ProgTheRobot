@@ -7,17 +7,10 @@ public class NodeStart : Nodes
 {
     public override void Execute()
     {
-        // remove all marks on the terrain
-        rs.robot.robotManager.ResetTerrainObj();
 
         if (!ExecManager.Instance.isRunning)
             return;
         ChangeBorderColor(currentExecutedNode);
-
-        rs.robot.power = rs.robot.defaultPower;
-        rs.robot.robotManager.transform.position = rs.robot.robotManager.robotStartPos;
-        rs.robot.robotManager.transform.rotation = rs.robot.robotManager.robotStartRot;
-        rs.robot.varsManager.Clean();
         StartCoroutine("WaitBeforeCallingNextNode");
     }
 

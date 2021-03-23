@@ -61,7 +61,10 @@ public class RobotScript
         }
         foreach (GameObject spline in splines)
         {
-            spline.SetActive(true);
+            if(spline != null)
+            {
+                spline.SetActive(true);
+            }
         }
         Debug.Log($"Loaded Script {id}");
     }
@@ -78,7 +81,10 @@ public class RobotScript
             }
             foreach (GameObject spline in robotScripts[Manager.instance.currentlySelectedScript].splines)
             {
-                spline.SetActive(false);
+                if(spline != null)
+                {
+                    spline.SetActive(false);
+                }
             }
         }
     }

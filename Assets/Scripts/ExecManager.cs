@@ -45,11 +45,16 @@ public class ExecManager : MonoBehaviour
                 Debugger.ClearDebug();
                 isRunning = true;
                 // call the start node from all main scripts
-                foreach (KeyValuePair<int,Robot> robot in Robot.robots)
+                foreach (Robot robot in Robot.robots.Values)
                 {
-                    if(robot.Value.MainScript.nodeStart != null)
+                    if(robot.MainScript.nodeStart != null)
                     {
-                        robot.Value.MainScript.nodeStart.Execute();
+                        robot.robotManager.ResetTerrainObj();
+                        robot.power = robot.defaultPower;
+                        robot.robotManager.transform.position = robot.robotManager.robotStartPos;
+                        robot.robotManager.transform.rotation = robot.robotManager.robotStartRot;
+                        robot.varsManager.Clean();
+                        robot.MainScript.nodeStart.Execute();
                     }
                 }
             }

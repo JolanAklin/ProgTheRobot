@@ -17,6 +17,9 @@ public class Manager : MonoBehaviour
     public EventHandler CheckNode;
     public bool canExecute = true;
 
+    // update the list of all sub program nodes
+    public EventHandler onScriptAdded;
+
     // the canvas with all the UI
     public GameObject canvas;
     public AspectRatioFitter smallRobotViewAspectRation;

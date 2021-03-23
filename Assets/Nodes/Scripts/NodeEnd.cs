@@ -9,8 +9,16 @@ public class NodeEnd : Nodes
     {
         if (!ExecManager.Instance.isRunning)
             return;
-        ChangeBorderColor(currentExecutedNode);
-        StartCoroutine("WaitBeforeCallingNextNode");
+        if (rs.endCallBack == null)
+        {
+            ChangeBorderColor(currentExecutedNode);
+            StartCoroutine("WaitBeforeCallingNextNode");
+        }
+        else
+        {
+            rs.endCallBack?.Invoke();
+            ChangeBorderColor(defaultColor);
+        }
     }
 
     IEnumerator WaitBeforeCallingNextNode()
@@ -24,7 +32,7 @@ public class NodeEnd : Nodes
     {
         ExecManager.Instance.StopExec();
         rs.End();
-        Debug.Log("its the end");
+        Debug.Log("its the end"); 
     }
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)

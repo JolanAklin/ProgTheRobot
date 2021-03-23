@@ -8,8 +8,15 @@ using System;
 public class NodeMethod : Nodes
 {
     public TMP_Dropdown tMP_Dropdown;
-    private RobotScript nextScript;
-    Dictionary<int, string> options = new Dictionary<int, string>();
+    private int nextScriptId;
+    //Dictionary<int, string> options = new Dictionary<int, string>();
+    Dictionary<int, SubProgram> options = new Dictionary<int, SubProgram>();
+
+    private class SubProgram
+    {
+        public int subProgramId;
+        public string subProgramName;
+    }
 
     new private void Start()
     {
@@ -21,11 +28,13 @@ public class NodeMethod : Nodes
     {
         base.Awake();
         ExecManager.onChangeBegin += LockAllInput;
+        Manager.instance.onScriptAdded += UpdateScriptList;
     }
 
     public void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockAllInput;
+        Manager.instance.onScriptAdded -= UpdateScriptList;
     }
 
     public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
@@ -35,39 +44,33 @@ public class NodeMethod : Nodes
 
     private bool ValidateInput()
     {
-        //if(nextScript != null)
-        //{
-        //    Debug.Log("there");
-        //    if (nextScript.nodeStart != null)
-        //    {
-        //        Debug.Log("there1");
-        //        return true;
-        //    }
-        //}
-        //return false;
         return true;
     }
 
     public void ChangeSelected()
     {
-        // there is one more script in the list and one more in the dropdown. dropdown.value return a one based index, so -1
-        nextScript = rs.robot.robotScripts[options.ElementAt(tMP_Dropdown.value-1).Key];
-        if (!ValidateInput())
-        {
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
+        nextScriptId = options[tMP_Dropdown.value].subProgramId;
+    }
+
+    private void UpdateScriptList(object sender, EventArgs e)
+    {
+        UpdateScriptList();
     }
 
     private void UpdateScriptList()
     {
+        tMP_Dropdown.options.Clear();
+        options.Clear();
         for (int i = 1; i < rs.robot.robotScripts.Count; i++)
         {
-            options.Add(rs.robot.robotScripts[i].id, rs.robot.robotScripts[i].name);
-            tMP_Dropdown.options.Add(new TMP_Dropdown.OptionData() { text = options.ElementAt(i-1).Value, });
+            RobotScript robotScript = rs.robot.robotScripts[i];
+            options.Add(i-1, new SubProgram()
+            {
+                subProgramId = robotScript.id,
+                subProgramName = robotScript.name,
+            });
+            if(rs.id != robotScript.id)
+                tMP_Dropdown.options.Add(new TMP_Dropdown.OptionData() { text = robotScript.name });
         }
     }
 
@@ -89,10 +92,10 @@ public class NodeMethod : Nodes
             return;
         ChangeBorderColor(currentExecutedNode);
 
-        if (nextScript.nodeStart != null)
+        if (RobotScript.robotScripts[nextScriptId].nodeStart != null)
         {
-            rs.endCallBack = () => { StartCoroutine("WaitBeforeCallingNextNode"); };
-            nextScript.nodeStart.Execute();
+            RobotScript.robotScripts[nextScriptId].endCallBack = () => { CallNextNode(); };
+            RobotScript.robotScripts[nextScriptId].nodeStart.Execute();
         }
         else
         {
@@ -100,28 +103,24 @@ public class NodeMethod : Nodes
         }
     }
 
-    IEnumerator WaitBeforeCallingNextNode()
+    public override void CallNextNode()
     {
+
         if (!ExecManager.Instance.debugOn)
         {
-            yield return new WaitForSeconds(executedColorTime / Manager.instance.execSpeed);
             ChangeBorderColor(defaultColor);
-            CallNextNode();
+            if (NodesDict.ContainsKey(nextNodeId))
+                NodesDict[nextNodeId].Execute();
         }
         else
         {
             ExecManager.Instance.buttonNextAction = () => {
-                CallNextNode();
+                if (NodesDict.ContainsKey(nextNodeId))
+                    NodesDict[nextNodeId].Execute();
                 ChangeBorderColor(defaultColor);
             };
 
         }
-    }
-
-    public override void CallNextNode()
-    {
-        if (NodesDict.ContainsKey(nextNodeId))
-            NodesDict[nextNodeId].Execute();
     }
 
     public override void PostExecutionCleanUp(object sender, EventArgs e)
