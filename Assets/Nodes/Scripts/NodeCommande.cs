@@ -59,7 +59,7 @@ public class NodeCommande : Nodes
             case "TurnLeft":
             case "Marquer":
             case "Mark":
-            case "Demarquer":
+            case "Démarquer":
             case "Unmark":
             case "Recharger":
             case "Reload":
@@ -97,7 +97,7 @@ public class NodeCommande : Nodes
             case "Mark":
                 input = Translation.Get("Mark");
                 break;
-            case "Demarquer":
+            case "Démarquer":
             case "Unmark":
                 input = Translation.Get("Unmark");
                 break;
@@ -145,11 +145,11 @@ public class NodeCommande : Nodes
                 break;
             case "Marquer":
             case "Mark":
-                rs.robot.robotManager.Mark();
+                rs.robot.robotManager.Mark(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Demarquer":
+            case "Démarquer":
             case "Unmark":
-                rs.robot.robotManager.Unmark();
+                rs.robot.robotManager.Unmark(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "Recharger":
             case "Reload":
@@ -157,15 +157,15 @@ public class NodeCommande : Nodes
                 break;
             case "PoserBallon":
             case "PlaceBall":
-                rs.robot.robotManager.PlaceBall();
+                rs.robot.robotManager.PlaceBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "PrendreBallon":
             case "TakeBall":
-                rs.robot.robotManager.TakeBall();
+                rs.robot.robotManager.TakeBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "LancerBallon":
             case "ThrowBall":
-                rs.robot.robotManager.ThrowBall();
+                rs.robot.robotManager.ThrowBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
 
             default:

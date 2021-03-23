@@ -8,6 +8,8 @@ public class TerrainInteractableObj : MonoBehaviour
     {
         none = 0,
         PowerPlug,
+        Marking,
+        ball
     }
 
     public ObjectType type;

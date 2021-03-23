@@ -6,5 +6,5 @@ public class PowerOutlet : TerrainInteractableObj
 {
     public uint powerPerTick = 100;
 
-    public uint PowerPerTick { get { return (uint)Mathf.RoundToInt(powerPerTick * Manager.instance.execSpeed); } set => powerPerTick = value; }
+    public uint PowerPerTick { get => powerPerTick; set => powerPerTick = value; }
 }

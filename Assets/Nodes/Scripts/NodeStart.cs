@@ -7,6 +7,10 @@ public class NodeStart : Nodes
 {
     public override void Execute()
     {
+        // remove all marks on the terrain
+        rs.robot.robotManager.RemoveMarks();
+        rs.robot.robotManager.ResetBalls();
+
         if (!ExecManager.Instance.isRunning)
             return;
         ChangeBorderColor(currentExecutedNode);
