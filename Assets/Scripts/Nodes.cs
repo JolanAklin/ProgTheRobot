@@ -83,6 +83,7 @@ public abstract class Nodes : MonoBehaviour
     private GameObject nodeHolder;
     private LoopArea nodesLoopArea;
     private Action onMoveEnd;
+    private List<Nodes> nodesInsideLoop = new List<Nodes>();
 
     public uint nodeExecPower = 5;
 
@@ -301,6 +302,8 @@ public abstract class Nodes : MonoBehaviour
             }
         }
 
+        MoveSplineForNodeInsideLoop(nodesInsideLoop);
+
 
         if (nodesLoopArea != null)
             nodesLoopArea.collider.enabled = false;
@@ -325,12 +328,14 @@ public abstract class Nodes : MonoBehaviour
 
                 // changing the sorting order of the canvas to ensure that the node is on the top
                 canvas.sortingOrder = loopArea.nodeCanvas.sortingOrder + 1;
-                parentId = loopArea.parent.GetComponent<Nodes>().id;
+                Nodes node = loopArea.parent.GetComponent<Nodes>();
+                parentId = node.id;
                 onMoveEnd = () =>
                 {
                     transform.parent = loopArea.parent.transform;
                     float zpos = (loopArea.parent.transform.position.z - 0.001f);
                     transform.position = new Vector3(transform.position.x, transform.position.y, zpos);
+                    node.nodesInsideLoop.Add(this);
                 };
             }
             
@@ -347,6 +352,14 @@ public abstract class Nodes : MonoBehaviour
 
             onMoveEnd = () =>
             {
+                if(NodesDict.ContainsKey(parentId))
+                {
+                    NodesDict[parentId].GetComponent<Nodes>().nodesInsideLoop.Remove(this);
+                }
+                else
+                {
+                    parentId = -1;
+                }
                 transform.parent = nodeHolder.transform;
                 transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
             };
@@ -360,6 +373,15 @@ public abstract class Nodes : MonoBehaviour
         else
         {
             ChangeBorderColor(errorColor);
+        }
+    }
+
+    private void MoveSplineForNodeInsideLoop(List<Nodes> nodes)
+    {
+        foreach (Nodes node in nodes)
+        {
+            node.OnNodeModified?.Invoke(this, EventArgs.Empty);
+            MoveSplineForNodeInsideLoop(node.nodesInsideLoop);
         }
     }
 
@@ -408,7 +430,10 @@ public abstract class Nodes : MonoBehaviour
         if(NodesDict.ContainsKey(parentId))
         {
             transform.parent = NodesDict[parentId].transform;
-            canvas.sortingOrder = NodesDict[parentId].GetComponent<Nodes>().canvas.sortingOrder + 1;
+            Nodes parentNode = NodesDict[parentId].GetComponent<Nodes>();
+            canvas.sortingOrder = parentNode.canvas.sortingOrder + 1;
+            parentNode.nodesInsideLoop.Add(this);
+
         }
     }
 

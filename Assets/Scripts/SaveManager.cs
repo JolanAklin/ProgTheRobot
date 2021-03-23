@@ -342,7 +342,7 @@ public class SaveManager : MonoBehaviour
         // create all links from the json created object
         foreach (SplineManager.SerializedSpline serializedSpline in splineList.serializedSplines)
         {
-            GameObject splineLinkInstance = Instantiate(splineLink, Vector3.zero, Quaternion.identity, nodeHolder);
+            GameObject splineLinkInstance = Instantiate(splineLink, new Vector3(0, 0, -899), Quaternion.identity, nodeHolder);
             SplineManager splineManager = splineLinkInstance.GetComponent<SplineManager>();
             splineManager.DeSerializeSpline(serializedSpline);
         }
