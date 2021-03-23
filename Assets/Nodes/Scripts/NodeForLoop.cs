@@ -209,7 +209,7 @@ public class NodeForLoop : Nodes
                 CallNextNode();
                 ChangeBorderColor(defaultColor);
             };
-
+            ExecManager.Instance.ShowVar();
         }
     }
 

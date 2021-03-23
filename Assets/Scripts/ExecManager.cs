@@ -111,7 +111,6 @@ public class ExecManager : MonoBehaviour
     {
         if(debugOn)
         {
-            ShowVar();
             buttonNextAction?.Invoke();
         }
     }
@@ -124,6 +123,13 @@ public class ExecManager : MonoBehaviour
             {
                 Debugger.Log(var);
             }
+            Debugger.Log($"xRobot de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("xRobot").ToString());
+            Debugger.Log($"yRobot de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("yRobot").ToString());
+            Debugger.Log($"dxRobot de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("dxRobot").ToString());
+            Debugger.Log($"dyRobot de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("dyRobot").ToString());
+            Debugger.Log($"énergie de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("Energie").ToString());
+            Debugger.Log($"xBallon de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("xBallon").ToString());
+            Debugger.Log($"yBallon de {robot.Value.robotName} : " + robot.Value.varsManager.GetFunction("yBallon").ToString());
         }
     }
     public void Stop()

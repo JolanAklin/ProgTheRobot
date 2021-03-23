@@ -198,6 +198,7 @@ public class NodeCommande : Nodes
                 CallNextNode();
                 ChangeBorderColor(defaultColor);
             };
+            ExecManager.Instance.ShowVar();
 
         }
     }

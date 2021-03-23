@@ -119,7 +119,7 @@ public class NodeMethod : Nodes
                     NodesDict[nextNodeId].Execute();
                 ChangeBorderColor(defaultColor);
             };
-
+            ExecManager.Instance.ShowVar();
         }
     }
 

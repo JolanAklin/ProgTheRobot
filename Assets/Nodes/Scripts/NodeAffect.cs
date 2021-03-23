@@ -152,6 +152,7 @@ public class NodeAffect : Nodes
                 CallNextNode();
                 ChangeBorderColor(defaultColor);
             };
+            ExecManager.Instance.ShowVar();
             
         }
     }

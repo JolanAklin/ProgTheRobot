@@ -136,7 +136,7 @@ public class NodeWhileLoop : Nodes
                 CallNextNode();
                 ChangeBorderColor(defaultColor);
             };
-
+            ExecManager.Instance.ShowVar();
         }
     }
 

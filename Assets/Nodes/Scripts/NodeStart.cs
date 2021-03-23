@@ -28,7 +28,7 @@ public class NodeStart : Nodes
                 CallNextNode();
                 ChangeBorderColor(defaultColor);
             };
-
+            ExecManager.Instance.ShowVar();
         }
     }
 

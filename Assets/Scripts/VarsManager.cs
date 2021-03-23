@@ -16,10 +16,6 @@ public class VarsManager
     {
         this.robot = robot;
         rm = robotManager;
-        GetVar("Faux", 0);
-        GetVar("False", 0);
-        GetVar("Vrai", 1);
-        GetVar("True", 1);
     }
 
     /// <summary>
@@ -186,6 +182,11 @@ public class VarsManager
     {
         public bool error = false;
         public bool result;
+
+        public override string ToString()
+        {
+            return result.ToString();
+        }
     }
 
     public BoolFunctionReturn GetBoolFunction(string funcName)
@@ -250,6 +251,11 @@ public class VarsManager
     {
         public bool error = false;
         public int result;
+
+        public override string ToString()
+        {
+            return result.ToString();
+        }
     }
 
     public FunctionReturn GetFunction(string funcName)
@@ -267,10 +273,36 @@ public class VarsManager
             case "yRobot":
                 result = Mathf.RoundToInt(rm.transform.position.z);
                 break;
-            //case "dxRobot":
-            //case "dyRobot":
-            //    if(rm.transform.rotation.z == 0)
-            //        return 1
+            case "dxRobot":
+                switch(Mathf.RoundToInt(rm.transform.rotation.eulerAngles.y))
+                {
+                    case 0:
+                    case 180:
+                        result = 0;
+                        break;
+                    case 90:
+                        result = 1;
+                        break;
+                    case 270:
+                        result = -1;
+                        break;
+                }
+                break;
+            case "dyRobot":
+                switch (Mathf.RoundToInt(rm.transform.rotation.eulerAngles.y))
+                {
+                    case 90:
+                    case -90:
+                        result = 0;
+                        break;
+                    case 0:
+                        result = 1;
+                        break;
+                    case 180:
+                        result = -1;
+                        break;
+                }
+                break;
             case "xBallon":
                 foreach (Ball ball in robot.robotManager.balls)
                 {

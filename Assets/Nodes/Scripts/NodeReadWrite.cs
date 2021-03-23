@@ -144,7 +144,7 @@ public class NodeReadWrite : Nodes
                 CallNextNode();
                 ChangeBorderColor(defaultColor);
             };
-
+            ExecManager.Instance.ShowVar();
         }
     }
 

@@ -147,7 +147,7 @@ public class NodeIf : Nodes
                 NodesDict[nodeId].Execute();
                 ChangeBorderColor(defaultColor);
             };
-
+            ExecManager.Instance.ShowVar();
         }
     }
 
