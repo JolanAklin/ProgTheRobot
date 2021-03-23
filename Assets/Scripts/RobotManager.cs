@@ -61,6 +61,13 @@ public class RobotManager : MonoBehaviour
         }
     }
 
+    public void ResetTerrainObj()
+    {
+        RemoveMarks();
+        ResetBalls();
+        GetBallOnTerrain();
+    }
+
     public void GetBallOnTerrain()
     {
         balls.Clear();

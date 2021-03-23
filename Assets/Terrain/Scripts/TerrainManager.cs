@@ -495,6 +495,14 @@ public class TerrainManager : MonoBehaviour
         }
     }
 
+    public void ResetTerrain()
+    {
+        foreach (Robot robot in Robot.robots.Values)
+        {
+            robot.robotManager.ResetTerrainObj();
+        }
+    }
+
     public GameObject[] fences;
 
     public Material showMat;
