@@ -190,7 +190,7 @@ public class VarsManager
 
     public BoolFunctionReturn GetBoolFunction(string funcName)
     {
-        bool result;
+        bool result = false;
         switch (funcName)
         {
             case "MurEnFace":
@@ -220,9 +220,17 @@ public class VarsManager
             //case "CaseDevantOccupée":
             //case "TileInFrontOccupied":
             //    return false;
-            //case "BallonSurLeSol":
-            //case "BallOnTheGround":
-            //    return false;
+            case "BallonSurLeSol":
+            case "BallOnTheGround":
+                foreach (Ball ball in robot.robotManager.balls)
+                {
+                    if (!ball.ballTaken)
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+                break;
             case "Vrai":
             case "True":
                 result = true;
@@ -246,7 +254,7 @@ public class VarsManager
 
     public FunctionReturn GetFunction(string funcName)
     {
-        int result;
+        int result = 0;
         switch (funcName)
         {
             case "Energie":
@@ -263,8 +271,26 @@ public class VarsManager
             //case "dyRobot":
             //    if(rm.transform.rotation.z == 0)
             //        return 1
-            //case "yBallon":
-            //case "xBallon":
+            case "xBallon":
+                foreach (Ball ball in robot.robotManager.balls)
+                {
+                    if (!ball.ballTaken)
+                    {
+                        result = Mathf.RoundToInt(ball.parent.transform.position.x);
+                        break;
+                    }
+                }
+                break;
+            case "yBallon":
+                foreach (Ball ball in robot.robotManager.balls)
+                {
+                    if(!ball.ballTaken)
+                    {
+                        result = Mathf.RoundToInt(ball.parent.transform.position.z);
+                        break;
+                    }
+                }
+                break;
 
             default:
                 return new FunctionReturn() { error = true };

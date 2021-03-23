@@ -25,6 +25,7 @@ TagManager:
   - Outlet
   - Marking
   - LoopArea
+  - Ball
   layers:
   - Default
   - TransparentFX

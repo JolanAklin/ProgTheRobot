@@ -32,13 +32,14 @@ public class RobotManager : MonoBehaviour
     public uint otherActionPower = 10;
 
     public Transform ballCarryPoint;
-    public Transform ballThrowDir;
     public float ballThrowForce;
 
     public GameObject markingPrefab;
 
     private List<GameObject> markings = new List<GameObject>();
-    private List<Ball> balls = new List<Ball>();
+    private List<Ball> ballsToReset = new List<Ball>();
+    [HideInInspector]
+    public List<Ball> balls = new List<Ball>();
     private float t; // interpolation factor
 
     private void Start()
@@ -57,6 +58,15 @@ public class RobotManager : MonoBehaviour
         foreach (Renderer renderer in renderers)
         {
             renderer.material.color = color;
+        }
+    }
+
+    public void GetBallOnTerrain()
+    {
+        balls.Clear();
+        foreach (GameObject gameObject in GameObject.FindGameObjectsWithTag("Ball"))
+        {
+            balls.Add(gameObject.GetComponent<Ball>());
         }
     }
 
@@ -82,11 +92,11 @@ public class RobotManager : MonoBehaviour
     {
         carryBall = null;
         this.ball = null;
-        foreach (Ball ball in balls)
+        foreach (Ball ball in ballsToReset)
         {
             ball.BallReset();
         }
-        balls.Clear();
+        ballsToReset.Clear();
     }
 
     public void GoForward(Action callBack, Action noPower)
@@ -324,7 +334,7 @@ public class RobotManager : MonoBehaviour
                         if(!tempBall.ballTaken)
                         {
                             ball = tempBall;
-                            balls.Add(ball);
+                            ballsToReset.Add(ball);
                             ball.ballTaken = true;
                             ball.GetObjectPlacement();
 
@@ -418,7 +428,7 @@ public class RobotManager : MonoBehaviour
                 carryBall = null;
                 Rigidbody rb = ball.ballObject.GetComponent<Rigidbody>();
                 rb.isKinematic = false;
-                rb.AddForce(ballThrowDir.position.normalized * ballThrowForce, ForceMode.Force);
+                rb.AddForce(transform.TransformDirection(new Vector3(0, 290, 100)).normalized * ballThrowForce, ForceMode.Force);
                 ball = null;
             }
             

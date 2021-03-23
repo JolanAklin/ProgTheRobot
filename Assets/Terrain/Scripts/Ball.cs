@@ -15,7 +15,7 @@ public class Ball : TerrainInteractableObj
     public void GetObjectPlacement()
     {
         RaycastHit hit;
-        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.z + 0.5f, transform.position.z), transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
+        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + 0.5f, transform.position.z), transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
         {
             hit.collider.TryGetComponent(out DefaultObjectPlacement);
             currentObjectPlacement = DefaultObjectPlacement;

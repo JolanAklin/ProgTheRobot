@@ -10,6 +10,7 @@ public class NodeStart : Nodes
         // remove all marks on the terrain
         rs.robot.robotManager.RemoveMarks();
         rs.robot.robotManager.ResetBalls();
+        rs.robot.robotManager.GetBallOnTerrain();
 
         if (!ExecManager.Instance.isRunning)
             return;
