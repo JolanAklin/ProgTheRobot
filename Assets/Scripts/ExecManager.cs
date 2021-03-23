@@ -38,7 +38,7 @@ public class ExecManager : MonoBehaviour
     {
         // this event is used to lock all the inputs of nodes
         onChangeBegin?.Invoke(this, new onChangeBeginEventArgs() { started = true });
-        if(Manager.instance.canExecute)
+        if(CheckNode())
         {
             if(!isRunning)
             {
@@ -59,6 +59,29 @@ public class ExecManager : MonoBehaviour
             Debugger.Log("Pas tout les blocs ont une configuration valide");
         }
     }
+
+    public bool CheckNode()
+    {
+        Manager.instance.CheckNode?.Invoke(this, EventArgs.Empty);
+        foreach (Nodes node in Nodes.NodesDict.Values)
+        {
+            if(node.NodeErrorCode != Nodes.ErrorCode.ok)
+            {
+                return false;
+            }
+        }
+        return true;
+
+        //if (Manager.instance.canExecute)
+        //{
+        //    Manager.instance.CheckNode?.Invoke(this, EventArgs.Empty);
+        //}
+        //else
+        //{
+        //    Debugger.Log("Pas tout les blocs ont une configuration valide");
+        //}
+    }
+
     public void StopExec()
     {
         // test if all the robot have finished their program, if yes, inputs field can be modified again

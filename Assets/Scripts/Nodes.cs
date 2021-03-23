@@ -56,6 +56,8 @@ public abstract class Nodes : MonoBehaviour
     [HideInInspector]
     public int parentId = -1; // as another node higher in the hierarchy
     public ThreeElementNodeVisual nodeVisual; // change the node element to look good when resized
+    [HideInInspector]
+    public int numberOfInputConnection = 0;
 
     public RectTransform canvasRect; // the node canvas
     private Canvas canvas;
@@ -104,6 +106,8 @@ public abstract class Nodes : MonoBehaviour
     public string infoTextTitle;
     [TextArea]
     public string infoText;
+
+    public bool isEndNode = false;
 
     public void Awake()
     {
@@ -165,20 +169,26 @@ public abstract class Nodes : MonoBehaviour
     // will return true only if there is no error and the node is connected correctly
     private void isConnected(object sender, EventArgs e)
     {
-        if(nextNodeId >= 0)
+        if(numberOfInputConnection > 0 && !isEndNode)
         {
-            if(nodeErrorCode == ErrorCode.notConnected)
+            if(!NodesDict.ContainsKey(nextNodeId))
             {
-                nodeErrorCode = (int)ErrorCode.ok;
-                ChangeBorderColor(defaultColor);
-                Manager.instance.canExecute = true;
+                if(nodeErrorCode == ErrorCode.ok)
+                {
+                    nodeErrorCode = ErrorCode.notConnected;
+                    ChangeBorderColor(errorColor);
+                    Manager.instance.canExecute = false;
+                }
             }
-            return;
+            else
+            {
+                if (nodeErrorCode != ErrorCode.wrongInput)
+                {
+                    nodeErrorCode = ErrorCode.ok;
+                    ChangeBorderColor(defaultColor);
+                }
+            }
         }
-        nodeErrorCode = ErrorCode.notConnected;
-        ChangeBorderColor(errorColor);
-        Manager.instance.canExecute = false;
-        return;
     }
 
     private void FixedUpdate()

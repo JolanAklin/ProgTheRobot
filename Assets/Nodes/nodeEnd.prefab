@@ -972,6 +972,7 @@ MonoBehaviour:
   nextGameObject: {fileID: 0}
   parentId: -1
   nodeVisual: {fileID: 8120454241193560682}
+  numberOfInputConnection: 0
   canvasRect: {fileID: 8120454241193560662}
   nodeLayerMask:
     serializedVersion: 2
@@ -998,6 +999,7 @@ MonoBehaviour:
   insideNodeColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
   infoTextTitle: Bloc de fin
   infoText: "Ce bloc d\xE9fini la fin d'un organigramme."
+  isEndNode: 1
 --- !u!1 &8120454241339052605
 GameObject:
   m_ObjectHideFlags: 0

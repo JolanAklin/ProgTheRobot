@@ -14,7 +14,7 @@ public class Manager : MonoBehaviour
     public event EventHandler OnLanguageChanged;
 
     // trigger an event where every node will test if there is an error in their config
-    public event EventHandler CheckNode;
+    public EventHandler CheckNode;
     public bool canExecute = true;
 
     // the canvas with all the UI
@@ -188,8 +188,8 @@ public class Manager : MonoBehaviour
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
             SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
             splineManager.EndSpline(handleTransform, sender, handleId);
-            //node.nextNodeId = sender.id;
             actionWhenConnectionFinished(sender.id);
+            sender.numberOfInputConnection++;
             return node;
         }
         return null;

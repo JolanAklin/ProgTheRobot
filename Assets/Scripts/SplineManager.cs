@@ -111,7 +111,6 @@ public class SplineManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
             {
                 willBeMoved = false;
-                splineManagers.Remove(this);
                 Destroy(this.gameObject);
             }
             MousePos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition), 1);
@@ -158,11 +157,14 @@ public class SplineManager : MonoBehaviour
 
     private void OnDestroy()
     {
+        splineManagers.Remove(this);
         Manager.instance.node = null;
         nodeStart.OnNodeModified -= ChangeSpline;
+        nodeStart.nextNodeId = -1;
         try
         {
             nodeEnd.OnNodeModified -= ChangeSpline;
+            nodeEnd.numberOfInputConnection--;
         }catch(Exception e)
         {
 
