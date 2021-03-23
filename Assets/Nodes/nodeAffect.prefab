@@ -966,7 +966,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5034817158100937439}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -2.4, z: 0}
+  m_LocalPosition: {x: -3.5, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5034817159356517125}
@@ -1016,6 +1016,7 @@ MonoBehaviour:
   nextGameObject: {fileID: 0}
   parentId: -1
   nodeVisual: {fileID: 5034817159356517177}
+  numberOfInputConnection: 0
   canvasRect: {fileID: 5034817159356517125}
   nodeLayerMask:
     serializedVersion: 2
@@ -1046,6 +1047,7 @@ MonoBehaviour:
   infoTextTitle: Bloc d'affectation
   infoText: "Ce bloc permet d'assigner des valeurs \xE0 des variables.\n\nex : maVar
     = monAutreVar * 2"
+  isEndNode: 0
   inputField: {fileID: 8791487679252678049}
 --- !u!1 &5034817158148821870
 GameObject:

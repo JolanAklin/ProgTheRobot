@@ -51,7 +51,7 @@ public class RobotScript
     // show the node from json when finished
     public void LoadNodes()
     {
-        Manager.instance.HideNodes();
+        HideNodes();
         Manager.instance.currentlySelectedScript = this.id;
         foreach (GameObject node in nodes)
         {
@@ -64,6 +64,23 @@ public class RobotScript
             spline.SetActive(true);
         }
         Debug.Log($"Loaded Script {id}");
+    }
+
+    public void HideNodes()
+    {
+        if(robotScripts.ContainsKey(Manager.instance.currentlySelectedScript))
+        {
+            foreach (GameObject node in robotScripts[Manager.instance.currentlySelectedScript].nodes)
+            {
+                node.transform.GetChild(0).gameObject.SetActive(false);
+                node.transform.GetComponent<BoxCollider2D>().enabled = false;
+
+            }
+            foreach (GameObject spline in robotScripts[Manager.instance.currentlySelectedScript].splines)
+            {
+                spline.SetActive(false);
+            }
+        }
     }
 
     public void End()

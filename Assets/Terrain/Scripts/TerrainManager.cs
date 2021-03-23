@@ -444,7 +444,7 @@ public class TerrainManager : MonoBehaviour
             {
                 if (hit.transform.gameObject.tag != "PlacementOccupied")
                 {
-                    if(!currentFence.activeSelf)
+                    if(!currentObject.activeSelf)
                         currentObject.SetActive(true);
 
                     currentObject.transform.rotation = hit.transform.rotation;
@@ -480,6 +480,18 @@ public class TerrainManager : MonoBehaviour
                     currentObject.SetActive(false);
 
             }
+        }
+    }
+
+    public void RemoveCurrentObject()
+    {
+        if(currentFence != null)
+        {
+            Destroy(currentFence);
+        }
+        if(currentObject != null)
+        {
+            Destroy(currentObject);
         }
     }
 

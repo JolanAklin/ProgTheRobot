@@ -78,7 +78,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702956444976196924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.1, y: -3.4, z: 0}
+  m_LocalPosition: {x: -3.5, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 702956446777199846}
@@ -128,6 +128,7 @@ MonoBehaviour:
   nextGameObject: {fileID: 0}
   parentId: -1
   nodeVisual: {fileID: 702956446777199834}
+  numberOfInputConnection: 0
   canvasRect: {fileID: 702956446777199846}
   nodeLayerMask:
     serializedVersion: 2
@@ -159,6 +160,7 @@ MonoBehaviour:
     test est vrai si maVar + 1 est strictement \xE9gal \xE0 monAutreVar * 2\n\nListe
     des comparateur :\n = : strictement \xE9gale\n > : plus grand que\n < : plus
     petit que\n >= : plus grand ou \xE9gale\n <= : plus petit ou \xE9gal\n <> : diff\xE9rent"
+  isEndNode: 0
   nextNodeIdFalse: 0
   inputField: {fileID: 3899985168870474306}
 --- !u!1 &702956445024769165

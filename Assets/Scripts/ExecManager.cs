@@ -59,6 +59,8 @@ public class ExecManager : MonoBehaviour
             Debugger.Log("Pas tout les blocs ont une configuration valide");
         }
     }
+    
+
 
     public bool CheckNode()
     {
@@ -71,15 +73,11 @@ public class ExecManager : MonoBehaviour
             }
         }
         return true;
+    }
 
-        //if (Manager.instance.canExecute)
-        //{
-        //    Manager.instance.CheckNode?.Invoke(this, EventArgs.Empty);
-        //}
-        //else
-        //{
-        //    Debugger.Log("Pas tout les blocs ont une configuration valide");
-        //}
+    public void InitializeScript()
+    {
+        CheckNode();
     }
 
     public void StopExec()
