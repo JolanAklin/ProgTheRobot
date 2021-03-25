@@ -8,7 +8,7 @@ using System;
 public class NodeMethod : Nodes
 {
     public TMP_Dropdown tMP_Dropdown;
-    private int nextScriptId;
+    private int nextScriptId = 0;
     //Dictionary<int, string> options = new Dictionary<int, string>();
     Dictionary<int, SubProgram> options = new Dictionary<int, SubProgram>();
 
@@ -22,6 +22,7 @@ public class NodeMethod : Nodes
     {
         base.Start();
         UpdateScriptList();
+        tMP_Dropdown.value = dropDownValue;
     }
 
     new private void Awake()
@@ -47,11 +48,6 @@ public class NodeMethod : Nodes
         return true;
     }
 
-    public void ChangeSelected()
-    {
-        nextScriptId = options[tMP_Dropdown.value].subProgramId;
-    }
-
     private void UpdateScriptList(object sender, EventArgs e)
     {
         UpdateScriptList();
@@ -61,22 +57,27 @@ public class NodeMethod : Nodes
     {
         tMP_Dropdown.options.Clear();
         options.Clear();
+        int x = 0;
         for (int i = 1; i < rs.robot.robotScripts.Count; i++)
         {
             RobotScript robotScript = rs.robot.robotScripts[i];
-            options.Add(i-1, new SubProgram()
-            {
-                subProgramId = robotScript.id,
-                subProgramName = robotScript.name,
-            });
             if(rs.id != robotScript.id)
+            {
+                options.Add(x, new SubProgram()
+                {
+                    subProgramId = robotScript.id,
+                    subProgramName = robotScript.name,
+                });
                 tMP_Dropdown.options.Add(new TMP_Dropdown.OptionData() { text = robotScript.name });
+                x++;
+            }
         }
     }
 
 
     public override void Execute()
     {
+        nextScriptId = options[tMP_Dropdown.value].subProgramId;
         // test if the robot has enough power to execute the node, if not he stop the code execution
         if (rs.robot.power <= nodeExecPower)
         {
@@ -128,6 +129,8 @@ public class NodeMethod : Nodes
         ChangeBorderColor(defaultColor);
     }
 
+    private int dropDownValue;
+
     #region save stuff
     public override SerializableNode SerializeNode()
     {
@@ -150,7 +153,7 @@ public class NodeMethod : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        tMP_Dropdown.value = Convert.ToInt32(serializableNode.nodeSettings[0]);
+        dropDownValue = Convert.ToInt32(serializableNode.nodeSettings[0]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
     }
     #endregion

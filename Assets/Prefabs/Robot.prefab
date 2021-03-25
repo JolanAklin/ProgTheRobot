@@ -164,9 +164,9 @@ MonoBehaviour:
   turnPower: 15
   otherActionPower: 10
   ballCarryPoint: {fileID: 480938901750255433}
-  ballThrowDir: {fileID: 6834996077233888922}
   ballThrowForce: 840
   markingPrefab: {fileID: 1330088190758939192, guid: 3718dddbfdc9e4841b12e1ab37fdaa8f, type: 3}
+  balls: []
 --- !u!54 &2722837647033027805
 Rigidbody:
   m_ObjectHideFlags: 0

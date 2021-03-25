@@ -20,8 +20,6 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        mouseSensitivity *= Time.deltaTime;
-        moveSpeed *= Time.deltaTime;
     }
 
     private void Update()
@@ -34,16 +32,16 @@ public class CameraController : MonoBehaviour
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
                     Vector3 moveDir = new Vector3(-Input.GetAxis("Mouse X"), -Input.GetAxis("Mouse Y"), 0).normalized;
-                    Vector3 targetMoveAmount = moveDir * moveSpeed;
+                    Vector3 targetMoveAmount = moveDir * moveSpeed * Time.deltaTime;
                     Vector3 localMove = transform.TransformDirection(targetMoveAmount) * Time.fixedDeltaTime;
                     transform.Translate(transform.InverseTransformDirection(localMove));
                 }
                 else
                 {
-                    horizontalLookRotation += Input.GetAxis("Mouse X") * mouseSensitivity;
+                    horizontalLookRotation += Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
 
-                    verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity;
-                    verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90, 90);
+                    verticalLookRotation += Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
+                    verticalLookRotation = Mathf.Clamp(verticalLookRotation, -90, 0);
 
                     transform.localEulerAngles = new Vector3(-1 * verticalLookRotation, 1 * horizontalLookRotation, 0);
                 }
@@ -54,7 +52,7 @@ public class CameraController : MonoBehaviour
         }
         if(Input.mouseScrollDelta.y != 0 && canMove && !inMove)
         {
-            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * moveSpeed / 4);
+            transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * moveSpeed * Time.deltaTime / 4);
         }
     }
 
