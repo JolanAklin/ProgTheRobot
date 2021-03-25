@@ -9,7 +9,6 @@ public class PopUpMenu : MonoBehaviour
     {
         save = 0,
         load,
-        import,
         newFile,
         options,
         credits

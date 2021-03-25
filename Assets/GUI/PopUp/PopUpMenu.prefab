@@ -559,8 +559,6 @@ MonoBehaviour:
     menuType: save
   - menuObj: {fileID: 4483700838289294463, guid: eaf106e0f6e757640a6126091242b612, type: 3}
     menuType: load
-  - menuObj: {fileID: 9023234560918112960, guid: c37d2fe3c50f490439b8f65f421fd832, type: 3}
-    menuType: import
   - menuObj: {fileID: 665571223315083756, guid: 6171e49db18fbb046aae546a6d46549e, type: 3}
     menuType: newFile
   - menuObj: {fileID: 3338094231214622999, guid: 8d247a5527e8b8249a7c8b23648db8e5, type: 3}
@@ -570,7 +568,6 @@ MonoBehaviour:
   choicesName:
   - Sauvegarder
   - Charger
-  - Importer
   - Nouveau
   - Options
   - "Cr\xE9dits"

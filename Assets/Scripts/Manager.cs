@@ -45,6 +45,7 @@ public class Manager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        Application.targetFrameRate = 60;
     }
 
     private void Start()
@@ -223,6 +224,10 @@ public class Manager : MonoBehaviour
         RobotManager robotManager = Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity).GetComponent<RobotManager>();
         robotManager.robot = robot;
         return robotManager;
+    }
+    public void DestroyObject(GameObject gameObject)
+    {
+        Destroy(gameObject);
     }
 
 

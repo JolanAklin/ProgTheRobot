@@ -80,6 +80,7 @@ public class Robot
 
     public static void DeleteRobot(int id)
     {
+        Manager.instance.DestroyObject(robots[id].robotManager.gameObject);
         robots.Remove(id);
     }
 
@@ -148,11 +149,6 @@ public class Robot
             rs.Clear();
         }
         robotScripts.Clear();
-    }
-
-    ~Robot()
-    {
-        Debug.Log($"{robotName} was destroyed");
     }
 
     #region Save 
