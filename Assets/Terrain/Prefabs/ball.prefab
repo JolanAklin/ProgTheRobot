@@ -138,6 +138,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 3
+  objectRenderers:
+  - {fileID: 494628908962559264}
+  placeHolderMat: {fileID: 2100000, guid: 0625bee2828b9534a94211b90e3016db, type: 2}
   parent: {fileID: 4475532061856234385}
   ballObjectDefaultPos: {fileID: 2707782959042692492}
   ballObject: {fileID: 2152080908129506549}
@@ -204,7 +207,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5027930762632448317}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: 0, y: 0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1966509086845077403}
@@ -239,7 +242,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: edefdb842f4e06c4da8fc3779dddf611, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.1
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: edefdb842f4e06c4da8fc3779dddf611, type: 3}
       propertyPath: m_LocalPosition.z
@@ -295,5 +298,10 @@ GameObject:
 --- !u!4 &1627605428668321359 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: edefdb842f4e06c4da8fc3779dddf611, type: 3}
+  m_PrefabInstance: {fileID: 1233093489843546532}
+  m_PrefabAsset: {fileID: 0}
+--- !u!23 &494628908962559264 stripped
+MeshRenderer:
+  m_CorrespondingSourceObject: {fileID: -7511558181221131132, guid: edefdb842f4e06c4da8fc3779dddf611, type: 3}
   m_PrefabInstance: {fileID: 1233093489843546532}
   m_PrefabAsset: {fileID: 0}

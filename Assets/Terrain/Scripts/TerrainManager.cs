@@ -538,18 +538,28 @@ public class TerrainManager : MonoBehaviour
     {
         GameObject instance = Instantiate(prefab, transform.position, transform.rotation, GameObject.FindGameObjectWithTag("Terrain").transform);
         instance.SetActive(false);
-        foreach (MeshRenderer meshRenderer in instance.transform.GetComponentsInChildren<MeshRenderer>())
+
+        TerrainInteractableObj tio;
+        if((tio = instance.GetComponentInChildren<TerrainInteractableObj>()) != null)
         {
-            meshRenderer.material = showMat;
+            tio.PlaceHolderMat();
         }
         return instance;
     }
 
     private void PlaceObject(GameObject objectToPlace)
     {
-        foreach (MeshRenderer meshRenderer in objectToPlace.transform.GetComponentsInChildren<MeshRenderer>())
+        TerrainInteractableObj tio;
+        if ((tio = objectToPlace.GetComponentInChildren<TerrainInteractableObj>()) != null)
         {
-            meshRenderer.material = finalMat;
+            tio.PlacedMat();
+        }
+        else
+        {
+            foreach (MeshRenderer meshRenderer in objectToPlace.transform.GetComponentsInChildren<MeshRenderer>())
+            {
+                meshRenderer.material = finalMat;
+            }
         }
     }
     #endregion

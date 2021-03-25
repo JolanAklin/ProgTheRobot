@@ -12,6 +12,8 @@ public class Ball : TerrainInteractableObj
     public bool ballTaken;
     public LayerMask objectLayer;
 
+    
+
     public void GetObjectPlacement()
     {
         RaycastHit hit;
