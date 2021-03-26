@@ -21,7 +21,7 @@ public class UIRaycaster : MonoBehaviour
     // resize node
     private ResizeHandle resizeHandle;
     //move node
-    private Nodes nodeToMove;
+    public Nodes nodeToMove;
     private Vector3 beginMoveMousePos;
 
     // move node camera
@@ -35,6 +35,8 @@ public class UIRaycaster : MonoBehaviour
 
     private Nodes selectedNode = null;
 
+    public static UIRaycaster instance;
+
 
     void Start()
     {
@@ -42,6 +44,8 @@ public class UIRaycaster : MonoBehaviour
         eventsystem = GetComponent<EventSystem>();
 
         panelOpen = false;
+
+        instance = this;
     }
 
     void Update()

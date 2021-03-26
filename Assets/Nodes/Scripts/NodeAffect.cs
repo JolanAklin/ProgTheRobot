@@ -48,42 +48,49 @@ public class NodeAffect : Nodes
 
     private bool ValidateInput()
     {
-        string[] delimiters = new string[] { " " };
-        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        if (inputSplited.Length <= 2)
-            return false;
-        if (!inputSplited[0].Any(char.IsDigit))
+        if(input.Length > 0)
         {
-            try
+            string[] delimiters = new string[] { " " };
+            inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+            if (inputSplited.Length <= 2)
+                return false;
+            if (!inputSplited[0].Any(char.IsDigit))
             {
-                if (inputSplited[1] == "=")
+                try
                 {
-                    for (int i = 2; i < inputSplited.Length; i++)
+                    if (inputSplited[1] == "=")
                     {
-                        if (!(inputSplited[i].Any(Char.IsDigit) || inputSplited[i].Any(Char.IsLetter)))
+                        for (int i = 2; i < inputSplited.Length; i++)
                         {
-                            //return VarsManager.CheckVarName(inputSplited[i]);
-                            switch (inputSplited[i])
+                            if (!(inputSplited[i].Any(Char.IsDigit) || inputSplited[i].Any(Char.IsLetter)))
                             {
-                                case "+":
-                                case "-":
-                                case "*":
-                                case "/":
-                                case "(":
-                                case ")":
-                                    break;
-                                default:
-                                    return false;
+                                //return VarsManager.CheckVarName(inputSplited[i]);
+                                switch (inputSplited[i])
+                                {
+                                    case "+":
+                                    case "-":
+                                    case "*":
+                                    case "/":
+                                    case "(":
+                                    case ")":
+                                        break;
+                                    default:
+                                        return false;
+                                }
                             }
                         }
+                        return true;
                     }
-                    return true;
+                }
+                catch
+                {
+                    return false;
                 }
             }
-            catch
-            {
-                return false;
-            }
+        }
+        else
+        {
+            return true;
         }
         return false;
     }

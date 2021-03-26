@@ -527,7 +527,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6743916129687385063}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1, y: -0.7, z: 0}
+  m_LocalPosition: {x: -2.4, y: -1.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6743916129884983869}
@@ -577,6 +577,7 @@ MonoBehaviour:
   nextGameObject: {fileID: 0}
   parentId: -1
   nodeVisual: {fileID: 6743916129884983809}
+  numberOfInputConnection: 0
   canvasRect: {fileID: 6743916129884983869}
   nodeLayerMask:
     serializedVersion: 2
@@ -606,6 +607,7 @@ MonoBehaviour:
   infoText: "Ce bloc affiche ou lit une entr\xE9e utilisateur\n\nex : Lire test\n\nTest
     prendra donc la valeur sp\xE9cifi\xE9e par l'utilisateur\n\nValeur possible :\n-
     Lire\n - Afficher"
+  isEndNode: 0
   inputField: {fileID: 7082423944652430489}
 --- !u!1 &6743916129740016214
 GameObject:

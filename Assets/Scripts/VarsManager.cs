@@ -144,7 +144,7 @@ public class VarsManager
                 case "Out":
                 case "RobotSurUnePrise":
                 case "RobotOnAnOutlet":
-                case "CaseMarqué":
+                case "CaseMarquée":
                 case "TileMarked":
                 case "CaseDevantOccupée":
                 case "TileInFrontOccupied":
@@ -214,7 +214,7 @@ public class VarsManager
             case "RobotOnAnOutlet":
                 result = rm.IsOnAnOutlet();
                 break;
-            case "CaseMarqué":
+            case "CaseMarquée":
             case "TileMarked":
                 result = rm.IsCaseMarked();
                 break;
@@ -263,6 +263,10 @@ public class VarsManager
         int result = 0;
         switch (funcName)
         {
+            case "DistanceMur":
+            case "WallDistance":
+                result = rm.WallDistance();
+                break;
             case "Energie":
             case "Power":
                 result = (int)robot.power;
@@ -382,6 +386,70 @@ public class VarsManager
     {
         public bool error = false;
         public bool result;
+    }
+
+    public bool CheckExpression(string expression)
+    {
+        string[] stringsToFind = new string[] { "Ou", "Or", "Et", "And" };
+        string[] exprSplit = expression.Split(stringsToFind, StringSplitOptions.None);
+
+        bool expressionIsValid = false;
+        foreach (string item in exprSplit)
+        {
+            string[] separators = new string[] { " " };
+            string[] smallExprSplit = item.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+            switch (smallExprSplit.Length)
+            {
+                // get the corresponding function, if it exist, and adds it to the result list
+                case 1:
+                    expressionIsValid = true;
+                    break;
+                // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
+                case 2:
+                    if (smallExprSplit[0] == "Non" || smallExprSplit[0] == "No")
+                    {
+                        expressionIsValid = true;
+                    }
+                    else
+                    {
+                        expressionIsValid = false;
+                    }
+                    break;
+                // evaluate an expression like this : test + 2 = myVar + 4
+                default:
+                    string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
+                    List<string> exprPart1 = new List<string>();
+                    List<string> exprPart2 = new List<string>();
+                    bool findDelimiter = false;
+                    foreach (string exprBits in smallExprSplit)
+                    {
+                        if (!findDelimiter)
+                        {
+                            foreach (string del in delimiters)
+                            {
+                                if (exprBits == del)
+                                {
+                                    findDelimiter = true;
+                                    break;
+                                }
+                            }
+                            if (!findDelimiter)
+                                exprPart1.Add(exprBits);
+                        }
+                        else
+                        {
+                            exprPart2.Add(exprBits);
+                        }
+                    }
+                    if (exprPart1.Count > 0 && exprPart2.Count > 0)
+                        expressionIsValid = true;
+                    else
+                        expressionIsValid = false;
+                    break;
+            }
+        }
+        return expressionIsValid;
     }
 
     public Evaluation Evaluate(string expression)

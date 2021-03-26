@@ -47,38 +47,10 @@ public class NodeIf : Nodes
 
     private bool ValidateInput()
     {
-        //string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
-        //inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        //if(inputSplited.Length == 1)
-        //{
-        //    switch(inputSplited[0])
-        //    {
-        //        case "MurEnFace":
-        //        case "WallInFront":
-        //        case "MurADroite":
-        //        case "WallRight":
-        //        case "MurAGauche":
-        //        case "WallLeft":
-        //        case "Sorti":
-        //        case "Out":
-        //        case "RobotSurUnePrise":
-        //        case "RobotOnAnOutlet":
-        //        case "CaseMarqué":
-        //        case "TileMarked":
-        //        case "CaseDevantOccupée":
-        //        case "TileInFrontOccupied":
-        //        case "BallonSurLeSol":
-        //        case "BallOnTheGround":
-        //        case "Vrai":
-        //        case "True":
-        //        case "Faux":
-        //        case "False":
-        //            return true;
-        //    }
-        //}
-        //if (inputSplited.Length > 2 || inputSplited.Length == 1)
-        //    return false;
-        return true;
+        if (input.Length > 0)
+            return rs.robot.varsManager.CheckExpression(input);
+        else
+            return true;
     }
 
     public override void Execute()

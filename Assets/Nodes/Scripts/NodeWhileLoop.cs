@@ -50,25 +50,20 @@ public class NodeWhileLoop : Nodes
 
     private bool ValidateInput()
     {
-        //try
-        //{
-        //    string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
-        //    inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        //    if (!(inputSplited[0].IndexOf("TantQue") == 0 || inputSplited[0].IndexOf("While") == 0))
-        //        return false;
-        //    if (inputSplited.Length > 2 || inputSplited.Length == 1)
-        //        return false;
-        //    delimiters = new string[] { "While", "TantQue" };
-        //    string[] inputSplitedFirstPart = inputSplited[0].Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        //    if (inputSplitedFirstPart.Length > 1 || inputSplitedFirstPart[0] == "TantQue" || inputSplitedFirstPart[0] == "While")
-        //        return false;
-        //    TranslateText(this, EventArgs.Empty);
-        //    return true;
-        //}catch(Exception e)
-        //{
-        //    return false;
-        //}
-        return true;
+        if (input.Length > 0)
+        {
+            if (input.StartsWith("TantQue") || input.StartsWith("While"))
+            {
+                string expr = input.Replace("TantQue", "");
+                expr = expr.Replace("While", "");
+                return rs.robot.varsManager.CheckExpression(expr);
+            }
+        }
+        else
+        {
+            return true;
+        }
+        return false;
     }
 
     private void TranslateText(object sender, EventArgs e)

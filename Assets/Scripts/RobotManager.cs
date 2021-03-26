@@ -311,6 +311,7 @@ public class RobotManager : MonoBehaviour
 
     private IEnumerator Charge(PowerOutlet powerOutlet)
     {
+        powerOutlet.StartParticleSystem();
         while(robot.power < robot.defaultPower)
         {
             if(robot.power + powerOutlet.PowerPerTick <= robot.defaultPower)
@@ -319,6 +320,7 @@ public class RobotManager : MonoBehaviour
                 robot.power = robot.defaultPower;
             yield return new WaitForSeconds(3/Manager.instance.execSpeed);
         }
+        powerOutlet.StopParticleSystem();
         callBack?.Invoke();
     }
 
@@ -484,6 +486,16 @@ public class RobotManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public int WallDistance()
+    {
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.right), out hit, Mathf.Infinity, wallLayer))
+        {
+            return Mathf.RoundToInt(hit.distance);
+        }
+        return 0;
     }
 
     public bool IsOut()

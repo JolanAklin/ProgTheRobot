@@ -47,7 +47,11 @@ public class AddNodeScript : MonoBehaviour
 
                     node.transform.position = spawnPos;
                     RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodes.Add(instantiatedNode);
-                    instantiatedNode.GetComponent<Nodes>().rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript]; // make the node aware in which robotScript he is
+                    Nodes nodeScript = instantiatedNode.GetComponent<Nodes>();
+                    nodeScript.rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript]; // make the node aware in which robotScript he is
+
+                    nodeScript.StartMove();
+                    UIRaycaster.instance.nodeToMove = nodeScript;
                 }
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);

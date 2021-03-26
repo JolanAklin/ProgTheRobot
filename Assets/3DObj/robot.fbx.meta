@@ -3,7 +3,22 @@ guid: 45bf3c5212d946f4492dc2f1f23cb77d
 ModelImporter:
   serializedVersion: 20200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metal
+    second: {fileID: 2100000, guid: 963736f4b6348c445a425b9000d80982, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: screen
+    second: {fileID: 2100000, guid: c8aec4b8917496b45a36c43ef3a3a5ee, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: tire
+    second: {fileID: 2100000, guid: 44dcb98da09818e47b1eaeed421e8baa, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

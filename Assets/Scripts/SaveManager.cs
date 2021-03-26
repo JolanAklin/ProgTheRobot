@@ -347,6 +347,12 @@ public class SaveManager : MonoBehaviour
             splineManager.DeSerializeSpline(serializedSpline);
         }
 
+        // hide all nodes and splines from all scripts
+        foreach (RobotScript rs in RobotScript.robotScripts.Values)
+        {
+            rs.HideNodesForThisScript();
+        }
+
         Manager.instance.listRobot.SelectFirst();
 
         // create the terrain

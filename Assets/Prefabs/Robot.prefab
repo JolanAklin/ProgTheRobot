@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6834996077233888922}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ballThrowDir
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -145,10 +145,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   renderers:
   - {fileID: 7275399691306443028}
-  - {fileID: 3509997162206546644}
   - {fileID: 2942545356501605176}
   - {fileID: 230097236367227916}
   - {fileID: 7290907116305010635}
+  - {fileID: 3509997162206546644}
   robotStartPos: {x: 0, y: 0, z: 0}
   robotStartRot: {x: 0, y: 0, z: 0, w: 0}
   wallLayer:
@@ -317,6 +317,10 @@ PrefabInstance:
       value: 8
       objectReference: {fileID: 0}
     - target: {fileID: -1946815813645408259, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: -1800040556390063913, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}

@@ -69,6 +69,23 @@ public class RobotScript
         Debug.Log($"Loaded Script {id}");
     }
 
+    public void HideNodesForThisScript()
+    {
+        foreach (GameObject node in nodes)
+        {
+            node.transform.GetChild(0).gameObject.SetActive(false);
+            node.transform.GetComponent<BoxCollider2D>().enabled = false;
+
+        }
+        foreach (GameObject spline in splines)
+        {
+            if (spline != null)
+            {
+                spline.SetActive(false);
+            }
+        }
+    }
+
     public void HideNodes()
     {
         if(robotScripts.ContainsKey(Manager.instance.currentlySelectedScript))

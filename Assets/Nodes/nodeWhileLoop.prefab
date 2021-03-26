@@ -2660,7 +2660,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5158547176770619525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.6, y: -2.3, z: 0}
+  m_LocalPosition: {x: -2, y: -2.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5158547174704327007}
@@ -2722,7 +2722,10 @@ MonoBehaviour:
     boucle sera ex\xE9cut\xE9e tant que maVar + 1 est strictement \xE9gal \xE0 monAutreVar
     * 2\n\nListe des comparateur :\n = : strictement \xE9gale\n > : plus grand que\n<
     : plus petit que\n >= : plus grand ou \xE9gale\n <= : plus petit ou \xE9gal\n<>
-    : diff\xE9rent"
+    : diff\xE9rent\n\nOp\xE9rateurs logique :\n Et\n Ou\n Non\n Vrai\n Faux\n\nFonctions
+    :\n - MurEnFace\r\n - MurADroite\r\n - MurAGauche\r\n - Sorti\r\n - RobotSurUnePrise\r\n-
+    CaseMarqu\xE9e\r\n - BallonSurLeSol\r\n - DistanceMur\r\n - Energie\r\n - xRobot\r\n-
+    yRobot\r\n - dxRobot\r\n - dyRobot\r\n - xBallon\r\n - yBallon"
   isEndNode: 0
   inputField: {fileID: 1159343116539730625}
   nextNodeInside: -1
