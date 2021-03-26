@@ -10,6 +10,10 @@ public class ExecManager : MonoBehaviour
 
     public static ExecManager Instance { get => instance; private set => instance = value; }
 
+    public Button startButton;
+    public Button stopButton;
+    public Button nextStepButton;
+
     [HideInInspector]
     public bool isRunning = false;
 
@@ -44,6 +48,10 @@ public class ExecManager : MonoBehaviour
             {
                 Debugger.ClearDebug();
                 isRunning = true;
+                startButton.interactable = false;
+                stopButton.interactable = true;
+                if (debugOn)
+                    nextStepButton.interactable = true;
                 // call the start node from all main scripts
                 foreach (Robot robot in Robot.robots.Values)
                 {
@@ -91,6 +99,10 @@ public class ExecManager : MonoBehaviour
         numberOfStopExecReceived++;
         if(numberOfStopExecReceived == Robot.robots.Count)
         {
+            startButton.interactable = true;
+            stopButton.interactable = false;
+            nextStepButton.interactable = false;
+
             numberOfStopExecReceived = 0;
 
             Instance.isRunning = false;
