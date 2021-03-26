@@ -56,8 +56,10 @@ public class RobotScript
         foreach (GameObject node in nodes)
         {
             node.transform.GetChild(0).gameObject.SetActive(true);
-            node.transform.GetComponent<BoxCollider2D>().enabled = true;
-
+            foreach (BoxCollider2D collider2D in node.transform.GetComponents<BoxCollider2D>())
+            {
+                collider2D.enabled = true;
+            }
         }
         foreach (GameObject spline in splines)
         {
@@ -74,8 +76,10 @@ public class RobotScript
         foreach (GameObject node in nodes)
         {
             node.transform.GetChild(0).gameObject.SetActive(false);
-            node.transform.GetComponent<BoxCollider2D>().enabled = false;
-
+            foreach (BoxCollider2D collider2D in node.transform.GetComponents<BoxCollider2D>())
+            {
+                collider2D.enabled = false;
+            }
         }
         foreach (GameObject spline in splines)
         {
@@ -93,8 +97,10 @@ public class RobotScript
             foreach (GameObject node in robotScripts[Manager.instance.currentlySelectedScript].nodes)
             {
                 node.transform.GetChild(0).gameObject.SetActive(false);
-                node.transform.GetComponent<BoxCollider2D>().enabled = false;
-
+                foreach (BoxCollider2D collider2D in node.transform.GetComponents<BoxCollider2D>())
+                {
+                    collider2D.enabled = false;
+                }
             }
             foreach (GameObject spline in robotScripts[Manager.instance.currentlySelectedScript].splines)
             {

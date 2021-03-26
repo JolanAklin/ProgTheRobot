@@ -20,6 +20,8 @@ public class AddNodeScript : MonoBehaviour
     // create the add node panel and sets it's actions
     private void Start()
     {
+        if (UIRaycaster.instance.nodeToMove != null)
+            Destroy(this.gameObject);
         nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
 
         GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");

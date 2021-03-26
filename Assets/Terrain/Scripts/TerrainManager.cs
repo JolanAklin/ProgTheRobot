@@ -500,6 +500,8 @@ public class TerrainManager : MonoBehaviour
         foreach (Robot robot in Robot.robots.Values)
         {
             robot.robotManager.ResetTerrainObj();
+            robot.robotManager.transform.position = robot.robotManager.robotStartPos;
+            robot.robotManager.transform.rotation = robot.robotManager.robotStartRot;
         }
     }
 
