@@ -57,7 +57,7 @@ public class UIRaycaster : MonoBehaviour
         rayCastResults = new List<RaycastResult>();
         graphicraycaster.Raycast(pointerevent, rayCastResults);
 
-        if (Input.GetMouseButtonDown(1) && !panelOpen && rayCastResults.Count == 0)
+        if (Input.GetMouseButtonDown(1) && !panelOpen && rayCastResults.Count == 0 && nodeToMove == null)
         {
             addNodeMenu = Instantiate(addNodeMenuInstance, Input.mousePosition, Quaternion.identity, transform);
             addNodeMenu.tag = "MenuAddScript";
