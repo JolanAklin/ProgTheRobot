@@ -13,6 +13,7 @@ public class ExecManager : MonoBehaviour
     public Button startButton;
     public Button stopButton;
     public Button nextStepButton;
+    public Button modifyTerrainButton;
 
     [HideInInspector]
     public bool isRunning = false;
@@ -50,6 +51,7 @@ public class ExecManager : MonoBehaviour
                 isRunning = true;
                 startButton.interactable = false;
                 stopButton.interactable = true;
+                modifyTerrainButton.interactable = false;
                 if (debugOn)
                     nextStepButton.interactable = true;
                 // call the start node from all main scripts
@@ -102,6 +104,7 @@ public class ExecManager : MonoBehaviour
             startButton.interactable = true;
             stopButton.interactable = false;
             nextStepButton.interactable = false;
+            modifyTerrainButton.interactable = true;
 
             numberOfStopExecReceived = 0;
 

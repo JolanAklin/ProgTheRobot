@@ -58,7 +58,7 @@ public class PopUpMenu : MonoBehaviour
 
     public void Quit()
     {
-        // test if there is changes before exiting
+        Close();
         Application.Quit();
     }
 }
