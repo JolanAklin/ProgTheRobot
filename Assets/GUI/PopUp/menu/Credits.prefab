@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2857878344863528977}
   - component: {fileID: 4653554617249488553}
   - component: {fileID: 4505338055177307494}
+  - component: {fileID: 6217631629312282426}
   m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
@@ -32,11 +33,11 @@ RectTransform:
   m_Father: {fileID: 857795201089396778}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -50}
-  m_SizeDelta: {x: 0, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -120}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &4653554617249488553
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -65,7 +66,30 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Copyright 2021 Jolan Aklin
+  m_text: 'Copyright 2021 Jolan Aklin
+
+
+    Prog the robot is free software: you
+    can redistribute it and/or modify
+
+    it under the terms of the GNU General
+    Public License as published by
+
+    the Free Software Foundation, version 3 of
+    the License.
+
+
+
+    Prog the robot is distributed in the hope that it will be
+    useful,
+
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+
+    MERCHANTABILITY
+    or FITNESS FOR A PARTICULAR PURPOSE.See the
+
+    GNU General Public License for
+    more details.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -134,6 +158,20 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &6217631629312282426
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 705280456246998426}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_HorizontalFit: 0
+  m_VerticalFit: 2
 --- !u!114 &887952899398338430
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,11 +329,11 @@ RectTransform:
   m_Father: {fileID: 857795201089396778}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: -50}
   m_SizeDelta: {x: 0, y: 50}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!222 &5850178269663772848
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1033,7 +1071,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 270}
+  m_SizeDelta: {x: 0, y: 410}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!1 &7706899346170978161
 GameObject:
@@ -1380,7 +1418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 769565467620472037, guid: 7a48d501bb0d62449be63e0746059fa6, type: 3}
       propertyPath: m_Size
-      value: 0.06311377
+      value: 0.062203787
       objectReference: {fileID: 0}
     - target: {fileID: 769565467620472037, guid: 7a48d501bb0d62449be63e0746059fa6, type: 3}
       propertyPath: m_Value
@@ -1532,14 +1570,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7a48d501bb0d62449be63e0746059fa6, type: 3}
---- !u!1 &1776293177556468459 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1918432224532390570, guid: 7a48d501bb0d62449be63e0746059fa6, type: 3}
-  m_PrefabInstance: {fileID: 160171126559760449}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7431644949390738815 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 7285570197708907838, guid: 7a48d501bb0d62449be63e0746059fa6, type: 3}
+  m_PrefabInstance: {fileID: 160171126559760449}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1776293177556468459 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1918432224532390570, guid: 7a48d501bb0d62449be63e0746059fa6, type: 3}
   m_PrefabInstance: {fileID: 160171126559760449}
   m_PrefabAsset: {fileID: 0}
 --- !u!224 &504271279622184796 stripped
