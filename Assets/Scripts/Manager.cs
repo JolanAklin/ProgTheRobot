@@ -260,7 +260,7 @@ public class Manager : MonoBehaviour
         if(!quit)
         {
             PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), instance.canvas.transform).GetComponent<PopUpWarning>();
-            sw.warningText.text = "Des changement ne sont peut-être pas sauvegarder";
+            sw.warningText.text = "Des changements ne sont peut-être pas sauvegardés";
             sw.SetCancelAction(() =>
             {
                 sw.Close();
