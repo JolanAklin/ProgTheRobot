@@ -125,6 +125,21 @@ public abstract class Nodes : MonoBehaviour
 
     public bool isEndNode = false;
 
+    //start tpi
+    [Header("Size")]
+    [Tooltip("Put minWidth and maxWidth to same number to prevent the node to be resized")]
+    public float minWidth;
+    [Tooltip("Put minHeight and maxHeight to same number to prevent the node to be resized")]
+    public float minHeight;
+    [Tooltip("Put minWidth and maxWidth to same number to prevent the node to be resized")]
+    public float maxWidth;
+    [Tooltip("Put minHeight and maxHeight to same number to prevent the node to be resized")]
+    public float maxHeight;
+    [Tooltip("Width will be multiplied by the height * minAspectRation. Put this number to 0 to do nothing")]
+    public float minAspectRatio;
+    //end tpi
+
+
     public void Awake()
     {
         // All nodes have a different id
@@ -269,6 +284,17 @@ public abstract class Nodes : MonoBehaviour
 
         // The delta is calculated between the center and the corner. It is multiplied by 2 to have the full height
         resizeAmount = new Vector3((float)Math.Round(delta.x*2, 1), (float)Math.Round(delta.y*2, 1), 0);
+
+        //start tpi
+        // apply a min form factor to the node. It prevent it from making some weird visual for some of them
+        if(resizeAmount.x < resizeAmount.y * minAspectRatio && minAspectRatio != 0)
+        {
+            resizeAmount.x = resizeAmount.y * minAspectRatio;
+        }
+        // clamp the node size
+        resizeAmount = new Vector3(Mathf.Clamp(resizeAmount.x, minWidth, maxWidth), Mathf.Clamp(resizeAmount.y, minHeight, maxHeight), 0);
+        //end tpi
+
         // scale the size by a 100 cause the canvas scale is multiplied by 0.01
         canvasRect.sizeDelta = resizeAmount*100;
 

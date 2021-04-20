@@ -520,7 +520,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1052317501531756442}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -7.3, y: 3.6, z: 0}
+  m_LocalPosition: {x: -3.4, y: 4.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1052317501844846144}
@@ -599,6 +599,10 @@ MonoBehaviour:
   infoText: "Ce bloc est le d\xE9part de l'organigramme. Il peut y en avoir un seul
     par organigramme."
   isEndNode: 0
+  minWidth: 2
+  minHeight: 0.5
+  maxWidth: 2
+  maxHeight: 0.5
 --- !u!1 &1052317501700690350
 GameObject:
   m_ObjectHideFlags: 0

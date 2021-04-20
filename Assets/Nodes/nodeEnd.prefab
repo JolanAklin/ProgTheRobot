@@ -922,7 +922,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8120454241257089932}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: 1.8, z: 0}
+  m_LocalPosition: {x: -0.7, y: 2.8, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8120454241193560662}
@@ -1000,6 +1000,11 @@ MonoBehaviour:
   infoTextTitle: Bloc de fin
   infoText: "Ce bloc d\xE9fini la fin d'un organigramme."
   isEndNode: 1
+  minWidth: 2
+  minHeight: 0.5
+  maxWidth: 2
+  maxHeight: 0.5
+  minAspectRatio: 0
 --- !u!1 &8120454241339052605
 GameObject:
   m_ObjectHideFlags: 0

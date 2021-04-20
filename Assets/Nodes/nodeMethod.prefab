@@ -911,6 +911,10 @@ MonoBehaviour:
   infoTextTitle: Bloc sous programme
   infoText: Ce bloc apelle un sous programme.
   isEndNode: 0
+  minWidth: 2
+  minHeight: 0.5
+  maxWidth: 200
+  maxHeight: 50
   tMP_Dropdown: {fileID: 7294859057803665673}
 --- !u!1 &3168512351046951637
 GameObject:

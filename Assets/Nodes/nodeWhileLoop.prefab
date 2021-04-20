@@ -2660,7 +2660,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5158547176770619525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.4, y: -2.6, z: 0}
+  m_LocalPosition: {x: -2.9, y: -5.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5158547174704327007}
@@ -2727,6 +2727,11 @@ MonoBehaviour:
     CaseMarqu\xE9e\r\n - BallonSurLeSol\r\n - DistanceMur\r\n - Energie\r\n - xRobot\r\n-
     yRobot\r\n - dxRobot\r\n - dyRobot\r\n - xBallon\r\n - yBallon"
   isEndNode: 0
+  minWidth: 2
+  minHeight: 2
+  maxWidth: 200
+  maxHeight: 200
+  minAspectRatio: 0
   inputField: {fileID: 1159343116539730625}
   nextNodeInside: -1
 --- !u!61 &7273554834798435417

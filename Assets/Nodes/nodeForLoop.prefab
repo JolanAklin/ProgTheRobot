@@ -2793,6 +2793,10 @@ MonoBehaviour:
     quelconque\n0 est le chiffre de d\xE9part de la variable\n10 est le nombre auxquel
     i va s'arr\xEAter\n2 est l'incr\xE9mentation de i \xE0 chaque passage"
   isEndNode: 0
+  minWidth: 2
+  minHeight: 2
+  maxWidth: 200
+  maxHeight: 200
   inputField: {fileID: 722380815501715896}
   nextNodeInside: -1
 --- !u!61 &5446191239289844097

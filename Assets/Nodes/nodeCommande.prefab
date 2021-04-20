@@ -419,6 +419,10 @@ MonoBehaviour:
     actions que le robot peut faire :\n - Avancer\n - TournerADroite\n - TournerAGauche\n-
     Marquer\n - D\xE9marquer\n - Recharger\n - PoserBallon\n - PrendreBallon\n- LancerBallon"
   isEndNode: 0
+  minWidth: 2
+  minHeight: 0.5
+  maxWidth: 200
+  maxHeight: 50
   inputField: {fileID: 892941907719725026}
 --- !u!1 &8025506041546081060
 GameObject:

@@ -1048,6 +1048,10 @@ MonoBehaviour:
   infoText: "Ce bloc permet d'assigner des valeurs \xE0 des variables.\n\nex : maVar
     = monAutreVar * 2"
   isEndNode: 0
+  minWidth: 2
+  minHeight: 0.5
+  maxWidth: 200
+  maxHeight: 50
   inputField: {fileID: 8791487679252678049}
 --- !u!1 &5034817158148821870
 GameObject:
