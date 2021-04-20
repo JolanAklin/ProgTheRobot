@@ -181,7 +181,7 @@ public class SplineManager : MonoBehaviour
         {
             nodeEnd.OnNodeModified -= ChangeSpline;
             nodeEnd.numberOfInputConnection--;
-        }catch(Exception e)
+        }catch(Exception)
         {
 
         }

@@ -22,7 +22,7 @@ public class PowerOutlet : TerrainInteractableObj
 {
     public uint powerPerTick = 100;
 
-    public ParticleSystem particleSystem;
+    new public ParticleSystem particleSystem;
 
    
     public uint PowerPerTick { get => powerPerTick; set => powerPerTick = value; }

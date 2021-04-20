@@ -205,12 +205,29 @@ public class Manager : MonoBehaviour
         if (isInput)
         {
             // input. Where the spline ends
-            OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
-            SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
-            splineManager.EndSpline(handleTransform, sender, handleId);
-            actionWhenConnectionFinished(sender.id);
-            sender.numberOfInputConnection++;
-            return node;
+
+            //start tpi
+            // check if the node contain the same handle as the one passed in the parameters
+            bool canConnect = true;
+            foreach (GameObject handle in node.handleEndArray)
+            {
+                if (handle == sender.handleEndArray[handleId])
+                {
+                    canConnect = false;
+                    break;
+                }
+            }
+            if(canConnect)
+            {
+                OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
+                SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
+                splineManager.EndSpline(handleTransform, sender, handleId);
+                actionWhenConnectionFinished(sender.id);
+                sender.numberOfInputConnection++;
+                return node;
+            }
+            return null;
+            //end tpi
         }
         return null;
     }

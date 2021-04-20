@@ -561,7 +561,7 @@ public class VarsManager
                     {
                         value1 = Convert.ToInt32(new DataTable().Compute(string.Join("", robot.varsManager.ReplaceStringsByVar(exprPart1.ToArray())), null));
                         value2 = Convert.ToInt32(new DataTable().Compute(string.Join("", robot.varsManager.ReplaceStringsByVar(exprPart2.ToArray())), null));
-                    }catch (Exception e)
+                    }catch (Exception)
                     {
                         return new Evaluation() { error = true };
                     }

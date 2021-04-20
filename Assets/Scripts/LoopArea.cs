@@ -24,5 +24,5 @@ public class LoopArea : MonoBehaviour
     public GameObject parent;
     public Canvas nodeCanvas;
     public Image image;
-    public BoxCollider2D collider;
+    new public BoxCollider2D collider;
 }
