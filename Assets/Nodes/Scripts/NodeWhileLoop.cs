@@ -49,13 +49,11 @@ public class NodeWhileLoop : Nodes
     {
         base.Awake();
         nodeTypes = NodeTypes.whileLoop;
-        Manager.instance.OnLanguageChanged += TranslateText;
         ExecManager.onChangeBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
-        Manager.instance.OnLanguageChanged -= TranslateText;
         ExecManager.onChangeBegin -= LockAllInput;
     }
 
@@ -68,32 +66,12 @@ public class NodeWhileLoop : Nodes
     {
         if (input.Length > 0)
         {
-            if (input.StartsWith("TantQue") || input.StartsWith("While"))
-            {
-                string expr = input.Replace("TantQue", "");
-                expr = expr.Replace("While", "");
-                return rs.robot.varsManager.CheckExpression(expr);
-            }
+            return rs.robot.varsManager.CheckExpression(input);
         }
         else
         {
             return true;
         }
-        return false;
-    }
-
-    private void TranslateText(object sender, EventArgs e)
-    {
-        if (Translation.CurrentLanguage == "eng")
-        {
-            input = input.Replace("TantQue", "While");
-        }
-        if (Translation.CurrentLanguage == "fr")
-        {
-            input = input.Replace("While", "TantQue");
-        }
-
-        inputField.text = input;
     }
 
     public override void Execute()

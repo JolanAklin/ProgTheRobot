@@ -23,21 +23,21 @@ using Language;
 
 public class NodeForLoop : Nodes
 {
-    private string input;
-    public TMP_InputField inputField;
-    private string[] inputSplited;
-
+    [Tooltip("Put the input field in this order : varname, varstart, varend, varstep")]
+    public TMP_InputField[] inputFields;
     public int nextNodeInside = -1;
 
     private VarsManager.Var varIncrement;
-    private int varStart = 0;
+    private int varStart;
     private int varEnd;
-    private int varStep = 1;
-    public void ChangeInput(TMP_InputField tMP_InputField)
+    private int varStep;
+
+    private string incrementVar = "";
+    private string startVar = "";
+    private string endVar = "";
+    private string stepVar = "";
+    public void ChangeInput()
     {
-        input = tMP_InputField.text;
-        inputField = tMP_InputField;
-        inputSplited = input.Split(' ');
         if (!ValidateInput())
         {
             nodeErrorCode = ErrorCode.wrongInput;
@@ -54,79 +54,50 @@ public class NodeForLoop : Nodes
     {
         base.Awake();
         nodeTypes = NodeTypes.forLoop;
-        Manager.instance.OnLanguageChanged += TranslateText;
         ExecManager.onChangeBegin += LockAllInput;
     }
 
     private void OnDestroy()
     {
-        Manager.instance.OnLanguageChanged -= TranslateText;
         ExecManager.onChangeBegin -= LockAllInput;
     }
+    //start tpi
+    private bool ValidateInput()
+    {
+        if(startVar != "" && endVar != "" && stepVar != "" && incrementVar != "")
+        {
+            return true;
+        }
+        return false;
+    }
+    public void setIncrementVar(TMP_InputField inputField)
+    {
+        incrementVar = inputField.text;
+        ChangeInput();
+    }
+    public void SetStart(TMP_InputField inputField)
+    {
+        startVar = inputField.text;
+        ChangeInput();
+    }
+    public void SetEnd(TMP_InputField inputField)
+    {
+        endVar = inputField.text;
+        ChangeInput();
+    }
+    public void SetStep(TMP_InputField inputField)
+    {
+        stepVar = inputField.text;
+        ChangeInput();
+    }
+    //end tpi
 
     public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        inputField.interactable = !e.started;
-    }
-
-    public bool ValidateInput()
-    {
-        // need to add the var support
-        // Pour i = 0 Jusque 2 Pas 1
-        // For i = 0 UpTo 10 Step 2
-        // Pour i = var1 Jusque var2 Step var3
-        // Pour i = 0 Jusque 3
-        if(input.Length > 0)
+        foreach (TMP_InputField inputField in inputFields)
         {
-            if(inputSplited.Length != 0)
-                try
-                {
-                    if(inputSplited[0] == "Pour" || inputSplited[0] == "For")
-                        if(VarsManager.CheckVarName(inputSplited[1]))
-                            if (inputSplited[2] == "=")
-                                if (inputSplited[4] == "Jusque" || inputSplited[4] == "UpTo")
-                                { 
-                                    varStep = 1;
-                                    if(inputSplited.Length == 8)
-                                    {
-                                        if (!(inputSplited[6] == "Pas" || inputSplited[6] == "Step"))
-                                        {
-                                            return false;
-                                        }
-                                    }
-                                    if (inputSplited.Length > 6 && inputSplited.Length != 8)
-                                        return false;
-                                    TranslateText(this, EventArgs.Empty);
-                                    return true;
-                                }
-                        return false;
-
-                }catch
-                {
-                    return false;
-                }
+            inputField.interactable = !e.started;
         }
-        return true;
-    }
-
-    // translate the text inside the node
-    private void TranslateText(object sender, EventArgs e)
-    {
-        if(Translation.CurrentLanguage == "eng")
-        {
-            input = input.Replace("Pour", "For");
-            input = input.Replace("Jusque", "UpTo");
-            input = input.Replace("Pas", "Step");
-
-        }
-        if (Translation.CurrentLanguage == "fr")
-        {
-            input = input.Replace("For", "Pour");
-            input = input.Replace("UpTo", "Jusque");
-            input = input.Replace("Step", "Pas");
-        }
-
-        inputField.text = input;
     }
 
     public override void Execute()
@@ -148,52 +119,49 @@ public class NodeForLoop : Nodes
 
         if (varIncrement == null)
         {
-            if(!int.TryParse(inputSplited[3], out varStart))
+            if(!int.TryParse(startVar, out varStart))
             {
-                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[3]);
+                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(startVar);
                 if(tempVar != null)
                 {
                     varStart = tempVar.Value;
                 }
                 else
                 {
-                    Debugger.LogError("Une erreur est survenue");
+                    Debugger.LogError("Une erreur est survenue1");
                     return;
                 }
             }
-            varIncrement = rs.robot.varsManager.GetVar(inputSplited[1],varStart);
+            varIncrement = rs.robot.varsManager.GetVar(incrementVar,varStart);
             if(varIncrement == null)
             {
-                Debugger.LogError("Une erreur est survenue");
+                Debugger.LogError("Une erreur est survenue2");
                 return;
             }
-            if (!int.TryParse(inputSplited[5], out varEnd))
+            if (!int.TryParse(endVar, out varEnd))
             {
-                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[5]);
+                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(endVar);
                 if (tempVar != null)
                 {
                     varEnd = tempVar.Value;
                 }
                 else
                 {
-                    Debugger.LogError("Une erreur est survenue");
+                    Debugger.LogError("Une erreur est survenue3");
                     return;
                 }
             }
-            if(inputSplited.Length > 6)
+            if (!int.TryParse(stepVar, out varStep))
             {
-                if (!int.TryParse(inputSplited[7], out varStep))
+                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(stepVar);
+                if (tempVar != null)
                 {
-                    VarsManager.Var tempVar = rs.robot.varsManager.GetVar(inputSplited[7]);
-                    if (tempVar != null)
-                    {
-                        varStep = tempVar.Value;
-                    }
-                    else
-                    {
-                        Debugger.LogError("Une erreur est survenue");
-                        return;
-                    }
+                    varStep = tempVar.Value;
+                }
+                else
+                {
+                    Debugger.LogError("Une erreur est survenue4");
+                    return;
                 }
             }
         }
@@ -281,7 +249,10 @@ public class NodeForLoop : Nodes
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(incrementVar);
+        serializableNode.nodeSettings.Add(startVar);
+        serializableNode.nodeSettings.Add(endVar);
+        serializableNode.nodeSettings.Add(stepVar);
         serializableNode.nodeSettings.Add(nextNodeInside.ToString());
         return serializableNode;
     }
@@ -290,8 +261,14 @@ public class NodeForLoop : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
-        inputField.text = input;
+        for (int i = 0; i < serializableNode.nodeSettings.Count-1; i++)
+        {
+            inputFields[i].text = serializableNode.nodeSettings[i];
+        }
+        incrementVar = serializableNode.nodeSettings[0];
+        startVar = serializableNode.nodeSettings[1];
+        endVar = serializableNode.nodeSettings[2];
+        stepVar = serializableNode.nodeSettings[3];
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
     }
