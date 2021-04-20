@@ -20,7 +20,6 @@ using UnityEngine;
 using TMPro;
 using System;
 using Language;
-using System.Data;
 
 public class NodeWhileLoop : Nodes
 {

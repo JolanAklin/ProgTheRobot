@@ -30,9 +30,17 @@ public class AdaptCollider : MonoBehaviour
     {
         boxCollider2d.size = new Vector2(rectTransform.rect.width/resizeFactor, rectTransform.rect.height/resizeFactor);
         if(canvas != null)
+        {
             if (rectTransform.anchorMax.y == 1)
-                boxCollider2d.offset = new Vector2(0, canvas.rect.height / (resizeFactor * 2) - rectTransform.rect.height / (resizeFactor * 2));
+                boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, canvas.rect.height / (resizeFactor * 2) - rectTransform.rect.height / (resizeFactor * 2));
             else
-                boxCollider2d.offset = new Vector2(0, -canvas.rect.height / (resizeFactor * 2) + rectTransform.rect.height / (resizeFactor * 2));
+                boxCollider2d.offset = new Vector2(boxCollider2d.offset.x, -canvas.rect.height / (resizeFactor * 2) + rectTransform.rect.height / (resizeFactor * 2));
+            //start tpi
+            if (rectTransform.anchorMax.x == 1)
+                boxCollider2d.offset = new Vector2(canvas.rect.width / (resizeFactor * 2) - rectTransform.rect.width / (resizeFactor * 2), boxCollider2d.offset.y);
+            else
+                boxCollider2d.offset = new Vector2(-canvas.rect.width / (resizeFactor * 2) + rectTransform.rect.width / (resizeFactor * 2), boxCollider2d.offset.y);
+            //end tpi
+        }
     }
 }

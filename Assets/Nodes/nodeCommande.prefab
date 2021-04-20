@@ -340,7 +340,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8025506041070510845}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.8, y: -3.8, z: 0}
+  m_LocalPosition: {x: -0.2, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8025506041546081063}
@@ -423,6 +423,7 @@ MonoBehaviour:
   minHeight: 0.5
   maxWidth: 200
   maxHeight: 50
+  minAspectRatio: 0
   inputField: {fileID: 892941907719725026}
 --- !u!1 &8025506041546081060
 GameObject:

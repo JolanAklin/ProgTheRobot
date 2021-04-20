@@ -141,6 +141,17 @@ public abstract class Nodes : MonoBehaviour
     public float maxHeight;
     [Tooltip("Width will be multiplied by the height * minAspectRation. Put this number to 0 to do nothing")]
     public float minAspectRatio;
+
+    private NodeConfinement confinement;
+    private LoopArea parentLoopArea;
+
+    private class NodeConfinement
+    {
+        public float left;
+        public float right;
+        public float top;
+        public float bottom;
+    }
     //end tpi
 
 
@@ -164,6 +175,9 @@ public abstract class Nodes : MonoBehaviour
         canvas = canvasRect.GetComponent<Canvas>();
 
         nodesLoopArea = GetComponentInChildren<LoopArea>();
+
+        if (parentId != -1)
+            parentLoopArea = NodesDict[parentId].nodesLoopArea;
     }
 
     private void OnDestroy()
@@ -338,6 +352,26 @@ public abstract class Nodes : MonoBehaviour
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -890);
 
+        //start tpi
+        if (parentId != 0 && confinement != null)
+        {
+            confinement = new NodeConfinement() { right = parentLoopArea.Right(), left = parentLoopArea.Left(), top = parentLoopArea.Top(), bottom = parentLoopArea.Bottom() };
+            float xPos;
+            float yPos;
+            if (confinement.left > confinement.right)
+                xPos = Mathf.Clamp(pos.x, confinement.right, confinement.left);
+            else
+                xPos = Mathf.Clamp(pos.x, confinement.left, confinement.right);
+
+            if (confinement.top > confinement.bottom)
+                yPos = Mathf.Clamp(pos.y, confinement.bottom, confinement.top);
+            else
+                yPos = Mathf.Clamp(pos.y, confinement.top, confinement.bottom);
+
+            pos = new Vector3(xPos, yPos, pos.z);
+        }
+        //end tpi
+
         // change the node position
         transform.position = pos;
         // change the spline
@@ -370,6 +404,7 @@ public abstract class Nodes : MonoBehaviour
         // prevent the node end and node start from being in a loop
         if(nodeTypes != NodeTypes.end && nodeTypes != NodeTypes.start)
         {
+            // put the node in the loop or get it out
             RaycastHit2D hit;
             Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
             if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, insideLoopMask))
@@ -395,6 +430,9 @@ public abstract class Nodes : MonoBehaviour
                         float zpos = (loopArea.parent.transform.position.z - 0.001f);
                         transform.position = new Vector3(transform.position.x, transform.position.y, zpos);
                         node.nodesInsideLoop.Add(this);
+
+                        parentLoopArea = loopArea;
+                        confinement = new NodeConfinement() { right = loopArea.Right(), left = loopArea.Left(), top = loopArea.Top(), bottom = loopArea.Bottom() };
                     };
                 }
             
