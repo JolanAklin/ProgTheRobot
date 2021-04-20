@@ -21,6 +21,11 @@ using System;
 
 public class NodeEnd : Nodes
 {
+    new private void Awake()
+    {
+        base.Awake();
+        nodeTypes = NodeTypes.end;
+    }
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)

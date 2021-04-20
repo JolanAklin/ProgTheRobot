@@ -46,6 +46,7 @@ public class NodeReadWrite : Nodes
     new private void Awake()
     {
         base.Awake();
+        nodeTypes = NodeTypes.readWrite;
         Manager.instance.OnLanguageChanged += TranslateText;
         ExecManager.onChangeBegin += LockAllInput;
     }

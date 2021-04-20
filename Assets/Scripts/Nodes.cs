@@ -44,6 +44,10 @@ public abstract class Nodes : MonoBehaviour
         notConnected,
     }
 
+    // start tpi
+    protected NodeTypes nodeTypes;
+    //end tpi
+
     /// <summary>
     /// Execute the node
     /// </summary>
@@ -363,59 +367,65 @@ public abstract class Nodes : MonoBehaviour
         if (lastInsideLoopImage != null)
             lastInsideLoopImage.color = insideNodeColor;
 
-        RaycastHit2D hit;
-        Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
-        if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, insideLoopMask))
+        // prevent the node end and node start from being in a loop
+        if(nodeTypes != NodeTypes.end && nodeTypes != NodeTypes.start)
         {
-            LoopArea loopArea = hit.collider.GetComponent<LoopArea>();
-            if(!loopArea.parent.transform.IsChildOf(transform))
+            RaycastHit2D hit;
+            Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+            if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, insideLoopMask))
             {
-                // changing the color
-                Image currentInsideLoop = loopArea.image;
-                currentInsideLoop.color = selectedColor;
-                if (lastInsideLoopImage != null && lastInsideLoopImage != currentInsideLoop)
+                LoopArea loopArea = hit.collider.GetComponent<LoopArea>();
+                if(!loopArea.parent.transform.IsChildOf(transform))
+                {
+                    // changing the color
+                    Image currentInsideLoop = loopArea.image;
+                    currentInsideLoop.color = selectedColor;
+                    if (lastInsideLoopImage != null && lastInsideLoopImage != currentInsideLoop)
+                        lastInsideLoopImage.color = insideNodeColor;
+                    lastInsideLoopImage = currentInsideLoop;
+
+
+                    // changing the sorting order of the canvas to ensure that the node is on the top
+                    canvas.sortingOrder = loopArea.nodeCanvas.sortingOrder + 1;
+                    Nodes node = loopArea.parent.GetComponent<Nodes>();
+                    parentId = node.id;
+                    onMoveEnd = () =>
+                    {
+                        transform.parent = loopArea.parent.transform;
+                        float zpos = (loopArea.parent.transform.position.z - 0.001f);
+                        transform.position = new Vector3(transform.position.x, transform.position.y, zpos);
+                        node.nodesInsideLoop.Add(this);
+                    };
+                }
+            
+            }
+            else
+            {
+                parentId = -1;
+
+                // changing the color back
+                if (lastInsideLoopImage != null)
                     lastInsideLoopImage.color = insideNodeColor;
-                lastInsideLoopImage = currentInsideLoop;
 
+                canvas.sortingOrder = 0;
 
-                // changing the sorting order of the canvas to ensure that the node is on the top
-                canvas.sortingOrder = loopArea.nodeCanvas.sortingOrder + 1;
-                Nodes node = loopArea.parent.GetComponent<Nodes>();
-                parentId = node.id;
                 onMoveEnd = () =>
                 {
-                    transform.parent = loopArea.parent.transform;
-                    float zpos = (loopArea.parent.transform.position.z - 0.001f);
-                    transform.position = new Vector3(transform.position.x, transform.position.y, zpos);
-                    node.nodesInsideLoop.Add(this);
+                    if(NodesDict.ContainsKey(parentId))
+                    {
+                        NodesDict[parentId].GetComponent<Nodes>().nodesInsideLoop.Remove(this);
+                    }
+                    else
+                    {
+                        parentId = -1;
+                    }
+                    transform.parent = nodeHolder.transform;
+                    transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
                 };
             }
-            
+
         }
-        else
-        {
-            parentId = -1;
 
-            // changing the color back
-            if (lastInsideLoopImage != null)
-                lastInsideLoopImage.color = insideNodeColor;
-
-            canvas.sortingOrder = 0;
-
-            onMoveEnd = () =>
-            {
-                if(NodesDict.ContainsKey(parentId))
-                {
-                    NodesDict[parentId].GetComponent<Nodes>().nodesInsideLoop.Remove(this);
-                }
-                else
-                {
-                    parentId = -1;
-                }
-                transform.parent = nodeHolder.transform;
-                transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
-            };
-        }
 
         Manager.instance.selectedNodeId = -1;
         if(canMove)

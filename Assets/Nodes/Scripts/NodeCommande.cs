@@ -29,6 +29,7 @@ public class NodeCommande : Nodes
     new private void Awake()
     {
         base.Awake();
+        nodeTypes = NodeTypes.execute;
         Manager.instance.OnLanguageChanged += TranslateText;
         ExecManager.onChangeBegin += LockAllInput;
     }

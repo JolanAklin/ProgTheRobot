@@ -44,6 +44,7 @@ public class NodeMethod : Nodes
     new private void Awake()
     {
         base.Awake();
+        nodeTypes = NodeTypes.subProgram;
         ExecManager.onChangeBegin += LockAllInput;
         Manager.instance.onScriptAdded += UpdateScriptList;
     }

@@ -33,6 +33,7 @@ public class NodeIf : Nodes
     new private void Awake()
     {
         base.Awake();
+        nodeTypes = NodeTypes.test;
         ExecManager.onChangeBegin += LockAllInput;
     }
 

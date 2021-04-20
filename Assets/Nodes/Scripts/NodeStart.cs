@@ -21,6 +21,12 @@ using System;
 
 public class NodeStart : Nodes
 {
+
+    new private void Awake()
+    {
+        base.Awake();
+        nodeTypes = NodeTypes.start;
+    }
     public override void Execute()
     {
 
