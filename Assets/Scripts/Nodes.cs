@@ -176,8 +176,6 @@ public abstract class Nodes : MonoBehaviour
 
         nodesLoopArea = GetComponentInChildren<LoopArea>();
 
-        if (parentId != -1)
-            parentLoopArea = NodesDict[parentId].nodesLoopArea;
     }
 
     private void OnDestroy()
@@ -353,7 +351,7 @@ public abstract class Nodes : MonoBehaviour
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -890);
 
         //start tpi
-        if (parentId != 0 && confinement != null)
+        if (parentLoopArea != null)
         {
             confinement = new NodeConfinement() { right = parentLoopArea.Right(), left = parentLoopArea.Left(), top = parentLoopArea.Top(), bottom = parentLoopArea.Bottom() };
             float xPos;
@@ -533,7 +531,7 @@ public abstract class Nodes : MonoBehaviour
             Nodes parentNode = NodesDict[parentId].GetComponent<Nodes>();
             canvas.sortingOrder = parentNode.canvas.sortingOrder + 1;
             parentNode.nodesInsideLoop.Add(this);
-
+            parentLoopArea = NodesDict[parentId].nodesLoopArea;
         }
     }
 
