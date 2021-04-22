@@ -78,7 +78,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702956444976196924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.1, y: -4.5, z: 0}
+  m_LocalPosition: {x: -0.7, y: -4.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 702956446777199846}
@@ -137,10 +137,10 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   handleStartArray:
-  - {fileID: 2388597136042747542}
-  - {fileID: 8778440033141043498}
+  - {fileID: 4598383870703989396}
+  - {fileID: 4497324397499816899}
   handleEndArray:
-  - {fileID: 2826741635810182391}
+  - {fileID: 7750613654143988939}
   canResize: 1
   ResizeHandle: {fileID: 2185034933020512544}
   canMove: 1
@@ -1177,6 +1177,7 @@ MonoBehaviour:
   ifFalse: 1
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &2774690854752825764
 GameObject:
   m_ObjectHideFlags: 0
@@ -1598,6 +1599,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &3899985168870474304
 GameObject:
   m_ObjectHideFlags: 0
@@ -2264,3 +2266,4 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}

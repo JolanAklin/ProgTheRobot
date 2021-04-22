@@ -239,6 +239,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &8120454240271626459
 GameObject:
   m_ObjectHideFlags: 0
@@ -982,7 +983,7 @@ MonoBehaviour:
     m_Bits: 65536
   handleStartArray: []
   handleEndArray:
-  - {fileID: 5786985527918085667}
+  - {fileID: 7752796421315654932}
   canResize: 1
   ResizeHandle: {fileID: 2666394107578352649}
   canMove: 1

@@ -182,6 +182,7 @@ public class Manager : MonoBehaviour
     // create a spline and to connect to two nodes
     [HideInInspector]
     public Nodes node = null; // the node where the spline starts
+    private ConnectHandle startSplineHandle;
     public GameObject SplineObject; // spline prefab
     [HideInInspector]
     public GameObject spline; // the current spline
@@ -200,6 +201,7 @@ public class Manager : MonoBehaviour
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
             instance.spline = Instantiate(SplineObject, new Vector3(0,0,-899), Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
             instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender, handleId);
+            startSplineHandle = sender.handleStartArray[handleId];
             node = sender;
         }
         if (isInput)
@@ -209,13 +211,18 @@ public class Manager : MonoBehaviour
             //start tpi
             // check if the node contain the same handle as the one passed in the parameters
             bool canConnect = true;
-            foreach (GameObject handle in node.handleEndArray)
+            foreach (ConnectHandle handle in node.handleEndArray)
             {
                 if (handle == sender.handleEndArray[handleId])
                 {
                     canConnect = false;
                     break;
                 }
+            }
+            if(canConnect)
+            {
+                if (startSplineHandle.loopArea != sender.handleEndArray[handleId].loopArea)
+                    canConnect = false;
             }
             if(canConnect)
             {

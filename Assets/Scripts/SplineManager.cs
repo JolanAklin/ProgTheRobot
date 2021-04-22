@@ -52,7 +52,7 @@ public class SplineManager : MonoBehaviour
 
     private Nodes nodeStart, nodeEnd;
 
-    // start pos will be used when a node is moved or rized.
+    // start pos will be used when a node is moved.
     // the node parameter only serve to subscibe to the change/resize event
     public void Init(Transform startPos, Nodes node, int handleId)
     {
@@ -165,7 +165,7 @@ public class SplineManager : MonoBehaviour
         {
             willBeMoved = true;
             Destroy(this.gameObject);
-            ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
+            ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber];
             connect.canBeClicked = true;
             connect.Click();
         }
@@ -189,7 +189,7 @@ public class SplineManager : MonoBehaviour
         if(!willBeMoved)
         {
             Manager.instance.OnSpline?.Invoke(Manager.instance, new Manager.OnSplineEventArgs() { splineStarted = false});
-            ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber].GetComponent<ConnectHandle>();
+            ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber];
             connect.canBeClicked = true;
             connect.image.enabled = true;
             connect.boxCollider2d.enabled = true;

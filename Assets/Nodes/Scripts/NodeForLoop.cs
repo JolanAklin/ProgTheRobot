@@ -55,6 +55,13 @@ public class NodeForLoop : Nodes
         base.Awake();
         nodeTypes = NodeTypes.forLoop;
         ExecManager.onChangeBegin += LockAllInput;
+
+        // start tpi
+        if (handleEndArray.Length > 1)
+            handleEndArray[1].loopArea = nodesLoopArea;
+        if (handleStartArray.Length > 1)
+            handleStartArray[1].loopArea = nodesLoopArea;
+        //end tpi
     }
 
     private void OnDestroy()
@@ -90,7 +97,6 @@ public class NodeForLoop : Nodes
         stepVar = inputField.text;
         ChangeInput();
     }
-    //end tpi
 
     public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
@@ -99,6 +105,7 @@ public class NodeForLoop : Nodes
             inputField.interactable = !e.started;
         }
     }
+    //end tpi
 
     public override void Execute()
     {

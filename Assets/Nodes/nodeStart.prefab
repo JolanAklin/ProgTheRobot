@@ -123,6 +123,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &783018540565910690
 GameObject:
   m_ObjectHideFlags: 0
@@ -579,7 +580,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   handleStartArray:
-  - {fileID: 421143234731277977}
+  - {fileID: 6920369946996892687}
   handleEndArray: []
   canResize: 1
   ResizeHandle: {fileID: 783018540565910690}

@@ -239,6 +239,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &8025506040851281856
 GameObject:
   m_ObjectHideFlags: 0
@@ -399,9 +400,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   handleStartArray:
-  - {fileID: 8505140792856527258}
+  - {fileID: 5991924893435548591}
   handleEndArray:
-  - {fileID: 3995293576745224420}
+  - {fileID: 3588298106718515584}
   canResize: 1
   ResizeHandle: {fileID: 2039390222973368603}
   canMove: 1
@@ -786,6 +787,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1001 &2889291345652592691
 PrefabInstance:
   m_ObjectHideFlags: 0

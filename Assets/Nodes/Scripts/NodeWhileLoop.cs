@@ -50,6 +50,13 @@ public class NodeWhileLoop : Nodes
         base.Awake();
         nodeTypes = NodeTypes.whileLoop;
         ExecManager.onChangeBegin += LockAllInput;
+
+        // start tpi
+        if (handleEndArray.Length > 1)
+            handleEndArray[1].loopArea = nodesLoopArea;
+        if (handleStartArray.Length > 1)
+            handleStartArray[1].loopArea = nodesLoopArea;
+        //end tpi
     }
 
     private void OnDestroy()

@@ -569,6 +569,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &1384323913305572929
 GameObject:
   m_ObjectHideFlags: 0
@@ -934,6 +935,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 1
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &3218259700655934778
 GameObject:
   m_ObjectHideFlags: 0
@@ -3033,7 +3035,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5158547176770619525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.9, y: -3.3, z: 0}
+  m_LocalPosition: {x: -2.7, y: -3.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5158547174704327007}
@@ -3066,11 +3068,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   handleStartArray:
-  - {fileID: 8993160322650077964}
-  - {fileID: 3012832301632454266}
+  - {fileID: 3370915604957423830}
+  - {fileID: 2423783925421469342}
   handleEndArray:
-  - {fileID: 5355865931366499773}
-  - {fileID: 1213038791730483112}
+  - {fileID: 2016647105653241898}
+  - {fileID: 3345365787676244007}
   canResize: 1
   ResizeHandle: {fileID: 2198036974579868831}
   canMove: 1
@@ -3398,6 +3400,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &6510057681320096589
 GameObject:
   m_ObjectHideFlags: 0
@@ -4024,3 +4027,4 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}

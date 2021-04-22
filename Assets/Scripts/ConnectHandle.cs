@@ -35,6 +35,9 @@ public class ConnectHandle : MonoBehaviour
     public bool inLoopOut = false;
 
     public int handleNumber;
+
+    
+    public LoopArea loopArea;
     
     private void Start()
     {

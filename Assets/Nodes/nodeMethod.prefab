@@ -123,6 +123,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &396479144608984716
 GameObject:
   m_ObjectHideFlags: 0
@@ -891,9 +892,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 65536
   handleStartArray:
-  - {fileID: 8192464773838311380}
+  - {fileID: 4698327871187444887}
   handleEndArray:
-  - {fileID: 65493179703090884}
+  - {fileID: 5775873274322493356}
   canResize: 1
   ResizeHandle: {fileID: 4362921364354434093}
   canMove: 1
@@ -915,6 +916,7 @@ MonoBehaviour:
   minHeight: 0.5
   maxWidth: 200
   maxHeight: 50
+  minAspectRatio: 0
   tMP_Dropdown: {fileID: 7294859057803665673}
 --- !u!1 &3168512351046951637
 GameObject:
@@ -2046,6 +2048,7 @@ MonoBehaviour:
   ifFalse: 0
   inLoopOut: 0
   handleNumber: 0
+  loopArea: {fileID: 0}
 --- !u!1 &8623466811322456206
 GameObject:
   m_ObjectHideFlags: 0

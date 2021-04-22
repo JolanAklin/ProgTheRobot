@@ -86,8 +86,8 @@ public abstract class Nodes : MonoBehaviour
     public LayerMask nodeLayerMask;
     public LayerMask insideLoopMask;
 
-    public GameObject[] handleStartArray;
-    public GameObject[] handleEndArray;
+    public ConnectHandle[] handleStartArray;
+    public ConnectHandle[] handleEndArray;
 
     //resize
     private bool resize = false;
@@ -103,7 +103,7 @@ public abstract class Nodes : MonoBehaviour
     public List<BoxCollider2D> collidersToIgnore;
     public EventHandler OnNodeModified;
     private GameObject nodeHolder;
-    private LoopArea nodesLoopArea;
+    protected LoopArea nodesLoopArea;
     private Action onMoveEnd;
     private List<Nodes> nodesInsideLoop = new List<Nodes>();
 
@@ -142,8 +142,8 @@ public abstract class Nodes : MonoBehaviour
     [Tooltip("Width will be multiplied by the height * minAspectRation. Put this number to 0 to do nothing")]
     public float minAspectRatio;
 
-    private NodeConfinement confinement;
     private LoopArea parentLoopArea;
+    public LoopArea ParentLoopArea { get => parentLoopArea; private set => parentLoopArea = value; }
 
     private class NodeConfinement
     {
@@ -164,11 +164,11 @@ public abstract class Nodes : MonoBehaviour
 
         for (int i = 0; i < handleStartArray.Length; i++)
         {
-            handleStartArray[i].GetComponent<ConnectHandle>().handleNumber = i;
+            handleStartArray[i].handleNumber = i;
         }
         for (int i = 0; i < handleEndArray.Length; i++)
         {
-            handleEndArray[i].GetComponent<ConnectHandle>().handleNumber = i;
+            handleEndArray[i].handleNumber = i;
         }
         UpdateIgnoreColliderList();
 
@@ -353,7 +353,7 @@ public abstract class Nodes : MonoBehaviour
         //start tpi
         if (parentLoopArea != null)
         {
-            confinement = new NodeConfinement() { right = parentLoopArea.Right(), left = parentLoopArea.Left(), top = parentLoopArea.Top(), bottom = parentLoopArea.Bottom() };
+            NodeConfinement confinement = new NodeConfinement() { right = parentLoopArea.Right(), left = parentLoopArea.Left(), top = parentLoopArea.Top(), bottom = parentLoopArea.Bottom() };
             float xPos;
             float yPos;
             if (confinement.left > confinement.right)
@@ -430,7 +430,8 @@ public abstract class Nodes : MonoBehaviour
                         node.nodesInsideLoop.Add(this);
 
                         parentLoopArea = loopArea;
-                        confinement = new NodeConfinement() { right = loopArea.Right(), left = loopArea.Left(), top = loopArea.Top(), bottom = loopArea.Bottom() };
+                        handleStartArray[0].loopArea = parentLoopArea;
+                        handleEndArray[0].loopArea = parentLoopArea;
                     };
                 }
             
