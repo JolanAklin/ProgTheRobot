@@ -29,10 +29,9 @@ public class NodeWhileLoop : Nodes
 
     public int nextNodeInside = -1;
 
-    public void ChangeInput(TMP_InputField tMP_InputField)
+    public void ChangeInput()
     {
-        input = tMP_InputField.text;
-        inputField = tMP_InputField;
+        input = inputField.text;
         if (!ValidateInput())
         {
             nodeErrorCode = ErrorCode.wrongInput;

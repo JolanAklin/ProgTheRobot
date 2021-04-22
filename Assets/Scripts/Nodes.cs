@@ -532,7 +532,11 @@ public abstract class Nodes : MonoBehaviour
             Nodes parentNode = NodesDict[parentId].GetComponent<Nodes>();
             canvas.sortingOrder = parentNode.canvas.sortingOrder + 1;
             parentNode.nodesInsideLoop.Add(this);
+            // start tpi
             parentLoopArea = NodesDict[parentId].nodesLoopArea;
+            handleStartArray[0].loopArea = parentLoopArea;
+            handleEndArray[0].loopArea = parentLoopArea;
+            // end tpi
         }
     }
 
