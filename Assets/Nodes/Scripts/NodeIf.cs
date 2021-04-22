@@ -21,6 +21,7 @@ using TMPro;
 using System.Linq;
 using System;
 using System.Data;
+using System.Text.RegularExpressions;
 
 public class NodeIf : Nodes
 {
@@ -50,6 +51,8 @@ public class NodeIf : Nodes
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         input = tMP_InputField.text;
+        input = FormatInput(input);
+        inputField.text = input;
         if (!ValidateInput())
         {
             nodeErrorCode = ErrorCode.wrongInput;
@@ -60,6 +63,26 @@ public class NodeIf : Nodes
         nodeErrorCode = ErrorCode.ok;
         Manager.instance.canExecute = true;
         ChangeBorderColor(defaultColor);
+    }
+
+    private string FormatInput(string input)
+    {
+        input = input.Replace("=", " = ");
+        input = input.Replace("<", " < ");
+        input = input.Replace(">", " > ");
+        input = input.Replace("<=", " <= ");
+        input = input.Replace(">=", " >= ");
+        input = input.Replace("<>", " <> ");
+        input = input.Replace("+", " + ");
+        input = input.Replace("-", " - ");
+        input = input.Replace("*", " * ");
+        input = input.Replace("/", " / ");
+        input = input.Replace("(", " ( ");
+        input = input.Replace(")", " ) ");
+
+        string pattern = @"\s+";
+        input = Regex.Replace(input, pattern, " ");
+        return input;
     }
 
     private bool ValidateInput()

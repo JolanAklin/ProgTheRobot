@@ -20,6 +20,7 @@ using UnityEngine;
 using TMPro;
 using System;
 using Language;
+using System.Text.RegularExpressions;
 
 public class NodeWhileLoop : Nodes
 {
@@ -28,22 +29,6 @@ public class NodeWhileLoop : Nodes
     public TMP_InputField inputField;
 
     public int nextNodeInside = -1;
-
-    public void ChangeInput()
-    {
-        input = inputField.text;
-        if (!ValidateInput())
-        {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
-    }
-
     new private void Awake()
     {
         base.Awake();
@@ -57,6 +42,44 @@ public class NodeWhileLoop : Nodes
             handleStartArray[1].loopArea = nodesLoopArea;
         //end tpi
     }
+
+    public void ChangeInput()
+    {
+        input = inputField.text;
+        input = FormatInput(input);
+        inputField.text = input;
+        if (!ValidateInput())
+        {
+            nodeErrorCode = ErrorCode.wrongInput;
+            ChangeBorderColor(errorColor);
+            Manager.instance.canExecute = false;
+            return;
+        }
+        nodeErrorCode = ErrorCode.ok;
+        Manager.instance.canExecute = true;
+        ChangeBorderColor(defaultColor);
+    }
+
+    private string FormatInput(string input)
+    {
+        input = input.Replace("=", " = ");
+        input = input.Replace("<", " < ");
+        input = input.Replace(">", " > ");
+        input = input.Replace("<=", " <= ");
+        input = input.Replace(">=", " >= ");
+        input = input.Replace("<>", " <> ");
+        input = input.Replace("+", " + ");
+        input = input.Replace("-", " - ");
+        input = input.Replace("*", " * ");
+        input = input.Replace("/", " / ");
+        input = input.Replace("(", " ( ");
+        input = input.Replace(")", " ) ");
+
+        string pattern = @"\s+";
+        input = Regex.Replace(input, pattern, " ");
+        return input;
+    }
+
 
     private void OnDestroy()
     {
@@ -99,10 +122,7 @@ public class NodeWhileLoop : Nodes
 
         IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
 
-        string expr = input.Replace("TantQue", "");
-        expr = expr.Replace("While", "");
-
-        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(expr);
+        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(input);
 
         if (!eval.error)
             if (eval.result)
