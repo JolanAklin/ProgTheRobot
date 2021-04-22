@@ -9515,6 +9515,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   addNodeMenuInstance: {fileID: 7552550339543872685, guid: 9d2dc31ea5d09c84ba005c8e65a7bc64, type: 3}
   panelOpen: 0
+  nodeContextMenu: {fileID: 4239826567792624434, guid: dcc557f095d534c4ba04ef7a0cb1498e, type: 3}
   nodeToMove: {fileID: 0}
   nodeAreaPanSensitivity: 50
   infoBar: {fileID: 819571190}

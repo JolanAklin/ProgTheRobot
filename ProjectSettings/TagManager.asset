@@ -26,6 +26,7 @@ TagManager:
   - Marking
   - LoopArea
   - Ball
+  - NodeContextMenu
   layers:
   - Default
   - TransparentFX

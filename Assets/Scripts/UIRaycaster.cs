@@ -14,6 +14,7 @@
 //You should have received a copy of the GNU General Public License
 //along with Prog the robot.  If not, see<https://www.gnu.org/licenses/>.
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,7 +27,9 @@ public class UIRaycaster : MonoBehaviour
     public GameObject addNodeMenuInstance;
     [HideInInspector]
     public bool panelOpen;
+    public bool nodeContextMenuOpen = false;
     private GameObject addNodeMenu;
+    public GameObject nodeContextMenu;
 
     // raycast stuff
     GraphicRaycaster graphicraycaster;
@@ -48,6 +51,8 @@ public class UIRaycaster : MonoBehaviour
 
     // info bar
     public GameObject infoBar;
+
+    private GameObject nodeContextMenuInstance;
 
     private Nodes selectedNode = null;
 
@@ -73,20 +78,29 @@ public class UIRaycaster : MonoBehaviour
         rayCastResults = new List<RaycastResult>();
         graphicraycaster.Raycast(pointerevent, rayCastResults);
 
-        if (Input.GetMouseButtonDown(1) && !panelOpen && rayCastResults.Count == 0 && nodeToMove == null)
+
+        // start tpi
+        if (Input.GetMouseButton(0))
         {
-            addNodeMenu = Instantiate(addNodeMenuInstance, Input.mousePosition, Quaternion.identity, transform);
-            addNodeMenu.tag = "MenuAddScript";
-            panelOpen = true;
-        }
-        if(Input.GetMouseButton(0) && panelOpen && rayCastResults.Find(X => X.gameObject.tag == "MenuAddScript").gameObject == null)
-        {
-            if(addNodeMenu != null)
+            // close the add node panel
+            if (panelOpen && rayCastResults.Find(X => X.gameObject.tag == "MenuAddScript").gameObject == null)
             {
-                Destroy(addNodeMenu);
-                panelOpen = false;
+                if (addNodeMenu != null)
+                {
+                    Destroy(addNodeMenu);
+                    panelOpen = false;
+                }
+            } // close the node context menu
+            else if (nodeContextMenuOpen && rayCastResults.Find(X => X.gameObject.tag == "NodeContextMenu").gameObject == null)
+            {
+                if (nodeContextMenuInstance != null)
+                {
+                    Destroy(nodeContextMenuInstance);
+                    nodeContextMenuOpen = false;
+                }
             }
         }
+        //end tpi
         GameObject resizePanel = null;
         if (rayCastResults.Count > 0)
         {
@@ -133,6 +147,38 @@ public class UIRaycaster : MonoBehaviour
 
         // only do raycast in the 3D/2D world
         #region On nodes
+
+        //start tpi
+        if (Input.GetMouseButtonDown(1) && !panelOpen && !nodeContextMenuOpen && nodeToMove == null && !ExecManager.Instance.isRunning)
+        {
+            // open the node context menu
+            RaycastHit2D hit;
+            Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+            if ((hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity)))
+            {
+                if (hit.collider.gameObject.tag == "Node")
+                {
+                    Nodes hitNode = hit.collider.GetComponent<Nodes>();
+                    if(hitNode.IsInputLocked && hitNode.GetType() != typeof(NodeStart) && hitNode.GetType() != typeof(NodeEnd))
+                    {
+                        nodeContextMenuOpen = true;
+                        nodeContextMenuInstance = Instantiate(nodeContextMenu, Input.mousePosition, Quaternion.identity, transform);
+                        nodeContextMenuInstance.GetComponent<NodeContextMenuScript>().nodeToModify = hit.collider.GetComponent<Nodes>();
+                    }
+                }
+            } //end tpi
+            else
+            {
+                // close the add node context menu
+                if (rayCastResults.Count == 0)
+                {
+                    addNodeMenu = Instantiate(addNodeMenuInstance, Input.mousePosition, Quaternion.identity, transform);
+                    addNodeMenu.tag = "MenuAddScript";
+                    panelOpen = true;
+                }
+            }
+        }
+
         if (Input.GetMouseButtonUp(0))
         {
             //end resize
@@ -177,8 +223,11 @@ public class UIRaycaster : MonoBehaviour
                 {
                     if (hit.collider.gameObject.tag == "Node")
                     {
-                        beginMoveMousePos = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition);
-                        nodeToMove = hit.collider.GetComponent<Nodes>();
+                        if(hit.collider.GetComponent<Nodes>().IsInputLocked)
+                        {
+                            beginMoveMousePos = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition);
+                            nodeToMove = hit.collider.GetComponent<Nodes>();
+                        }
                     }
                 }
             }
@@ -231,7 +280,7 @@ public class UIRaycaster : MonoBehaviour
         {
             if(!nodeToMove.isMoving)
             {
-                if((NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition) - beginMoveMousePos).sqrMagnitude > 1 && nodeToMove != null)
+                if(nodeToMove != null)
                 {
                     nodeToMove.StartMove();
                 }

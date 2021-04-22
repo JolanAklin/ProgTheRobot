@@ -45,20 +45,32 @@ public class NodeMethod : Nodes
     {
         base.Awake();
         nodeTypes = NodeTypes.subProgram;
-        ExecManager.onChangeBegin += LockAllInput;
+        ExecManager.onChangeBegin += LockUnlockAllInput;
         Manager.instance.onScriptAdded += UpdateScriptList;
     }
 
     public void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockAllInput;
+        ExecManager.onChangeBegin -= LockUnlockAllInput;
         Manager.instance.onScriptAdded -= UpdateScriptList;
     }
 
-    public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         tMP_Dropdown.interactable = !e.started;
+        IsInputLocked = e.started;
     }
+    // start tpi
+    public override void LockUnlockAllInput(bool isLocked)
+    {
+        tMP_Dropdown.enabled = !isLocked;
+        IsInputLocked = isLocked;
+        if (!isLocked)
+            tMP_Dropdown.Show();
+        else
+            tMP_Dropdown.Hide();
+    }
+    //end tpi
 
     private bool ValidateInput()
     {

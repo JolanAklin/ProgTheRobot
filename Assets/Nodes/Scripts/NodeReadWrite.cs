@@ -48,19 +48,29 @@ public class NodeReadWrite : Nodes
         base.Awake();
         nodeTypes = NodeTypes.readWrite;
         Manager.instance.OnLanguageChanged += TranslateText;
-        ExecManager.onChangeBegin += LockAllInput;
+        ExecManager.onChangeBegin += LockUnlockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
-        ExecManager.onChangeBegin -= LockAllInput;
+        ExecManager.onChangeBegin -= LockUnlockAllInput;
     }
 
-    public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         inputField.interactable = !e.started;
+        IsInputLocked = e.started;
     }
+    // start tpi
+    public override void LockUnlockAllInput(bool isLocked)
+    {
+        inputField.enabled = !isLocked;
+        IsInputLocked = isLocked;
+        if (!isLocked)
+            inputField.Select();
+    }
+    //end tpi
 
     private bool ValidateInput()
     {

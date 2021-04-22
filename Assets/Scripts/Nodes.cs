@@ -14,11 +14,9 @@
 //You should have received a copy of the GNU General Public License
 //along with Prog the robot.  If not, see<https://www.gnu.org/licenses/>.
 
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
-using System;
 using UnityEngine.UI;
 
 // handle all the common features of nodes
@@ -107,6 +105,8 @@ public abstract class Nodes : MonoBehaviour
     private Action onMoveEnd;
     private List<Nodes> nodesInsideLoop = new List<Nodes>();
 
+    private Vector3 mouseCenterDelta;
+
     public uint nodeExecPower = 5;
 
 
@@ -144,6 +144,9 @@ public abstract class Nodes : MonoBehaviour
 
     private LoopArea parentLoopArea;
     public LoopArea ParentLoopArea { get => parentLoopArea; private set => parentLoopArea = value; }
+
+    private bool isInputLocked = true;
+    public bool IsInputLocked { get => isInputLocked; protected set => isInputLocked = value; }
 
     private class NodeConfinement
     {
@@ -265,6 +268,10 @@ public abstract class Nodes : MonoBehaviour
 
     public void StartMove()
     {
+        // start tpi
+        Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+        mouseCenterDelta = transform.position - mouseToWorldPoint;
+        //end tpi
         canMove = false;
         move = true;
     }
@@ -348,6 +355,7 @@ public abstract class Nodes : MonoBehaviour
     {
         // round the mouse position
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
+        mouseToWorldPoint += mouseCenterDelta;
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -890);
 
         //start tpi
@@ -497,6 +505,10 @@ public abstract class Nodes : MonoBehaviour
             Destroy(node.Value.gameObject);
         }
     }
+
+    public abstract void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e);
+
+    public abstract void LockUnlockAllInput(bool isLocked);
 
     #region Save stuff
     [Serializable]

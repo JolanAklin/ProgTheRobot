@@ -54,7 +54,7 @@ public class NodeForLoop : Nodes
     {
         base.Awake();
         nodeTypes = NodeTypes.forLoop;
-        ExecManager.onChangeBegin += LockAllInput;
+        ExecManager.onChangeBegin += LockUnlockAllInput;
 
         // start tpi
         if (handleEndArray.Length > 1)
@@ -66,7 +66,7 @@ public class NodeForLoop : Nodes
 
     private void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockAllInput;
+        ExecManager.onChangeBegin -= LockUnlockAllInput;
     }
     //start tpi
     private bool ValidateInput()
@@ -98,12 +98,24 @@ public class NodeForLoop : Nodes
         ChangeInput();
     }
 
-    public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         foreach (TMP_InputField inputField in inputFields)
         {
             inputField.interactable = !e.started;
         }
+        IsInputLocked = e.started;
+    }
+    // start tpi
+    public override void LockUnlockAllInput(bool isLocked)
+    {
+        IsInputLocked = isLocked;
+        foreach (TMP_InputField inputField in inputFields)
+        {
+            inputField.enabled = !isLocked;
+        }
+        if (!isLocked)
+            inputFields[0].Select();
     }
     //end tpi
 

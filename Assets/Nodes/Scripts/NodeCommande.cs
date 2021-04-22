@@ -20,6 +20,8 @@ using UnityEngine;
 using TMPro;
 using Language;
 using System;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class NodeCommande : Nodes
 {
@@ -31,19 +33,29 @@ public class NodeCommande : Nodes
         base.Awake();
         nodeTypes = NodeTypes.execute;
         Manager.instance.OnLanguageChanged += TranslateText;
-        ExecManager.onChangeBegin += LockAllInput;
+        ExecManager.onChangeBegin += LockUnlockAllInput;
     }
 
     private void OnDestroy()
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
-        ExecManager.onChangeBegin -= LockAllInput;
+        ExecManager.onChangeBegin -= LockUnlockAllInput;
     }
 
-    public void LockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         inputField.interactable = !e.started;
+        IsInputLocked = e.started;
     }
+    // start tpi
+    public override void LockUnlockAllInput(bool isLocked)
+    {
+        inputField.enabled = !isLocked;
+        IsInputLocked = isLocked;
+        if (!isLocked)
+            inputField.Select();
+    }
+    //end tpi
 
     public void ChangeInput(TMP_InputField tMP_InputField)
     {

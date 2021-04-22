@@ -36,6 +36,15 @@ public class NodeStart : Nodes
         StartCoroutine("WaitBeforeCallingNextNode");
     }
 
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    {
+    }
+    // start tpi
+    public override void LockUnlockAllInput(bool isLocked)
+    {
+    }
+    //end tpi
+
     IEnumerator WaitBeforeCallingNextNode()
     {
         if (!ExecManager.Instance.debugOn)

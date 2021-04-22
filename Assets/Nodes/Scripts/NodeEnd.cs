@@ -49,6 +49,15 @@ public class NodeEnd : Nodes
         CallNextNode();
     }
 
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    {
+    }
+    // start tpi
+    public override void LockUnlockAllInput(bool isLocked)
+    {
+    }
+    //end tpi
+
     public override void CallNextNode()
     {
         ExecManager.Instance.StopExec();
