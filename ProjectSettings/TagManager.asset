@@ -27,6 +27,8 @@ TagManager:
   - LoopArea
   - Ball
   - NodeContextMenu
+  - InfoNodeName
+  - InfoNodeDesc
   layers:
   - Default
   - TransparentFX

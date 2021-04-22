@@ -127,6 +127,7 @@ public abstract class Nodes : MonoBehaviour
     [TextArea]
     public string infoText;
 
+
     public bool isEndNode = false;
 
     //start tpi
