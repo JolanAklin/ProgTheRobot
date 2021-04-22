@@ -74,13 +74,13 @@ public class ResizePanel : MonoBehaviour
     {
         if(horizontal)
         {
-            resizePanelRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, Input.mousePosition.x, resizePanelRectTransform.rect.width);
+            resizePanelRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, GetPointOnUi.GetMousePosOnUi().x, resizePanelRectTransform.rect.width);
             layoutElement.preferredWidth = resizePanelRectTransform.anchoredPosition.x;
             resizePanelRectTransform.anchoredPosition = new Vector2(rectTransform.rect.width,0);
         }
         else
         {
-            resizePanelRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, Input.mousePosition.y, resizePanelRectTransform.rect.height);
+            resizePanelRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, GetPointOnUi.GetMousePosOnUi().y, resizePanelRectTransform.rect.height);
             layoutElement.preferredHeight = resizePanelRectTransform.anchoredPosition.y - 25;
             resizePanelRectTransform.anchoredPosition = new Vector2(0, rectTransform.rect.height);
         }

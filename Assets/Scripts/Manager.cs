@@ -39,6 +39,7 @@ public class Manager : MonoBehaviour
     // the canvas with all the UI
     public GameObject canvas;
     public AspectRatioFitter smallRobotViewAspectRation;
+    public AspectRatioFitter bigRobotViewAspectRation;
 
     //List used to display script and robot
     public List list;
@@ -95,8 +96,8 @@ public class Manager : MonoBehaviour
     private void ResizeCanvas(object sender, WindowResized.WindowResizedEventArgs e)
     {
         // change the canvas resolution to match the screen size
-        canvasScaler.referenceResolution = new Vector2(e.screenWidth, e.screenHeight);
         smallRobotViewAspectRation.aspectRatio = (float)e.screenWidth / (float)e.screenHeight;
+        bigRobotViewAspectRation.aspectRatio = (float)e.screenWidth / (float)e.screenHeight;
     }
 
     private void Update()
