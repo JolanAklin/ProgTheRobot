@@ -25,6 +25,10 @@ public class RobotScript
     public static int nextid = 0;
     public static Dictionary<int, RobotScript> robotScripts = new Dictionary<int, RobotScript>();
     public int id;
+    //start tpi
+    public static List<UnassignedScript> unassignedRobotScript = new List<UnassignedScript>();
+    public bool isMainScript = false;
+    // end tpi
     public string name;
     public Robot robot;
 
@@ -42,10 +46,24 @@ public class RobotScript
         this.name = name;
         Init(robot);
     }
-
-    public RobotScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager, bool isMain)
+    // start tpi
+    /// <summary>
+    /// Create a new script
+    /// </summary>
+    /// <param name="name">The name of the script</param>
+    /// <param name="robot">The robot the scritp will be attached to</param>
+    /// <param name="isMain">If the script is the main script</param>
+    public RobotScript(string name, Robot robot, bool isMain)
     {
-        DeSerializeScript(serializedRobotScript, saveManager, isMain);
+        this.name = name;
+        this.isMainScript = isMain;
+        Init(robot);
+    }
+    //end tpi
+
+    public RobotScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager)
+    {
+        DeSerializeScript(serializedRobotScript, saveManager);
     }
 
     private void Init(Robot robot)
@@ -147,11 +165,26 @@ public class RobotScript
         splines.Clear();
     }
 
+    //start tpi
+
+    /// <summary>
+    /// A class to represent the hierarchy of the scripts that were attached to a robot
+    /// </summary>
+    [Serializable]
+    public class UnassignedScript
+    {
+        public RobotScript main;
+        public List<RobotScript> childrens;
+    }
+
+    //end tpi
+
     #region save stuff
     [Serializable]
     public class SerializedRobotScript
     {
         public int id;
+        public bool isMain;
         public string name;
         public int robotId;
         [SerializeField]
@@ -168,19 +201,20 @@ public class RobotScript
             Nodes nodeScript = node.GetComponent<Nodes>();
             serializedNode.Add(nodeScript.SerializeNode());
         }
-        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, name = name, robotId = robot.id, serializedNode = serializedNode};
+        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, isMain = isMainScript, name = name, robotId = robot.id, serializedNode = serializedNode};
         return serializedRobotScript;
     }
 
     // convert json to this class
-    public void DeSerializeScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager, bool isMain)
+    public void DeSerializeScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager)
     {
         id = serializedRobotScript.id;
+        isMainScript = serializedRobotScript.isMain;
         name = serializedRobotScript.name;
         robot = Robot.robots[serializedRobotScript.robotId];
         robotScripts.Add(id, this);
         robot.robotScripts.Add(this);
-        if (isMain)
+        if (isMainScript)
             robot.MainScript = this;
 
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;

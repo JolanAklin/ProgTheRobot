@@ -56,14 +56,15 @@ public class Robot
     /// <param name="color">Color of the robot</param>
     /// <param name="name">Name of the robot</param>
     /// <param name="power">Power of the robot</param>
-    public Robot(Color color, string name, uint power)
+    /// <param name="shouldHaveAMainScript">If true, the robot will have a main script created with him</param>
+    public Robot(Color color, string name, uint power, bool shouldHaveAMainScript = true)
     {
         robotManager = Manager.instance.CreateRobot(color, this);
         this.Color = color;
         this.robotName = name;
         this.defaultPower = power;
         varsManager = new VarsManager(robotManager, this);
-        Init();
+        Init(shouldHaveAMainScript);
     }
 
     public Robot(int id, uint power, float[] robotColor, string robotName, Vector3 position, Quaternion rotation, List<RobotScript.SerializedRobotScript> serializedRobotScripts, SaveManager saveManager)
@@ -75,28 +76,45 @@ public class Robot
         this.robotName = robotName;
         varsManager = new VarsManager(robotManager, this);
         robots.Add(id, this);
-        bool isMain = true;
         foreach (RobotScript.SerializedRobotScript serializedRobotScript in serializedRobotScripts)
         {
-            RobotScript robotScript = new RobotScript(serializedRobotScript, saveManager, isMain);
-            if (isMain)
-                isMain = false;
+            RobotScript robotScript = new RobotScript(serializedRobotScript, saveManager);
         }
     }
 
-    private void Init()
+    private void Init(bool shouldHaveAMainScript)
     {
         // All robots have a different id
         id = nextid;
         nextid++;
         robots.Add(id, this);
-        MainScript = new RobotScript("Principal", this);
-        AddScript(MainScript);
+        if(shouldHaveAMainScript)
+        {
+            MainScript = new RobotScript("Principal", this, true);
+            AddScript(MainScript);
+        }
     }
 
     public static void DeleteRobot(int id)
     {
-        Manager.instance.DestroyObject(robots[id].robotManager.gameObject);
+        //start tpi
+
+        // place the script in a class to keep the hierarchy
+        Robot robot = robots[id];
+        RobotScript.UnassignedScript unassignedScript = new RobotScript.UnassignedScript();
+        unassignedScript.childrens = new List<RobotScript>();
+        foreach (RobotScript rs in robot.robotScripts)
+        {
+            rs.robot = null;
+            if (rs.isMainScript)
+                unassignedScript.main = rs;
+            else
+                unassignedScript.childrens.Add(rs);
+        }
+        RobotScript.unassignedRobotScript.Add(unassignedScript);
+
+        //end tpi
+        Manager.instance.DestroyObject(robot.robotManager.gameObject);
         robots.Remove(id);
     }
 
@@ -130,6 +148,15 @@ public class Robot
             pas.SetOkAction(() =>
             {
                 List.ListElement element = this.CreateScript(pas.scriptName);
+                Manager.instance.list.AddChoice(element);
+                Manager.instance.list.SelectLast();
+                Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
+                pas.PopUpClose();
+            });
+            pas.SetAddScriptAction((robotScript) =>
+            {
+                robotScript.robot = this;
+                List.ListElement element = this.AddScript(robotScript);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
                 Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);

@@ -170,12 +170,18 @@ public class SaveManager : MonoBehaviour
         sr.WriteLine(JsonUtility.ToJson(GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().Serialize()));
         sr.Close();
 
+        // save unassignedScripts
+        sr = File.CreateText(tmpSavePath + "UnassignedScripts");
+        sr.WriteLine(JsonUtility.ToJson(new UnassignedScripts() { scripts = RobotScript.unassignedRobotScript }));
+        sr.Close();
+
         string[] files = new string[]
         {
             tmpSavePath + "Robots",
             tmpSavePath + "Splines",
             tmpSavePath + "Ids",
-            tmpSavePath + "Terrain"
+            tmpSavePath + "Terrain",
+            tmpSavePath + "UnassignedScripts"
         };
 
         if (!fileName.EndsWith(".pr"))
@@ -393,6 +399,8 @@ public class SaveManager : MonoBehaviour
         RobotScript.nextid = saveId.robotScriptNextId;
         Robot.nextid = saveId.robotNextId;
         Nodes.nextid = saveId.nodeNextId;
+
+        GC.Collect();
     }
 
     public GameObject InstantiateSavedObj(GameObject gameObject, Vector3 position, Quaternion rotation, Transform parent)
@@ -452,5 +460,12 @@ public class SaveManager : MonoBehaviour
     public class Settings
     {
         public string savePath;
+    }
+
+    // the class that will be converted to json to save unassigned scripts
+    [Serializable]
+    public class UnassignedScripts
+    {
+        public List<RobotScript.UnassignedScript> scripts;
     }
 }

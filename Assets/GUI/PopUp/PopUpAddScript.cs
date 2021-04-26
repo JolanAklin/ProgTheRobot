@@ -19,19 +19,74 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using UnityEngine.UI;
 
 public class PopUpAddScript : MonoBehaviour
 {
     [HideInInspector]
     public string scriptName;
 
-    //a voir pour les items pour la liste 
-
     private Action cancelAction;
     private Action okAction;
+    private Action<RobotScript> addScriptAction;
+
+    // start tpi
+    public GameObject listContent;
+    public GameObject buttonsPanelPrefab;
+    public GameObject buttonScriptPrefab;
+    //end tpi
 
     private void Start()
     {
+        // start tpi
+        foreach (RobotScript.UnassignedScript unassignedScript in RobotScript.unassignedRobotScript)
+        {
+            // create a panel to hold the scripts
+            GameObject buttonsPanel = Instantiate(buttonsPanelPrefab, Vector3.zero, Quaternion.identity, listContent.transform);
+
+            // create a button for each script
+            GameObject buttonScript = Instantiate(buttonScriptPrefab, Vector3.zero, Quaternion.identity, buttonsPanel.transform);
+            buttonScript.transform.GetChild(0).GetComponent<TMP_Text>().text = unassignedScript.main.name;
+            // when the button with the main script is clicked
+            buttonScript.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                //create a new robot
+                Robot robot = new Robot(Color.red, "Robot", 1000, false);
+                Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
+                Manager.instance.listRobot.Select(robot.id);
+
+                // add the main script 
+                robot.MainScript = unassignedScript.main;
+                unassignedScript.main.robot = robot;
+                List.ListElement element = robot.AddScript(unassignedScript.main);
+                Manager.instance.list.AddChoice(element);
+                Manager.instance.list.SelectLast();
+                Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
+
+                // add all other children of the main script
+                foreach (RobotScript rs in unassignedScript.childrens)
+                {
+                    rs.robot = robot;
+                    element = robot.AddScript(rs);
+                    Manager.instance.list.AddChoice(element);
+                    Manager.instance.list.SelectLast();
+                    Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
+                }
+                Manager.instance.ChangeRobotSettings();
+                this.PopUpClose();
+            });
+            foreach (RobotScript rs in unassignedScript.childrens)
+            {
+                buttonScript = Instantiate(buttonScriptPrefab, Vector3.zero, Quaternion.identity, buttonsPanel.transform);
+                buttonScript.transform.GetChild(0).GetComponent<TMP_Text>().text = rs.name;
+                // called when a children script button is clicked
+                buttonScript.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    addScriptAction.Invoke(rs);
+                });
+            }
+        }
+        // end tpi
     }
 
     public void PopUpClose()
@@ -53,6 +108,12 @@ public class PopUpAddScript : MonoBehaviour
     {
         okAction = action;
     }
+    // start tpi
+    public void SetAddScriptAction(Action<RobotScript> action)
+    {
+        addScriptAction = action;
+    }
+    //end tpi
 
     public void Cancel()
     {
