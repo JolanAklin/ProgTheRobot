@@ -63,7 +63,6 @@ public class SaveManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-
         tmpSavePath = Application.persistentDataPath + tmpSavePath;
         savePath = Application.persistentDataPath + savePath;
         extractPath = Application.persistentDataPath + extractPath;
@@ -90,6 +89,12 @@ public class SaveManager : MonoBehaviour
         }
 
         LoadSettings();
+
+    }
+
+    private void Start()
+    {
+        LoadFile();
     }
 
     private void Update()
@@ -99,6 +104,16 @@ public class SaveManager : MonoBehaviour
             Save();
         }
     }
+    // start tpi
+    /// <summary>
+    /// Load the default file
+    /// </summary>
+    public void LoadFile()
+    {
+        CleanDir(extractPath);
+        JsonToObj(Application.persistentDataPath + "/default/DefaultNewProject.pr");
+    }
+    // end tpi
 
     public void LoadFile(string filename)
     {
