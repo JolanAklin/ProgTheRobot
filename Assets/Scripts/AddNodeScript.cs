@@ -68,7 +68,7 @@ public class AddNodeScript : MonoBehaviour
                     nodeScript.rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript]; // make the node aware in which robotScript he is
 
                     nodeScript.StartMove();
-                    UIRaycaster.instance.nodeToMove = nodeScript;
+                    //UIRaycaster.instance.nodeToMove = nodeScript;
                 }
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);
