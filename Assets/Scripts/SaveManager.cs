@@ -170,10 +170,27 @@ public class SaveManager : MonoBehaviour
         sr.WriteLine(JsonUtility.ToJson(GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>().Serialize()));
         sr.Close();
 
+        // start tpi
         // save unassignedScripts
         sr = File.CreateText(tmpSavePath + "UnassignedScripts");
-        sr.WriteLine(JsonUtility.ToJson(new UnassignedScripts() { scripts = RobotScript.unassignedRobotScript }));
+        SerializedUnassignedScripts serializedUnassignedScripts = new SerializedUnassignedScripts();
+        serializedUnassignedScripts.scripts = new List<RobotScript.SerializedScriptsInRobotHierarchy>();
+        // serialize all scripts before saving
+        foreach (RobotScript.ScriptsInRobotHierarchy hierarchy in RobotScript.unassignedRobotScript)
+        {
+            RobotScript.SerializedScriptsInRobotHierarchy serializedScripts = new RobotScript.SerializedScriptsInRobotHierarchy();
+            serializedScripts.main = hierarchy.main.SerializeScript();
+            serializedScripts.childrens = new List<RobotScript.SerializedRobotScript>();
+            foreach (RobotScript rs in hierarchy.childrens)
+            {
+                serializedScripts.childrens.Add(rs.SerializeScript());
+            }
+            serializedUnassignedScripts.scripts.Add(serializedScripts);
+        }
+        sr.WriteLine(JsonUtility.ToJson(serializedUnassignedScripts));
         sr.Close();
+
+        //end tpi
 
         string[] files = new string[]
         {
@@ -226,6 +243,7 @@ public class SaveManager : MonoBehaviour
         SaveId saveId = null;
         SplineList splineList = null;
         TerrainManager.SerializedTerrain serializedTerrain = null;
+        string unassignedScripts = "";
 
         // read all files and and create object from the json
         foreach (string file in Directory.EnumerateFiles(extractPath))
@@ -247,6 +265,10 @@ public class SaveManager : MonoBehaviour
                 //serializedRobots.Add(JsonUtility.FromJson<Robot.SerializedRobot>(fileContent));
                 serializedRobotList = JsonUtility.FromJson<SerializedRobotList>(fileContent);
             }
+            else if(file.EndsWith("UnassignedScripts"))
+            {
+                unassignedScripts = fileContent;
+            }
         }
         List<Robot.SerializedRobot> serializedRobots = new List<Robot.SerializedRobot>();
         foreach (Robot.SerializedRobot serializedRobot in serializedRobotList.serializedRobots)
@@ -255,7 +277,7 @@ public class SaveManager : MonoBehaviour
         }
 
         // clean the app before creating the usable object
-        ClearGame(saveId, serializedRobots, splineList, serializedTerrain);
+        ClearGame(saveId, serializedRobots, splineList, serializedTerrain, unassignedScripts);
     }
 
     //https://stackoverflow.com/questions/31836519/how-to-create-tar-gz-file-in-c-sharp modified by me
@@ -317,10 +339,10 @@ public class SaveManager : MonoBehaviour
     /// <summary>
     /// clear the app before loading
     /// </summary>
-    public void ClearGame(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
+    public void ClearGame(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain, string unassignedScripts)
     {
         NewProject();
-        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList, serializedTerrain);
+        IEnumerator coroutine = LoadScene(saveId, serializedRobots, splineList, serializedTerrain, unassignedScripts);
         StartCoroutine(coroutine);
     }
 
@@ -332,6 +354,8 @@ public class SaveManager : MonoBehaviour
         //reset all the static vars
         RobotScript.nextid = 0;
         RobotScript.robotScripts = new Dictionary<int, RobotScript>();
+        RobotScript.unassignedRobotScript = new List<RobotScript.ScriptsInRobotHierarchy>();
+
 
         foreach (KeyValuePair<int, Robot> robot in Robot.robots)
         {
@@ -357,7 +381,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // create usable objects from the saved form
-    private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
+    private void LoadObject(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain, string unassignedScripts)
     {
         // create all the robot from the json created object
         foreach (Robot.SerializedRobot serializedRobot in serializedRobots)
@@ -390,6 +414,20 @@ public class SaveManager : MonoBehaviour
             rs.HideNodesForThisScript();
         }
 
+        //start tpi
+        // create all unassigned scripts
+        DeSerializedUnassignedScripts(unassignedScripts);
+        // hide unassignedScripts
+        foreach (RobotScript.ScriptsInRobotHierarchy hierarchy in RobotScript.unassignedRobotScript)
+        {
+            hierarchy.main.HideNodesForThisScript();
+            foreach (RobotScript rs in hierarchy.childrens)
+            {
+                rs.HideNodesForThisScript();
+            }
+        }
+        //end tpi
+
         Manager.instance.listRobot.SelectFirst();
 
         // create the terrain
@@ -400,6 +438,7 @@ public class SaveManager : MonoBehaviour
         Robot.nextid = saveId.robotNextId;
         Nodes.nextid = saveId.nodeNextId;
 
+
         GC.Collect();
     }
 
@@ -409,7 +448,7 @@ public class SaveManager : MonoBehaviour
     }
 
     // reload the current scene to remove all unwanted object on the load of a new file
-    private IEnumerator LoadScene(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain)
+    private IEnumerator LoadScene(SaveId saveId, List<Robot.SerializedRobot> serializedRobots, SplineList splineList, TerrainManager.SerializedTerrain serializedTerrain, string unassignedScripts)
     {
         // Start loading the scene
         Scene scene = SceneManager.GetActiveScene();
@@ -419,7 +458,7 @@ public class SaveManager : MonoBehaviour
             yield return null;
         // Wait a frame so every Awake and Start method is called
         yield return new WaitForEndOfFrame();
-        LoadObject(saveId, serializedRobots, splineList, serializedTerrain);
+        LoadObject(saveId, serializedRobots, splineList, serializedTerrain, unassignedScripts);
     }
     private IEnumerator LoadSceneSimple()
     {
@@ -464,8 +503,22 @@ public class SaveManager : MonoBehaviour
 
     // the class that will be converted to json to save unassigned scripts
     [Serializable]
-    public class UnassignedScripts
+    public class SerializedUnassignedScripts
     {
-        public List<RobotScript.ScriptsInRobotHierarchy> scripts;
+        [SerializeField]
+        public List<RobotScript.SerializedScriptsInRobotHierarchy> scripts;
+    }
+
+    private void DeSerializedUnassignedScripts(string json)
+    {
+        RobotScript.unassignedRobotScript = new List<RobotScript.ScriptsInRobotHierarchy>();
+        SerializedUnassignedScripts serializedUnassignedScripts = JsonUtility.FromJson<SerializedUnassignedScripts>(json);
+        foreach (RobotScript.SerializedScriptsInRobotHierarchy hierarchy in serializedUnassignedScripts.scripts)
+        {
+            RobotScript robotScript = new RobotScript();
+            robotScript.DeSerializeScript(hierarchy.main);
+            RobotScript.unassignedRobotScript.Add(robotScript.DeSerializedScriptsInRobotHierarchy(hierarchy));
+        }
+
     }
 }

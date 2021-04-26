@@ -106,6 +106,8 @@ public class PopUpAddScript : MonoBehaviour
             {
                 rs.robot = robot;
                 rs.id = RobotScript.GetNextId();
+                RobotScript.robotScripts.Add(rs.id, rs);
+                robot.robotScripts.Add(rs);
                 element = robot.AddScript(rs);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();

@@ -78,7 +78,7 @@ public class Robot
         robots.Add(id, this);
         foreach (RobotScript.SerializedRobotScript serializedRobotScript in serializedRobotScripts)
         {
-            RobotScript robotScript = new RobotScript(serializedRobotScript, saveManager);
+            RobotScript robotScript = new RobotScript(serializedRobotScript);
         }
     }
 
@@ -181,6 +181,8 @@ public class Robot
             {
                 robotScript.robot = this;
                 robotScript.id = RobotScript.GetNextId();
+                RobotScript.robotScripts.Add(robotScript.id, robotScript);
+                robotScripts.Add(robotScript);
                 List.ListElement element = this.AddScript(robotScript);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();

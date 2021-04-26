@@ -41,6 +41,11 @@ public class RobotScript
     public List<GameObject> nodes = new List<GameObject>();
     public List<GameObject> splines = new List<GameObject>();
 
+    public RobotScript()
+    {
+
+    }
+
     public RobotScript(string name, Robot robot)
     {
         this.name = name;
@@ -61,9 +66,9 @@ public class RobotScript
     }
     //end tpi
 
-    public RobotScript(SerializedRobotScript serializedRobotScript, SaveManager saveManager)
+    public RobotScript(SerializedRobotScript serializedRobotScript)
     {
-        DeSerializeScript(serializedRobotScript, saveManager);
+        DeSerializeScript(serializedRobotScript, SaveManager.instance);
     }
 
     private void Init(Robot robot)
@@ -176,11 +181,35 @@ public class RobotScript
     /// <summary>
     /// A class to represent the hierarchy of the scripts that were attached to a robot
     /// </summary>
-    [Serializable]
     public class ScriptsInRobotHierarchy
     {
         public RobotScript main;
         public List<RobotScript> childrens;
+    }
+
+    /// <summary>
+    /// A class to represent the hierarchy of the scripts that were attached to a robot but can be saved to a file
+    /// </summary>
+    [Serializable]
+    public class SerializedScriptsInRobotHierarchy
+    {
+        public SerializedRobotScript main;
+        public List<SerializedRobotScript> childrens;
+    }
+
+    public ScriptsInRobotHierarchy DeSerializedScriptsInRobotHierarchy(SerializedScriptsInRobotHierarchy serializedScriptsInRobotHierarchy)
+    {
+        ScriptsInRobotHierarchy scriptsInRobotHierarchy = new ScriptsInRobotHierarchy()
+        {
+            main = this,
+        };
+        scriptsInRobotHierarchy.childrens = new List<RobotScript>();
+        foreach (SerializedRobotScript serializedRobotScript in serializedScriptsInRobotHierarchy.childrens)
+        {
+            RobotScript rs = new RobotScript();
+            scriptsInRobotHierarchy.childrens.Add(rs.DeSerializeScript(serializedRobotScript));
+        }
+        return scriptsInRobotHierarchy;
     }
 
     //end tpi
@@ -207,7 +236,11 @@ public class RobotScript
             Nodes nodeScript = node.GetComponent<Nodes>();
             serializedNode.Add(nodeScript.SerializeNode());
         }
-        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, isMain = isMainScript, name = name, robotId = robot.id, serializedNode = serializedNode};
+        SerializedRobotScript serializedRobotScript = new SerializedRobotScript() { id = id, isMain = isMainScript, name = name, serializedNode = serializedNode};
+        if(robot != null)
+        {
+            serializedRobotScript.robotId = robot.id;
+        }
         return serializedRobotScript;
     }
 
@@ -241,5 +274,40 @@ public class RobotScript
             }
         }
     }
+
+    //start tpi
+
+    /// <summary>
+    /// Deserialize script but doesn't add it to the robotscripts list and doesn't link it to a robot
+    /// </summary>
+    /// <param name="serializedRobotScript"></param>
+    public RobotScript DeSerializeScript(SerializedRobotScript serializedRobotScript)
+    {
+        id = serializedRobotScript.id;
+        isMainScript = serializedRobotScript.isMain;
+        name = serializedRobotScript.name;
+        if (Robot.robots.ContainsKey(serializedRobotScript.robotId))
+            robot = Robot.robots[serializedRobotScript.robotId];
+
+        Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+        foreach (Nodes.SerializableNode serializableNode in serializedRobotScript.serializedNode)
+        {
+            GameObject node = SaveManager.instance.nodeObjects.Find(x => x.nodeType == serializableNode.type.ToString()).gameObject; // find the correct gameobject to instantiate
+            GameObject nodeInstance = SaveManager.instance.InstantiateSavedObj(node, new Vector3(serializableNode.position[0], serializableNode.position[1], serializableNode.position[2]), Quaternion.identity, nodeHolder);
+
+            nodes.Add(nodeInstance);
+            Nodes nodeInstanceScript = nodeInstance.GetComponent<Nodes>();
+            nodeInstanceScript.rs = this;
+
+            nodeInstanceScript.DeSerializeNode(serializableNode);
+
+            if (serializableNode.type == "start")
+            {
+                nodeStart = nodeInstance.GetComponent<Nodes>();
+            }
+        }
+        return this;
+    }
+    //end tpi
     #endregion
 }
