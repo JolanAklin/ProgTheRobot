@@ -67,6 +67,7 @@ public class AddNodeScript : MonoBehaviour
                     Nodes nodeScript = instantiatedNode.GetComponent<Nodes>();
                     nodeScript.rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript]; // make the node aware in which robotScript he is
 
+                    SelectionManager.instance.AddNodeToSelection(nodeScript);
                     nodeScript.StartMove();
                     //UIRaycaster.instance.nodeToMove = nodeScript;
                 }

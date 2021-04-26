@@ -138,6 +138,7 @@ GameObject:
   - component: {fileID: 34866}
   - component: {fileID: 34867}
   - component: {fileID: 34868}
+  - component: {fileID: 34869}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -167,7 +168,6 @@ MonoBehaviour:
   nodeHolder: {fileID: 397547265}
   robotPrefab: {fileID: 3547055596659527068, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
   execSpeed: 5
-  selectedNodeId: -1
   node: {fileID: 0}
   SplineObject: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
   spline: {fileID: 0}
@@ -314,8 +314,8 @@ MonoBehaviour:
       petit que\n >= : plus grand ou \xE9gale\n <= : plus petit ou \xE9gal\n <> :
       diff\xE9rent\n\nOp\xE9rateurs logique :\n Et\n Ou\n Non\n Vrai\n Faux\n\nFonctions
       :\n - MurEnFace\r\n - MurADroite\r\n- MurAGauche\r\n - Sorti\r\n - RobotSurUnePrise\r\n-
-      CaseMarqu\xE9e\r\n - BallonSurLeSol\r\n- DistanceMur\r\n - Energie\r\n - xRobot\r\n
-      - yRobot\r\n - dxRobot\r\n - dyRobot\r\n- xBallon\r\n - yBallon"
+      CaseMarqu\xE9e\r\n - BallonSurLeSol\r\n- DistanceMur\r\n - Energie\r\n - xRobot\r\n-
+      yRobot\r\n - dxRobot\r\n - dyRobot\r\n- xBallon\r\n - yBallon"
   - nodeTypes: 5
     infoTextTitle: Bloc sous programme
     infoText: Ce bloc apelle un sous programme.
@@ -331,13 +331,24 @@ MonoBehaviour:
       2\n\nLa boucle sera ex\xE9cut\xE9e tant que maVar + 1 est strictement \xE9gal
       \xE0 monAutreVar * 2\n\nListe des comparateur :\n = : strictement \xE9gale\n>
       : plus grand que\n< : plus petit que\n >= : plus grand ou \xE9gale\n <= : plus
-      petit ou \xE9gal\n<> : diff\xE9rent\n\nOp\xE9rateurs logique :\n Et\nOu\n Non\n
-      Vrai\n Faux\n\nFonctions :\n - MurEnFace\r\n - MurADroite\r\n - MurAGauche\r\n
-      - Sorti\r\n - RobotSurUnePrise\r\n- CaseMarqu\xE9e\r\n - BallonSurLeSol\r\n-
-      DistanceMur\r\n - Energie\r\n - xRobot\r\n- yRobot\r\n - dxRobot\r\n - dyRobot\r\n-
-      xBallon\r\n - yBallon"
+      petit ou \xE9gal\n<> : diff\xE9rent\n\nOp\xE9rateurs logique :\n Et\nOu\n Non\nVrai\nFaux\n\nFonctions
+      :\n - MurEnFace\r\n - MurADroite\r\n - MurAGauche\r\n- Sorti\r\n- RobotSurUnePrise\r\n-
+      CaseMarqu\xE9e\r\n - BallonSurLeSol\r\n- DistanceMur\r\n- Energie\r\n - xRobot\r\n-
+      yRobot\r\n - dxRobot\r\n - dyRobot\r\n- xBallon\r\n- yBallon"
   infotitle: {fileID: 27398558794119888}
   infodesc: {fileID: 27398558794120172}
+--- !u!114 &34869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85ba70b35e34e5e4ea12f5f43e0f3284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4418599
 GameObject:
   m_ObjectHideFlags: 0
@@ -4442,6 +4453,10 @@ PrefabInstance:
       propertyPath: m_RaycastTarget
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6997345317412859002, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
+      propertyPath: m_ChildAlignment
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6997345317412859003, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -4544,7 +4559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6997345318545651897, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 5
+      value: -5
       objectReference: {fileID: 0}
     - target: {fileID: 6997345318545651897, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -9618,7 +9633,6 @@ MonoBehaviour:
   panelOpen: 0
   nodeContextMenuOpen: 0
   nodeContextMenu: {fileID: 4239826567792624434, guid: dcc557f095d534c4ba04ef7a0cb1498e, type: 3}
-  nodeToMove: {fileID: 0}
   nodeAreaPanSensitivity: 50
   infoBar: {fileID: 819571190}
 --- !u!114 &1754670301
@@ -11047,10 +11061,10 @@ RectTransform:
   m_Father: {fileID: 27398558794119078}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 193.5, y: -21}
-  m_SizeDelta: {x: 381, y: 36}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794118189
 RectTransform:
@@ -11145,10 +11159,10 @@ RectTransform:
   m_Father: {fileID: 27398558794118279}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 192, y: 0}
-  m_SizeDelta: {x: 384, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794118279
 RectTransform:
@@ -11358,10 +11372,10 @@ RectTransform:
   m_Father: {fileID: 27398558794119078}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 193.5, y: -186.37929}
-  m_SizeDelta: {x: 381, y: 288.75858}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794119065
 RectTransform:
@@ -11455,8 +11469,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 27398558794120059}
   m_HandleRect: {fileID: 27398558794118963}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999998
+  m_Value: 0
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

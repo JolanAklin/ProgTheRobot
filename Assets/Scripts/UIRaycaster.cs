@@ -182,28 +182,23 @@ public class UIRaycaster : MonoBehaviour
             //end resize
             if(resizeHandle != null && resizeHandle.node.canResize)
             {
-                //resizeHandle.node.gameObject.transform.position = new Vector3(resizeHandle.node.gameObject.transform.position.x, resizeHandle.node.transform.position.y, );
                 resizeHandle.NodeResize();
                 resizeHandle = null;
             }
 
             //end move
-            if (/*nodeToMove != null && nodeToMove.canMove*/true)
+            foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
             {
-                //nodeToMove.gameObject.transform.position = new Vector3(nodeToMove.gameObject.transform.position.x, nodeToMove.transform.position.y, 0);
-                foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
-                {
-                    selectedNode.EndMove();
-                }
-                //nodeToMove = null;
+                selectedNode.EndMove();
             }
         }
         if (Input.GetMouseButtonDown(0))
         {
+            RaycastHit2D hit;
+            Ray ray;
             if (rayCastResults.Count == 0)
             {
-                RaycastHit2D hit;
-                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
                 if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
                 {
                     if (hit.collider.gameObject.tag == "Node")
@@ -232,11 +227,11 @@ public class UIRaycaster : MonoBehaviour
                 SelectionManager.instance.ResetSelection();
             }
 
+
             // start resize
             if (rayCastResults.Count == 0 && resizeHandle == null)
             {
-                RaycastHit2D hit;
-                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+                ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
                 if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
                 {
                     if (hit.collider.gameObject.tag == "ResizeHandle")
@@ -248,37 +243,30 @@ public class UIRaycaster : MonoBehaviour
             }
 
             //move node
-            if (/*nodeToMove == null*/true)
+            ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
+            if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
             {
-                RaycastHit2D hit;
-                Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
-                if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
+                if (hit.collider.gameObject.tag == "Node")
                 {
-                    if (hit.collider.gameObject.tag == "Node")
+                    if(hit.collider.GetComponent<Nodes>().IsInputLocked)
                     {
-                        if(hit.collider.GetComponent<Nodes>().IsInputLocked)
+                        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
                         {
-                            //nodeToMove = hit.collider.GetComponent<Nodes>();
-                            foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+                            if (selectedNode != null)
                             {
-                                //if (!nodeToMove.isMoving)
-                                //{
-                                    if (selectedNode != null)
-                                    {
-                                        selectedNode.StartMove();
-                                    }
-                                //}
+                                selectedNode.StartMove();
                             }
                         }
                     }
                 }
             }
+
         }
 
         if(Input.GetMouseButtonDown(0))
         {
             // move spline
-            if (rayCastResults.Count == 0 /*&& nodeToMove == null*/ && SelectionManager.instance.SelectedNodes.Count == 0)
+            if (rayCastResults.Count == 0 && SelectionManager.instance.SelectedNodes.Count == 0)
             {
                 RaycastHit2D hit;
                 Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
