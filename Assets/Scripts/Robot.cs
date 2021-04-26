@@ -125,10 +125,10 @@ public class Robot
         unassignedScript.childrens = new List<RobotScript>();
         foreach (RobotScript rs in robot.robotScripts)
         {
+            RobotScript.robotScripts.Remove(rs.id);
+
             rs.robot = null;
             rs.id = 0;
-
-            RobotScript.robotScripts.Remove(rs.id);
 
             if (rs.isMainScript)
                 unassignedScript.main = rs;
