@@ -239,40 +239,24 @@ public class UIRaycaster : MonoBehaviour
                 {
                     if (hit.collider.gameObject.tag == "Node")
                     {
-                        if (selectedNode != null)
-                        {
-                            selectedNode.ChangeBorderColor(selectedNode.defaultColor);
-                        }
-                        selectedNode = hit.collider.GetComponent<Nodes>();
-                        Manager.instance.selectedNodeId = selectedNode.id;
-                        selectedNode.ChangeBorderColor(selectedNode.selectedColor);
+                        if(Input.GetKey(KeyCode.LeftShift))
+                            SelectionManager.instance.AddNodeToSelection(hit.collider.GetComponent<Nodes>(), false);
+                        else
+                            SelectionManager.instance.AddNodeToSelection(hit.collider.GetComponent<Nodes>());
                     }
                     else
                     {
-                        Manager.instance.selectedNodeId = -1;
-                        if (selectedNode != null)
-                        {
-                            selectedNode.ChangeBorderColor(selectedNode.defaultColor);
-                            selectedNode = null;
-                        }
-                    }
-                }else
-                {
-                    Manager.instance.selectedNodeId = -1;
-                    if (selectedNode != null)
-                    {
-                        selectedNode.ChangeBorderColor(selectedNode.defaultColor);
-                        selectedNode = null;
+                        SelectionManager.instance.ResetSelection();
                     }
                 }
-            }else
+                else
+                {
+                    SelectionManager.instance.ResetSelection();
+                }
+            }
+            else
             {
-                Manager.instance.selectedNodeId = -1;
-                if(selectedNode != null)
-                {
-                    selectedNode.ChangeBorderColor(selectedNode.defaultColor);
-                    selectedNode = null;
-                }
+                SelectionManager.instance.ResetSelection();
             }
         }
         // only start moving a node if the cursor was moved more than 1 unit

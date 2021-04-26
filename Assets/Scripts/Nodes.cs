@@ -339,11 +339,6 @@ public abstract class Nodes : MonoBehaviour
                 }
             }
         }
-        Manager.instance.selectedNodeId = -1;
-        if (canResize)
-            ChangeBorderColor(defaultColor);
-        else
-            ChangeBorderColor(errorColor);
     }
 
     public void Resize(Vector2 size)
@@ -470,17 +465,6 @@ public abstract class Nodes : MonoBehaviour
                 };
             }
 
-        }
-
-
-        Manager.instance.selectedNodeId = -1;
-        if(canMove)
-        {
-            ChangeBorderColor(defaultColor);
-        }
-        else
-        {
-            ChangeBorderColor(errorColor);
         }
     }
 

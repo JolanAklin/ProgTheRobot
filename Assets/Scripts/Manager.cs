@@ -57,8 +57,6 @@ public class Manager : MonoBehaviour
     // define the execution speed of the script
     public float execSpeed;
 
-    public int selectedNodeId = -1;
-
     private void Awake()
     {
         instance = this;
@@ -102,10 +100,10 @@ public class Manager : MonoBehaviour
 
     private void Update()
     {
-        Nodes nodeInfo;
-        if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.I))
+        if(SelectionManager.instance.SelectedNodes.Count > 0)
         {
-            if(Nodes.NodesDict.TryGetValue(selectedNodeId, out nodeInfo))
+            Nodes nodeInfo = SelectionManager.instance.SelectedNodes[0];
+            if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.I))
             {
                 ShowInfo(nodeInfo);
             }
