@@ -466,6 +466,6 @@ public class SaveManager : MonoBehaviour
     [Serializable]
     public class UnassignedScripts
     {
-        public List<RobotScript.UnassignedScript> scripts;
+        public List<RobotScript.ScriptsInRobotHierarchy> scripts;
     }
 }

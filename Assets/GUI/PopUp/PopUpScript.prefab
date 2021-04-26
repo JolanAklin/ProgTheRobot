@@ -461,8 +461,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scriptName: 
   listContent: {fileID: 5737620841024988920}
-  buttonsPanelPrefab: {fileID: 8022316542960355940, guid: a50fb40641d06d540b37033f84d72668, type: 3}
-  buttonScriptPrefab: {fileID: 3381274419426590382, guid: 72150c250cb81a44287ae7f090348cfc, type: 3}
+  buttonsPanelPrefab: {fileID: 7302202057440037393, guid: a50fb40641d06d540b37033f84d72668, type: 3}
+  buttonMainPrefab: {fileID: 9165946288096271327, guid: efd351a90f36b234eb3a6ea74680fecb, type: 3}
+  buttonChildrenPrefab: {fileID: 2404414142049544579, guid: fb94a781d5ea3384b87bef472e048574, type: 3}
 --- !u!1 &2149542841282490610
 GameObject:
   m_ObjectHideFlags: 0
@@ -1179,10 +1180,10 @@ RectTransform:
   m_Father: {fileID: 819780328688972184}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 25}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 291.75, y: -12.5}
+  m_SizeDelta: {x: 190.5, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4493727701947292845
 CanvasRenderer:
@@ -1312,10 +1313,10 @@ RectTransform:
   m_Father: {fileID: 819780328688972184}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 25}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 98.25, y: -12.5}
+  m_SizeDelta: {x: 190.5, y: 25}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4493727702212164036
 CanvasRenderer:
@@ -1553,7 +1554,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Organigramme import\xE9s"
+  m_text: "Organigrammes pr\xE9sents"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}

@@ -26,7 +26,7 @@ public class RobotScript
     public static Dictionary<int, RobotScript> robotScripts = new Dictionary<int, RobotScript>();
     public int id;
     //start tpi
-    public static List<UnassignedScript> unassignedRobotScript = new List<UnassignedScript>();
+    public static List<ScriptsInRobotHierarchy> unassignedRobotScript = new List<ScriptsInRobotHierarchy>();
     public bool isMainScript = false;
     // end tpi
     public string name;
@@ -69,10 +69,16 @@ public class RobotScript
     private void Init(Robot robot)
     {
         // All robotscripts have a different id
-        id = nextid;
-        nextid++;
+        id = GetNextId();
         this.robot = robot;
         robotScripts.Add(id, this);
+    }
+
+    public static int GetNextId()
+    {
+        int id = nextid;
+        nextid++;
+        return id;
     }
 
 
@@ -171,7 +177,7 @@ public class RobotScript
     /// A class to represent the hierarchy of the scripts that were attached to a robot
     /// </summary>
     [Serializable]
-    public class UnassignedScript
+    public class ScriptsInRobotHierarchy
     {
         public RobotScript main;
         public List<RobotScript> childrens;

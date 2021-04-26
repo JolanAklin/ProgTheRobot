@@ -33,60 +33,116 @@ public class PopUpAddScript : MonoBehaviour
     // start tpi
     public GameObject listContent;
     public GameObject buttonsPanelPrefab;
-    public GameObject buttonScriptPrefab;
+    public GameObject buttonMainPrefab;
+    public GameObject buttonChildrenPrefab;
     //end tpi
 
     private void Start()
     {
         // start tpi
-        foreach (RobotScript.UnassignedScript unassignedScript in RobotScript.unassignedRobotScript)
+        foreach (RobotScript.ScriptsInRobotHierarchy unassignedScript in RobotScript.unassignedRobotScript)
         {
             // create a panel to hold the scripts
             GameObject buttonsPanel = Instantiate(buttonsPanelPrefab, Vector3.zero, Quaternion.identity, listContent.transform);
 
-            // create a button for each script
-            GameObject buttonScript = Instantiate(buttonScriptPrefab, Vector3.zero, Quaternion.identity, buttonsPanel.transform);
-            buttonScript.transform.GetChild(0).GetComponent<TMP_Text>().text = unassignedScript.main.name;
-            // when the button with the main script is clicked
-            buttonScript.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                //create a new robot
-                Robot robot = new Robot(Color.red, "Robot", 1000, false);
-                Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
-                Manager.instance.listRobot.Select(robot.id);
+            ScriptListCollapsable collapsable = buttonsPanel.GetComponent<ScriptListCollapsable>();
 
-                // add the main script 
-                robot.MainScript = unassignedScript.main;
-                unassignedScript.main.robot = robot;
-                List.ListElement element = robot.AddScript(unassignedScript.main);
+            collapsable.objectToHide.Add(CreateMainScriptImportButton(unassignedScript, buttonsPanel, true));
+
+            collapsable.objectToHide.AddRange(CreateChildrenScriptImportButtons(unassignedScript, buttonsPanel));
+
+            collapsable.Collapse();
+        }
+
+        foreach (Robot robot in Robot.robots.Values)
+        {
+            RobotScript.ScriptsInRobotHierarchy hierarchy = robot.GetScriptHierarchy();
+
+            GameObject buttonsPanel = Instantiate(buttonsPanelPrefab, Vector3.zero, Quaternion.identity, listContent.transform);
+
+            ScriptListCollapsable collapsable = buttonsPanel.GetComponent<ScriptListCollapsable>();
+
+            collapsable.objectToHide.Add(CreateMainScriptImportButton(hierarchy, buttonsPanel));
+
+            collapsable.objectToHide.AddRange(CreateChildrenScriptImportButtons(hierarchy, buttonsPanel));
+
+            collapsable.Collapse();
+
+        }
+        // end tpi
+    }
+
+    /// <summary>
+    /// Create the import button for the main script
+    /// </summary>
+    /// <param name="unassignedScript">A ScriptsInRobotHierarchy object to define the main script</param>
+    /// <param name="buttonsPanel">The panel where the button will be added</param>
+    /// <param name="shouldRemoveEntry">Remove the entry from RobotScript.unassignedRobotScript, should only be true when the ScriptsInRobotHierarchy come from this list</param>
+    /// <returns>The created button</returns>
+    private GameObject CreateMainScriptImportButton(RobotScript.ScriptsInRobotHierarchy unassignedScript, GameObject buttonsPanel, bool shouldRemoveEntry = false)
+    {
+        // create a button for each script
+        GameObject buttonScript = Instantiate(buttonMainPrefab, Vector3.zero, Quaternion.identity, buttonsPanel.transform);
+        buttonScript.transform.GetChild(0).GetComponent<TMP_Text>().text = unassignedScript.main.name;
+        // when the button with the main script is clicked
+        buttonScript.GetComponent<Button>().onClick.AddListener(() =>
+        {
+            //create a new robot
+            Robot robot = new Robot(Color.red, "Robot", 1000, false);
+            Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());
+            Manager.instance.listRobot.Select(robot.id);
+
+            // add the main script 
+            robot.MainScript = unassignedScript.main;
+            unassignedScript.main.robot = robot;
+            unassignedScript.main.id = RobotScript.GetNextId();
+            List.ListElement element = robot.AddScript(unassignedScript.main);
+            Manager.instance.list.AddChoice(element);
+            Manager.instance.list.SelectLast();
+            Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
+
+            // add all other children of the main script
+            foreach (RobotScript rs in unassignedScript.childrens)
+            {
+                rs.robot = robot;
+                rs.id = RobotScript.GetNextId();
+                element = robot.AddScript(rs);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
                 Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
-
-                // add all other children of the main script
-                foreach (RobotScript rs in unassignedScript.childrens)
-                {
-                    rs.robot = robot;
-                    element = robot.AddScript(rs);
-                    Manager.instance.list.AddChoice(element);
-                    Manager.instance.list.SelectLast();
-                    Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
-                }
-                Manager.instance.ChangeRobotSettings();
-                this.PopUpClose();
-            });
-            foreach (RobotScript rs in unassignedScript.childrens)
-            {
-                buttonScript = Instantiate(buttonScriptPrefab, Vector3.zero, Quaternion.identity, buttonsPanel.transform);
-                buttonScript.transform.GetChild(0).GetComponent<TMP_Text>().text = rs.name;
-                // called when a children script button is clicked
-                buttonScript.GetComponent<Button>().onClick.AddListener(() =>
-                {
-                    addScriptAction.Invoke(rs);
-                });
+                if (shouldRemoveEntry)
+                    RobotScript.unassignedRobotScript.Remove(unassignedScript);
             }
+            Manager.instance.ChangeRobotSettings();
+            this.PopUpClose();
+        });
+        return buttonScript;
+    }
+
+    /// <summary>
+    /// Create import buttons for the children of the main script
+    /// </summary>
+    /// <param name="unassignedScript">A ScriptsInRobotHierarchy object to define all childrens</param>
+    /// <param name="buttonsPanel">The panel where the button will be added</param>
+    /// <returns>An array of all add script buttons</returns>
+    private GameObject[] CreateChildrenScriptImportButtons(RobotScript.ScriptsInRobotHierarchy unassignedScript, GameObject buttonsPanel)
+    {
+        GameObject[] buttons = new GameObject[unassignedScript.childrens.Count];
+        int i = 0;
+        GameObject buttonScript;
+        foreach (RobotScript rs in unassignedScript.childrens)
+        {
+            buttonScript = Instantiate(buttonChildrenPrefab, Vector3.zero, Quaternion.identity, buttonsPanel.transform);
+            buttonScript.transform.GetChild(0).GetComponent<TMP_Text>().text = rs.name;
+            // called when a children script button is clicked
+            buttonScript.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                addScriptAction.Invoke(rs);
+            });
+            buttons[i] = buttonScript;
+            i++;
         }
-        // end tpi
+        return buttons;
     }
 
     public void PopUpClose()

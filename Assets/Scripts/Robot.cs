@@ -95,17 +95,41 @@ public class Robot
         }
     }
 
+    //start tpi
+    /// <summary>
+    /// Get the hierarchy of scripts inside the robot
+    /// </summary>
+    /// <returns>A ScriptsInRobotHierarchy object</returns>
+    public RobotScript.ScriptsInRobotHierarchy GetScriptHierarchy()
+    {
+        RobotScript.ScriptsInRobotHierarchy hierarchy = new RobotScript.ScriptsInRobotHierarchy()
+        {
+            main = mainScript,
+            childrens = new List<RobotScript>(),
+        };
+        for (int i = 1; i < robotScripts.Count; i++)
+        {
+            hierarchy.childrens.Add(robotScripts[i]);
+        }
+        return hierarchy;
+    }
+    //end tpi
+
     public static void DeleteRobot(int id)
     {
         //start tpi
 
         // place the script in a class to keep the hierarchy
         Robot robot = robots[id];
-        RobotScript.UnassignedScript unassignedScript = new RobotScript.UnassignedScript();
+        RobotScript.ScriptsInRobotHierarchy unassignedScript = new RobotScript.ScriptsInRobotHierarchy();
         unassignedScript.childrens = new List<RobotScript>();
         foreach (RobotScript rs in robot.robotScripts)
         {
             rs.robot = null;
+            rs.id = 0;
+
+            RobotScript.robotScripts.Remove(rs.id);
+
             if (rs.isMainScript)
                 unassignedScript.main = rs;
             else
@@ -156,6 +180,7 @@ public class Robot
             pas.SetAddScriptAction((robotScript) =>
             {
                 robotScript.robot = this;
+                robotScript.id = RobotScript.GetNextId();
                 List.ListElement element = this.AddScript(robotScript);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
