@@ -246,19 +246,7 @@ public class UIRaycaster : MonoBehaviour
             ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
             if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
             {
-                if (hit.collider.gameObject.tag == "Node")
-                {
-                    if(hit.collider.GetComponent<Nodes>().IsInputLocked)
-                    {
-                        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
-                        {
-                            if (selectedNode != null)
-                            {
-                                selectedNode.StartMove();
-                            }
-                        }
-                    }
-                }
+                MoveNode(hit);
             }
 
         }
@@ -317,5 +305,33 @@ public class UIRaycaster : MonoBehaviour
             NodeDisplay.instance.nodeCamera.orthographicSize = zoom;
         }
         #endregion
+    }
+
+    public void MoveNode(RaycastHit2D hit)
+    {
+        if (hit.collider.gameObject.tag == "Node")
+        {
+            if (hit.collider.GetComponent<Nodes>().IsInputLocked)
+            {
+                foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+                {
+                    if (selectedNode != null)
+                    {
+                        selectedNode.StartMove();
+                    }
+                }
+            }
+        }
+    }
+
+    public void MoveNode()
+    {
+        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+        {
+            if (selectedNode != null)
+            {
+                selectedNode.StartMove();
+            }
+        }
     }
 }

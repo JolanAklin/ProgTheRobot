@@ -107,7 +107,21 @@ public class Manager : MonoBehaviour
             {
                 ShowInfo(nodeInfo);
             }
+            // start tpi
+
+            if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
+            {
+                SelectionManager.instance.SelectionToCopyBuffer();
+            }
+
         }
+        if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
+        {
+            SelectionManager.instance.PasteCopyBuffer(RobotScript.robotScripts[currentlySelectedScript]);
+        }
+
+        // end tpi
+
     }
 
     private PopUpNodeInfo ni;
