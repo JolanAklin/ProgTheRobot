@@ -24,7 +24,7 @@ using System.Text.RegularExpressions;
 
 public class NodeWhileLoop : Nodes
 {
-    private string input;
+    private string input = "";
     private string[] inputSplited;
     public TMP_InputField inputField;
 

@@ -191,6 +191,13 @@ public class UIRaycaster : MonoBehaviour
             {
                 selectedNode.EndMove();
             }
+            if(SelectionManager.instance.SelectedNodes.Find(x => x.isMoving == true) != null)
+            {
+                foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+                {
+                    selectedNode.StartMove();
+                }
+            }
         }
         if (Input.GetMouseButtonDown(0))
         {
@@ -204,7 +211,7 @@ public class UIRaycaster : MonoBehaviour
                     if (hit.collider.gameObject.tag == "Node")
                     {
                         Nodes node = hit.collider.GetComponent<Nodes>();
-                        if (!SelectionManager.instance.SelectedNodes.Contains(node))
+                        if (!SelectionManager.instance.SelectedNodes.Contains(node) && SelectionManager.instance.SelectedNodes.Find( x => x.isMoving == true) == null)
                         {
                             if (Input.GetKey(KeyCode.LeftShift))
                                 SelectionManager.instance.AddNodeToSelection(node, false);

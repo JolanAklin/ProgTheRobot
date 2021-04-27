@@ -419,7 +419,7 @@ public abstract class Nodes : MonoBehaviour
             // put the node in the loop or get it out
             RaycastHit2D hit;
             Ray ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
-            if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity, insideLoopMask))
+            if (hit = Physics2D.Raycast(transform.position, transform.forward, Mathf.Infinity, insideLoopMask))
             {
                 LoopArea loopArea = hit.collider.GetComponent<LoopArea>();
                 if(!loopArea.parent.transform.IsChildOf(transform))

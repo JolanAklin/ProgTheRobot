@@ -99,5 +99,29 @@ public class SelectionManager : MonoBehaviour
             UIRaycaster.instance.MoveNode();
         }
     }
+
+    //private void CreateSpline()
+    //{
+    //    Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+    //    GameObject[] clonedSplines = new GameObject[splinesToClone.Length];
+    //    int i = 0;
+    //    foreach (GameObject splineToClone in splinesToClone)
+    //    {
+    //        SplineManager.SerializedSpline serializedSpline = splineToClone.GetComponent<SplineManager>().SerializeSpline();
+
+    //        // change the node and script to the new cloned ones
+    //        serializedSpline.idNodeStart += idDelta;
+    //        serializedSpline.idNodeEnd += idDelta;
+    //        serializedSpline.robotScriptId = robotScript.id;
+
+    //        // create and set the right value for the spline
+    //        GameObject splineLinkInstance = Instantiate(SaveManager.instance.splineLink, new Vector3(0, 0, -899), Quaternion.identity, nodeHolder);
+    //        SplineManager splineManager = splineLinkInstance.GetComponent<SplineManager>();
+    //        splineManager.DeSerializeSpline(serializedSpline);
+    //        clonedSplines[i] = splineLinkInstance;
+    //        i++;
+    //    }
+    //    return clonedSplines;
+    //}
 }
 // end tpi
