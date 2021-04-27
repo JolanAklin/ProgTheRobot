@@ -56,6 +56,9 @@ public class NodeEnd : Nodes
     public override void LockUnlockAllInput(bool isLocked)
     {
     }
+    public override void UpdateNextNodeId(int idDelta)
+    {
+    }
     //end tpi
 
     public override void CallNextNode()

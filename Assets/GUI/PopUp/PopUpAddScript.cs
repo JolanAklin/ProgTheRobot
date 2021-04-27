@@ -93,10 +93,10 @@ public class PopUpAddScript : MonoBehaviour
             Manager.instance.listRobot.Select(robot.id);
 
             // add the main script 
-            robot.MainScript = unassignedScript.main;
-            unassignedScript.main.robot = robot;
-            unassignedScript.main.id = RobotScript.GetNextId();
-            List.ListElement element = robot.AddScript(unassignedScript.main);
+            RobotScript clone = ScriptCloner.CloneScript(unassignedScript.main);
+            robot.MainScript = clone;
+            clone.robot = robot;
+            List.ListElement element = robot.AddScript(clone);
             Manager.instance.list.AddChoice(element);
             Manager.instance.list.SelectLast();
             Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
@@ -104,17 +104,15 @@ public class PopUpAddScript : MonoBehaviour
             // add all other children of the main script
             foreach (RobotScript rs in unassignedScript.childrens)
             {
-                rs.robot = robot;
-                rs.id = RobotScript.GetNextId();
-                RobotScript.robotScripts.Add(rs.id, rs);
-                robot.robotScripts.Add(rs);
-                element = robot.AddScript(rs);
+                clone = ScriptCloner.CloneScript(rs);
+                clone.robot = robot;
+                element = robot.AddScript(clone);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
                 Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
-                if (shouldRemoveEntry)
-                    RobotScript.unassignedRobotScript.Remove(unassignedScript);
             }
+            if (shouldRemoveEntry)
+                RobotScript.unassignedRobotScript.Remove(unassignedScript);
             Manager.instance.ChangeRobotSettings();
             this.PopUpClose();
         });

@@ -56,6 +56,12 @@ public class NodeAffect : Nodes
         if (!isLocked)
             inputField.Select();
     }
+
+    public override void UpdateNextNodeId(int idDelta)
+    {
+        if(nextNodeId != -1)
+            nextNodeId += idDelta;
+    }
     //end tpi
 
     public void ChangeInput(TMP_InputField tMP_InputField)

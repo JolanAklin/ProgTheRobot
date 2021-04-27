@@ -44,6 +44,8 @@ public abstract class Nodes : MonoBehaviour
 
     // start tpi
     protected NodeTypes nodeTypes;
+    public NodeTypes NodeType { get => nodeTypes; protected set => nodeTypes = value; }
+
     //end tpi
 
     /// <summary>
@@ -339,6 +341,10 @@ public abstract class Nodes : MonoBehaviour
                 }
             }
         }
+        if (canResize)
+            ChangeBorderColor(selectedColor);
+        else
+            ChangeBorderColor(errorColor);
     }
 
     public void Resize(Vector2 size)
@@ -393,6 +399,10 @@ public abstract class Nodes : MonoBehaviour
                 }
             }
         }
+        if (canMove)
+            ChangeBorderColor(selectedColor);
+        else
+            ChangeBorderColor(errorColor);
 
         MoveSplineForNodeInsideLoop(nodesInsideLoop);
 
@@ -494,6 +504,14 @@ public abstract class Nodes : MonoBehaviour
     public abstract void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e);
 
     public abstract void LockUnlockAllInput(bool isLocked);
+
+    // start tpi
+    /// <summary>
+    /// Update the nextnode id by adding a delta
+    /// </summary>
+    /// <param name="idDelta">The delta to add to the next node id</param>
+    public abstract void UpdateNextNodeId(int idDelta);
+    //end tpi
 
     #region Save stuff
     [Serializable]

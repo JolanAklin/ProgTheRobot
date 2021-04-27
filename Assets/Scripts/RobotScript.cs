@@ -43,7 +43,8 @@ public class RobotScript
 
     public RobotScript()
     {
-
+        id = GetNextId();
+        robotScripts.Add(id, this);
     }
 
     public RobotScript(string name, Robot robot)

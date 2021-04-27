@@ -70,6 +70,11 @@ public class NodeMethod : Nodes
         else
             tMP_Dropdown.Hide();
     }
+    public override void UpdateNextNodeId(int idDelta)
+    {
+        if (nextNodeId != -1)
+            nextNodeId += idDelta;
+    }
     //end tpi
 
     private bool ValidateInput()

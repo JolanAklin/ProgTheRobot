@@ -73,7 +73,7 @@ public class SplineManager : MonoBehaviour
     {
         splineManagers.Add(this);
         robotScript.splines.Add(this.gameObject);
-        robotScriptId = Manager.instance.currentlySelectedScript;
+        robotScriptId = robotScript.id;
 
         splineMaker = GetComponent<SplineMaker>();
         currentSegment = CreateNewSplineSegment(startPos.position);

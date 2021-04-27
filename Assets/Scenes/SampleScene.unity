@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.7302244, g: 0.7889752, b: 0.8498586, a: 1}
+  m_IndirectSpecularColor: {r: 0.730239, g: 0.78898084, b: 0.849859, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -139,6 +139,7 @@ GameObject:
   - component: {fileID: 34867}
   - component: {fileID: 34868}
   - component: {fileID: 34869}
+  - component: {fileID: 34870}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -347,6 +348,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 85ba70b35e34e5e4ea12f5f43e0f3284, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &34870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 34861}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8980955d4754d54782d885743e95649, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4418599
@@ -4456,6 +4469,14 @@ PrefabInstance:
     - target: {fileID: 6997345317412859002, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
       propertyPath: m_ChildAlignment
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6997345317412859002, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
+      propertyPath: m_ChildControlHeight
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6997345317412859002, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
+      propertyPath: m_ChildForceExpandHeight
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6997345317412859003, guid: 3b8887d3f06f47741a1d639bfdbd765e, type: 3}
       propertyPath: m_SizeDelta.y
@@ -11470,7 +11491,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 27398558794118963}
   m_Direction: 0
   m_Value: 0
-  m_Size: 1
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

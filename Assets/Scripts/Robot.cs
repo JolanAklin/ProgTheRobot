@@ -125,6 +125,7 @@ public class Robot
         unassignedScript.childrens = new List<RobotScript>();
         foreach (RobotScript rs in robot.robotScripts)
         {
+            rs.HideNodesForThisScript();
             RobotScript.robotScripts.Remove(rs.id);
 
             rs.robot = null;
@@ -179,11 +180,10 @@ public class Robot
             });
             pas.SetAddScriptAction((robotScript) =>
             {
-                robotScript.robot = this;
-                robotScript.id = RobotScript.GetNextId();
-                RobotScript.robotScripts.Add(robotScript.id, robotScript);
-                robotScripts.Add(robotScript);
-                List.ListElement element = this.AddScript(robotScript);
+                RobotScript clone = ScriptCloner.CloneScript(robotScript);
+                MainScript = clone;
+                clone.robot = this;
+                List.ListElement element = AddScript(clone);
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
                 Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);

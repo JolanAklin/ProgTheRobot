@@ -40,6 +40,8 @@ public class SelectionManager : MonoBehaviour
         // put all the nodes back to the right color
         foreach (Nodes node in selectedNodes)
         {
+            if (node.isMoving)
+                node.EndMove();
             if (node.NodeErrorCode == Nodes.ErrorCode.notConnected || node.NodeErrorCode == Nodes.ErrorCode.wrongInput)
                 node.ChangeBorderColor(node.errorColor);
             else

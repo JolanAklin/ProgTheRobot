@@ -69,7 +69,6 @@ public class AddNodeScript : MonoBehaviour
 
                     SelectionManager.instance.AddNodeToSelection(nodeScript);
                     nodeScript.StartMove();
-                    //UIRaycaster.instance.nodeToMove = nodeScript;
                 }
                 canvas.GetComponent<UIRaycaster>().panelOpen = false;
                 Destroy(this.gameObject);

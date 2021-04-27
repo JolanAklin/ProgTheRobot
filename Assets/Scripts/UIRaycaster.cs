@@ -147,7 +147,7 @@ public class UIRaycaster : MonoBehaviour
         #region On nodes
 
         //start tpi
-        if (Input.GetMouseButtonDown(1) && !panelOpen && !nodeContextMenuOpen /*&& nodeToMove == null*/ && !ExecManager.Instance.isRunning)
+        if (Input.GetMouseButtonDown(1) && !panelOpen && !nodeContextMenuOpen && !ExecManager.Instance.isRunning)
         {
             // open the node context menu
             RaycastHit2D hit;
