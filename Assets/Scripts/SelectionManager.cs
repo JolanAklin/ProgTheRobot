@@ -106,6 +106,15 @@ public class SelectionManager : MonoBehaviour
                 nodeClones.Add(node.gameObject);
             }
             robotScript.nodes.AddRange(nodeClones);
+            foreach (Nodes node in selectedNodes)
+            {
+                if(node.parentId > -1)
+                {
+                    Nodes.NodesDict[node.parentId].NodesInsideLoop.Remove(node);
+                    node.parentId = -1;
+                }
+                node.ParentLoopArea = null;
+            }
             UIRaycaster.instance.MoveNode();
         }
     }
