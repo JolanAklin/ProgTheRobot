@@ -113,6 +113,8 @@ public class NodeForLoop : Nodes
             nextNodeId += idDelta;
         if (nextNodeInside != -1)
             nextNodeInside += idDelta;
+        if (parentId != -1)
+            parentId += idDelta;
     }
     public override void LockUnlockAllInput(bool isLocked)
     {

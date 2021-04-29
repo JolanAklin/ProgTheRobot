@@ -81,6 +81,7 @@ public abstract class Nodes : MonoBehaviour
 
     public RectTransform canvasRect; // the node canvas
     private Canvas canvas;
+    public Canvas Canvas { get => canvas; private set => canvas = value; }
 
     // use to test if a node collide with an other
     public LayerMask nodeLayerMask;
@@ -104,8 +105,10 @@ public abstract class Nodes : MonoBehaviour
     public EventHandler OnNodeModified;
     private GameObject nodeHolder;
     protected LoopArea nodesLoopArea;
+    public LoopArea NodesLoopArea { get => nodesLoopArea; protected set => nodesLoopArea = value; }
     private Action onMoveEnd;
     private List<Nodes> nodesInsideLoop = new List<Nodes>();
+    public List<Nodes> NodesInsideLoop { get => nodesInsideLoop; private set => nodesInsideLoop = value; }
 
     private Vector3 mouseCenterDelta;
 
@@ -146,7 +149,7 @@ public abstract class Nodes : MonoBehaviour
     public float minAspectRatio;
 
     private LoopArea parentLoopArea;
-    public LoopArea ParentLoopArea { get => parentLoopArea; private set => parentLoopArea = value; }
+    public LoopArea ParentLoopArea { get => parentLoopArea; set => parentLoopArea = value; }
 
     private bool isInputLocked = true;
     public bool IsInputLocked { get => isInputLocked; protected set => isInputLocked = value; }
@@ -474,7 +477,14 @@ public abstract class Nodes : MonoBehaviour
                     transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
                 };
             }
-
+        }
+        else
+        {
+            onMoveEnd = () =>
+            {
+                transform.parent = nodeHolder.transform;
+                transform.position = new Vector3(transform.position.x, transform.position.y, 0f);
+            };
         }
     }
 

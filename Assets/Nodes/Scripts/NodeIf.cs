@@ -62,6 +62,8 @@ public class NodeIf : Nodes
             nextNodeId += idDelta;
         if (nextNodeIdFalse != -1)
             nextNodeIdFalse += idDelta;
+        if (parentId != -1)
+            parentId += idDelta;
     }
     //end tpi
 

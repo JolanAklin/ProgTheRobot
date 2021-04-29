@@ -89,6 +89,35 @@ public class ScriptCloner : MonoBehaviour
         foreach (Nodes node in clonedNode)
         {
             node.UpdateNextNodeId(idDelta);
+            // put the node in his loop
+            if(node.parentId > -1)
+            {
+                if(Nodes.NodesDict[node.parentId].GetType() == typeof(NodeWhileLoop) || Nodes.NodesDict[node.parentId].GetType() == typeof(NodeForLoop))
+                {
+                    LoopArea loopArea = Nodes.NodesDict[node.parentId].NodesLoopArea;
+                    if (!loopArea.parent.transform.IsChildOf(node.transform))
+                    {
+                        // changing the sorting order of the canvas to ensure that the node is on the top
+                        node.Canvas.sortingOrder = loopArea.nodeCanvas.sortingOrder + 1;
+                        Nodes parentNode = loopArea.parent.GetComponent<Nodes>();
+                        node.parentId = parentNode.id;
+
+                        node.transform.parent = loopArea.parent.transform;
+                        float zpos = (loopArea.parent.transform.position.z - 0.001f);
+                        node.transform.position = new Vector3(node.transform.position.x, node.transform.position.y, zpos);
+                        parentNode.NodesInsideLoop.Add(node);
+
+                        node.ParentLoopArea = loopArea;
+                        node.handleStartArray[0].loopArea = node.ParentLoopArea;
+                        node.handleEndArray[0].loopArea = node.ParentLoopArea;
+                    }
+                }
+                else
+                {
+                    node.parentId = -1;
+                }
+
+            }
         }
 
         return clonedNode;

@@ -105,6 +105,8 @@ public class NodeWhileLoop : Nodes
             nextNodeId += idDelta;
         if (nextNodeInside != -1)
             nextNodeInside += idDelta;
+        if (parentId != -1)
+            parentId += idDelta;
     }
     //end tpi
 

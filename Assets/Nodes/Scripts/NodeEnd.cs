@@ -58,6 +58,8 @@ public class NodeEnd : Nodes
     }
     public override void UpdateNextNodeId(int idDelta)
     {
+        if (parentId != -1)
+            parentId += idDelta;
     }
     //end tpi
 

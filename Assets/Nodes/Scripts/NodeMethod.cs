@@ -74,6 +74,8 @@ public class NodeMethod : Nodes
     {
         if (nextNodeId != -1)
             nextNodeId += idDelta;
+        if (parentId != -1)
+            parentId += idDelta;
     }
     //end tpi
 
