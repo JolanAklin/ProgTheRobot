@@ -105,7 +105,7 @@ public class SelectionManager : MonoBehaviour
                 AddNodeToSelection(node, false);
                 nodeClones.Add(node.gameObject);
             }
-            robotScript.nodes = nodeClones;
+            robotScript.nodes.AddRange(nodeClones);
             UIRaycaster.instance.MoveNode();
         }
     }

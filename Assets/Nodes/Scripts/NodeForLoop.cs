@@ -107,15 +107,6 @@ public class NodeForLoop : Nodes
         IsInputLocked = e.started;
     }
     // start tpi
-    public override void UpdateNextNodeId(int idDelta)
-    {
-        if (nextNodeId != -1)
-            nextNodeId += idDelta;
-        if (nextNodeInside != -1)
-            nextNodeInside += idDelta;
-        if (parentId != -1)
-            parentId += idDelta;
-    }
     public override void LockUnlockAllInput(bool isLocked)
     {
         IsInputLocked = isLocked;

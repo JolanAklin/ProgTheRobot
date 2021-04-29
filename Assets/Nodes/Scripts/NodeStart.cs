@@ -43,13 +43,6 @@ public class NodeStart : Nodes
     public override void LockUnlockAllInput(bool isLocked)
     {
     }
-    public override void UpdateNextNodeId(int idDelta)
-    {
-        if (nextNodeId != -1)
-            nextNodeId += idDelta;
-        if (parentId != -1)
-            parentId += idDelta;
-    }
     //end tpi
 
     IEnumerator WaitBeforeCallingNextNode()

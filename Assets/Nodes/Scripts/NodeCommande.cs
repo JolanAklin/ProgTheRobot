@@ -55,14 +55,6 @@ public class NodeCommande : Nodes
         if (!isLocked)
             inputField.Select();
     }
-    public override void UpdateNextNodeId(int idDelta)
-    {
-        if (nextNodeId != -1)
-            nextNodeId += idDelta;
-
-        if (parentId != -1)
-            parentId += idDelta;
-    }
     //end tpi
 
     public void ChangeInput(TMP_InputField tMP_InputField)

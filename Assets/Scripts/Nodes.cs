@@ -515,12 +515,6 @@ public abstract class Nodes : MonoBehaviour
 
     public abstract void LockUnlockAllInput(bool isLocked);
 
-    // start tpi
-    /// <summary>
-    /// Update the nextnode id by adding a delta
-    /// </summary>
-    /// <param name="idDelta">The delta to add to the next node id</param>
-    public abstract void UpdateNextNodeId(int idDelta);
     //end tpi
 
     #region Save stuff

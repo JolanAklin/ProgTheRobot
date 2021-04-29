@@ -99,15 +99,6 @@ public class NodeWhileLoop : Nodes
         if (!isLocked)
             inputField.Select();
     }
-    public override void UpdateNextNodeId(int idDelta)
-    {
-        if (nextNodeId != -1)
-            nextNodeId += idDelta;
-        if (nextNodeInside != -1)
-            nextNodeInside += idDelta;
-        if (parentId != -1)
-            parentId += idDelta;
-    }
     //end tpi
 
 

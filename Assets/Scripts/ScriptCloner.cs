@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 // start tpi
@@ -40,6 +41,17 @@ public class ScriptCloner : MonoBehaviour
     }
 
     /// <summary>
+    /// Describe node only with his ids;
+    /// </summary>
+    private class OldNodeId
+    {
+        public int id;
+        public int parentId = -1;
+        public int nextNodeId = -1;
+        public int nextNodeIdSecondary = -1;
+    }
+
+    /// <summary>
     /// Clone nodes inside the node array
     /// </summary>
     /// <param name="nodesToClone">The array containing nodes to clone</param>
@@ -47,6 +59,9 @@ public class ScriptCloner : MonoBehaviour
     /// <returns>An array with cloned nodes</returns>
     public static Nodes[] CloneNodes(Nodes[] nodesToClone, RobotScript robotScript, out int idDelta)
     {
+        // store the new node id and the old node id
+        Dictionary<int, OldNodeId> matchOldNewIds = new Dictionary<int, OldNodeId>();
+
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
         Nodes[] clonedNode = new Nodes[nodesToClone.Length];
 
@@ -64,6 +79,25 @@ public class ScriptCloner : MonoBehaviour
 
             Nodes nodeInstanceScript = nodeInstance.GetComponent<Nodes>();
             nodeInstanceScript.rs = robotScript;
+
+            OldNodeId oldNodeId = new OldNodeId() { id = nodeToClone.id, nextNodeId = nodeToClone.nextNodeId, parentId = nodeToClone.parentId };
+
+            // add the node to the old and new node match
+            if (nodeToClone.GetType() == typeof(NodeIf))
+            {
+                NodeIf nodeIf = (NodeIf)nodeToClone;
+                oldNodeId.nextNodeIdSecondary = nodeIf.nextNodeIdFalse;
+            }else if (nodeToClone.GetType() == typeof(NodeWhileLoop))
+            {
+                NodeWhileLoop nodeWhile = (NodeWhileLoop)nodeToClone;
+                oldNodeId.nextNodeIdSecondary = nodeWhile.nextNodeInside;
+            }else if (nodeToClone.GetType() == typeof(NodeForLoop))
+            {
+                NodeForLoop nodeFor = (NodeForLoop)nodeToClone;
+                oldNodeId.nextNodeIdSecondary = nodeFor.nextNodeInside;
+            }
+            matchOldNewIds.Add(nodeInstanceScript.id, oldNodeId);
+
 
             if (nodeToClone.id < lowestId)
                 lowestId = nodeToClone.id;
@@ -88,9 +122,56 @@ public class ScriptCloner : MonoBehaviour
         // update the nextNodeId of all nodes
         foreach (Nodes node in clonedNode)
         {
-            node.UpdateNextNodeId(idDelta);
+            // update the node nextnodeid and parentid
+            OldNodeId oldNodeId = matchOldNewIds[node.id];
+            try
+            {
+                KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeId);
+                node.nextNodeId = oldNextId.Key;
+            }
+            catch (Exception) { }
+
+            try
+            {
+                KeyValuePair<int, OldNodeId> oldParentId = matchOldNewIds.First(x => x.Value.id == oldNodeId.parentId);
+                node.parentId = oldParentId.Key;
+            }
+            catch (Exception) { }
+
+
+            if (node.GetType() == typeof(NodeIf))
+            {
+                try
+                {
+                    NodeIf nodeIf = (NodeIf)node;
+                    KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeIdSecondary);
+                    nodeIf.nextNodeIdFalse = oldNextId.Key;
+                }
+                catch (Exception) { }
+            }
+            else if (node.GetType() == typeof(NodeWhileLoop))
+            {
+                try
+                {
+                    NodeWhileLoop nodeWhile = (NodeWhileLoop)node;
+                    KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeIdSecondary);
+                    nodeWhile.nextNodeInside = oldNextId.Key;
+                }
+                catch (Exception) { }
+            }
+            else if (node.GetType() == typeof(NodeForLoop))
+            {
+                try
+                {
+                    NodeForLoop nodeFor = (NodeForLoop)node;
+                    KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeIdSecondary);
+                    nodeFor.nextNodeInside = oldNextId.Key;
+                }
+                catch (Exception) { }
+            }
+
             // put the node in his loop
-            if(node.parentId > -1)
+            if (node.parentId > -1)
             {
                 if(Nodes.NodesDict[node.parentId].GetType() == typeof(NodeWhileLoop) || Nodes.NodesDict[node.parentId].GetType() == typeof(NodeForLoop))
                 {
