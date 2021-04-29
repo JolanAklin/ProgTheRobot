@@ -15,7 +15,7 @@ public class SelectionManager : MonoBehaviour
     private List<Nodes> selectedNodes = new List<Nodes>();
     public List<Nodes> SelectedNodes { get => selectedNodes; private set => selectedNodes = value; }
 
-    private Nodes[] nodeToCopy;
+    private Nodes[] nodesToCopy;
 
     private void Awake()
     {
@@ -32,6 +32,10 @@ public class SelectionManager : MonoBehaviour
         // reset the selection if not all the script are in the same script
         if (selectedNodesInScript == -1)
             selectedNodesInScript = selectedNode.rs.id;
+        if (selectedNodes.Count >= 1)
+            if (SelectedNodes[0].parentId != selectedNode.parentId)
+                ResetSelection();
+
         if(selectedNode.rs.id != selectedNodesInScript)
         {
             ResetSelection();
@@ -68,10 +72,10 @@ public class SelectionManager : MonoBehaviour
     /// </summary>
     public void SelectionToCopyBuffer()
     {
-        if(selectedNodes.Count > 0)
+        if(SelectedNodes.Count > 0)
         {
-            nodeToCopy = new Nodes[SelectedNodes.Count];
-            Array.Copy(selectedNodes.ToArray(), nodeToCopy, selectedNodes.Count);
+            nodesToCopy = new Nodes[SelectedNodes.Count];
+            Array.Copy(SelectedNodes.ToArray(), nodesToCopy, SelectedNodes.Count);
         }
     }
 
@@ -81,10 +85,16 @@ public class SelectionManager : MonoBehaviour
     /// <param name="robotScript">Where the copy buffer will be passed</param>
     public void PasteCopyBuffer(RobotScript robotScript)
     {
-        if(nodeToCopy.Length > 0)
+        if(nodesToCopy.Length > 0)
         {
             int idDelta;
-            Nodes[] clones = ScriptCloner.CloneNodes(nodeToCopy, robotScript, out idDelta);
+            List<Nodes> nodesToCopyAll = new List<Nodes>();
+            foreach (Nodes nodeToCopy in nodesToCopy)
+            {
+                nodesToCopyAll.AddRange(GetAllNodes(nodeToCopy));
+            }
+            nodesToCopyAll.AddRange(nodesToCopy);
+            Nodes[] clones = ScriptCloner.CloneNodes(nodesToCopyAll.ToArray(), robotScript, out idDelta);
 
             List<GameObject> nodeClones = new List<GameObject>();
 
@@ -98,6 +108,17 @@ public class SelectionManager : MonoBehaviour
             robotScript.nodes = nodeClones;
             UIRaycaster.instance.MoveNode();
         }
+    }
+
+    private List<Nodes> GetAllNodes(Nodes node)
+    {
+        List<Nodes> nodes = new List<Nodes>();
+        foreach (Nodes childNode in node.NodesInsideLoop)
+        {
+            nodes.Add(childNode);
+            nodes.AddRange(GetAllNodes(childNode));
+        }
+        return nodes;
     }
 
     //private void CreateSpline()
