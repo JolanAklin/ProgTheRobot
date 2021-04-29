@@ -213,9 +213,11 @@ public class Manager : MonoBehaviour
             actionWhenConnectionFinished = action;
             OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = true });
             instance.spline = Instantiate(SplineObject, new Vector3(0,0,-899), Quaternion.identity, GameObject.FindGameObjectWithTag("NodeHolder").transform);
-            instance.spline.GetComponent<SplineManager>().Init(handleTransform, sender, handleId);
+            SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
+            splineManager.Init(handleTransform, sender, handleId);
             startSplineHandle = sender.handleStartArray[handleId];
             node = sender;
+            sender.currentSplines[handleId] = splineManager;
         }
         if (isInput)
         {

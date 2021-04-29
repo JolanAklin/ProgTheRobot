@@ -406,6 +406,7 @@ public class SaveManager : MonoBehaviour
             GameObject splineLinkInstance = Instantiate(splineLink, new Vector3(0, 0, -899), Quaternion.identity, nodeHolder);
             SplineManager splineManager = splineLinkInstance.GetComponent<SplineManager>();
             splineManager.DeSerializeSpline(serializedSpline);
+            Nodes.NodesDict[serializedSpline.idNodeStart].currentSplines[serializedSpline.handleStart] = splineManager;
         }
 
         // hide all nodes and splines from all scripts

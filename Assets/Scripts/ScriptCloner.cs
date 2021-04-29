@@ -129,45 +129,45 @@ public class ScriptCloner : MonoBehaviour
                 KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeId);
                 node.nextNodeId = oldNextId.Key;
             }
-            catch (Exception) { }
+            catch (Exception) { node.nextNodeId = -1; }
 
             try
             {
                 KeyValuePair<int, OldNodeId> oldParentId = matchOldNewIds.First(x => x.Value.id == oldNodeId.parentId);
                 node.parentId = oldParentId.Key;
             }
-            catch (Exception) { }
+            catch (Exception) { node.parentId = -1; }
 
 
             if (node.GetType() == typeof(NodeIf))
             {
+                NodeIf nodeIf = (NodeIf)node;
                 try
                 {
-                    NodeIf nodeIf = (NodeIf)node;
                     KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeIdSecondary);
                     nodeIf.nextNodeIdFalse = oldNextId.Key;
                 }
-                catch (Exception) { }
+                catch (Exception) { nodeIf.nextNodeIdFalse = -1; }
             }
             else if (node.GetType() == typeof(NodeWhileLoop))
             {
+                NodeWhileLoop nodeWhile = (NodeWhileLoop)node;
                 try
                 {
-                    NodeWhileLoop nodeWhile = (NodeWhileLoop)node;
                     KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeIdSecondary);
                     nodeWhile.nextNodeInside = oldNextId.Key;
                 }
-                catch (Exception) { }
+                catch (Exception) { nodeWhile.nextNodeInside = -1; }
             }
             else if (node.GetType() == typeof(NodeForLoop))
             {
+                NodeForLoop nodeFor = (NodeForLoop)node;
                 try
                 {
-                    NodeForLoop nodeFor = (NodeForLoop)node;
                     KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == oldNodeId.nextNodeIdSecondary);
                     nodeFor.nextNodeInside = oldNextId.Key;
                 }
-                catch (Exception) { }
+                catch (Exception) { nodeFor.nextNodeInside = -1; }
             }
 
             // put the node in his loop
@@ -191,6 +191,10 @@ public class ScriptCloner : MonoBehaviour
                         node.ParentLoopArea = loopArea;
                         node.handleStartArray[0].loopArea = node.ParentLoopArea;
                         node.handleEndArray[0].loopArea = node.ParentLoopArea;
+                        if (node.NodeType == Nodes.NodeTypes.test)
+                        {
+                            node.handleStartArray[1].loopArea = node.ParentLoopArea;
+                        }
                     }
                 }
                 else
@@ -204,6 +208,7 @@ public class ScriptCloner : MonoBehaviour
         return clonedNode;
     }
 
+    //todo : need to stop using iddelta
     /// <summary>
     /// Cloned the given spline array
     /// </summary>

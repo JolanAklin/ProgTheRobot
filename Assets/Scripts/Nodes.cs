@@ -103,6 +103,7 @@ public abstract class Nodes : MonoBehaviour
     public bool canMove = true;
     public List<BoxCollider2D> collidersToIgnore;
     public EventHandler OnNodeModified;
+    public SplineManager[] currentSplines = new SplineManager[2];
     private GameObject nodeHolder;
     protected LoopArea nodesLoopArea;
     public LoopArea NodesLoopArea { get => nodesLoopArea; protected set => nodesLoopArea = value; }
@@ -449,6 +450,10 @@ public abstract class Nodes : MonoBehaviour
                         parentLoopArea = loopArea;
                         handleStartArray[0].loopArea = parentLoopArea;
                         handleEndArray[0].loopArea = parentLoopArea;
+                        if(nodeTypes == NodeTypes.test)
+                        {
+                            handleStartArray[1].loopArea = parentLoopArea;
+                        }
                     };
                 }
             

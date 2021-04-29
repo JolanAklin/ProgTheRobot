@@ -36,7 +36,7 @@ public class SelectionManager : MonoBehaviour
             if (SelectedNodes[0].parentId != selectedNode.parentId)
                 ResetSelection();
 
-        if(selectedNode.rs.id != selectedNodesInScript)
+        if (selectedNode.rs.id != selectedNodesInScript)
         {
             ResetSelection();
         }
@@ -72,7 +72,7 @@ public class SelectionManager : MonoBehaviour
     /// </summary>
     public void SelectionToCopyBuffer()
     {
-        if(SelectedNodes.Count > 0)
+        if (SelectedNodes.Count > 0)
         {
             nodesToCopy = new Nodes[SelectedNodes.Count];
             Array.Copy(SelectedNodes.ToArray(), nodesToCopy, SelectedNodes.Count);
@@ -85,9 +85,10 @@ public class SelectionManager : MonoBehaviour
     /// <param name="robotScript">Where the copy buffer will be passed</param>
     public void PasteCopyBuffer(RobotScript robotScript)
     {
-        if(nodesToCopy.Length > 0)
+        if (nodesToCopy.Length > 0)
         {
             int idDelta;
+            // get all the node inside other node recursively
             List<Nodes> nodesToCopyAll = new List<Nodes>();
             foreach (Nodes nodeToCopy in nodesToCopy)
             {
@@ -96,8 +97,72 @@ public class SelectionManager : MonoBehaviour
             nodesToCopyAll.AddRange(nodesToCopy);
             Nodes[] clones = ScriptCloner.CloneNodes(nodesToCopyAll.ToArray(), robotScript, out idDelta);
 
-            List<GameObject> nodeClones = new List<GameObject>();
+            // create the spline between nodes
+            int i = 0;
+            Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
+            foreach (Nodes node in clones)
+            {
+                for (int j = 0; j < nodesToCopyAll[i].currentSplines.Length; j++)
+                {
+                    if (nodesToCopyAll[i].currentSplines[j] != null)
+                    {
+                        SplineManager.SerializedSpline serializedSpline = nodesToCopyAll[i].currentSplines[j].SerializeSpline();
 
+                        serializedSpline.idNodeStart = node.id;
+                        if (j == 0)
+                        {
+                            if (node.nextNodeId > -1)
+                            {
+                                serializedSpline.idNodeEnd = node.nextNodeId;
+                            }
+                            else
+                            {
+                                continue;
+                            }
+                        }
+                        else
+                        {
+                            if (node.GetType() == typeof(NodeIf))
+                            {
+                                NodeIf nodeIf = (NodeIf)node;
+                                if (nodeIf.nextNodeIdFalse > -1)
+                                    serializedSpline.idNodeEnd = nodeIf.nextNodeIdFalse;
+                                else
+                                    continue;
+                            }
+                            else if (node.GetType() == typeof(NodeWhileLoop))
+                            {
+                                NodeWhileLoop nodeWhile = (NodeWhileLoop)node;
+                                if (nodeWhile.nextNodeInside > -1)
+                                    serializedSpline.idNodeEnd = nodeWhile.nextNodeInside;
+                                else
+                                    continue;
+                            }
+                            else if (node.GetType() == typeof(NodeForLoop))
+                            {
+                                NodeForLoop nodeFor = (NodeForLoop)node;
+                                if (nodeFor.nextNodeInside > -1)
+                                    serializedSpline.idNodeEnd = nodeFor.nextNodeInside;
+                                else
+                                    continue;
+                            }
+                        }
+                        serializedSpline.robotScriptId = robotScript.id;
+
+                        // create and set the right value for the spline
+                        GameObject splineLinkInstance = Instantiate(SaveManager.instance.splineLink, new Vector3(0, 0, -899), Quaternion.identity, nodeHolder);
+                        SplineManager splineManager = splineLinkInstance.GetComponent<SplineManager>();
+                        splineManager.DeSerializeSpline(serializedSpline);
+                        robotScript.splines.Add(splineLinkInstance);
+                        node.currentSplines[j] = splineManager;
+                        node.handleStartArray[j].GetComponent<ConnectHandle>().Hide();
+                        node.handleStartArray[j].GetComponent<ConnectHandle>().canBeClicked = false;
+                    }
+                }
+                i++;
+            }
+
+            List<GameObject> nodeClones = new List<GameObject>();
 
             ResetSelection();
             foreach (Nodes node in clones)
@@ -106,9 +171,10 @@ public class SelectionManager : MonoBehaviour
                 nodeClones.Add(node.gameObject);
             }
             robotScript.nodes.AddRange(nodeClones);
+            // remove the confinement zone for the right nodes
             foreach (Nodes node in selectedNodes)
             {
-                if(node.parentId > -1)
+                if (node.parentId > -1)
                 {
                     Nodes.NodesDict[node.parentId].NodesInsideLoop.Remove(node);
                     node.parentId = -1;
@@ -129,29 +195,5 @@ public class SelectionManager : MonoBehaviour
         }
         return nodes;
     }
-
-    //private void CreateSpline()
-    //{
-    //    Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
-    //    GameObject[] clonedSplines = new GameObject[splinesToClone.Length];
-    //    int i = 0;
-    //    foreach (GameObject splineToClone in splinesToClone)
-    //    {
-    //        SplineManager.SerializedSpline serializedSpline = splineToClone.GetComponent<SplineManager>().SerializeSpline();
-
-    //        // change the node and script to the new cloned ones
-    //        serializedSpline.idNodeStart += idDelta;
-    //        serializedSpline.idNodeEnd += idDelta;
-    //        serializedSpline.robotScriptId = robotScript.id;
-
-    //        // create and set the right value for the spline
-    //        GameObject splineLinkInstance = Instantiate(SaveManager.instance.splineLink, new Vector3(0, 0, -899), Quaternion.identity, nodeHolder);
-    //        SplineManager splineManager = splineLinkInstance.GetComponent<SplineManager>();
-    //        splineManager.DeSerializeSpline(serializedSpline);
-    //        clonedSplines[i] = splineLinkInstance;
-    //        i++;
-    //    }
-    //    return clonedSplines;
-    //}
 }
 // end tpi

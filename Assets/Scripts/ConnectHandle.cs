@@ -39,7 +39,7 @@ public class ConnectHandle : MonoBehaviour
     
     public LoopArea loopArea;
     
-    private void Start()
+    private void Awake()
     {
         canBeClicked = true;
         image = GetComponent<Image>();
@@ -98,6 +98,15 @@ public class ConnectHandle : MonoBehaviour
             image.enabled = false;
             boxCollider2d.enabled = false;
         }
+    }
+
+    /// <summary>
+    /// hide the handle
+    /// </summary>
+    public void Hide()
+    {
+        image.enabled = false;
+        boxCollider2d.enabled = false;
     }
 
     // show and hide the input image (red dot)
