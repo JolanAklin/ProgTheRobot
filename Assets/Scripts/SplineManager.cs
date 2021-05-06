@@ -84,16 +84,23 @@ public class SplineManager : MonoBehaviour
     }
 
     // will update point and handle position when a node is moved or resized
-    private void ChangeSpline(object sender, EventArgs e)
+    private void ChangeSpline(object sender, Nodes.OnNodeModifiedEventArgs e)
     {
-        splineMaker.splineSegments[0].splineStart.point = new Vector3(startPos.position.x, startPos.position.y, -0.15f);
-        splineMaker.splineSegments[0].splineStart.handle = new Vector3(startPos.position.x, startPos.position.y, -0.15f) + Vector3.down;
-        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = new Vector3(endPos.position.x, endPos.position.y, -0.15f);
-        splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, -0.15f) + Vector3.up;
-
-        if(MoveHandle != null)
-            MoveHandle.transform.position = new Vector3(endPos.position.x, endPos.position.y, MoveHandle.transform.position.z);
-
+        if (e.destroy)
+            Destroy(this.gameObject);
+        try
+        {
+            splineMaker.splineSegments[0].splineStart.point = new Vector3(startPos.position.x, startPos.position.y, -0.15f);
+            splineMaker.splineSegments[0].splineStart.handle = new Vector3(startPos.position.x, startPos.position.y, -0.15f) + Vector3.down;
+            splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.point = new Vector3(endPos.position.x, endPos.position.y, -0.15f);
+            splineMaker.splineSegments[splineMaker.splineSegments.Count - 1].splineEnd.handle = new Vector3(endPos.position.x, endPos.position.y, -0.15f) + Vector3.up;
+            if(MoveHandle != null)
+                MoveHandle.transform.position = new Vector3(endPos.position.x, endPos.position.y, MoveHandle.transform.position.z);
+        }
+        catch (Exception)
+        {
+            Destroy(this.gameObject);
+        }
         splineMaker.GenerateMesh();
     }
 
@@ -191,8 +198,10 @@ public class SplineManager : MonoBehaviour
             Manager.instance.OnSpline?.Invoke(Manager.instance, new Manager.OnSplineEventArgs() { splineStarted = false});
             ConnectHandle connect = nodeStart.handleStartArray[handleStartNumber];
             connect.canBeClicked = true;
-            connect.image.enabled = true;
-            connect.boxCollider2d.enabled = true;
+            if(connect.image != null)
+                connect.image.enabled = true;
+            if(connect.boxCollider2d != null)
+                connect.boxCollider2d.enabled = true;
         }
     }
 

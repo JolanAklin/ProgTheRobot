@@ -68,6 +68,18 @@ public class SelectionManager : MonoBehaviour
     }
 
     /// <summary>
+    /// Delete selected nodes and their splines
+    /// </summary>
+    public void DeleteSelection()
+    {
+        while(selectedNodes.Count > 0)
+        {
+            Destroy(selectedNodes[selectedNodes.Count-1].gameObject);
+            selectedNodes.Remove(selectedNodes[selectedNodes.Count-1]);
+        }
+    }
+
+    /// <summary>
     /// Put the current selection in the copy buffer
     /// </summary>
     public void SelectionToCopyBuffer()
@@ -87,7 +99,6 @@ public class SelectionManager : MonoBehaviour
     {
         if (nodesToCopy.Length > 0)
         {
-            int idDelta;
             // get all the node inside other node recursively
             List<Nodes> nodesToCopyAll = new List<Nodes>();
             foreach (Nodes nodeToCopy in nodesToCopy)
@@ -95,7 +106,8 @@ public class SelectionManager : MonoBehaviour
                 nodesToCopyAll.AddRange(GetAllNodes(nodeToCopy));
             }
             nodesToCopyAll.AddRange(nodesToCopy);
-            Nodes[] clones = ScriptCloner.CloneNodes(nodesToCopyAll.ToArray(), robotScript, out idDelta);
+            Dictionary<int, ScriptCloner.OldNodeId> matchOldNewIds;
+            Nodes[] clones = ScriptCloner.CloneNodes(nodesToCopyAll.ToArray(), robotScript, out matchOldNewIds);
 
             // create the spline between nodes
             int i = 0;

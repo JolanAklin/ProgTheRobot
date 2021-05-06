@@ -107,7 +107,13 @@ public class Manager : MonoBehaviour
             {
                 ShowInfo(nodeInfo);
             }
+
             // start tpi
+
+            if(Input.GetKeyDown(KeyCode.Delete))
+            {
+                SelectionManager.instance.DeleteSelection();
+            }
 
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
             {
@@ -119,7 +125,6 @@ public class Manager : MonoBehaviour
         {
             SelectionManager.instance.PasteCopyBuffer(RobotScript.robotScripts[currentlySelectedScript]);
         }
-
         // end tpi
 
     }

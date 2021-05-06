@@ -41,6 +41,7 @@ public class NodeAffect : Nodes
     public void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        DestroyNode();
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)

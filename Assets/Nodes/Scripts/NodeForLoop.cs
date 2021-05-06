@@ -67,6 +67,7 @@ public class NodeForLoop : Nodes
     private void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        DestroyNode();
     }
     //start tpi
     private bool ValidateInput()

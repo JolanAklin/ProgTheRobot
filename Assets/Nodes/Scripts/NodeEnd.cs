@@ -26,6 +26,12 @@ public class NodeEnd : Nodes
         base.Awake();
         nodeTypes = NodeTypes.end;
     }
+
+    private void OnDestroy()
+    {
+        DestroyNode();
+    }
+
     public override void Execute()
     {
         if (!ExecManager.Instance.isRunning)

@@ -55,6 +55,7 @@ public class NodeReadWrite : Nodes
     {
         Manager.instance.OnLanguageChanged -= TranslateText;
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        DestroyNode();
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)

@@ -36,6 +36,11 @@ public class NodeStart : Nodes
         StartCoroutine("WaitBeforeCallingNextNode");
     }
 
+    private void OnDestroy()
+    {
+        DestroyNode();
+    }
+
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
     }

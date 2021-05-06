@@ -54,8 +54,7 @@ public class ConnectHandle : MonoBehaviour
 
     private void OnDestroy()
     {
-        if (isInput)
-            Manager.instance.OnSpline -= ShowHide;
+        Manager.instance.OnSpline -= ShowHide;
     }
 
     // when the handle is clicked, will ask the manager.

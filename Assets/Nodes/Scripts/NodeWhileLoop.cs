@@ -84,6 +84,7 @@ public class NodeWhileLoop : Nodes
     private void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        DestroyNode();
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)

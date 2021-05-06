@@ -102,8 +102,14 @@ public abstract class Nodes : MonoBehaviour
     [HideInInspector]
     public bool canMove = true;
     public List<BoxCollider2D> collidersToIgnore;
-    public EventHandler OnNodeModified;
-    public SplineManager[] currentSplines = new SplineManager[2];
+    public EventHandler<OnNodeModifiedEventArgs> OnNodeModified;
+
+    public class OnNodeModifiedEventArgs : EventArgs
+    {
+        public bool destroy = false;
+    }
+
+    public SplineManager[] currentSplines = new SplineManager[2]; // splines going out of this node
     private GameObject nodeHolder;
     protected LoopArea nodesLoopArea;
     public LoopArea NodesLoopArea { get => nodesLoopArea; protected set => nodesLoopArea = value; }
@@ -188,10 +194,21 @@ public abstract class Nodes : MonoBehaviour
 
     }
 
-    private void OnDestroy()
+    //start tpi
+    protected void DestroyNode()
     {
         rs.onStop -= PostExecutionCleanUp;
+        OnNodeModified?.Invoke(this, new OnNodeModifiedEventArgs() { destroy = true });
+        // remove all the connected splines
+        for (int j = 0; j < currentSplines.Length; j++)
+        {
+            if (currentSplines[j] != null)
+                Destroy(currentSplines[j].gameObject);
+        }
+        NodesDict.Remove(id);
+        rs.nodes.Remove(this.gameObject);
     }
+    //end tpi
 
     public void Start()
     {
@@ -330,7 +347,7 @@ public abstract class Nodes : MonoBehaviour
 
         nodeVisual.Resize();
         // change the spline
-        OnNodeModified?.Invoke(this, EventArgs.Empty);
+        OnNodeModified?.Invoke(this, new OnNodeModifiedEventArgs());
 
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvasRect.sizeDelta / 100, 0f, nodeLayerMask);
         foreach (Collider2D collider in colliders)
@@ -387,7 +404,7 @@ public abstract class Nodes : MonoBehaviour
         // change the node position
         transform.position = pos;
         // change the spline
-        OnNodeModified?.Invoke(this, EventArgs.Empty);
+        OnNodeModified?.Invoke(this, new OnNodeModifiedEventArgs());
 
         //bool blocInLoop = false;
         Collider2D[] colliders = Physics2D.OverlapBoxAll(transform.position, canvasRect.sizeDelta/100, 0f, nodeLayerMask);
@@ -497,7 +514,7 @@ public abstract class Nodes : MonoBehaviour
     {
         foreach (Nodes node in nodes)
         {
-            node.OnNodeModified?.Invoke(this, EventArgs.Empty);
+            node.OnNodeModified?.Invoke(this, new OnNodeModifiedEventArgs());
             MoveSplineForNodeInsideLoop(node.nodesInsideLoop);
         }
     }

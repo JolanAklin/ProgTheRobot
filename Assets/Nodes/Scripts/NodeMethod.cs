@@ -53,6 +53,7 @@ public class NodeMethod : Nodes
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
         Manager.instance.onScriptAdded -= UpdateScriptList;
+        DestroyNode();
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)

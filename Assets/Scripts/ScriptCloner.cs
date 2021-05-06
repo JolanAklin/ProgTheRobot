@@ -26,15 +26,15 @@ public class ScriptCloner : MonoBehaviour
             nodesToClone[i] = node.GetComponent<Nodes>();
             i++;
         }
-        int idDelta;
-        Nodes[] clonedNodesArray = CloneNodes(nodesToClone, robotScriptClone, out idDelta);
+        Dictionary<int, OldNodeId> matchOldNewIds;
+        Nodes[] clonedNodesArray = CloneNodes(nodesToClone, robotScriptClone, out matchOldNewIds);
         foreach (Nodes node in clonedNodesArray)
         {
             robotScriptClone.nodes.Add(node.gameObject);
         }
 
         // clone splines
-        robotScriptClone.splines.AddRange(CloneSpline(robotScriptToClone.splines.ToArray(), robotScriptClone, idDelta));
+        robotScriptClone.splines.AddRange(CloneSpline(robotScriptToClone.splines.ToArray(), robotScriptClone, matchOldNewIds));
         
 
         return robotScriptClone;
@@ -43,7 +43,7 @@ public class ScriptCloner : MonoBehaviour
     /// <summary>
     /// Describe node only with his ids;
     /// </summary>
-    private class OldNodeId
+    public class OldNodeId
     {
         public int id;
         public int parentId = -1;
@@ -57,10 +57,10 @@ public class ScriptCloner : MonoBehaviour
     /// <param name="nodesToClone">The array containing nodes to clone</param>
     /// <param name="robotScript">The script to clone nodes to</param>
     /// <returns>An array with cloned nodes</returns>
-    public static Nodes[] CloneNodes(Nodes[] nodesToClone, RobotScript robotScript, out int idDelta)
+    public static Nodes[] CloneNodes(Nodes[] nodesToClone, RobotScript robotScript, out Dictionary<int, OldNodeId> matchOldNewIds)
     {
         // store the new node id and the old node id
-        Dictionary<int, OldNodeId> matchOldNewIds = new Dictionary<int, OldNodeId>();
+        matchOldNewIds = new Dictionary<int, OldNodeId>();
 
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
         Nodes[] clonedNode = new Nodes[nodesToClone.Length];
@@ -117,7 +117,6 @@ public class ScriptCloner : MonoBehaviour
             i++;
         }
 
-        idDelta = lowestNewId - lowestId;
         i = 0;
         // update the nextNodeId of all nodes
         foreach (Nodes node in clonedNode)
@@ -216,7 +215,7 @@ public class ScriptCloner : MonoBehaviour
     /// <param name="robotScript">The script that will hold the splines</param>
     /// <param name="idDelta">The idDelta</param>
     /// <returns></returns>
-    public static GameObject[] CloneSpline(GameObject[] splinesToClone, RobotScript robotScript, int idDelta)
+    private static GameObject[] CloneSpline(GameObject[] splinesToClone, RobotScript robotScript, Dictionary<int, OldNodeId> matchOldNewIds)
     {
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
         GameObject[] clonedSplines = new GameObject[splinesToClone.Length];
@@ -226,8 +225,19 @@ public class ScriptCloner : MonoBehaviour
             SplineManager.SerializedSpline serializedSpline = splineToClone.GetComponent<SplineManager>().SerializeSpline();
 
             // change the node and script to the new cloned ones
-            serializedSpline.idNodeStart += idDelta;
-            serializedSpline.idNodeEnd += idDelta;
+            try
+            {
+                KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == serializedSpline.idNodeStart);
+                serializedSpline.idNodeStart = oldNextId.Key;
+            }
+            catch (Exception) { }
+
+            try
+            {
+                KeyValuePair<int, OldNodeId> oldNextId = matchOldNewIds.First(x => x.Value.id == serializedSpline.idNodeEnd);
+                serializedSpline.idNodeEnd = oldNextId.Key;
+            }
+            catch (Exception) { }
             serializedSpline.robotScriptId = robotScript.id;
 
             // create and set the right value for the spline

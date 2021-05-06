@@ -16,4 +16,13 @@ public class NodeContextMenuScript : MonoBehaviour
         UIRaycaster.instance.nodeContextMenuOpen = false;
         Destroy(this.gameObject);
     }
+
+    /// <summary>
+    /// Remove the ndoe targeted by the context menu
+    /// </summary>
+    public void Remove()
+    {
+        Destroy(nodeToModify.gameObject);
+        Destroy(this.gameObject);
+    }
 }
