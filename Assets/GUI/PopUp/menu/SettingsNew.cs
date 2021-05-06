@@ -40,7 +40,7 @@ public class SettingsNew : MonoBehaviour
         {
             if (fileName.Length > 0)
             {
-                SaveManager.instance.fileName = fileName;
+                SaveManager.instance.filepath = fileName;
                 SaveManager.instance.LoadFile();
                 menu.Close();
             }

@@ -19,6 +19,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using System.IO;
+using UnityEngine.UI;
 
 public class SettingsSave : MonoBehaviour
 {
@@ -27,6 +29,7 @@ public class SettingsSave : MonoBehaviour
     public string fileName;
     public TMP_Text saveButtonText;
     public TMP_InputField inputField;
+    public Button saveButton;
 
     public Action saveAction;
     public Action saveAsAction;
@@ -39,20 +42,38 @@ public class SettingsSave : MonoBehaviour
         {
             menu.Close();
         };
-        saveButtonText.text = $"Enregistrer {SaveManager.instance.fileName}";
+        if(SaveManager.instance.filepath.Length > 1)
+        {
+            saveButtonText.text = $"Enregistrer {Path.GetFileName(SaveManager.instance.filepath)}";
+            saveButton.interactable = true;
+        }
+        else
+        {
+            saveButtonText.text = "Enregistrer";
+            saveButton.interactable = false;
+        }
+        // start tpi
         saveAsAction = () =>
         {
-            if (fileName.Length > 0)
-            {
-                SaveManager.instance.fileName = fileName;
-                SaveManager.instance.Save();
-                menu.Close();
-            }
-            else
-            {
-                inputField.Select();
-            }
+            SaveLoadFileBrowser.instance.ShowSaveFileDialog(
+                (paths) =>
+                {
+                    if (paths != null)
+                    {
+                        if (paths[0].Length > 0)
+                        {
+                            SaveManager.instance.filepath = paths[0];
+                            SaveManager.instance.Save();
+                            menu.Close();
+                        }
+                    }
+                },
+                () =>
+                {
+                    Debug.Log("canceled");
+                });
         };
+        // end tpi
         saveAction = () =>
         {
             SaveManager.instance.Save();

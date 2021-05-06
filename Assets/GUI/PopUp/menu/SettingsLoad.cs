@@ -27,6 +27,7 @@ public class SettingsLoad : MonoBehaviour
     public Action cancelAction;
     public Action importAction;
     public Action loadAction;
+    public Action loadFromSomeWhereElseAction;
 
     public List projectList;
 
@@ -57,9 +58,26 @@ public class SettingsLoad : MonoBehaviour
 
         loadAction = () =>
         {
-            SaveManager.instance.LoadFile(fileNameToLoad);
+            SaveManager.instance.LoadFile(fileNameToLoad, false);
             menu.Close();
         };
+        // start tpi
+        loadFromSomeWhereElseAction = () =>
+        {
+            SaveLoadFileBrowser.instance.ShowLoadFileDialog((paths) =>
+            {
+                if(paths != null)
+                {
+                    SaveManager.instance.LoadFile(paths[0], true);
+                    menu.Close();
+                }
+            },
+            () =>
+            {
+                Debug.Log("canceled");
+            });
+        };
+        // end tpi
     }
 
     #region buttons action
@@ -87,6 +105,11 @@ public class SettingsLoad : MonoBehaviour
     public void Load()
     {
         loadAction();
+    }
+
+    public void LoadFromSomeWhereElse()
+    {
+        loadFromSomeWhereElseAction();
     }
     #endregion
 }

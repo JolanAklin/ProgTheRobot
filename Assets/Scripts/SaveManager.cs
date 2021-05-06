@@ -39,7 +39,7 @@ public class SaveManager : MonoBehaviour
 
     public GameObject splineLink;
 
-    public string fileName;
+    public string filepath = "";
 
     public static SaveManager instance;
 
@@ -115,11 +115,19 @@ public class SaveManager : MonoBehaviour
     }
     // end tpi
 
-    public void LoadFile(string filename)
+    /// <summary>
+    /// Load the specified file
+    /// </summary>
+    /// <param name="file">the path or the name of the file</param>
+    /// <param name="isCompletePath">if true, use the file as a complete path. If false, search for the file in Application.PersistentDataPath</param>
+    public void LoadFile(string file, bool isCompletePath)
     {
-        fileName = filename;
+        if (isCompletePath)
+            filepath = file;
+        else
+            filepath = Path.Combine(savePath + file);
         CleanDir(extractPath);
-        JsonToObj(savePath + filename);
+        JsonToObj(filepath);
     }
 
 
@@ -201,11 +209,11 @@ public class SaveManager : MonoBehaviour
             tmpSavePath + "UnassignedScripts"
         };
 
-        if (!fileName.EndsWith(".pr"))
-            fileName += ".pr";
+        if (!filepath.EndsWith(".pr"))
+            filepath += ".pr";
 
         // create a targz with the specified files
-        CreateTarGZ(savePath + $"{fileName}", files);
+        CreateTarGZ(filepath, files);
 
         CleanDir(tmpSavePath);
     }

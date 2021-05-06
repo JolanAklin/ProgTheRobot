@@ -186,6 +186,7 @@ MonoBehaviour:
   fileName: 
   saveButtonText: {fileID: 4115374297078102143}
   inputField: {fileID: 1483619304356446281}
+  saveButton: {fileID: 7817878518638417767}
 --- !u!1 &2013941920038257660
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,7 +601,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_AnchorMin.x
@@ -608,11 +609,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 1028
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_SizeDelta.y
@@ -648,11 +649,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: 514
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -33
       objectReference: {fileID: 0}
     - target: {fileID: 1025455244870505756, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -681,6 +682,10 @@ PrefabInstance:
     - target: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_Name
       value: InputField
+      objectReference: {fileID: 0}
+    - target: {fileID: 4788058193776220177, guid: efffd370187d7804985f5e14902939e6, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5608367636492744316, guid: efffd370187d7804985f5e14902939e6, type: 3}
       propertyPath: m_ContentType
@@ -856,6 +861,10 @@ PrefabInstance:
       value: Save
       objectReference: {fileID: 0}
     - target: {fileID: 3836112871224389965, guid: 59311e00662c88640a825c2ea2502106, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 0.078431375
+      objectReference: {fileID: 0}
+    - target: {fileID: 3836112871224389965, guid: 59311e00662c88640a825c2ea2502106, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -906,6 +915,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 3836112871224389962, guid: 59311e00662c88640a825c2ea2502106, type: 3}
   m_PrefabInstance: {fileID: 6431759582560495146}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7817878518638417767 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3836112871224389965, guid: 59311e00662c88640a825c2ea2502106, type: 3}
+  m_PrefabInstance: {fileID: 6431759582560495146}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4115374297078102143 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6944142006916963925, guid: 59311e00662c88640a825c2ea2502106, type: 3}
