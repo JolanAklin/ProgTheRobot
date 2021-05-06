@@ -54,6 +54,7 @@ public class SaveManager : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(this.gameObject);
         if(instance == null)
         {
             instance = this;
@@ -63,12 +64,12 @@ public class SaveManager : MonoBehaviour
             Destroy(this.gameObject);
         }
 
+
         tmpSavePath = Application.persistentDataPath + tmpSavePath;
         savePath = Application.persistentDataPath + savePath;
         extractPath = Application.persistentDataPath + extractPath;
         settingsPath = Application.persistentDataPath + settingsPath;
 
-        DontDestroyOnLoad(this.gameObject);
 
         // create the directory if they don't exist
         if (!Directory.Exists(extractPath))
@@ -94,7 +95,8 @@ public class SaveManager : MonoBehaviour
 
     private void Start()
     {
-        LoadFile();
+        if(!CommandLineManager.instance.LoadFromCmd())
+            LoadFile();
     }
 
     private void Update()
