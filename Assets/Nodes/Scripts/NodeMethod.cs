@@ -58,8 +58,7 @@ public class NodeMethod : Nodes
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        tMP_Dropdown.interactable = !e.started;
-        IsInputLocked = e.started;
+        LockUnlockAllInput(true);
     }
     // start tpi
     public override void LockUnlockAllInput(bool isLocked)

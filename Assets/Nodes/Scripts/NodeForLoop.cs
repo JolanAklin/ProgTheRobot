@@ -101,11 +101,7 @@ public class NodeForLoop : Nodes
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        foreach (TMP_InputField inputField in inputFields)
-        {
-            inputField.interactable = !e.started;
-        }
-        IsInputLocked = e.started;
+        LockUnlockAllInput(true);
     }
     // start tpi
     public override void LockUnlockAllInput(bool isLocked)

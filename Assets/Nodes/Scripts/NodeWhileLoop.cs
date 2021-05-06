@@ -89,8 +89,7 @@ public class NodeWhileLoop : Nodes
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        inputField.interactable = !e.started;
-        IsInputLocked = e.started;
+        LockUnlockAllInput(true);
     }
     // start tpi
     public override void LockUnlockAllInput(bool isLocked)

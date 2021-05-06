@@ -22,11 +22,11 @@ addAffectNode = Bloc d'affectation
 
 [Command]
 GoForward = Avancer
-TurnRight = TournerADroite
-TurnLeft = TournerAGauche
+TurnRight = Tourner à droite
+TurnLeft = Tourner à gauche
 Mark = Marquer
 Unmark = Démarquer
 Reload = Recharger
-PlaceBall = PoserBallon
-TakeBall = PrendreBallon
-Throwball = LancerBallon
+PlaceBall = Poser ballon
+TakeBall = Prendre ballon
+Throwball = Lancer ballon

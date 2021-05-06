@@ -21,12 +21,12 @@ addSubProgramNode = SubProgramm node
 addAffectNode = Assignement node
 
 [Command]
-GoForward = GoForward
-TurnRight = TurnRight
-TurnLeft = TurnLeft
+GoForward = Go forward
+TurnRight = Turn right
+TurnLeft = Turn left
 Mark = Mark
 Unmark = Unmark
 Reload = Reload
-PlaceBall = PlaceBall
-TakeBall = TakeBall
-Throwball = ThrowBall
+PlaceBall = Place ball
+TakeBall = Take ball
+Throwball = Throw ball

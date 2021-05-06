@@ -45,8 +45,7 @@ public class NodeCommande : Nodes
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        inputField.interactable = !e.started;
-        IsInputLocked = e.started;
+        LockUnlockAllInput(true);
     }
     // start tpi
     public override void LockUnlockAllInput(bool isLocked)
@@ -82,23 +81,23 @@ public class NodeCommande : Nodes
         {
             case "":
             case "Avancer":
-            case "GoForward":
-            case "TournerADroite":
-            case "TurnRight":
-            case "TournerAGauche":
-            case "TurnLeft":
+            case "Go forward":
+            case "Tourner à droite":
+            case "Turn right":
+            case "Tourner à gauche":
+            case "Turn left":
             case "Marquer":
             case "Mark":
             case "Démarquer":
             case "Unmark":
             case "Recharger":
             case "Reload":
-            case "PoserBallon":
-            case "PlaceBall":
-            case "PrendreBallon":
-            case "TakeBall":
-            case "LancerBallon":
-            case "ThrowBall":
+            case "Poser ballon":
+            case "Place ball":
+            case "Prendre ballon":
+            case "Take ball":
+            case "Lancer ballon":
+            case "Throw ball":
                 TranslateText(this, EventArgs.Empty);
                 return true;
         }
@@ -112,15 +111,15 @@ public class NodeCommande : Nodes
             case "":
                 break;
             case "Avancer":
-            case "GoForward":
+            case "Go forward":
                 input = Translation.Get("GoForward");
                 break;
-            case "TournerADroite":
-            case "TurnRight":
+            case "Tourner à droite":
+            case "Turn right":
                 input = Translation.Get("TurnRight");
                 break;
-            case "TournerAGauche":
-            case "TurnLeft":
+            case "Tourner à gauche":
+            case "Turn left":
                 input = Translation.Get("TurnLeft");
                 break;
             case "Marquer":
@@ -135,16 +134,16 @@ public class NodeCommande : Nodes
             case "Reload":
                 input = Translation.Get("Reload");
                 break;
-            case "PoserBallon":
-            case "PlaceBall":
+            case "Poser ballon":
+            case "Place ball":
                 input = Translation.Get("PlaceBall");
                 break;
-            case "PrendreBallon":
-            case "TakeBall":
+            case "Prendre ballon":
+            case "Take ball":
                 input = Translation.Get("TakeBall");
                 break;
-            case "LancerBallon":
-            case "ThrowBall":
+            case "Lancer ballon":
+            case "Throw ball":
                 input = Translation.Get("Throwball");
                 break;
         }
@@ -162,15 +161,15 @@ public class NodeCommande : Nodes
             case "":
                 break;
             case "Avancer":
-            case "GoForward":
+            case "Go forward":
                 rs.robot.robotManager.GoForward(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "TournerADroite":
-            case "TurnRight":
+            case "Tourner à droite":
+            case "Turn right":
                 rs.robot.robotManager.TurnRight(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "TournerAGauche":
-            case "TurnLeft":
+            case "Tourner à gauche":
+            case "Turn left":
                 rs.robot.robotManager.TurnLeft(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
             case "Marquer":
@@ -185,16 +184,16 @@ public class NodeCommande : Nodes
             case "Reload":
                 rs.robot.robotManager.Charge(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
                 break;
-            case "PoserBallon":
-            case "PlaceBall":
+            case "Poser ballon":
+            case "Place ball":
                 rs.robot.robotManager.PlaceBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "PrendreBallon":
-            case "TakeBall":
+            case "Prendre ballon":
+            case "Take ball":
                 rs.robot.robotManager.TakeBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "LancerBallon":
-            case "ThrowBall":
+            case "Lancer ballon":
+            case "Throw ball":
                 rs.robot.robotManager.ThrowBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
 
