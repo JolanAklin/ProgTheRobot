@@ -21,6 +21,7 @@ using UnityEngine.UI;
 using UnityEngine.Events;
 using TMPro;
 using System.Linq;
+using Cinemachine;
 
 public class ListRobot : MonoBehaviour
 {
@@ -42,6 +43,13 @@ public class ListRobot : MonoBehaviour
     private Button currentSelectedButton;
     private Button addButton;
     public GameObject Content;
+
+    private CinemachineVirtualCamera robotVcam;
+
+    private void Awake()
+    {
+        robotVcam = GameObject.FindGameObjectWithTag("RobotVcam").GetComponent<CinemachineVirtualCamera>();
+    }
 
     public void Init(Dictionary<int, ListElement> listChoices, uint defaulSelected)
     {
@@ -139,7 +147,10 @@ public class ListRobot : MonoBehaviour
         ListElement choice = choices[id];
         ButtonClicked(button);
         if (!choice.isAddRobot)
+        {
             button.onClick?.Invoke();
+            CameraTargetRobot(id);
+        }
     }
 
     public void SelectFirst()
@@ -149,8 +160,24 @@ public class ListRobot : MonoBehaviour
         ListElement choice = choices[id];
         ButtonClicked(button);
         if (!choice.isAddRobot)
+        {
             button.onClick?.Invoke();
+            CameraTargetRobot(id);
+        }
     }
+    // start tpi
+    public void CameraTargetRobot(int id)
+    {
+        if(robotVcam != null)
+        {
+            Transform cameraPoint = Robot.robots[id].robotManager.cameraPoint.transform;
+            cameraPoint.localPosition = Robot.robots[id].robotManager.defaultCameraPointPos;
+            cameraPoint.rotation = Quaternion.identity;
+            robotVcam.Follow = cameraPoint;
+            robotVcam.LookAt = cameraPoint;
+        }
+    }
+    //end tpi
 
     public void ChangeChoiceColor(int id, Color color)
     {

@@ -205,10 +205,18 @@ public class Robot
     // convert the robot to a displayable list element
     public ListRobot.ListElement ConvertToListElement()
     {
-        return new ListRobot.ListElement() { isAddRobot = false, robotColor = Color, actionOnClick = () => {
+        return new ListRobot.ListElement()
+        {
+            isAddRobot = false,
+            robotColor = Color,
+            actionOnClick = () =>
+            {
                 idSelected = this.id;
-                Manager.instance.list.ChangeList(ScriptToList(),1); 
-            } 
+                //start tpi
+                Manager.instance.listRobot.CameraTargetRobot(this.id);
+                //end tpi
+                Manager.instance.list.ChangeList(ScriptToList(), 1);
+            }
         };
     }
 

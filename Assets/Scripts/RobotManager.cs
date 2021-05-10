@@ -37,6 +37,11 @@ public class RobotManager : MonoBehaviour
 
     public Renderer bodyRenderer;
 
+    // start tpi
+    public GameObject cameraPoint;
+    public Vector3 defaultCameraPointPos;
+    // end tpi
+
     // hold the data to reset the robot to its original position
     public Vector3 robotStartPos;
     public Quaternion robotStartRot;

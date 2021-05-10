@@ -29,6 +29,7 @@ TagManager:
   - NodeContextMenu
   - InfoNodeName
   - InfoNodeDesc
+  - RobotVcam
   layers:
   - Default
   - TransparentFX
