@@ -38,6 +38,7 @@ public class RobotManager : MonoBehaviour
     public Renderer bodyRenderer;
 
     // start tpi
+    [Header("Camera follow point")]
     public GameObject cameraPoint;
     public Vector3 defaultCameraPointPos;
     // end tpi

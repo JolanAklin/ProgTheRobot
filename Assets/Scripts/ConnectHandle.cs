@@ -45,7 +45,7 @@ public class ConnectHandle : MonoBehaviour
         image = GetComponent<Image>();
         boxCollider2d = GetComponent<BoxCollider2D>();
         Manager.instance.OnSpline += ShowHide; // this event while be triggered when a spline is created or ended
-        if (image != null && boxCollider2d != null && isInput)
+        if (image != null && boxCollider2d != null && isInput && !Manager.instance.connectHandleAlwaysShown)
         {
             image.enabled = false;
             boxCollider2d.enabled = false;
@@ -118,14 +118,14 @@ public class ConnectHandle : MonoBehaviour
                 image.enabled = true;
                 boxCollider2d.enabled = true;
             }
-            else
+            else if(!Manager.instance.connectHandleAlwaysShown)
             {
                 image.enabled = false;
                 boxCollider2d.enabled = false;
             }
         }else if(canBeClicked)
         {
-            if (e.splineStarted)
+            if (e.splineStarted && !Manager.instance.connectHandleAlwaysShown)
             {
                 image.enabled = false;
                 boxCollider2d.enabled = false;

@@ -24,13 +24,17 @@ using TMPro;
 public class SettingsOptions : MonoBehaviour
 {
     private PopUpMenu menu;
+
     public TMP_InputField inputField;
     public string filePath;
+    public ToggleScript toggleScript;
+
     public Action okAction;
     public Action cancelAction;
 
     private void Start()
     {
+        toggleScript.Value = Manager.instance.connectHandleAlwaysShown;
         menu = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<PopUpMenu>();
         inputField.text = SaveManager.instance.savePath;
         filePath = inputField.text;
@@ -44,7 +48,7 @@ public class SettingsOptions : MonoBehaviour
             {
                 if(Directory.Exists(filePath))
                 {
-                    
+                    ChangeConnectHandleDisplayMethod(toggleScript);
                     SaveManager.instance.savePath = filePath.EndsWith("/") ? filePath : filePath + "/";
                     SaveManager.instance.SaveSettings();
                     menu.Close();
@@ -65,6 +69,11 @@ public class SettingsOptions : MonoBehaviour
                 inputField.Select();
             }
         };
+    }
+
+    private void ChangeConnectHandleDisplayMethod(ToggleScript toggle)
+    {
+        Manager.instance.ChangeConnectHandleDisplayMethod(toggle);
     }
 
     public void OnEndEditFilePath(TMP_InputField inputField)

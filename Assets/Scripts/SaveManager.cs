@@ -224,7 +224,7 @@ public class SaveManager : MonoBehaviour
     public void SaveSettings()
     {
         StreamWriter sr = File.CreateText(settingsPath + "settings");
-        sr.WriteLine(JsonUtility.ToJson(new Settings() { savePath = savePath}));
+        sr.WriteLine(JsonUtility.ToJson(new Settings() { savePath = savePath, alwaysShowConnectHandle = Manager.instance.connectHandleAlwaysShown}));
         sr.Close();
     }
 
@@ -237,6 +237,7 @@ public class SaveManager : MonoBehaviour
             Settings settings = JsonUtility.FromJson<Settings>(content);
 
             savePath = settings.savePath;
+            Manager.instance.connectHandleAlwaysShown = settings.alwaysShowConnectHandle;
         }
     }
 
@@ -510,6 +511,7 @@ public class SaveManager : MonoBehaviour
     public class Settings
     {
         public string savePath;
+        public bool alwaysShowConnectHandle;
     }
 
     // the class that will be converted to json to save unassigned scripts

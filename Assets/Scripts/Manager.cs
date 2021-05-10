@@ -57,6 +57,11 @@ public class Manager : MonoBehaviour
     // define the execution speed of the script
     public float execSpeed;
 
+    // start tpi
+    [Header("Settings")]
+    public bool connectHandleAlwaysShown = true;
+    // end tpi
+
     private void Awake()
     {
         instance = this;
@@ -90,6 +95,13 @@ public class Manager : MonoBehaviour
         });
         listRobot.Init(robotElements, 0);
     }
+
+    // start tpi
+    public void ChangeConnectHandleDisplayMethod(ToggleScript toggle)
+    {
+        instance.connectHandleAlwaysShown = toggle.Value;
+    }
+    // end tpi
 
     private void ResizeCanvas(object sender, WindowResized.WindowResizedEventArgs e)
     {

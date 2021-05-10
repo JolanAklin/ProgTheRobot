@@ -27,32 +27,40 @@ public class ToggleScript : MonoBehaviour
     public GameObject fillArea;
     public Color fillAreaColor;
 
+    public bool value;
+    public bool Value { get => value; set { this.value = value; MoveCursor(); } }
+
     public UnityEvent OnCheckChanged;
 
-    private bool value;
-    public bool Value { get => value; }
 
-    private void Start()
+    private void Awake()
     {
         handleRectTransform = handle.GetComponent<RectTransform>();
         fillArea.GetComponent<Image>().color = fillAreaColor;
-        value = false;
+    }
+    private void Start()
+    {
+        MoveCursor();
     }
 
     public void CheckChanged()
     {
         value = !value;
+        MoveCursor();
+        OnCheckChanged?.Invoke();
+    }
+    private void MoveCursor()
+    {
         if (value)
         {
             fillArea.SetActive(true);
-            handleRectTransform.localPosition = new Vector3(-5, 0, 0);
+            handleRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 10, handleRectTransform.sizeDelta.x);
+
         }
         else
         {
             fillArea.SetActive(false);
-            handleRectTransform.localPosition = new Vector3(-15, 0, 0);
+            handleRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, 0, handleRectTransform.sizeDelta.x);
         }
-        OnCheckChanged?.Invoke();
     }
-
 }
