@@ -150,6 +150,7 @@ MonoBehaviour:
   - {fileID: 230097236367227916}
   - {fileID: 7290907116305010635}
   - {fileID: 3509997162206546644}
+  bodyRenderer: {fileID: 3039571610065711096}
   robotStartPos: {x: 0, y: 0, z: 0}
   robotStartRot: {x: 0, y: 0, z: 0, w: 0}
   wallLayer:
@@ -353,6 +354,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 8
       objectReference: {fileID: 0}
+    - target: {fileID: 6317578925029434746, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f100e4cedbcc44a428089693060bb7b8, type: 2}
     - target: {fileID: 6512510688612296998, guid: 45bf3c5212d946f4492dc2f1f23cb77d, type: 3}
       propertyPath: m_Layer
       value: 8

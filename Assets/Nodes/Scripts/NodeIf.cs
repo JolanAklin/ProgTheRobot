@@ -106,7 +106,7 @@ public class NodeIf : Nodes
     public override void Execute()
     {
         // test if the robot has enough power to execute the node, if not he stop the code execution
-        if (rs.robot.power <= nodeExecPower)
+        if (rs.robot.Power <= nodeExecPower)
         {
             ExecManager.Instance.StopExec();
             rs.End();
@@ -114,7 +114,7 @@ public class NodeIf : Nodes
             Debugger.Log($"Le robot {rs.robot.robotName} n'a plus assez d'énergie");
             return;
         }
-        rs.robot.power -= nodeExecPower;
+        rs.robot.Power -= nodeExecPower;
 
         if (!ExecManager.Instance.isRunning)
             return;

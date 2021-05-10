@@ -76,7 +76,7 @@ public class ExecManager : MonoBehaviour
                     if(robot.MainScript.nodeStart != null)
                     {
                         robot.robotManager.ResetTerrainObj();
-                        robot.power = robot.defaultPower;
+                        robot.Power = robot.defaultPower;
                         robot.robotManager.transform.position = robot.robotManager.robotStartPos;
                         robot.robotManager.transform.rotation = robot.robotManager.robotStartRot;
                         robot.varsManager.Clean();

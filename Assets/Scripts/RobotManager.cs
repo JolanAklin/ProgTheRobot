@@ -35,6 +35,8 @@ public class RobotManager : MonoBehaviour
 
     public Renderer[] renderers;
 
+    public Renderer bodyRenderer;
+
     // hold the data to reset the robot to its original position
     public Vector3 robotStartPos;
     public Quaternion robotStartRot;
@@ -68,6 +70,19 @@ public class RobotManager : MonoBehaviour
         robotStartPos = transform.position;
         robotStartRot = transform.rotation;
     }
+
+    // start tpi
+
+    /// <summary>
+    /// Show the battery usage on the robot
+    /// </summary>
+    /// <param name="value">Amout of battery left between 0 and 1. (remaining/total)</param>
+    public void ShowBatteryUsage(float value)
+    {
+        value = Mathf.Clamp01(value);
+        bodyRenderer.material.SetFloat("amount", value);
+    }
+    // end tpi
 
     public void SetRobotColor(Color color)
     {
@@ -126,7 +141,7 @@ public class RobotManager : MonoBehaviour
     {
         if (!WallInFront())
         {
-            if (robot.power >= goForwardPower)
+            if (robot.Power >= goForwardPower)
             {
                 this.noPower = noPower;
                 this.callBack = callBack;
@@ -151,7 +166,7 @@ public class RobotManager : MonoBehaviour
         {
             actionOnUpdate = GoForward;
             startMovementPos = transform.position;
-            robot.power -= goForwardPower;
+            robot.Power -= goForwardPower;
             t = 0f;
         }
         t += 1 * Time.deltaTime * Manager.instance.execSpeed;
@@ -165,7 +180,7 @@ public class RobotManager : MonoBehaviour
 
     public void TurnRight(Action callBack, Action noPower)
     {
-        if (robot.power >= turnPower)
+        if (robot.Power >= turnPower)
         {
             this.noPower = noPower;
             this.callBack = callBack;
@@ -183,7 +198,7 @@ public class RobotManager : MonoBehaviour
         {
             actionOnUpdate = TurnRight;
             startMovementRot = transform.rotation;
-            robot.power -= turnPower;
+            robot.Power -= turnPower;
             t = 0f;
         }
         t += 1 * Time.deltaTime * Manager.instance.execSpeed;
@@ -197,7 +212,7 @@ public class RobotManager : MonoBehaviour
 
     public void TurnLeft(Action callBack, Action noPower)
     {
-        if (robot.power >= turnPower)
+        if (robot.Power >= turnPower)
         {
             this.noPower = noPower;
             this.callBack = callBack;
@@ -215,7 +230,7 @@ public class RobotManager : MonoBehaviour
         {
             actionOnUpdate = TurnLeft;
             startMovementRot = transform.rotation;
-            robot.power -= turnPower;
+            robot.Power -= turnPower;
             t = 0f;
         }
         t += 1 * Time.deltaTime * Manager.instance.execSpeed;
@@ -231,11 +246,11 @@ public class RobotManager : MonoBehaviour
     {
         if(!IsCaseMarked())
         {
-            if (robot.power >= turnPower)
+            if (robot.Power >= turnPower)
             {
                 this.noPower = noPower;
                 this.callBack = callBack;
-                robot.power -= otherActionPower;
+                robot.Power -= otherActionPower;
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectPlacement))
                 {
@@ -263,11 +278,11 @@ public class RobotManager : MonoBehaviour
     {
         if (IsCaseMarked())
         {
-            if (robot.power >= turnPower)
+            if (robot.Power >= turnPower)
             {
                 this.noPower = noPower;
                 this.callBack = callBack;
-                robot.power -= otherActionPower;
+                robot.Power -= otherActionPower;
                 RaycastHit hit;
                 if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
                 {
@@ -328,12 +343,12 @@ public class RobotManager : MonoBehaviour
     private IEnumerator Charge(PowerOutlet powerOutlet)
     {
         powerOutlet.StartParticleSystem();
-        while(robot.power < robot.defaultPower)
+        while(robot.Power < robot.defaultPower)
         {
-            if(robot.power + powerOutlet.PowerPerTick <= robot.defaultPower)
-                robot.power += powerOutlet.PowerPerTick;
+            if(robot.Power + powerOutlet.PowerPerTick <= robot.defaultPower)
+                robot.Power += powerOutlet.PowerPerTick;
             else
-                robot.power = robot.defaultPower;
+                robot.Power = robot.defaultPower;
             yield return new WaitForSeconds(3/Manager.instance.execSpeed);
         }
         powerOutlet.StopParticleSystem();
@@ -342,11 +357,11 @@ public class RobotManager : MonoBehaviour
 
     public void TakeBall(Action callBack, Action noPower)
     {
-        if (robot.power >= turnPower)
+        if (robot.Power >= turnPower)
         {
             this.noPower = noPower;
             this.callBack = callBack;
-            robot.power -= otherActionPower;
+            robot.Power -= otherActionPower;
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectLayer))
             {
@@ -392,11 +407,11 @@ public class RobotManager : MonoBehaviour
 
     public void PlaceBall(Action callBack, Action noPower)
     {
-        if (robot.power >= turnPower)
+        if (robot.Power >= turnPower)
         {
             this.noPower = noPower;
             this.callBack = callBack;
-            robot.power -= otherActionPower;
+            robot.Power -= otherActionPower;
             RaycastHit hit;
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out hit, 1, objectPlacement))
             {
@@ -442,11 +457,11 @@ public class RobotManager : MonoBehaviour
 
     public void ThrowBall(Action callBack, Action noPower)
     {
-        if (robot.power >= turnPower)
+        if (robot.Power >= turnPower)
         {
             this.noPower = noPower;
             this.callBack = callBack;
-            robot.power -= otherActionPower;
+            robot.Power -= otherActionPower;
 
             if(ball != null)
             {

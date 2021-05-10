@@ -285,7 +285,7 @@ public class VarsManager
                 break;
             case "Energie":
             case "Power":
-                result = (int)robot.power;
+                result = (int)robot.Power;
                 break;
             case "xRobot":
                 result = Mathf.RoundToInt(rm.transform.position.x);

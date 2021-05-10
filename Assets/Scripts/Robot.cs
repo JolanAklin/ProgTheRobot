@@ -31,7 +31,11 @@ public class Robot
 
     public string robotName;
     public uint defaultPower;
-    public uint power;
+    private uint power;
+    public uint Power { get => power; set {
+            power = value;
+            robotManager.ShowBatteryUsage((float)power / (float)defaultPower);
+        } }
 
     public RobotManager robotManager;
     public VarsManager varsManager;
