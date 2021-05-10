@@ -41,6 +41,11 @@ public class AutoCompletion : MonoBehaviour
             Manager.instance.OnLanguageChanged += ChangeProbaWord;
     }
 
+    /// <summary>
+    /// Change the words if language changes
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     private void ChangeProbaWord(object sender, EventArgs e)
     {
         if(useLanguageFiles)
@@ -57,6 +62,10 @@ public class AutoCompletion : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Show a list of button under the node's input field
+    /// </summary>
+    /// <param name="inputField"></param>
     public void ShowCompletion(TMP_InputField inputField)
     {
         CompletionProbability[] sortedProba = GetCompletion(inputField.text);
@@ -71,6 +80,9 @@ public class AutoCompletion : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 
+    /// <summary>
+    /// Remove all the button under the node's input field
+    /// </summary>
     public void HideCompletion()
     {
         foreach (Transform child in this.transform)
@@ -79,6 +91,9 @@ public class AutoCompletion : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Remove all the button under the node's input field but with a delay
+    /// </summary>
     public void HideCompletionWait()
     {
         StartCoroutine("HideCompletionOnNextFrame");
