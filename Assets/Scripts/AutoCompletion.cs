@@ -46,7 +46,7 @@ public class AutoCompletion : MonoBehaviour
     /// </summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
-    private void ChangeProbaWord(object sender, EventArgs e)
+    public void ChangeProbaWord(object sender, EventArgs e)
     {
         if(useLanguageFiles)
         {
@@ -116,7 +116,6 @@ public class AutoCompletion : MonoBehaviour
     public CompletionProbability[] GetCompletion(string text)
     {
         NormalizedLevenshtein nl = new NormalizedLevenshtein();
-        Debug.Log(nl.Distance("anticonstitutionnellement", "xyz"));
         List<CompletionProbability> completionProbabilities = new List<CompletionProbability>();
         foreach (string completion in possibleCompletion)
         {

@@ -33,6 +33,7 @@ public abstract class Nodes : MonoBehaviour
         affectation,
         whileLoop,
         forLoop,
+        sound,
     }
 
     public enum ErrorCode
