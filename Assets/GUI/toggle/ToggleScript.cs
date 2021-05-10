@@ -45,12 +45,12 @@ public class ToggleScript : MonoBehaviour
         if (value)
         {
             fillArea.SetActive(true);
-            handleRectTransform.localPosition = new Vector3(0, 0, 0);
+            handleRectTransform.localPosition = new Vector3(-5, 0, 0);
         }
         else
         {
             fillArea.SetActive(false);
-            handleRectTransform.localPosition = new Vector3(-20, 0, 0);
+            handleRectTransform.localPosition = new Vector3(-15, 0, 0);
         }
         OnCheckChanged?.Invoke();
     }

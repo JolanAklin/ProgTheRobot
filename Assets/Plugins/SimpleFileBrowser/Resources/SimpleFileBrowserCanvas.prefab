@@ -4879,7 +4879,7 @@ GameObject:
   - component: {fileID: 8611661872065146431}
   - component: {fileID: 8611661868981438447}
   m_Layer: 5
-  m_Name: SimpleFileBrowserCanvas2
+  m_Name: SimpleFileBrowserCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -5003,22 +5003,24 @@ MonoBehaviour:
   contextMenuShowDeleteButton: 1
   contextMenuShowRenameButton: 1
   showResizeCursor: 1
-  folderIcon: {fileID: 21300000, guid: 05e18bb0a86cfdb4dbf887d382b69249, type: 3}
-  driveIcon: {fileID: 21300000, guid: c3f6bb04213791646b2e4824be1436dc, type: 3}
-  defaultIcon: {fileID: 21300000, guid: 372a6728b63455845bdad04ffc8a323b, type: 3}
+  folderIcon: {fileID: 21300000, guid: e65e124f7f12b9c48a810c283ace2093, type: 3}
+  driveIcon: {fileID: 21300000, guid: 084ae1fb238e12a4a83eee3f5f824adc, type: 3}
+  defaultIcon: {fileID: 21300000, guid: 45466d90784e5b548a5f5038b8b89378, type: 3}
   filetypeIcons:
   - extension: .txt
-    icon: {fileID: 21300000, guid: d9b30118e14d81742a606dac7cc44d7e, type: 3}
+    icon: {fileID: 21300000, guid: 87569b919caa71c40885ecd09ca09a42, type: 3}
   - extension: .doc
-    icon: {fileID: 21300000, guid: d9b30118e14d81742a606dac7cc44d7e, type: 3}
+    icon: {fileID: 21300000, guid: 87569b919caa71c40885ecd09ca09a42, type: 3}
   - extension: .docx
-    icon: {fileID: 21300000, guid: d9b30118e14d81742a606dac7cc44d7e, type: 3}
+    icon: {fileID: 21300000, guid: 87569b919caa71c40885ecd09ca09a42, type: 3}
   - extension: .jpg
-    icon: {fileID: 21300000, guid: d95a00b6cdb17884682cd580102f14e0, type: 3}
+    icon: {fileID: 21300000, guid: 5339631946217e04c90425625eff8ed3, type: 3}
   - extension: .jpeg
-    icon: {fileID: 21300000, guid: d95a00b6cdb17884682cd580102f14e0, type: 3}
+    icon: {fileID: 21300000, guid: 5339631946217e04c90425625eff8ed3, type: 3}
   - extension: .png
-    icon: {fileID: 21300000, guid: d95a00b6cdb17884682cd580102f14e0, type: 3}
+    icon: {fileID: 21300000, guid: 5339631946217e04c90425625eff8ed3, type: 3}
+  - extension: .pr
+    icon: {fileID: 21300000, guid: 966a4d4e26f7e9743a3aefd0f88ce891, type: 3}
   multiSelectionToggleOffIcon: {fileID: 21300000, guid: d6beaeac8de2af749a48581db778df3e, type: 3}
   multiSelectionToggleOnIcon: {fileID: 21300000, guid: 30a2566f94f937b4998542121050e68b, type: 3}
   window: {fileID: 8611661871780280693}
