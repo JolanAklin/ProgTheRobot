@@ -37,6 +37,7 @@ public class TerrainManager : MonoBehaviour
 
 
     private uint[] terrainSize;
+    public uint[] TerrainSize { get => terrainSize; private set => terrainSize = value; }
 
     private List<List<terrainPart>> terrainParts = new List<List<terrainPart>>();
 
@@ -174,8 +175,18 @@ public class TerrainManager : MonoBehaviour
                 robotToMove.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
                 if(Input.GetKeyDown(KeyCode.Mouse0))
                 {
+                    // start tpi
+                    RobotManager manager = robotToMove.GetComponent<RobotManager>();
+                    // test if there is another robot on the same spot
+                    foreach (Robot robot in Robot.robots.Values)
+                    {
+                        robot.robotManager.UpdatePosOnGrid();
+                        if (manager.PosOnGridInt == robot.robotManager.PosOnGridInt && robot.robotManager != manager)
+                            return;
+                    }
+                    // end tpi
                     addObjectActionOnUpdate = null;
-                    robotToMove.GetComponent<RobotManager>().SetDefaultPos(robotToMove.transform);
+                    manager.SetDefaultPos(robotToMove.transform);
                 }
             }
         }else

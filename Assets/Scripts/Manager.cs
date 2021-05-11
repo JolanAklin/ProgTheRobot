@@ -293,10 +293,49 @@ public class Manager : MonoBehaviour
     }
     public RobotManager CreateRobot(Color color, Robot robot)
     {
-        RobotManager robotManager = Instantiate(robotPrefab, new Vector3(0, 0.5f, 0), Quaternion.identity).GetComponent<RobotManager>();
+        Vector3 spawnPos = GetRandomPosOnGrid();
+        RobotManager robotManager = Instantiate(robotPrefab, spawnPos, Quaternion.identity).GetComponent<RobotManager>();
         robotManager.robot = robot;
         return robotManager;
     }
+
+    // start tpi
+
+    /// <summary>
+    /// Get a random pos on the grid without robot overlaping
+    /// </summary>
+    /// <returns>The pos on the grid without a robot on it</returns>
+    public Vector3 GetRandomPosOnGrid()
+    {
+        TerrainManager terrain = GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>();
+        Vector3 pos = Vector3.zero;
+        bool foundPos = true;
+        for (int j = 0; j < terrain.TerrainSize[0]; j++)
+        {
+            for (int i = 0; i < terrain.TerrainSize[1]; i++)
+            {
+                foundPos = true;
+                pos = new Vector3(j, 0.5f, i);
+
+                foreach (Robot robot in Robot.robots.Values)
+                {
+                    if (robot.robotManager.PosOnGridInt == new Vector3(pos.x, 0, pos.z))
+                    {
+                        foundPos = false;
+                        break;
+                    }
+                }
+
+                if (foundPos)
+                    break;
+            }
+            if (foundPos)
+                break;
+        }
+        return pos;
+    }
+    //end tpi
+
     public void DestroyObject(GameObject gameObject)
     {
         Destroy(gameObject);

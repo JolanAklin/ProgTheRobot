@@ -41,6 +41,16 @@ public class RobotManager : MonoBehaviour
     [Header("Camera follow point")]
     public GameObject cameraPoint;
     public Vector3 defaultCameraPointPos;
+
+    // make robot not pass in each other
+    private Vector3Int posOnGrid;
+    public Vector3 PosOnGrid { get => posOnGrid; set { posOnGrid = ConvertToVector3Int(value); } }
+    public Vector3Int PosOnGridInt { get => posOnGrid; set => posOnGrid = value; }
+
+    private Vector3Int nextPosOnGrid;
+    public Vector3 NextPosOnGrid { get => nextPosOnGrid; set { nextPosOnGrid = ConvertToVector3Int(value); } }
+    public Vector3Int NextPosOnGridInt { get => nextPosOnGrid; set => nextPosOnGrid = value; }
+
     // end tpi
 
     // hold the data to reset the robot to its original position
@@ -69,6 +79,8 @@ public class RobotManager : MonoBehaviour
     private void Start()
     {
         SetDefaultPos(this.transform);
+        PosOnGrid = transform.position;
+        NextPosOnGrid = transform.position;
     }
 
     public void SetDefaultPos(Transform transform)
@@ -149,6 +161,34 @@ public class RobotManager : MonoBehaviour
         {
             if (robot.Power >= goForwardPower)
             {
+                // start tpi
+                PosOnGrid = transform.position;
+                switch (Mathf.RoundToInt(transform.rotation.eulerAngles.y))
+                {
+                    case 0:
+                        nextPosOnGrid = new Vector3Int(posOnGrid.x, posOnGrid.y, posOnGrid.z + 1);
+                        break;
+                    case 180:
+                        nextPosOnGrid = new Vector3Int(posOnGrid.x, posOnGrid.y, posOnGrid.z - 1);
+                        break;
+                    case 90:
+                        nextPosOnGrid = new Vector3Int(posOnGrid.x + 1, posOnGrid.y, posOnGrid.z);
+                        break;
+                    case 270:
+                        nextPosOnGrid = new Vector3Int(posOnGrid.x - 1, posOnGrid.y, posOnGrid.z);
+                        break;
+                }
+                foreach (Robot robot in Robot.robots.Values)
+                {
+                    if(nextPosOnGrid == robot.robotManager.nextPosOnGrid && robot.robotManager != this)
+                    {
+                        nextPosOnGrid = posOnGrid;
+                        Debugger.Log($"Le robot {robot.robotName} est bloqué");
+                        callBack();
+                        return;
+                    }
+                }
+                // end tpi
                 this.noPower = noPower;
                 this.callBack = callBack;
                 GoForward();
@@ -567,4 +607,30 @@ public class RobotManager : MonoBehaviour
         }
         return false;
     }
+
+    // start tpi
+
+    /// <summary>
+    /// Update the position of the robot on the grid
+    /// </summary>
+    public void UpdatePosOnGrid()
+    {
+        PosOnGrid = transform.position;
+    }
+
+    /// <summary>
+    /// Round a Vector3 to a Vector3Int
+    /// </summary>
+    /// <param name="vector3">The vector to convert to Vector3Int</param>
+    /// <returns>The converted Vector3Int</returns>
+    private Vector3Int ConvertToVector3Int(Vector3 vector3)
+    {
+        return new Vector3Int
+        (
+            Mathf.RoundToInt(vector3.x),
+            Mathf.RoundToInt(vector3.y),
+            Mathf.RoundToInt(vector3.z)
+        );
+    }
+    //end tpi
 }
