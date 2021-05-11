@@ -25,12 +25,13 @@ public class TerrainInteractableObj : MonoBehaviour
         none = 0,
         PowerPlug,
         Marking,
-        ball
+        ball,
+        portal
     }
 
     public ObjectType type;
 
-    private List<Material[]> defaultMat = new List<Material[]>();
+    protected List<Material[]> defaultMat = new List<Material[]>();
     public Renderer[] objectRenderers;
     public Material placeHolderMat;
 

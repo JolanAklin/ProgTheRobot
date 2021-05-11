@@ -5277,6 +5277,7 @@ MonoBehaviour:
   - {fileID: 4475532061856234385, guid: 0613ece122452af47b91f63f2b1c541d, type: 3}
   - {fileID: 8284760571569105663, guid: 46391c8eb12d5754e8728230e8cb8e29, type: 3}
   - {fileID: 1222827262509498292, guid: b1243f781e034494683f46979f59184b, type: 3}
+  - {fileID: 7752567679502719831, guid: 6c6e30c0892e2f74da6f191d73dcdde4, type: 3}
   canvas: {fileID: 1754670295}
   terrainCam: {fileID: 1524606128}
   fencePlacementLayer:
@@ -10496,7 +10497,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.688925, y: 1}
+    m_SensorSize: {x: 1.7777778, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -11726,8 +11727,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 138.5, y: -99.25001}
-  m_SizeDelta: {x: 271, y: 186.50002}
+  m_AnchoredPosition: {x: 138.5, y: -100.42857}
+  m_SizeDelta: {x: 271, y: 188.85715}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794119065
 RectTransform:
@@ -11822,7 +11823,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 27398558794118963}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:

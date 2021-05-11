@@ -135,6 +135,18 @@ public class TerrainManager : MonoBehaviour
                     Destroy(currentObject);
             }
         });
+        // start tpi
+        objectList.AddChoice(new List.ListElement()
+        {
+            displayedText = "Porte temporelle",
+            actionOnClick = () =>
+            {
+                addObjectActionOnUpdate = () => { AddObject(objects[4], 4); } ;
+                if (currentObject != null)
+                    Destroy(currentObject);
+            }
+        });
+        // end tpi
 
     }
 

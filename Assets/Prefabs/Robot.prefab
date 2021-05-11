@@ -210,6 +210,9 @@ MonoBehaviour:
   objectPlacement:
     serializedVersion: 2
     m_Bits: 1024
+  portalLayerMask:
+    serializedVersion: 2
+    m_Bits: 131072
   goForwardPower: 20
   turnPower: 15
   otherActionPower: 10

@@ -60,6 +60,7 @@ public class RobotManager : MonoBehaviour
     public LayerMask wallLayer;
     public LayerMask objectLayer;
     public LayerMask objectPlacement;
+    public LayerMask portalLayerMask;
 
     public uint goForwardPower = 20;
     public uint turnPower = 15;
@@ -220,7 +221,19 @@ public class RobotManager : MonoBehaviour
         if(t > 1)
         {
             actionOnUpdate = null;
+            TeleportIfPortal();
+            UpdatePosOnGrid();
             callBack();
+        }
+    }
+
+    private void TeleportIfPortal()
+    {
+        Collider[] colliders = Physics.OverlapBox(transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.identity, portalLayerMask);
+        if(colliders.Length > 0)
+        {
+            Portal portal = colliders[0].GetComponent<Portal>();
+            transform.position = new Vector3(portal.LinkedPortal.transform.position.x, 0.5f, portal.LinkedPortal.transform.position.z);
         }
     }
 
