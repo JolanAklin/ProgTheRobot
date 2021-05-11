@@ -227,15 +227,27 @@ public class RobotManager : MonoBehaviour
         }
     }
 
+    // start tpi
+
+    /// <summary>
+    /// Use the portal on it's case if there is one
+    /// </summary>
     private void TeleportIfPortal()
     {
         Collider[] colliders = Physics.OverlapBox(transform.position, new Vector3(0.2f, 0.2f, 0.2f), Quaternion.identity, portalLayerMask);
         if(colliders.Length > 0)
         {
             Portal portal = colliders[0].GetComponent<Portal>();
-            transform.position = new Vector3(portal.LinkedPortal.transform.position.x, 0.5f, portal.LinkedPortal.transform.position.z);
+            if(portal.LinkedPortal.CheckAvailibility())
+            {
+                transform.position = new Vector3(portal.LinkedPortal.transform.position.x, 0.5f, portal.LinkedPortal.transform.position.z);
+            }else
+            {
+                Debugger.Log("La porte est occupée par un autre robot");
+            }
         }
     }
+    // end tpi
 
     public void TurnRight(Action callBack, Action noPower)
     {

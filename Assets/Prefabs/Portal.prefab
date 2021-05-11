@@ -131,6 +131,9 @@ MonoBehaviour:
   objectRenderers:
   - {fileID: 5868464699704588682}
   placeHolderMat: {fileID: 2100000, guid: 88704a3fbfbdd7644b90ca3f36130632, type: 2}
+  robotLayerMask:
+    serializedVersion: 2
+    m_Bits: 256
 --- !u!65 &4556041443589950559
 BoxCollider:
   m_ObjectHideFlags: 0
