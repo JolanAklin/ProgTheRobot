@@ -34,13 +34,13 @@ public class SoundManager : MonoBehaviour
 
         // change loadPath dir depending of the environment
 #if UNITY_EDITOR
-        loadPath = $@"E:\001_TPI\projet\sounds";
+        loadPath = $@"D:\001_TPI\projet\sounds";
 #else
         loadPath = $@"{Application.dataPath}/sounds";
 #endif
         if(!Directory.Exists(loadPath))
         {
-            Debug.LogError("the specified sound directory cannot be found");
+            Debug.LogError($"the specified sound directory cannot be found {loadPath}");
             return;
         }
 

@@ -157,6 +157,7 @@ public class NodeSound : Nodes
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
         };
         serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(playAsync.ToString());
         return serializableNode;
     }
     public override void DeSerializeNode(SerializableNode serializableNode)
@@ -165,6 +166,7 @@ public class NodeSound : Nodes
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
         input = serializableNode.nodeSettings[0];
+        asyncToggle.value = Convert.ToBoolean(serializableNode.nodeSettings[1]);
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
     }

@@ -27,10 +27,14 @@ public class AutoCompletion : MonoBehaviour
     private RectTransform rectTransform;
     private string[] possibleCompletion;
 
+    private void Awake()
+    {
+        rectTransform = GetComponent<RectTransform>();
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        rectTransform = GetComponent<RectTransform>();
         if (useLanguageFiles)
             Manager.instance.OnLanguageChanged += ChangeProbaWord;
         ChangeProbaWord(this, EventArgs.Empty);
@@ -76,6 +80,10 @@ public class AutoCompletion : MonoBehaviour
             completionProposition.completionText.text = completion.completion;
             completionProposition.toFill = toComplete;
             completionProposition.completion = completion.completion;
+            completionProposition.callBack = () =>
+            {
+                HideCompletion();
+            };
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
@@ -85,23 +93,6 @@ public class AutoCompletion : MonoBehaviour
     /// </summary>
     public void HideCompletion()
     {
-        foreach (Transform child in this.transform)
-        {
-            Destroy(child.transform.gameObject);
-        }
-    }
-
-    /// <summary>
-    /// Remove all the button under the node's input field but with a delay
-    /// </summary>
-    public void HideCompletionWait()
-    {
-        StartCoroutine("HideCompletionOnNextFrame");
-    }
-
-    IEnumerator HideCompletionOnNextFrame()
-    {
-        yield return new WaitForSeconds(0.1f);
         foreach (Transform child in this.transform)
         {
             Destroy(child.transform.gameObject);

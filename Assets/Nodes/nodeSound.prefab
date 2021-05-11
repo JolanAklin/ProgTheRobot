@@ -679,7 +679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3687543890005095077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.5, y: -0.3, z: 0}
+  m_LocalPosition: {x: -2.4, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3687543888583791487}
@@ -1528,7 +1528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.size
@@ -1540,7 +1540,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
@@ -1553,7 +1553,7 @@ PrefabInstance:
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 3117409199037845742}
+      objectReference: {fileID: 6201043009058252632}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -1584,7 +1584,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HideCompletionWait
+      value: ChangeInput
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
@@ -1620,7 +1620,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: AutoCompletion, Assembly-CSharp
+      value: NodeSound, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
@@ -1645,7 +1645,7 @@ PrefabInstance:
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 5776085837210554298}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgument
       value: 
@@ -1668,7 +1668,7 @@ PrefabInstance:
       objectReference: {fileID: 5776085837210554298}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
+      value: TMPro.TMP_InputField, Unity.TextMeshPro
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
