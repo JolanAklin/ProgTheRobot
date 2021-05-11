@@ -89,6 +89,7 @@ public class TerrainManager : MonoBehaviour
         terrainSize = new uint[] { 10, 10 };
         changeSizeXInputField.text = terrainSize[0].ToString();
         changeSizeYInputField.text = terrainSize[1].ToString();
+
         CreateTerrain(terrainSize);
 
         // fill the object list
