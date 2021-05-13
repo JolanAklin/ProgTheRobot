@@ -1,4 +1,4 @@
-# ProgTheRobot
-An app for learning the basics of programmation
+# Prog The Robot
+Une application pour apprendre la programmation de façon visuelle en connectant des blocs.
 
-inspired by [RobotProg](http://www.physicsbox.com/indexrobotprogfr.html)
+inspiré par [RobotProg](http://www.physicsbox.com/indexrobotprogfr.html)
