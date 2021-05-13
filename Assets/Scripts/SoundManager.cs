@@ -9,7 +9,6 @@ using System;
 /// <summary>
 /// <see cref="https://docs.unity3d.com/ScriptReference/Networking.UnityWebRequestMultimedia.GetAudioClip.html"/> and <see cref="https://www.youtube.com/watch?v=9gAHZGArDgU"/>
 /// </summary>
-[RequireComponent(typeof(AudioSource))]
 public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
@@ -17,7 +16,6 @@ public class SoundManager : MonoBehaviour
     // sound dictionary : name, sound
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
 
-    private AudioSource audioSource;
     private AudioClip audioClip;
     private string loadPath;
     private string webLoadPath;
@@ -29,8 +27,6 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-
         // change loadPath dir depending of the environment
 #if UNITY_EDITOR
         loadPath = $@"D:\001_TPI\projet\sounds";
@@ -80,15 +76,15 @@ public class SoundManager : MonoBehaviour
     /// </summary>
     /// <param name="audioName">The sound to play</param>
     /// <returns></returns>
-    public bool Play(string audioName)
+    public bool Play(string audioName, AudioSource audio)
     {
         /*
         * the audio source need to be one the robot
         */
         if (!audioClips.ContainsKey(audioName))
             return false;
-        audioSource.clip = audioClips[audioName];
-        audioSource.Play();
+        audio.clip = audioClips[audioName];
+        audio.Play();
         return true;
     }
 
@@ -98,7 +94,7 @@ public class SoundManager : MonoBehaviour
     /// <param name="audioName">The sound to play</param>
     /// <param name="callback">The action that will be call back when the sound ends</param>
     /// <returns></returns>
-    public bool PlaySync(string audioName, Action callback)
+    public bool PlaySync(string audioName, AudioSource audio, Action callback)
     {
         /*
         * the audio source need to be one the robot
@@ -106,8 +102,8 @@ public class SoundManager : MonoBehaviour
         if (!audioClips.ContainsKey(audioName))
             return false;
         AudioClip audioClip = audioClips[audioName];
-        audioSource.clip = audioClip;
-        audioSource.Play();
+        audio.clip = audioClip;
+        audio.Play();
         IEnumerator coroutine = Wait(audioClip.length, callback);
         StartCoroutine(coroutine);
         return true;

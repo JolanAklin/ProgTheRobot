@@ -129,12 +129,12 @@ public class NodeSound : Nodes
         // play the sound
         if (!playAsync)
         {
-            SoundManager.instance.Play(input);
+            SoundManager.instance.Play(input, rs.robot.robotManager.audioSource);
             StartCoroutine("WaitBeforeCallingNextNode");
         }
         else
         {
-            SoundManager.instance.PlaySync(input, () => { StartCoroutine("WaitBeforeCallingNextNode"); });
+            SoundManager.instance.PlaySync(input, rs.robot.robotManager.audioSource, () => { StartCoroutine("WaitBeforeCallingNextNode"); });
         }
     }
 

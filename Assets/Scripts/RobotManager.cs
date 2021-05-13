@@ -37,6 +37,8 @@ public class RobotManager : MonoBehaviour
 
     public Renderer bodyRenderer;
 
+    public AudioSource audioSource;
+
     // start tpi
     [Header("Camera follow point")]
     public GameObject cameraPoint;
