@@ -6,41 +6,69 @@ using UnityEngine;
 public class Portal : TerrainInteractableObj
 {
     public static Portal currentPortal;
+    public static int nextid = 0;
 
     public LayerMask robotLayerMask;
 
+    public TerrainManager.ObjectPosition objectPosition;
+
     private Portal linkedPortal;
+    public Portal LinkedPortal { get => linkedPortal; set => linkedPortal = value; }
 
-    public Portal LinkedPortal { get => linkedPortal; private set => linkedPortal = value; }
+    private Color portalColor;
+    public Color PortalColor { get => portalColor; set => portalColor = value; }
 
-    private void Start()
+    private int id;
+    public int Id { get => id; set => id = value; }
+
+    public void PortalPlaced()
     {
-        if (currentPortal != null)
+        if (linkedPortal == null)
         {
+            id = nextid;
+            nextid++;
+        }
+        // testing for linked portal because if it set when the object is instantiated, it won't be null, so keeping it's configuration
+        if (currentPortal != null && linkedPortal == null)
+        {
+
             LinkedPortal = currentPortal;
             LinkedPortal.LinkedPortal = this;
             currentPortal = null;
 
-            Color portalColor = Random.ColorHSV(0, 1, 0.8f, 1, 0.8f, 1, 1, 1);
-            foreach (Material[] mats in defaultMat)
-            {
-                foreach (Material material in mats)
-                {
-                    material.color = portalColor;
-                }
-            }
-            foreach (Material[] mats in LinkedPortal.defaultMat)
-            {
-                foreach (Material material in mats)
-                {
-                    material.color = portalColor;
-                }
-            }
+            portalColor = Random.ColorHSV(0, 1, 0.8f, 1, 0.8f, 1, 1, 1);
+
+            objectPosition.optionalSettings = new List<string>();
+            objectPosition.optionalSettings.Add(id.ToString());
+            objectPosition.optionalSettings.Add(linkedPortal.id.ToString());
+            objectPosition.optionalSettings.Add($"{portalColor.r},{portalColor.g},{portalColor.b},{portalColor.a}");
+
+            LinkedPortal.objectPosition.optionalSettings = new List<string>();
+            LinkedPortal.objectPosition.optionalSettings.Add(linkedPortal.id.ToString());
+            LinkedPortal.objectPosition.optionalSettings.Add(id.ToString());
+            LinkedPortal.objectPosition.optionalSettings.Add($"{portalColor.r},{portalColor.g},{portalColor.b},{portalColor.a}");
+
+            LinkedPortal.portalColor = portalColor;
+
+            SetDefaultMat();
+            linkedPortal.SetDefaultMat();
+
             PlacedMat();
             LinkedPortal.PlacedMat();
         }
         else
             currentPortal = this;
+    }
+
+    public void SetDefaultMat()
+    {
+        foreach (Material[] mats in defaultMat)
+        {
+            foreach (Material material in mats)
+            {
+                material.color = portalColor;
+            }
+        }
     }
 
     /// <summary>
@@ -55,6 +83,15 @@ public class Portal : TerrainInteractableObj
             return false;
         }
         return true;
+    }
+
+    private void OnDestroy()
+    {
+        // destroy the linked portal too
+        if(LinkedPortal != null)
+        {
+            Destroy(LinkedPortal.gameObject);
+        }
     }
 }
 // end tpi

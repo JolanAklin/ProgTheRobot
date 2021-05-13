@@ -73,19 +73,22 @@ public class AutoCompletion : MonoBehaviour
     public void ShowCompletion(TMP_InputField inputField)
     {
         CompletionProbability[] sortedProba = GetCompletion(inputField.text);
-        HideCompletion();
-        foreach (CompletionProbability completion in sortedProba)
+        if(sortedProba != null)
         {
-            CompletionProposition completionProposition = Instantiate(completionPropositionPrefab, Vector3.zero, Quaternion.identity, this.transform).GetComponent<CompletionProposition>();
-            completionProposition.completionText.text = completion.completion;
-            completionProposition.toFill = toComplete;
-            completionProposition.completion = completion.completion;
-            completionProposition.callBack = () =>
+            HideCompletion();
+            foreach (CompletionProbability completion in sortedProba)
             {
-                HideCompletion();
-            };
+                CompletionProposition completionProposition = Instantiate(completionPropositionPrefab, Vector3.zero, Quaternion.identity, this.transform).GetComponent<CompletionProposition>();
+                completionProposition.completionText.text = completion.completion;
+                completionProposition.toFill = toComplete;
+                completionProposition.completion = completion.completion;
+                completionProposition.callBack = () =>
+                {
+                    HideCompletion();
+                };
+            }
+            LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
         }
-        LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 
     /// <summary>
@@ -106,18 +109,25 @@ public class AutoCompletion : MonoBehaviour
     /// <returns>A string array with all the possible completions in order of the most propable</returns>
     public CompletionProbability[] GetCompletion(string text)
     {
-        NormalizedLevenshtein nl = new NormalizedLevenshtein();
-        List<CompletionProbability> completionProbabilities = new List<CompletionProbability>();
-        foreach (string completion in possibleCompletion)
+        try
         {
-            double dist = nl.Distance(completion, text);
-            // 0 = exactly the same, 1 = nothing in common
-            if (dist < 0.9f)
-                completionProbabilities.Add(new CompletionProbability() { completion = completion, dist = dist });
+            NormalizedLevenshtein nl = new NormalizedLevenshtein();
+            List<CompletionProbability> completionProbabilities = new List<CompletionProbability>();
+            foreach (string completion in possibleCompletion)
+            {
+                double dist = nl.Distance(completion, text);
+                // 0 = exactly the same, 1 = nothing in common
+                if (dist < 0.9f)
+                    completionProbabilities.Add(new CompletionProbability() { completion = completion, dist = dist });
+            }
+            CompletionProbability[] completionProbabilitiesArray = completionProbabilities.ToArray();
+            QuickSortCompletionProbability(completionProbabilitiesArray, 0, completionProbabilities.Count - 1);
+            return completionProbabilitiesArray;
         }
-        CompletionProbability[] completionProbabilitiesArray = completionProbabilities.ToArray();
-        QuickSortCompletionProbability(completionProbabilitiesArray, 0, completionProbabilities.Count - 1);
-        return completionProbabilitiesArray;
+        catch (Exception)
+        {
+            return null;
+        }
     }
 
     public class CompletionProbability

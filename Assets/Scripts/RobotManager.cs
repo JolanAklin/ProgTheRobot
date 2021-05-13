@@ -238,12 +238,15 @@ public class RobotManager : MonoBehaviour
         if(colliders.Length > 0)
         {
             Portal portal = colliders[0].GetComponent<Portal>();
-            if(portal.LinkedPortal.CheckAvailibility())
+            if(portal.LinkedPortal != null)
             {
-                transform.position = new Vector3(portal.LinkedPortal.transform.position.x, 0.5f, portal.LinkedPortal.transform.position.z);
-            }else
-            {
-                Debugger.Log("La porte est occupée par un autre robot");
+                if(portal.LinkedPortal.CheckAvailibility())
+                {
+                    transform.position = new Vector3(portal.LinkedPortal.transform.position.x, 0.5f, portal.LinkedPortal.transform.position.z);
+                }else
+                {
+                    Debugger.Log("La porte est occupée par un autre robot");
+                }
             }
         }
     }

@@ -280,6 +280,10 @@ public class TerrainManager : MonoBehaviour
         objectPositions.CopyTo(objectPositionsCopy);
         objectPositions.Clear();
 
+        // start tpi
+        Dictionary<Portal, ObjectPosition> portals = new Dictionary<Portal, ObjectPosition>();
+        // end tpi
+
         for (int i = 0; i < size[0]; i++)
         {
             terrainParts.Add(new List<terrainPart>());
@@ -297,6 +301,19 @@ public class TerrainManager : MonoBehaviour
                     objectPlacementScript.terrainObject = GenerateObject(objectPosition.objectType, new Vector3(objectPosition.position[0], 0, objectPosition.position[1]));
                     objectPlacementScript.objectPosition = objPosition;
                     objPlacement.transform.GetChild(0).tag = "PlacementOccupied";
+
+                    // tpi
+                    if (objPosition.objectType == 4)
+                    {
+                        // set the id of the portal if there is all the other arguments
+                        Portal portal = objectPlacementScript.terrainObject.GetComponent<Portal>();
+                        if(objectPosition.optionalSettings.Count == 3)
+                        {
+                            portal.Id = Convert.ToInt32(objectPosition.optionalSettings[0]);
+                            portals.Add(portal, objectPosition);
+                        }
+                    }
+                    // end tpi
                 }
 
                 GameObject[] fencesPlacement = new GameObject[4];
@@ -367,6 +384,21 @@ public class TerrainManager : MonoBehaviour
                 terrainParts[i].Add(new terrainPart() { block = Instantiate(terrainPartPrefab, new Vector3(i, -0.5f, j), Quaternion.Euler(-90, 0, 0), this.transform), objectPlacement = objPlacement, fencePlacement = fencesPlacement });
             }
         }
+
+        // start tpi
+        // set the portal id, linkedPortal and color of each portal
+        foreach (KeyValuePair<Portal, ObjectPosition> portal in portals)
+        {
+            if(portal.Value.optionalSettings.Count == 3)
+            {
+                portal.Key.LinkedPortal = portals.First(x => x.Key.Id == Convert.ToInt32(portal.Value.optionalSettings[1])).Key;
+                string[] colorValues = portal.Value.optionalSettings[2].Split(',');
+                portal.Key.PortalColor = new Color(float.Parse(colorValues[0]), float.Parse(colorValues[1]), float.Parse(colorValues[2]), float.Parse(colorValues[3]));
+                portal.Key.SetDefaultMat();
+                portal.Key.PlacedMat();
+            }
+        }
+        // end tpi
     }
     #endregion
 
@@ -495,6 +527,17 @@ public class TerrainManager : MonoBehaviour
 
                         ObjectPlacement objectPlacement = hit.transform.GetComponent<ObjectPlacement>();
                         ObjectPosition objPosition = new ObjectPosition() { position = new int[] { Mathf.RoundToInt(hit.transform.parent.position.x), Mathf.RoundToInt(hit.transform.parent.position.z) }, objectType = type };
+
+                        // tpi
+                        if(objPosition.objectType == 4)
+                        {
+                            Portal portal = currentObject.GetComponent<Portal>();
+                            if(portal.objectPosition != null)
+                                portal.objectPosition = objPosition;
+                            portal.PortalPlaced();
+                        }
+                        // end tpi
+                        
                         objectPositions.Add(objPosition);
 
                         objectPlacement.terrainObject = currentObject;
@@ -624,6 +667,10 @@ public class TerrainManager : MonoBehaviour
     {
         public int[] position;
         public int objectType;
+        // start tpi
+        [SerializeField]
+        public List<string> optionalSettings;
+        // end tpi
     }
     [Serializable]
     public class SerializedTerrain
