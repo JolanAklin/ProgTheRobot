@@ -29,9 +29,10 @@ public class SelectionManager : MonoBehaviour
     /// <param name="startOfSelection">Restart the selection, the node specified will be the first one in the selection</param>
     public void AddNodeToSelection(Nodes selectedNode, bool startOfSelection = true)
     {
-        // reset the selection if not all the script are in the same script
+        // reset the selection if not all nodes are in the same script
         if (selectedNodesInScript == -1)
             selectedNodesInScript = selectedNode.rs.id;
+        // reset the selection if not all nodes have the same parent
         if (selectedNodes.Count >= 1)
             if (SelectedNodes[0].parentId != selectedNode.parentId)
                 ResetSelection();
@@ -197,6 +198,11 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Get all nodes inside a node
+    /// </summary>
+    /// <param name="node">The node to get all the ones inside</param>
+    /// <returns>A list of node</returns>
     private List<Nodes> GetAllNodes(Nodes node)
     {
         List<Nodes> nodes = new List<Nodes>();

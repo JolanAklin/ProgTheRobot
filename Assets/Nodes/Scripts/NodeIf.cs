@@ -49,6 +49,10 @@ public class NodeIf : Nodes
         LockUnlockAllInput(true);
     }
     // start tpi
+    /// <summary>
+    /// Lock all input fields of the node
+    /// </summary>
+    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
         inputField.enabled = !isLocked;

@@ -163,7 +163,10 @@ public class RobotManager : MonoBehaviour
             if (robot.Power >= goForwardPower)
             {
                 // start tpi
+
+                // test if the robot will ends up on another robot in the next move
                 PosOnGrid = transform.position;
+                // set his next position
                 switch (Mathf.RoundToInt(transform.rotation.eulerAngles.y))
                 {
                     case 0:
@@ -179,6 +182,7 @@ public class RobotManager : MonoBehaviour
                         nextPosOnGrid = new Vector3Int(posOnGrid.x - 1, posOnGrid.y, posOnGrid.z);
                         break;
                 }
+                // test if another robot has the same next pos. If yes, the robot doesn't move and show a message in the debuger
                 foreach (Robot robot in Robot.robots.Values)
                 {
                     if(nextPosOnGrid == robot.robotManager.nextPosOnGrid && robot.robotManager != this)
@@ -240,6 +244,7 @@ public class RobotManager : MonoBehaviour
             Portal portal = colliders[0].GetComponent<Portal>();
             if(portal.LinkedPortal != null)
             {
+                // test if the destination portal is occupied. If not, teleport
                 if(portal.LinkedPortal.CheckAvailibility())
                 {
                     transform.position = new Vector3(portal.LinkedPortal.transform.position.x, 0.5f, portal.LinkedPortal.transform.position.z);

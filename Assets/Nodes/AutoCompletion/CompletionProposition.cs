@@ -7,9 +7,18 @@ using System;
 // start tpi
 public class CompletionProposition : MonoBehaviour
 {
+    /// <summary>
+    /// The text that show the completion proposition
+    /// </summary>
     public TMP_Text completionText;
+    /// <summary>
+    /// the inputField to fill
+    /// </summary>
     public TMP_InputField toFill;
     public string completion;
+    /// <summary>
+    /// Action called when the complete method is triggered
+    /// </summary>
     public Action callBack; 
 
     /// <summary>

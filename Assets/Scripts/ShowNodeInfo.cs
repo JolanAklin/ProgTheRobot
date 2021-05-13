@@ -20,6 +20,7 @@ public class ShowNodeInfo : MonoBehaviour
 
     private void Update()
     {
+        // display the info of a node if the mouse pointer is over the rect
         if(RectTransformUtility.RectangleContainsScreenPoint(rect, Input.mousePosition))
         {
             NodeInfo.infoTitle.text = nodeInfo.infoTextTitle;

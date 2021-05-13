@@ -24,6 +24,10 @@ public class CommandLineManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Load the file specified in the command line argument when lauching the program
+    /// </summary>
+    /// <returns></returns>
     public bool LoadFromCmd()
     {
         ParseCommandLineArguments();
@@ -39,6 +43,9 @@ public class CommandLineManager : MonoBehaviour
 
     }
 
+    /// <summary>
+    /// Get the file specified in the command line arguments
+    /// </summary>
     private void ParseCommandLineArguments()
     {
         string[] args = Environment.GetCommandLineArgs();

@@ -26,7 +26,9 @@ public class RobotScript
     public static Dictionary<int, RobotScript> robotScripts = new Dictionary<int, RobotScript>();
     public int id;
     //start tpi
+    // keep track of all the deleted scripts
     public static List<ScriptsInRobotHierarchy> unassignedRobotScript = new List<ScriptsInRobotHierarchy>();
+
     public bool isMainScript = false;
     // end tpi
     public string name;
@@ -198,6 +200,11 @@ public class RobotScript
         public List<SerializedRobotScript> childrens;
     }
 
+    /// <summary>
+    /// Convert a saved script hierarchy object into a usable script hierarchy object
+    /// </summary>
+    /// <param name="serializedScriptsInRobotHierarchy"></param>
+    /// <returns></returns>
     public ScriptsInRobotHierarchy DeSerializedScriptsInRobotHierarchy(SerializedScriptsInRobotHierarchy serializedScriptsInRobotHierarchy)
     {
         ScriptsInRobotHierarchy scriptsInRobotHierarchy = new ScriptsInRobotHierarchy()
@@ -281,7 +288,7 @@ public class RobotScript
     /// <summary>
     /// Deserialize script but doesn't add it to the robotscripts list and doesn't link it to a robot
     /// </summary>
-    /// <param name="serializedRobotScript"></param>
+    /// <param name="serializedRobotScript">The saved script to convert</param>
     public RobotScript DeSerializeScript(SerializedRobotScript serializedRobotScript)
     {
         id = serializedRobotScript.id;

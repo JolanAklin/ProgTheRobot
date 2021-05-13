@@ -70,6 +70,11 @@ public class NodeForLoop : Nodes
         DestroyNode();
     }
     //start tpi
+
+    /// <summary>
+    /// Test if values inside the node are correct
+    /// </summary>
+    /// <returns>True if values are correct</returns>
     private bool ValidateInput()
     {
         if(startVar != "" && endVar != "" && stepVar != "" && incrementVar != "")
@@ -78,32 +83,54 @@ public class NodeForLoop : Nodes
         }
         return false;
     }
+
+    /// <summary>
+    /// Set the var that will be incremented through the for loop
+    /// </summary>
+    /// <param name="inputField">The input field for this setting</param>
     public void setIncrementVar(TMP_InputField inputField)
     {
         incrementVar = inputField.text;
         ChangeInput();
     }
+    /// <summary>
+    /// Set the start value of the for loop
+    /// </summary>
+    /// <param name="inputField">The input field for this setting</param>
     public void SetStart(TMP_InputField inputField)
     {
         startVar = inputField.text;
         ChangeInput();
     }
+    /// <summary>
+    /// Set the end value of the for loop
+    /// </summary>
+    /// <param name="inputField">The input field for this setting</param>
     public void SetEnd(TMP_InputField inputField)
     {
         endVar = inputField.text;
         ChangeInput();
     }
+    /// <summary>
+    /// Set the step at which the for loop is going
+    /// </summary>
+    /// <param name="inputField">The input field for this setting</param>
     public void SetStep(TMP_InputField inputField)
     {
         stepVar = inputField.text;
         ChangeInput();
     }
-
+    //end tpi
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         LockUnlockAllInput(true);
     }
     // start tpi
+
+    /// <summary>
+    /// Lock all input fields of the node
+    /// </summary>
+    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
         IsInputLocked = isLocked;

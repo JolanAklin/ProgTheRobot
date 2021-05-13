@@ -40,32 +40,30 @@ public class PopUpAddScript : MonoBehaviour
     private void Start()
     {
         // start tpi
+
+        // create the script list with all the script even the deleted ones
         foreach (RobotScript.ScriptsInRobotHierarchy unassignedScript in RobotScript.unassignedRobotScript)
         {
             // create a panel to hold the scripts
             GameObject buttonsPanel = Instantiate(buttonsPanelPrefab, Vector3.zero, Quaternion.identity, listContent.transform);
-
             ScriptListCollapsable collapsable = buttonsPanel.GetComponent<ScriptListCollapsable>();
 
+            // create and add all scripts button
             collapsable.objectToHide.Add(CreateMainScriptImportButton(unassignedScript, buttonsPanel, true));
-
             collapsable.objectToHide.AddRange(CreateChildrenScriptImportButtons(unassignedScript, buttonsPanel));
-
             collapsable.Collapse();
         }
 
         foreach (Robot robot in Robot.robots.Values)
         {
             RobotScript.ScriptsInRobotHierarchy hierarchy = robot.GetScriptHierarchy();
-
+            // create a panel to hold the scripts
             GameObject buttonsPanel = Instantiate(buttonsPanelPrefab, Vector3.zero, Quaternion.identity, listContent.transform);
-
             ScriptListCollapsable collapsable = buttonsPanel.GetComponent<ScriptListCollapsable>();
 
+            // create and add all scripts button
             collapsable.objectToHide.Add(CreateMainScriptImportButton(hierarchy, buttonsPanel));
-
             collapsable.objectToHide.AddRange(CreateChildrenScriptImportButtons(hierarchy, buttonsPanel));
-
             collapsable.Collapse();
 
         }
@@ -165,6 +163,11 @@ public class PopUpAddScript : MonoBehaviour
         okAction = action;
     }
     // start tpi
+
+    /// <summary>
+    /// Set the addScriptAction, this action is called when a child script button is clicked
+    /// </summary>
+    /// <param name="action">The new addScriptAction</param>
     public void SetAddScriptAction(Action<RobotScript> action)
     {
         addScriptAction = action;

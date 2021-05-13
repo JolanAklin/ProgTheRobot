@@ -41,12 +41,6 @@ public class LoopArea : MonoBehaviour
     }
 
     //start tpi
-    //private void OnDrawGizmos()
-    //{
-    //    Gizmos.color = Color.red;
-    //    Gizmos.DrawSphere(CalculateTopLeftPoint(), 0.1f);
-    //    Gizmos.DrawSphere(CalculateBottomRightPoint(), 0.1f);
-    //}
 
     /// <summary>
     /// Calculate the top left corner position of this object

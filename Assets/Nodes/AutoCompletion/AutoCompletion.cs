@@ -157,6 +157,13 @@ public class AutoCompletion : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Partition the array for quicksort
+    /// </summary>
+    /// <param name="arr">The array to sort</param>
+    /// <param name="low">The first index to take into account</param>
+    /// <param name="high">The last index to take into account</param>
+    /// <returns></returns>
     private int partition(CompletionProbability[] arr, int low, int high)
     {
         CompletionProbability temp;

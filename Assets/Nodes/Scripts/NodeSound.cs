@@ -48,11 +48,18 @@ public class NodeSound : Nodes
         DestroyNode();
     }
 
+    /// <summary>
+    /// Lock all input fields of the node
+    /// </summary>
+    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
         LockUnlockAllInput(true);
     }
-
+    /// <summary>
+    /// Lock all input fields of the node
+    /// </summary>
+    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
         inputField.enabled = !isLocked;
@@ -61,6 +68,10 @@ public class NodeSound : Nodes
             inputField.Select();
     }
 
+    /// <summary>
+    /// Called when the node's input field is changed. It will check for error.
+    /// </summary>
+    /// <param name="tMP_InputField"></param>
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         inputField = tMP_InputField;
@@ -77,22 +88,45 @@ public class NodeSound : Nodes
         ChangeBorderColor(defaultColor);
     }
 
+    /// <summary>
+    /// Test if the node has a correct value
+    /// </summary>
+    /// <returns>True if the node has a correct value</returns>
     private bool ValidateInput()
     {
         return SoundManager.instance.HasAudio(input);
     }
 
+    /// <summary>
+    /// Called when the asyncToggle is changed
+    /// </summary>
     public void SyncCheckChanged()
     {
         playAsync = asyncToggle.value;
     }
 
+    /// <summary>
+    /// Execute the node
+    /// </summary>
     public override void Execute()
     {
+        // test if the robot has enough power to execute the node, if not he stop the code execution
+        if (rs.robot.Power <= nodeExecPower)
+        {
+            ExecManager.Instance.StopExec();
+            rs.End();
+            ChangeBorderColor(defaultColor);
+            Debugger.Log($"Le robot {rs.robot.robotName} n'a plus assez d'énergie");
+            return;
+        }
+        rs.robot.Power -= nodeExecPower;
+
         if (!ExecManager.Instance.isRunning)
             return;
+
         ChangeBorderColor(currentExecutedNode);
 
+        // play the sound
         if (!playAsync)
         {
             SoundManager.instance.Play(input);
@@ -104,16 +138,10 @@ public class NodeSound : Nodes
         }
     }
 
-    // get called by the robotmanager when an action require more power than the robot has
-    private void noPower()
-    {
-        ExecManager.Instance.StopExec();
-        rs.End();
-        ChangeBorderColor(defaultColor);
-        Debugger.Log($"Le robot {rs.robot.robotName} n'a plus assez d'énergie");
-        Debug.Log("there");
-    }
-
+    /// <summary>
+    /// Wait before calling the next node
+    /// </summary>
+    /// <returns></returns>
     IEnumerator WaitBeforeCallingNextNode()
     {
         if (!ExecManager.Instance.debugOn)
@@ -133,18 +161,30 @@ public class NodeSound : Nodes
         }
     }
 
+    /// <summary>
+    /// Call the next node immediately
+    /// </summary>
     public override void CallNextNode()
     {
         if (NodesDict.ContainsKey(nextNodeId))
             NodesDict[nextNodeId].Execute();
     }
 
+    /// <summary>
+    /// Clean the node
+    /// </summary>
+    /// <param name="sender"></param>
+    /// <param name="e"></param>
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
         ChangeBorderColor(defaultColor);
     }
 
     #region save stuff
+    /// <summary>
+    /// Convert the node to a saveable state
+    /// </summary>
+    /// <returns></returns>
     public override SerializableNode SerializeNode()
     {
         SerializableNode serializableNode = new SerializableNode() {
@@ -160,6 +200,10 @@ public class NodeSound : Nodes
         serializableNode.nodeSettings.Add(playAsync.ToString());
         return serializableNode;
     }
+    /// <summary>
+    /// Set the values from a saved node
+    /// </summary>
+    /// <param name="serializableNode"></param>
     public override void DeSerializeNode(SerializableNode serializableNode)
     {
         id = serializableNode.id;

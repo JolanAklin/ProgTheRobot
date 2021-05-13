@@ -36,6 +36,8 @@ public class NodeWhileLoop : Nodes
         ExecManager.onChangeBegin += LockUnlockAllInput;
 
         // start tpi
+
+        // set in wich looparea is the inside connectHandle
         if (handleEndArray.Length > 1)
             handleEndArray[1].loopArea = nodesLoopArea;
         if (handleStartArray.Length > 1)
@@ -92,6 +94,10 @@ public class NodeWhileLoop : Nodes
         LockUnlockAllInput(true);
     }
     // start tpi
+    /// <summary>
+    /// Lock all input fields of the node
+    /// </summary>
+    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
         inputField.enabled = !isLocked;

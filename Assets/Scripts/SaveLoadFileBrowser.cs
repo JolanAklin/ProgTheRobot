@@ -8,7 +8,7 @@ using System;
 // start tpi
 
 /// <summary>
-/// <see cref="https://github.com/yasirkula/UnitySimpleFileBrowser"/>
+/// Inspired from there <see cref="https://github.com/yasirkula/UnitySimpleFileBrowser"/>
 /// This class handle the file browser for saving and loading project
 /// </summary>
 public class SaveLoadFileBrowser : MonoBehaviour
@@ -25,6 +25,12 @@ public class SaveLoadFileBrowser : MonoBehaviour
     // Warning: paths returned by FileBrowser dialogs do not contain a trailing '\' character
     // Warning: FileBrowser can only show 1 dialog at a time
 
+    /// <summary>
+    /// Show a open file dialog
+    /// </summary>
+    /// <param name="onSuccess">Action done if a file is saved</param>
+    /// <param name="onCancel">Action done if the dialogue is canceled</param>
+    /// <returns>True if the dialogue has been opened</returns>
     public bool ShowLoadFileDialog(Action<string[]> onSuccess, Action onCancel)
     {
 		if (isBrowserOpened)
@@ -86,6 +92,7 @@ public class SaveLoadFileBrowser : MonoBehaviour
         // Path: C:\Users
         // Icon: default (folder icon)
         FileBrowser.AddQuickLink("Users", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), null);
+        FileBrowser.AddQuickLink("Prog The Robot Projects", SaveManager.instance.savePath, null);
 
         FileBrowser.ShowSaveDialog( 
             (paths) => { onSuccess.Invoke(paths); isBrowserOpened = false; }, () => { onCancel.Invoke(); isBrowserOpened = false; }, FileBrowser.PickMode.Files, false, SaveManager.instance.savePath, "project.pr", "Sauvegarder", "Sauvegarder");;

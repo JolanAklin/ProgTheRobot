@@ -207,7 +207,6 @@ public class ScriptCloner : MonoBehaviour
         return clonedNode;
     }
 
-    //todo : need to stop using iddelta
     /// <summary>
     /// Cloned the given spline array
     /// </summary>

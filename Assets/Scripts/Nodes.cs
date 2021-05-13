@@ -162,6 +162,9 @@ public abstract class Nodes : MonoBehaviour
     private bool isInputLocked = true;
     public bool IsInputLocked { get => isInputLocked; protected set => isInputLocked = value; }
 
+    /// <summary>
+    /// Used to confine a node to a certain area
+    /// </summary>
     private class NodeConfinement
     {
         public float left;
@@ -294,6 +297,7 @@ public abstract class Nodes : MonoBehaviour
     public void StartMove()
     {
         // start tpi
+        // get the delta between the node and the mouse cursor to avoid weird snap to the mouse cursor
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         mouseCenterDelta = transform.position - mouseToWorldPoint;
         //end tpi
@@ -322,7 +326,6 @@ public abstract class Nodes : MonoBehaviour
 
 
     Vector3 resizeAmount;
-    // resize overlap detection is buggy
     public void Resize()
     {
         // round the mouse position
@@ -383,6 +386,7 @@ public abstract class Nodes : MonoBehaviour
         Vector3 pos = new Vector3((float)Math.Round(mouseToWorldPoint.x,1), (float)Math.Round(mouseToWorldPoint.y,1), -890);
 
         //start tpi
+        // force the node to stay inside a defined area
         if (parentLoopArea != null)
         {
             NodeConfinement confinement = new NodeConfinement() { right = parentLoopArea.Right(), left = parentLoopArea.Left(), top = parentLoopArea.Top(), bottom = parentLoopArea.Bottom() };
@@ -538,8 +542,6 @@ public abstract class Nodes : MonoBehaviour
 
     public abstract void LockUnlockAllInput(bool isLocked);
 
-    //end tpi
-
     #region Save stuff
     [Serializable]
     public class SerializableNode
@@ -575,6 +577,7 @@ public abstract class Nodes : MonoBehaviour
             canvas.sortingOrder = parentNode.canvas.sortingOrder + 1;
             parentNode.nodesInsideLoop.Add(this);
             // start tpi
+            // get the loop area of the parent and set it accordingly
             parentLoopArea = NodesDict[parentId].nodesLoopArea;
             handleStartArray[0].loopArea = parentLoopArea;
             handleEndArray[0].loopArea = parentLoopArea;

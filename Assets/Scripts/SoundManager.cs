@@ -14,8 +14,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager instance;
 
-    public string filename = "testsound.mp3";
-
+    // sound dictionary : name, sound
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
 
     private AudioSource audioSource;

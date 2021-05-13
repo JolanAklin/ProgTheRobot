@@ -10,9 +10,12 @@ public class ScriptListCollapsable : MonoBehaviour
     private Image panelImage;
     public TMP_Text nbScripts;
     public Image buttonImage;
+
+    [Header("Images")]
     public Sprite plusSign;
     public Sprite minusSign;
 
+    [Header("Colors")]
     public Color collapsedColor;
     public Color normalColor;
 
@@ -31,7 +34,7 @@ public class ScriptListCollapsable : MonoBehaviour
     }
 
     /// <summary>
-    /// Hide its content
+    /// Hide and show it's content
     /// </summary>
     public void Collapse()
     {

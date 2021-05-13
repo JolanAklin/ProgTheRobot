@@ -7,6 +7,8 @@ using TMPro;
 public class NodeInfo : MonoBehaviour
 {
     // start tpi
+
+    [Header("Node infos")]
     public List<Info> infos = new List<Info>();
     public static List<Info> nodesInfos = new List<Info>();
 
@@ -26,11 +28,23 @@ public class NodeInfo : MonoBehaviour
         infoDesc = infodesc;
     }
 
+    /// <summary>
+    /// Infos for the specified node.
+    /// </summary>
     [Serializable]
     public class Info
     {
+        /// <summary>
+        /// the type of node targeted by this info
+        /// </summary>
         public Nodes.NodeTypes nodeTypes;
+        /// <summary>
+        /// Name of the node
+        /// </summary>
         public string infoTextTitle;
+        /// <summary>
+        /// Info on the node
+        /// </summary>
         [TextArea]
         public string infoText;
     }

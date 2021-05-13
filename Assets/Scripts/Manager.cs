@@ -97,6 +97,11 @@ public class Manager : MonoBehaviour
     }
 
     // start tpi
+
+    /// <summary>
+    /// Change the behaviour of connect handles
+    /// </summary>
+    /// <param name="toggle">The toggle that changes this parameter</param>
     public void ChangeConnectHandleDisplayMethod(ToggleScript toggle)
     {
         instance.connectHandleAlwaysShown = toggle.Value;
@@ -122,17 +127,21 @@ public class Manager : MonoBehaviour
 
             // start tpi
 
+            // delete
             if(Input.GetKeyDown(KeyCode.Delete))
             {
                 SelectionManager.instance.DeleteSelection();
             }
 
+            // copy
             if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.C))
             {
                 SelectionManager.instance.SelectionToCopyBuffer();
             }
 
         }
+
+        // paste
         if (Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.V))
         {
             SelectionManager.instance.PasteCopyBuffer(RobotScript.robotScripts[currentlySelectedScript]);
@@ -241,7 +250,7 @@ public class Manager : MonoBehaviour
             // input. Where the spline ends
 
             //start tpi
-            // check if the node contain the same handle as the one passed in the parameters
+            // check if the node contain the same handle as the one passed in the parameters. Return null if the node can't connect
             bool canConnect = true;
             foreach (ConnectHandle handle in node.handleEndArray)
             {
@@ -293,7 +302,7 @@ public class Manager : MonoBehaviour
     }
     public RobotManager CreateRobot(Color color, Robot robot)
     {
-        Vector3 spawnPos = GetRandomPosOnGrid();
+        Vector3 spawnPos = GetNextPlaceForRobot();
         RobotManager robotManager = Instantiate(robotPrefab, spawnPos, Quaternion.identity).GetComponent<RobotManager>();
         robotManager.robot = robot;
         return robotManager;
@@ -302,10 +311,10 @@ public class Manager : MonoBehaviour
     // start tpi
 
     /// <summary>
-    /// Get a random pos on the grid without robot overlaping
+    /// Get the next available place for a robot
     /// </summary>
     /// <returns>The pos on the grid without a robot on it</returns>
-    public Vector3 GetRandomPosOnGrid()
+    public Vector3 GetNextPlaceForRobot()
     {
         TerrainManager terrain = GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>();
         Vector3 pos = Vector3.zero;

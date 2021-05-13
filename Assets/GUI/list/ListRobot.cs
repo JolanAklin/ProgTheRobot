@@ -166,6 +166,10 @@ public class ListRobot : MonoBehaviour
         }
     }
     // start tpi
+    /// <summary>
+    /// Target the robot with the camera
+    /// </summary>
+    /// <param name="id">The robot to target</param>
     public void CameraTargetRobot(int id)
     {
         if(robotVcam != null)
