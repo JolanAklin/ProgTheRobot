@@ -12,6 +12,9 @@ public class Portal : TerrainInteractableObj
 
     public TerrainManager.ObjectPosition objectPosition;
 
+    /// <summary>
+    /// The destination portal
+    /// </summary>
     private Portal linkedPortal;
     public Portal LinkedPortal { get => linkedPortal; set => linkedPortal = value; }
 
@@ -21,6 +24,9 @@ public class Portal : TerrainInteractableObj
     private int id;
     public int Id { get => id; set => id = value; }
 
+    /// <summary>
+    /// Set the portal and the destionation values correctly
+    /// </summary>
     public void PortalPlaced()
     {
         if (linkedPortal == null)
@@ -38,6 +44,7 @@ public class Portal : TerrainInteractableObj
 
             portalColor = Random.ColorHSV(0, 1, 0.8f, 1, 0.8f, 1, 1, 1);
 
+            // put all the settings in a list to save them later
             objectPosition.optionalSettings = new List<string>();
             objectPosition.optionalSettings.Add(id.ToString());
             objectPosition.optionalSettings.Add(linkedPortal.id.ToString());
@@ -50,6 +57,7 @@ public class Portal : TerrainInteractableObj
 
             LinkedPortal.portalColor = portalColor;
 
+            // set the color to the mesh
             SetDefaultMat();
             linkedPortal.SetDefaultMat();
 
@@ -60,6 +68,9 @@ public class Portal : TerrainInteractableObj
             currentPortal = this;
     }
 
+    /// <summary>
+    /// Change de default materials colors with the new color
+    /// </summary>
     public void SetDefaultMat()
     {
         foreach (Material[] mats in defaultMat)

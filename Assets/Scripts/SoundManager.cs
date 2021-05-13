@@ -78,9 +78,6 @@ public class SoundManager : MonoBehaviour
     /// <returns></returns>
     public bool Play(string audioName, AudioSource audio)
     {
-        /*
-        * the audio source need to be one the robot
-        */
         if (!audioClips.ContainsKey(audioName))
             return false;
         audio.clip = audioClips[audioName];
@@ -96,9 +93,6 @@ public class SoundManager : MonoBehaviour
     /// <returns></returns>
     public bool PlaySync(string audioName, AudioSource audio, Action callback)
     {
-        /*
-        * the audio source need to be one the robot
-        */
         if (!audioClips.ContainsKey(audioName))
             return false;
         AudioClip audioClip = audioClips[audioName];

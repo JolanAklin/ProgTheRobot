@@ -117,38 +117,6 @@ public class VarsManager
                 case ">=":
                 case "<=":
                 case "<>":
-                // loop
-                case "Pour":
-                case "For":
-                case "Jusque":
-                case "UpTo":
-                case "Pas":
-                case "Step":
-                case "TantQue":
-                case "While":
-                //command
-                case "Lire":
-                case "Read":
-                case "Afficher":
-                case "Display":
-                case "Avancer":
-                case "GoForward":
-                case "TournerADroite":
-                case "TurnRight":
-                case "TournerAGauche":
-                case "TurnLeft":
-                case "Marquer":
-                case "Mark":
-                case "Démarquer":
-                case "Unmark":
-                case "Recharger":
-                case "Reload":
-                case "PoserBallon":
-                case "PlaceBall":
-                case "PrendreBallon":
-                case "TakeBall":
-                case "LancerBallon":
-                case "ThrowBall":
                 // fonctions
                 case "MurEnFace":
                 case "WallInFront":
