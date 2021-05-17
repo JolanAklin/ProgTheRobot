@@ -30,3 +30,26 @@ Reload = Reload
 PlaceBall = Place ball
 TakeBall = Take ball
 Throwball = Throw ball
+
+ShowVar = Display
+ReadVar = Read
+
+[Function]
+WallInFront = Wall in front
+WallRight = Wall right
+WallLeft = Wall left
+Out = Out
+RobotOnAnOutlet = Robot on an outlet
+TileMarked = Tile marked
+BallOnTheGround = Ball on the ground
+WallDistance = Wall distance
+Power = Power
+xRobot = x robot
+yRobot = y robot
+dxRobot = dx robot
+dyRobot = dy robot
+xBall = x ball
+yBall = y ball
+And = And
+Or = Or
+No = No

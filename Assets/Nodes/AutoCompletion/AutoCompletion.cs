@@ -27,6 +27,8 @@ public class AutoCompletion : MonoBehaviour
     private RectTransform rectTransform;
     private string[] possibleCompletion;
 
+    private string lastLetters = "";
+
     private void Awake()
     {
         rectTransform = GetComponent<RectTransform>();
@@ -72,7 +74,10 @@ public class AutoCompletion : MonoBehaviour
     /// <param name="inputField"></param>
     public void ShowCompletion(TMP_InputField inputField)
     {
-        CompletionProbability[] sortedProba = GetCompletion(inputField.text);
+        char lastLetter = inputField.text[inputField.text.Length - 1];
+        if (lastLetter != ' ')
+            lastLetters += lastLetter;
+        CompletionProbability[] sortedProba = GetCompletion(lastLetters);
         if(sortedProba != null)
         {
             HideCompletion();
@@ -82,8 +87,11 @@ public class AutoCompletion : MonoBehaviour
                 completionProposition.completionText.text = completion.completion;
                 completionProposition.toFill = toComplete;
                 completionProposition.completion = completion.completion;
+                completionProposition.lettersToRemove = lastLetters;
+                completionProposition.completedNode = completedNode;
                 completionProposition.callBack = () =>
                 {
+                    lastLetters = "";
                     HideCompletion();
                 };
             }
@@ -146,6 +154,8 @@ public class AutoCompletion : MonoBehaviour
                 // 0 = exactly the same, 1 = nothing in common
                 if (dist < 0.9f)
                     completionProbabilities.Add(new CompletionProbability() { completion = completion, dist = dist });
+                if (dist == 0)
+                    lastLetters = "";
             }
             CompletionProbability[] completionProbabilitiesArray = completionProbabilities.ToArray();
             QuickSortCompletionProbability(completionProbabilitiesArray, 0, completionProbabilities.Count - 1);

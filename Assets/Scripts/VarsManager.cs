@@ -338,8 +338,8 @@ public class VarsManager
         expression = expression.Replace("Mur à droite", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
         expression = expression.Replace("Wall right", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
         
-        expression = expression.Replace("Mur à gauche", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Wall left", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Mur à gauche", GetBoolFunction("WallLeft").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Wall left", GetBoolFunction("WallLeft").result == true ? "Vrai" : "Faux");
 
         expression = expression.Replace("Sorti", GetBoolFunction("Out").result == true ? "Vrai" : "Faux");
         expression = expression.Replace("Out", GetBoolFunction("Out").result == true ? "Vrai" : "Faux");
@@ -369,8 +369,10 @@ public class VarsManager
         expression = expression.Replace("dy robot", GetFunction("dyRobot").result.ToString());
 
         expression = expression.Replace("x ballon", GetFunction("xBall").result.ToString());
+        expression = expression.Replace("x ball", GetFunction("xBall").result.ToString());
 
         expression = expression.Replace("y ballon", GetFunction("yBall").result.ToString());
+        expression = expression.Replace("y ball", GetFunction("yBall").result.ToString());
 
         return expression;
     }

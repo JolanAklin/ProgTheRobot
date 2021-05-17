@@ -30,3 +30,26 @@ Reload = Recharger
 PlaceBall = Poser ballon
 TakeBall = Prendre ballon
 Throwball = Lancer ballon
+
+ShowVar = Afficher
+ReadVar = Lire
+
+[Function]
+WallInFront = Mur en face
+WallRight = Mur à droite
+WallLeft = Mur à gauche
+Out = Sorti
+RobotOnAnOutlet = Robot sur une prise
+TileMarked = Case marquée
+BallOnTheGround = Ballon sur le sol
+WallDistance = Distance mur
+Power = Energie
+xRobot = x robot
+yRobot = y robot
+dxRobot = dx robot
+dyRobot = dy robot
+xBall = x ballon
+yBall = y ballon
+And = Et
+Or = Ou
+No = Non
