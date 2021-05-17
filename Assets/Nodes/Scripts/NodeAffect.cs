@@ -182,7 +182,8 @@ public class NodeAffect : Nodes
             {
                 if(VarsManager.CheckVarName(inputSplited[0]))
                 {
-                    var = rs.robot.varsManager.GetVar(inputSplited[0]);
+                    string expression = string.Join("", inputVarReplaced, 2, inputVarReplaced.Length - 2).Trim();
+                    var = rs.robot.varsManager.GetVar(inputSplited[0], Convert.ToInt32(new DataTable().Compute(expression, null)));
                     if (var == null)
                     {
                         Debugger.LogError("Une erreur est survenue");
@@ -191,9 +192,6 @@ public class NodeAffect : Nodes
                 }
             }
 
-            string expression = string.Join("", inputVarReplaced, 2, inputVarReplaced.Length - 2).Trim();
-            var.Value = Convert.ToInt32(new DataTable().Compute(expression, null));
-            var.Persist();
         }
         else
         {
@@ -246,7 +244,7 @@ public class NodeAffect : Nodes
             id = id,
             nextNodeId = nextNodeId, //this is the next node in the execution order
             parentId = parentId,
-            type = "execute",
+            type = "affectation",
             position = new float[] { transform.position.x, transform.position.y, transform.position.z },
             nodeSettings = new List<string>(),
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
@@ -262,6 +260,7 @@ public class NodeAffect : Nodes
         input = serializableNode.nodeSettings[0];
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        ValidateInput();
     }
     #endregion
 }

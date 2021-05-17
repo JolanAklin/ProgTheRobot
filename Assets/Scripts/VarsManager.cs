@@ -117,33 +117,6 @@ public class VarsManager
                 case ">=":
                 case "<=":
                 case "<>":
-                // fonctions
-                case "MurEnFace":
-                case "WallInFront":
-                case "MurADroite":
-                case "WallRight":
-                case "MurAGauche":
-                case "WallLeft":
-                case "Sorti":
-                case "Out":
-                case "RobotSurUnePrise":
-                case "RobotOnAnOutlet":
-                case "CaseMarquée":
-                case "TileMarked":
-                case "CaseDevantOccupée":
-                case "TileInFrontOccupied":
-                case "BallonSurLeSol":
-                case "BallOnTheGround":
-                case "DistanceMur":
-                case "WallDistance":
-                case "Energie":
-                case "Power":
-                case "xRobot":
-                case "yRobot":
-                case "dxRobot":
-                case "dyRobot":
-                case "yBallon":
-                case "xBallon":
                 // logical operator
                 case "Et":
                 case "And":
@@ -505,6 +478,7 @@ public class VarsManager
             {
                 // get the corresponding function, if it exist, and adds it to the result list
                 case 1:
+                    // start tpi
                     switch (smallExprSplit[0])
                     {
                         case "Vrai":
@@ -519,6 +493,7 @@ public class VarsManager
                             fBoolReturn = new BoolFunctionReturn() { error = true };
                             break;
                     }
+                    // end tpi
                     if (!fBoolReturn.error)
                         results.Add(fBoolReturn.result);
                     else
@@ -526,12 +501,12 @@ public class VarsManager
                     break;
                 // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
                 case 2:
-                    
+                    // start tpi
                     switch (smallExprSplit[1])
                     {
                         case "Vrai":
                         case "True":
-                            fBoolReturn = new BoolFunctionReturn() { result = true};
+                            fBoolReturn = new BoolFunctionReturn() { result = true };
                             break;
                         case "Faux":
                         case "False":
@@ -541,12 +516,14 @@ public class VarsManager
                             fBoolReturn = new BoolFunctionReturn() { error = true };
                             break;
                     }
+                    // end tpi
                     if (!fBoolReturn.error)
                     {
-                        if(smallExprSplit[0] == "Non" || smallExprSplit[0] == "No")
+                        if (smallExprSplit[0] == "Non" || smallExprSplit[0] == "No")
                         {
                             results.Add(!fBoolReturn.result);
-                        }else
+                        }
+                        else
                         {
                             return new Evaluation() { error = true };
                         }
@@ -565,18 +542,18 @@ public class VarsManager
                     bool findDelimiter = false;
                     foreach (string exprBits in smallExprSplit)
                     {
-                        if(!findDelimiter)
+                        if (!findDelimiter)
                         {
                             foreach (string del in delimiters)
                             {
-                                if(exprBits == del)
+                                if (exprBits == del)
                                 {
                                     findDelimiter = true;
                                     foundDel = del;
                                     break;
                                 }
                             }
-                            if(!findDelimiter)
+                            if (!findDelimiter)
                                 exprPart1.Add(exprBits);
                         }
                         else
@@ -591,7 +568,8 @@ public class VarsManager
                     {
                         value1 = Convert.ToInt32(new DataTable().Compute(string.Join("", exprPart1.ToArray()), null));
                         value2 = Convert.ToInt32(new DataTable().Compute(string.Join("", exprPart2.ToArray()), null));
-                    }catch (Exception)
+                    }
+                    catch (Exception)
                     {
                         return new Evaluation() { error = true };
                     }
@@ -625,9 +603,9 @@ public class VarsManager
 
         // make the final result
         bool finalResult = false;
-        if(findOrder.Count > 0)
+        if (findOrder.Count > 0)
         {
-            if(findOrder[0] == "Et" || findOrder[0] == "And")
+            if (findOrder[0] == "Et" || findOrder[0] == "And")
             {
                 if (results[0] && results[1])
                     finalResult = true;
@@ -643,14 +621,14 @@ public class VarsManager
             }
             for (int i = 2; i < results.Count; i++)
             {
-                if (findOrder[i-1] == "Et" || findOrder[i-1] == "And")
+                if (findOrder[i - 1] == "Et" || findOrder[i - 1] == "And")
                 {
                     if (finalResult && results[i])
                         finalResult = true;
                     else
                         finalResult = false;
                 }
-                else if (findOrder[i-1] == "Ou" || findOrder[i-1] == "Or")
+                else if (findOrder[i - 1] == "Ou" || findOrder[i - 1] == "Or")
                 {
                     if (finalResult || results[i])
                         finalResult = true;
