@@ -107,6 +107,7 @@ public class NodeStart : Nodes
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        NodesDict.Add(id, this);
     }
     #endregion
 }

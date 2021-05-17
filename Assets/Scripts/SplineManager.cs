@@ -140,10 +140,12 @@ public class SplineManager : MonoBehaviour
             splineEndPos = new Vector3(MousePos.x, MousePos.y, 0);
 
             // update the pos of current spline's point
-            currentSegment.splineEnd.point = splineEndPos;
-            currentSegment.splineEnd.handle = currentSegment.splineEnd.point + Vector3.down;
-
-            splineMaker.GenerateMesh();
+            if(currentSegment != null)
+            {
+                currentSegment.splineEnd.point = splineEndPos;
+                currentSegment.splineEnd.handle = currentSegment.splineEnd.point + Vector3.down;
+                splineMaker.GenerateMesh();
+            }
         }
     }
 

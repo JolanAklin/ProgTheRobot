@@ -222,6 +222,7 @@ public class NodeIf : Nodes
         inputField.text = input;
         nextNodeIdFalse = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        NodesDict.Add(id, this);
     }
     #endregion
 }

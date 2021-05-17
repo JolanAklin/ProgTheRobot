@@ -216,6 +216,7 @@ public class NodeReadWrite : Nodes
         input = serializableNode.nodeSettings[0];
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        NodesDict.Add(id, this);
     }
     #endregion
 }

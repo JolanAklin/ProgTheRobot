@@ -213,6 +213,7 @@ public class NodeSound : Nodes
         asyncToggle.value = Convert.ToBoolean(serializableNode.nodeSettings[1]);
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        NodesDict.Add(id, this);
     }
     #endregion
 }

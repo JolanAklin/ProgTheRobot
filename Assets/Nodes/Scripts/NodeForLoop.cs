@@ -346,6 +346,7 @@ public class NodeForLoop : Nodes
         stepVar = serializableNode.nodeSettings[3];
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[4]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        NodesDict.Add(id, this);
     }
     #endregion
 }

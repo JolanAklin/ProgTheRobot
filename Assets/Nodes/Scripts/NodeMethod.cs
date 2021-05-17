@@ -188,6 +188,7 @@ public class NodeMethod : Nodes
         parentId = serializableNode.parentId;
         dropDownValue = Convert.ToInt32(serializableNode.nodeSettings[0]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
+        NodesDict.Add(id, this);
     }
     #endregion
 }

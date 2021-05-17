@@ -62,7 +62,7 @@ public abstract class Nodes : MonoBehaviour
     public abstract void PostExecutionCleanUp(object sender, EventArgs e);
 
     // id stuff
-    public int id;
+    public int id = -1;
     public static int nextid = 0;
     private static Dictionary<int, Nodes> nodes = new Dictionary<int, Nodes>();
     public static Dictionary<int, Nodes> NodesDict { get => nodes; set => nodes = value; }
@@ -177,11 +177,6 @@ public abstract class Nodes : MonoBehaviour
 
     public void Awake()
     {
-        // All nodes have a different id
-        id = nextid;
-        nextid++;
-        nodes.Add(id, this);
-
         for (int i = 0; i < handleStartArray.Length; i++)
         {
             handleStartArray[i].handleNumber = i;
@@ -197,6 +192,8 @@ public abstract class Nodes : MonoBehaviour
         nodesLoopArea = GetComponentInChildren<LoopArea>();
 
     }
+
+    
 
     //start tpi
     protected void DestroyNode()
@@ -216,6 +213,16 @@ public abstract class Nodes : MonoBehaviour
 
     public void Start()
     {
+        // start tpi
+        // All nodes have a different id
+        if(id == -1)
+        {
+            id = nextid;
+            nextid++;
+            nodes.Add(id, this);
+        }
+        //end tpi
+
         // subscribe to the checknode event. The node will check if it is connected correctly
         Manager.instance.CheckNode += isConnected;
         // set the event camera of the canvas

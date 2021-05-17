@@ -235,6 +235,7 @@ public class NodeWhileLoop : Nodes
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         ValidateInput();
+        NodesDict.Add(id, this);
     }
     #endregion
 }

@@ -182,8 +182,10 @@ public class NodeAffect : Nodes
             {
                 if(VarsManager.CheckVarName(inputSplited[0]))
                 {
+                    // start tpi
                     string expression = string.Join("", inputVarReplaced, 2, inputVarReplaced.Length - 2).Trim();
                     var = rs.robot.varsManager.GetVar(inputSplited[0], Convert.ToInt32(new DataTable().Compute(expression, null)));
+                    // end tpi
                     if (var == null)
                     {
                         Debugger.LogError("Une erreur est survenue");
@@ -261,6 +263,7 @@ public class NodeAffect : Nodes
         inputField.text = input;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         ValidateInput();
+        NodesDict.Add(id, this);
     }
     #endregion
 }
