@@ -38,16 +38,25 @@ public class SettingsNew : MonoBehaviour
         };
         okAction = () =>
         {
-            if (fileName.Length > 0)
+            // start tpi
+            SaveLoadFileBrowser.instance.ShowSaveFileDialog(
+            (paths) =>
             {
-                SaveManager.instance.filepath = fileName;
-                SaveManager.instance.LoadFile();
-                menu.Close();
-            }
-            else
+                if (paths != null)
+                {
+                    if (paths[0].Length > 0)
+                    {
+                        SaveManager.instance.filepath = paths[0];
+                        SaveManager.instance.LoadFile();
+                        menu.Close();
+                    }
+                }
+            },
+            () =>
             {
-                inputField.Select();
-            }
+                Debug.Log("canceled");
+            });
+            // end tpi
         };
     }
 
