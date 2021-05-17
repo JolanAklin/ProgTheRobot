@@ -85,6 +85,23 @@ public class PopUpAddScript : MonoBehaviour
         // when the button with the main script is clicked
         buttonScript.GetComponent<Button>().onClick.AddListener(() =>
         {
+            // start tpi
+            // test if there is room available on the terrain for a new robot
+            TerrainManager terrainManager = GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>();
+            if (terrainManager.TerrainSize[0] * terrainManager.TerrainSize[1] < Robot.robots.Count + 1)
+            {
+                PopUpWarning w = WindowsManager.InstantiateWindow(Convert.ToInt32(WindowsManager.popUp.saveWarning), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+                w.warningText.text = "Il n'y a plus de place pour un autre robot";
+                w.quitButton.gameObject.SetActive(false);
+                w.saveButton.gameObject.SetActive(false);
+                w.SetCancelAction(() =>
+                {
+                    w.Close();
+                });
+                return;
+            }
+            // end tpi
+
             //create a new robot
             Robot robot = new Robot(Color.red, "Robot", 1000, false);
             Manager.instance.listRobot.AddChoice(robot.id, robot.ConvertToListElement());

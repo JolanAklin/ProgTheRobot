@@ -82,8 +82,7 @@ public class RobotManager : MonoBehaviour
     private void Start()
     {
         SetDefaultPos(this.transform);
-        PosOnGrid = transform.position;
-        NextPosOnGrid = transform.position;
+        UpdatePosOnGrid();
     }
 
     public void SetDefaultPos(Transform transform)
@@ -651,6 +650,7 @@ public class RobotManager : MonoBehaviour
     public void UpdatePosOnGrid()
     {
         PosOnGrid = transform.position;
+        NextPosOnGrid = transform.position;
     }
 
     /// <summary>

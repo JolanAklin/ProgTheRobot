@@ -248,7 +248,15 @@ public class TerrainManager : MonoBehaviour
                 changeSizeXInputField.text = maxSize.ToString();
             }
         }
+        // start tpi
+        if(!(terrainSize[0] * terrainSize[1] >= Robot.robots.Count))
+        {
+            terrainSize[0] = Convert.ToUInt32(Mathf.CeilToInt((float)Robot.robots.Count / (float)terrainSize[1]));
+            changeSizeXInputField.text = terrainSize[0].ToString();
+        }
         CreateTerrain(terrainSize);
+        // end tpi
+
     }
     public void ChangeY()
     {
@@ -265,7 +273,14 @@ public class TerrainManager : MonoBehaviour
                 changeSizeYInputField.text = maxSize.ToString();
             }
         }
+        // start tpi
+        if (!(terrainSize[0] * terrainSize[1] >= Robot.robots.Count))
+        {
+            terrainSize[1] = Convert.ToUInt32(Mathf.CeilToInt((float)Robot.robots.Count / (float)terrainSize[0]));
+            changeSizeYInputField.text = terrainSize[1].ToString();
+        }
         CreateTerrain(terrainSize);
+        // end tpi
     }
 
     public void CreateTerrain(uint[] size)
@@ -275,6 +290,18 @@ public class TerrainManager : MonoBehaviour
             Destroy(child.gameObject);
         }
         terrainParts.Clear();
+
+        // start tpi
+        foreach (Robot robot in Robot.robots.Values)
+        {
+            // grid start at zero
+            if(robot.robotManager.transform.position.x > size[0] - 1 || robot.robotManager.transform.position.z > size[1] - 1)
+            {
+                robot.robotManager.transform.position = Manager.instance.GetNextPlaceForRobot();
+                robot.robotManager.UpdatePosOnGrid();
+            }
+        }
+        // end tpi
 
 
         FencePostion[] fencePostionsCopy = new FencePostion[fencePostions.Count];

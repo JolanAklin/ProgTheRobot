@@ -89,6 +89,22 @@ public class Manager : MonoBehaviour
             isAddRobot = true,
             actionOnClick = () =>
             {
+                // start tpi
+                // test if there is room available on the terrain for a new robot
+                TerrainManager terrainManager = GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>();
+                if (terrainManager.TerrainSize[0] * terrainManager.TerrainSize[1] < Robot.robots.Count + 1)
+                {
+                    PopUpWarning w = WindowsManager.InstantiateWindow(Convert.ToInt32(WindowsManager.popUp.saveWarning), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+                    w.warningText.text = "Il n'y a plus de place pour un autre robot";
+                    w.quitButton.gameObject.SetActive(false);
+                    w.saveButton.gameObject.SetActive(false);
+                    w.SetCancelAction(() =>
+                    {
+                        w.Close();
+                    });
+                    return;
+                }
+                // end tpi
                 Robot robot = new Robot(Color.red, "Robot", 1000);
                 listRobot.AddChoice(robot.id, robot.ConvertToListElement());
                 listRobot.Select(robot.id);
