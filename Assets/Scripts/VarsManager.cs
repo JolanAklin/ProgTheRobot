@@ -178,34 +178,27 @@ public class VarsManager
         bool result = false;
         switch (funcName)
         {
-            case "MurEnFace":
             case "WallInFront":
                 result = rm.WallInFront();
                 break;
-            case "MurADroite":
             case "WallRight":
                 result = rm.WallRight();
                 break;
-            case "MurAGauche":
             case "WallLeft":
                 result = rm.WallLeft();
                 break;
-            case "Sorti":
             case "Out":
                 result = rm.IsOut();
                 break;
-            case "RobotSurUnePrise":
             case "RobotOnAnOutlet":
                 result = rm.IsOnAnOutlet();
                 break;
-            case "CaseMarquée":
             case "TileMarked":
                 result = rm.IsCaseMarked();
                 break;
             //case "CaseDevantOccupée":
             //case "TileInFrontOccupied":
             //    return false;
-            case "BallonSurLeSol":
             case "BallOnTheGround":
                 foreach (Ball ball in robot.robotManager.balls)
                 {
@@ -215,14 +208,6 @@ public class VarsManager
                         break;
                     }
                 }
-                break;
-            case "Vrai":
-            case "True":
-                result = true;
-                break;
-            case "Faux":
-            case "False":
-                result = false;
                 break;
 
             default:
@@ -247,11 +232,9 @@ public class VarsManager
         int result = 0;
         switch (funcName)
         {
-            case "DistanceMur":
             case "WallDistance":
                 result = rm.WallDistance();
                 break;
-            case "Energie":
             case "Power":
                 result = (int)robot.Power;
                 break;
@@ -291,7 +274,7 @@ public class VarsManager
                         break;
                 }
                 break;
-            case "xBallon":
+            case "xBall":
                 foreach (Ball ball in robot.robotManager.balls)
                 {
                     if (!ball.ballTaken)
@@ -301,7 +284,7 @@ public class VarsManager
                     }
                 }
                 break;
-            case "yBallon":
+            case "yBall":
                 foreach (Ball ball in robot.robotManager.balls)
                 {
                     if(!ball.ballTaken)
@@ -372,8 +355,58 @@ public class VarsManager
         public bool result;
     }
 
+    // start tpi
+    public string ReplaceFunctionByValue(string expression)
+    {
+        // bool function
+        expression = expression.Replace("Mur en face", GetBoolFunction("WallInFront").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Wall in front", GetBoolFunction("WallInFront").result == true ? "Vrai" : "Faux");
+
+        expression = expression.Replace("Mur à droite", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Wall right", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
+        
+        expression = expression.Replace("Mur à gauche", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Wall left", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
+
+        expression = expression.Replace("Sorti", GetBoolFunction("Out").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Out", GetBoolFunction("Out").result == true ? "Vrai" : "Faux");
+
+        expression = expression.Replace("Robot sur une prise", GetBoolFunction("RobotOnAnOutlet").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Robot on an outlet", GetBoolFunction("RobotOnAnOutlet").result == true ? "Vrai" : "Faux");
+
+        expression = expression.Replace("Case marquée", GetBoolFunction("TileMarked").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Tile marked", GetBoolFunction("TileMarked").result == true ? "Vrai" : "Faux");
+
+        expression = expression.Replace("Ballon sur le sol", GetBoolFunction("BallOnTheGround").result == true ? "Vrai" : "Faux");
+        expression = expression.Replace("Ball on the ground", GetBoolFunction("BallOnTheGround").result == true ? "Vrai" : "Faux");
+
+        // int function
+        expression = expression.Replace("Distance mur", GetFunction("WallDistance").result.ToString());
+        expression = expression.Replace("Wall distance", GetFunction("WallDistance").result.ToString());
+
+        expression = expression.Replace("Energie", GetFunction("Power").result.ToString());
+        expression = expression.Replace("Power", GetFunction("Power").result.ToString());
+
+        expression = expression.Replace("x robot", GetFunction("xRobot").result.ToString());
+
+        expression = expression.Replace("y robot", GetFunction("yRobot").result.ToString());
+
+        expression = expression.Replace("dx robot", GetFunction("dxRobot").result.ToString());
+
+        expression = expression.Replace("dy robot", GetFunction("dyRobot").result.ToString());
+
+        expression = expression.Replace("x ballon", GetFunction("xBall").result.ToString());
+
+        expression = expression.Replace("y ballon", GetFunction("yBall").result.ToString());
+
+        return expression;
+    }
+    // end tpi
+
     public bool CheckExpression(string expression)
     {
+        expression = ReplaceFunctionByValue(expression);
+
         string[] stringsToFind = new string[] { "Ou", "Or", "Et", "And" };
         string[] exprSplit = expression.Split(stringsToFind, StringSplitOptions.None);
 
@@ -438,6 +471,8 @@ public class VarsManager
 
     public Evaluation Evaluate(string expression)
     {
+        expression = ReplaceFunctionByValue(expression);
+
         string[] stringsToFind = new string[] { "Ou", "Or", "Et", "And" };
 
         List<string> findOrder = new List<string>();
@@ -470,7 +505,20 @@ public class VarsManager
             {
                 // get the corresponding function, if it exist, and adds it to the result list
                 case 1:
-                    fBoolReturn = GetBoolFunction(smallExprSplit[0]);
+                    switch (smallExprSplit[0])
+                    {
+                        case "Vrai":
+                        case "True":
+                            fBoolReturn = new BoolFunctionReturn() { result = true };
+                            break;
+                        case "Faux":
+                        case "False":
+                            fBoolReturn = new BoolFunctionReturn() { result = true };
+                            break;
+                        default:
+                            fBoolReturn = new BoolFunctionReturn() { error = true };
+                            break;
+                    }
                     if (!fBoolReturn.error)
                         results.Add(fBoolReturn.result);
                     else
@@ -478,7 +526,21 @@ public class VarsManager
                     break;
                 // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
                 case 2:
-                    fBoolReturn = GetBoolFunction(smallExprSplit[1]);
+                    
+                    switch (smallExprSplit[1])
+                    {
+                        case "Vrai":
+                        case "True":
+                            fBoolReturn = new BoolFunctionReturn() { result = true};
+                            break;
+                        case "Faux":
+                        case "False":
+                            fBoolReturn = new BoolFunctionReturn() { result = false };
+                            break;
+                        default:
+                            fBoolReturn = new BoolFunctionReturn() { error = true };
+                            break;
+                    }
                     if (!fBoolReturn.error)
                     {
                         if(smallExprSplit[0] == "Non" || smallExprSplit[0] == "No")
@@ -527,8 +589,8 @@ public class VarsManager
                     int value2 = 0;
                     try
                     {
-                        value1 = Convert.ToInt32(new DataTable().Compute(string.Join("", robot.varsManager.ReplaceStringsByVar(exprPart1.ToArray())), null));
-                        value2 = Convert.ToInt32(new DataTable().Compute(string.Join("", robot.varsManager.ReplaceStringsByVar(exprPart2.ToArray())), null));
+                        value1 = Convert.ToInt32(new DataTable().Compute(string.Join("", exprPart1.ToArray()), null));
+                        value2 = Convert.ToInt32(new DataTable().Compute(string.Join("", exprPart2.ToArray()), null));
                     }catch (Exception)
                     {
                         return new Evaluation() { error = true };

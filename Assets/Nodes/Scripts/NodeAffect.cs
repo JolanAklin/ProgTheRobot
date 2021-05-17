@@ -174,7 +174,8 @@ public class NodeAffect : Nodes
             return;
         ChangeBorderColor(currentExecutedNode);
         // calculate and set the var
-        string[] inputVarReplaced = rs.robot.varsManager.ReplaceStringsByVar((string[])inputSplited.Clone());
+        string[] delimiters = new string[] { " " };
+        string[] inputVarReplaced = rs.robot.varsManager.ReplaceFunctionByValue(input).Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         if (inputVarReplaced != null)
         {
             if (var == null)
