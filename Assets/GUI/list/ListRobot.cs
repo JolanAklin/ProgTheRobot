@@ -175,8 +175,7 @@ public class ListRobot : MonoBehaviour
         if(robotVcam != null)
         {
             Transform cameraPoint = Robot.robots[id].robotManager.cameraPoint.transform;
-            cameraPoint.localPosition = Robot.robots[id].robotManager.defaultCameraPointPos;
-            cameraPoint.rotation = Quaternion.identity;
+            cameraPoint.GetComponent<CameraController>().SetDefaultPosRot();
             robotVcam.Follow = cameraPoint;
             robotVcam.LookAt = cameraPoint;
         }

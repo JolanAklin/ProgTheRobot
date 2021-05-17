@@ -65,10 +65,6 @@ public class ScriptCloner : MonoBehaviour
         Transform nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder").transform;
         Nodes[] clonedNode = new Nodes[nodesToClone.Length];
 
-        // used to calculate the delta between the ids
-        int lowestId = nodesToClone[0].id;
-        int lowestNewId = Nodes.nextid;
-
         int i = 0;
 
         // create cloned nodes
@@ -97,10 +93,6 @@ public class ScriptCloner : MonoBehaviour
                 oldNodeId.nextNodeIdSecondary = nodeFor.nextNodeInside;
             }
             matchOldNewIds.Add(nodeInstanceScript.id, oldNodeId);
-
-
-            if (nodeToClone.id < lowestId)
-                lowestId = nodeToClone.id;
 
             // change the id of the serialized object to keep the right id
             Nodes.SerializableNode serializableNode = nodeToClone.SerializeNode();

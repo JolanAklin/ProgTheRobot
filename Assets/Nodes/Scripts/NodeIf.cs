@@ -79,6 +79,12 @@ public class NodeIf : Nodes
         ChangeBorderColor(defaultColor);
     }
 
+    // start tpi
+    /// <summary>
+    /// Format the string
+    /// </summary>
+    /// <param name="input">the string to format</param>
+    /// <returns>The formated string</returns>
     private string FormatInput(string input)
     {
         input = input.Replace("=", " = ");
@@ -98,6 +104,7 @@ public class NodeIf : Nodes
         input = Regex.Replace(input, pattern, " ");
         return input;
     }
+    // end tpi
 
     private bool ValidateInput()
     {

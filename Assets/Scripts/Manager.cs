@@ -60,6 +60,8 @@ public class Manager : MonoBehaviour
     // start tpi
     [Header("Settings")]
     public bool connectHandleAlwaysShown = true;
+
+    public bool canTerrainCamMove;
     // end tpi
 
     private void Awake()

@@ -113,7 +113,11 @@ public class SaveManager : MonoBehaviour
     public void LoadFile()
     {
         CleanDir(extractPath);
+#if UNITY_EDITOR
         JsonToObj(Application.persistentDataPath + "/default/DefaultNewProject.pr");
+#else
+        JsonToObj(Application.dataPath + "/default/DefaultNewProject.pr");
+#endif
     }
     // end tpi
 

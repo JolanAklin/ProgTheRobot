@@ -27,22 +27,20 @@ public class CameraController : MonoBehaviour
     private float verticalLookRotation;
     private float horizontalLookRotation;
 
-    private bool canMove;
     private bool inMove;
 
-    public static CameraController instance;
+    public Transform defaultCamPosRot;
 
-
-    private void Awake()
+    private void Start()
     {
-        instance = this;
+        SetDefaultPosRot();
     }
 
     private void Update()
     {
         if (Input.GetMouseButton(2))
         {
-            if(canMove || inMove)
+            if(Manager.instance.canTerrainCamMove || inMove)
             {
                 inMove = true;
                 if (Input.GetKey(KeyCode.LeftShift))
@@ -66,14 +64,22 @@ public class CameraController : MonoBehaviour
         {
             inMove = false;
         }
-        if(Input.mouseScrollDelta.y != 0 && canMove && !inMove)
+        if(Input.mouseScrollDelta.y != 0 && Manager.instance.canTerrainCamMove && !inMove)
         {
             transform.Translate(Vector3.forward * Input.mouseScrollDelta.y * moveSpeed * Time.deltaTime / 4);
         }
     }
 
-    public void SetCanMove(bool canMove)
+    // start tpi
+    /// <summary>
+    /// Set the default position and rotation
+    /// </summary>
+    public void SetDefaultPosRot()
     {
-        this.canMove = canMove;
+        transform.localPosition = defaultCamPosRot.localPosition;
+        transform.rotation = defaultCamPosRot.rotation;
+        verticalLookRotation = 0;
+        horizontalLookRotation = 0;
     }
+    // end tpi
 }

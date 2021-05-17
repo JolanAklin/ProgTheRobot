@@ -679,7 +679,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3687543890005095077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6, y: 0.2, z: 0}
+  m_LocalPosition: {x: 1.7, y: -1.4, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3687543888583791487}
@@ -1532,7 +1532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.size
@@ -1551,6 +1551,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6201043009058252632}
@@ -1562,6 +1566,10 @@ PrefabInstance:
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6201043009058252632}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 3117409199037845742}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1583,6 +1591,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: ChangeInput
       objectReference: {fileID: 0}
@@ -1593,6 +1605,10 @@ PrefabInstance:
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: LockUnlockAllInput
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: WaitBeforeHideCompletion
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -1631,6 +1647,10 @@ PrefabInstance:
       value: NodeSound, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: AutoCompletion, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnEndEdit.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
       value: 0
       objectReference: {fileID: 0}
@@ -1640,6 +1660,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_BoolArgument
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_BoolArgument
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
@@ -1676,6 +1700,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_OnDeselect.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 2629133257769889745, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
@@ -1727,8 +1755,12 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontSize
-      value: 27.3
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontColor.a
@@ -1738,7 +1770,8 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 2164260863
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6028932877702326661, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
 --- !u!114 &5776085837210554298 stripped
 MonoBehaviour:

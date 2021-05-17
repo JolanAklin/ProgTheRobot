@@ -529,7 +529,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6743916129687385063}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1, y: -5.3, z: 0}
+  m_LocalPosition: {x: -0.4, y: -3.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6743916129884983869}
@@ -1179,20 +1179,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 2
   m_AspectRatio: 0.5
---- !u!114 &3285092972514382788
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7082423945583617128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d772e5d0f3d68c647a8b263292d117fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  translationKey: enterText
-  translateAtStart: 1
 --- !u!1 &7264466017576503823
 GameObject:
   m_ObjectHideFlags: 0
@@ -1477,8 +1463,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
+      propertyPath: m_text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontSize
-      value: 29.25
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2629133258701133631, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
       propertyPath: m_fontColor.a
@@ -1488,7 +1478,8 @@ PrefabInstance:
       propertyPath: m_fontColor32.rgba
       value: 2164260863
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6028932877702326661, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
 --- !u!224 &7082423944652430488 stripped
 RectTransform:
@@ -1506,8 +1497,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &7082423945583617128 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2629133258701133600, guid: 251ad90153b6d794eb5629a84f771039, type: 3}
-  m_PrefabInstance: {fileID: 5059052874310398792}
-  m_PrefabAsset: {fileID: 0}

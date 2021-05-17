@@ -36,6 +36,9 @@ public class NodeForLoop : Nodes
     private string startVar = "";
     private string endVar = "";
     private string stepVar = "";
+
+    private IEnumerator waitBeforeLockInput;
+
     public void ChangeInput()
     {
         if (!ValidateInput())
@@ -61,6 +64,8 @@ public class NodeForLoop : Nodes
             handleEndArray[1].loopArea = nodesLoopArea;
         if (handleStartArray.Length > 1)
             handleStartArray[1].loopArea = nodesLoopArea;
+
+        waitBeforeLockInput = WaitBeforeLockingInputs();
         //end tpi
     }
 
@@ -140,6 +145,33 @@ public class NodeForLoop : Nodes
         }
         if (!isLocked)
             inputFields[0].Select();
+    }
+
+    /// <summary>
+    /// Stop the coroutine that wait the end of two frame before locking inputs
+    /// </summary>
+    public void StopLocking()
+    {
+        StopCoroutine(waitBeforeLockInput);
+    }
+    
+    /// <summary>
+    /// Start the coroutine that wait the end of two frame before locking inputs
+    /// </summary>
+    public void LockAllInputWait()
+    {
+        StartCoroutine(waitBeforeLockInput);
+    }
+
+    /// <summary>
+    /// Wait for the end of two frame and then lock inputs
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator WaitBeforeLockingInputs()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        LockUnlockAllInput(true);
     }
     //end tpi
 

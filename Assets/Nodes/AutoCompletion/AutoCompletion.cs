@@ -103,6 +103,33 @@ public class AutoCompletion : MonoBehaviour
     }
 
     /// <summary>
+    /// start a coroutine to wait before closing the completion list
+    /// </summary>
+    public void WaitBeforeHideCompletion()
+    {
+        StartCoroutine("WaitBeforeHide");
+    }
+
+    /// <summary>
+    /// Wait ten frames before hidding the completion list
+    /// </summary>
+    /// <returns></returns>
+    private IEnumerator WaitBeforeHide()
+    {
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        HideCompletion();
+    }
+
+    /// <summary>
     /// Get the possible completion in the propability order
     /// </summary>
     /// <param name="text">The text to complete</param>

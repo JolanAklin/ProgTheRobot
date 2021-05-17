@@ -21,6 +21,7 @@ using TMPro;
 using System.Linq;
 using System.Data;
 using System;
+using System.Text.RegularExpressions;
 
 public class NodeAffect : Nodes
 {
@@ -66,7 +67,9 @@ public class NodeAffect : Nodes
     public void ChangeInput(TMP_InputField tMP_InputField)
     {
         input = tMP_InputField.text;
-        if(!ValidateInput())
+        input = FormatInput(input);
+        inputField.text = input;
+        if (!ValidateInput())
         {
             nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
@@ -77,6 +80,33 @@ public class NodeAffect : Nodes
         Manager.instance.canExecute = true;
         ChangeBorderColor(defaultColor);
     }
+
+    // start tpi
+    /// <summary>
+    /// Format the string
+    /// </summary>
+    /// <param name="input">the string to format</param>
+    /// <returns>The formated string</returns>
+    private string FormatInput(string input)
+    {
+        input = input.Replace("=", " = ");
+        input = input.Replace("<", " < ");
+        input = input.Replace(">", " > ");
+        input = input.Replace("<=", " <= ");
+        input = input.Replace(">=", " >= ");
+        input = input.Replace("<>", " <> ");
+        input = input.Replace("+", " + ");
+        input = input.Replace("-", " - ");
+        input = input.Replace("*", " * ");
+        input = input.Replace("/", " / ");
+        input = input.Replace("(", " ( ");
+        input = input.Replace(")", " ) ");
+
+        string pattern = @"\s+";
+        input = Regex.Replace(input, pattern, " ");
+        return input;
+    }
+    // end tpi
 
     private bool ValidateInput()
     {

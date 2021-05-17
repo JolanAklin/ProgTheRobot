@@ -131,15 +131,20 @@ public class UIRaycaster : MonoBehaviour
         }else if(rayCastResults.Find(X => X.gameObject.tag == "RobotSmallWindow").gameObject != null)
         {
             infoBar.GetComponent<InfoBar>().ChangeInfos("RobotSmallWindow");
-            CameraController.instance.SetCanMove(true);
+            //start tpi
+            Manager.instance.canTerrainCamMove = true;
+            // end tpi
         }else if (rayCastResults.Find(X => X.gameObject.tag == "RobotBigWindow").gameObject != null)
         {
-            CameraController.instance.SetCanMove(true);
+            //start tpi
+            Manager.instance.canTerrainCamMove = true;
+            // end tpi
         }
         else
         {
-            CameraController.instance.SetCanMove(false);
-
+            //start tpi
+            Manager.instance.canTerrainCamMove = false;
+            // end tpi
         }
         #endregion
 
@@ -313,6 +318,7 @@ public class UIRaycaster : MonoBehaviour
         }
         #endregion
     }
+
 
     public void MoveNode(RaycastHit2D hit)
     {

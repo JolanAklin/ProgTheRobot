@@ -184,11 +184,16 @@ public class TerrainManager : MonoBehaviour
             Ray ray = terrainCam.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(terrainCam.transform.position, terrainCam.ScreenPointToRay(Input.mousePosition).direction, out hit, Mathf.Infinity, robotPlacementLayer))
             {
+                // start tpi
+                RobotManager manager = robotToMove.GetComponent<RobotManager>();
+                // keep the cameraPoint at the same position
+                Vector3 oldPos = manager.cameraPoint.transform.position;
                 robotToMove.transform.position = new Vector3(hit.transform.position.x, 0.5f, hit.transform.position.z);
+                manager.cameraPoint.transform.position = oldPos;
+                // end tpi
                 if(Input.GetKeyDown(KeyCode.Mouse0))
                 {
                     // start tpi
-                    RobotManager manager = robotToMove.GetComponent<RobotManager>();
                     // test if there is another robot on the same spot
                     foreach (Robot robot in Robot.robots.Values)
                     {

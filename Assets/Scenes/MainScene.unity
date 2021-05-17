@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.730239, g: 0.78898084, b: 0.849859, a: 1}
+  m_IndirectSpecularColor: {r: 0.7302244, g: 0.7889752, b: 0.8498586, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -170,6 +170,7 @@ MonoBehaviour:
   robotPrefab: {fileID: 3547055596659527068, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
   execSpeed: 5
   connectHandleAlwaysShown: 1
+  canTerrainCamMove: 0
   node: {fileID: 0}
   SplineObject: {fileID: 917842348732581532, guid: f259943eb50c89d4d858abaa55ad9e53, type: 3}
   spline: {fileID: 0}
@@ -5585,7 +5586,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_BindingMode: 3
-  m_FollowOffset: {x: 0, y: 0, z: -10}
+  m_FollowOffset: {x: 0, y: 0, z: -5}
   m_XDamping: 0
   m_YDamping: 0
   m_ZDamping: 0
@@ -8595,6 +8596,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mouseSensitivity: 300
   moveSpeed: 800
+  defaultCamPosRot: {fileID: 0}
 --- !u!114 &1524606126
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10399,7 +10401,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 1.841615, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -11336,10 +11338,10 @@ RectTransform:
   m_Father: {fileID: 27398558794119078}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 52.114212, y: -3}
-  m_SizeDelta: {x: 98.228424, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 138.5, y: 0}
+  m_SizeDelta: {x: 271, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794118189
 RectTransform:
@@ -11724,8 +11726,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 27398558794120059}
   m_HandleRect: {fileID: 27398558794118963}
   m_Direction: 0
-  m_Value: 1
-  m_Size: 0.9999997
+  m_Value: 0
+  m_Size: 0.9999999
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
