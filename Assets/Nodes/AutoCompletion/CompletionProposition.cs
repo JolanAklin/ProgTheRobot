@@ -32,9 +32,6 @@ public class CompletionProposition : MonoBehaviour
 
         toFill.text = ReplaceLastOccurrence(toFill.text, lettersToRemove, completion);
         callBack?.Invoke();
-
-        //completedNode.LockUnlockAllInput(false);
-        //toFill.Select();
     }
 
     /// <summary>
