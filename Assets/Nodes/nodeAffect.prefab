@@ -1013,7 +1013,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36c3d05c916a2d545b86097860e7024f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: -1
   nextNodeId: -1
   nextGameObject: {fileID: 0}
   parentId: -1

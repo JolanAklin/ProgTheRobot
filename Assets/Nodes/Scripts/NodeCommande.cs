@@ -71,7 +71,6 @@ public class NodeCommande : Nodes
             nodeErrorCode = ErrorCode.wrongInput;
             ChangeBorderColor(errorColor);
             Manager.instance.canExecute = false;
-            //Debugger.LogError("Commande inconnue");
             return;
         }
         nodeErrorCode = ErrorCode.ok;

@@ -4536,7 +4536,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a59c7734c6a3e1d45aff7ca99ba48734, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  id: 0
+  id: -1
   nextNodeId: -1
   nextGameObject: {fileID: 0}
   parentId: -1
