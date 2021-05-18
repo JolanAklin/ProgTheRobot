@@ -100,7 +100,7 @@ public class RobotManager : MonoBehaviour
     public void ShowBatteryUsage(float value)
     {
         value = Mathf.Clamp01(value);
-        bodyRenderer.material.SetFloat("amount", value);
+        bodyRenderer.materials[3].SetFloat("amount", value);
     }
     // end tpi
 
@@ -108,7 +108,7 @@ public class RobotManager : MonoBehaviour
     {
         foreach (Renderer renderer in renderers)
         {
-            renderer.material.color = color;
+            renderer.materials[3].color = color;
         }
     }
 
