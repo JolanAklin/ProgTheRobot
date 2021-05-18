@@ -10,4 +10,6 @@ Le robot évolue sur un terrain avec différent type d'objet pour pouvoir exécu
 ## Installation
 Téléchargez l'[installeur](https://github.com/JolanAklin/Prog-The-Robot-Installer/releases/latest) et suivez les infos à l'écran.
 
+---
+
 inspiré par [RobotProg](http://www.physicsbox.com/indexrobotprogfr.html)
