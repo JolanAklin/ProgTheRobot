@@ -270,7 +270,8 @@ public class Manager : MonoBehaviour
             //start tpi
             // check if the node contain the same handle as the one passed in the parameters. Return null if the node can't connect
             bool canConnect = true;
-            foreach (ConnectHandle handle in node.handleEndArray)
+            SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
+            foreach (ConnectHandle handle in splineManager.NodeStart.handleEndArray)
             {
                 if (handle == sender.handleEndArray[handleId])
                 {
@@ -286,7 +287,6 @@ public class Manager : MonoBehaviour
             if(canConnect)
             {
                 OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
-                SplineManager splineManager = instance.spline.GetComponent<SplineManager>();
                 splineManager.EndSpline(handleTransform, sender, handleId);
                 actionWhenConnectionFinished(sender.id);
                 sender.numberOfInputConnection++;

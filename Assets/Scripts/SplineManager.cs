@@ -51,6 +51,7 @@ public class SplineManager : MonoBehaviour
     public GameObject MoveHandle;
 
     private Nodes nodeStart, nodeEnd;
+    public Nodes NodeStart { get => nodeStart; }
 
     // start pos will be used when a node is moved.
     // the node parameter only serve to subscibe to the change/resize event
@@ -168,6 +169,7 @@ public class SplineManager : MonoBehaviour
         }
     }
     private bool willBeMoved = false;
+
     public void MoveSpline()
     {
         if(!ExecManager.Instance.isRunning)
