@@ -78,6 +78,10 @@ public class NodeMethod : Nodes
             tMP_Dropdown.Hide();
     }
 
+    /// <summary>
+    /// Test if the dropdown is  opened. If the dropdown is closed, it locks it.
+    /// </summary>
+    /// <returns></returns>
     IEnumerator CheckIfDropDownOpen()
     {
         while (tMP_Dropdown.IsExpanded)

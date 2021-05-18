@@ -44,6 +44,7 @@ public class AutoCompletion : MonoBehaviour
     private string[] possibleCompletion;
 
     private string lastLetters = "";
+    private int startIndex;
 
     private void Awake()
     {
@@ -56,6 +57,7 @@ public class AutoCompletion : MonoBehaviour
         if (useLanguageFiles)
             Manager.instance.OnLanguageChanged += ChangeProbaWord;
         ChangeProbaWord(this, EventArgs.Empty);
+        startIndex = toComplete.text.Length;
     }
     private void OnDestroy()
     {
@@ -90,17 +92,39 @@ public class AutoCompletion : MonoBehaviour
     /// <param name="inputField"></param>
     public void ShowCompletion(TMP_InputField inputField)
     {
-        try
+        lastLetters = inputField.text;
+        if(startIndex > lastLetters.Length)
         {
-            char lastLetter = inputField.text[inputField.text.Length - 1];
-            if (lastLetter != ' ')
-                lastLetters += lastLetter;
+            startIndex = lastLetters.Length;
         }
-        catch (Exception){}
+        lastLetters = lastLetters.Remove(0, startIndex);
+        if(lastLetters.Length > 0)
+        {
+            if(lastLetters[lastLetters.Length - 1] == ' ')
+            {
+                bool clearLastLetters = true;
+                foreach (string proposition in possibleCompletion)
+                {
+                    if (proposition.StartsWith(lastLetters))
+                    {
+                        clearLastLetters = false;
+                        break;
+                    }
+                }
+                if (clearLastLetters)
+                {
+                    startIndex = inputField.text.Length;
+                }
+            }
+        }
+
         CompletionProbability[] sortedProba = GetCompletion(lastLetters);
         if(sortedProba != null)
         {
-            HideCompletion();
+            foreach (Transform child in this.transform)
+            {
+                Destroy(child.transform.gameObject);
+            }
             foreach (CompletionProbability completion in sortedProba)
             {
                 CompletionProposition completionProposition = Instantiate(completionPropositionPrefab, Vector3.zero, Quaternion.identity, this.transform).GetComponent<CompletionProposition>();
@@ -111,7 +135,6 @@ public class AutoCompletion : MonoBehaviour
                 completionProposition.completedNode = completedNode;
                 completionProposition.callBack = () =>
                 {
-                    lastLetters = "";
                     HideCompletion();
                 };
             }
@@ -124,11 +147,11 @@ public class AutoCompletion : MonoBehaviour
     /// </summary>
     public void HideCompletion()
     {
-        lastLetters = "";
         foreach (Transform child in this.transform)
         {
             Destroy(child.transform.gameObject);
         }
+        startIndex = toComplete.text.Length;
     }
 
     /// <summary>
@@ -155,6 +178,7 @@ public class AutoCompletion : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
+        startIndex = lastLetters.Length;
         HideCompletion();
     }
 
