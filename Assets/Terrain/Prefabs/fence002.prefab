@@ -84,6 +84,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -194,17 +195,33 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -7037777848416706590, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -6478451125994164471, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: -6478451125994164471, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -2045257923548263128, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
       propertyPath: m_Layer
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: -2045257923548263128, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 281855664364225751, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 281855664364225751, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
       propertyPath: m_Name
@@ -213,6 +230,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
       propertyPath: m_Layer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 233668cfa6158ec4c8db9b3f786dc309, type: 3}
