@@ -29,11 +29,15 @@ public class SettingsOptions : MonoBehaviour
     public string filePath;
     public ToggleScript toggleScript;
 
+    public TMP_Text versionText;
+
     public Action okAction;
     public Action cancelAction;
 
     private void Start()
     {
+        versionText.text = $"Version : {Application.version}";
+
         toggleScript.Value = Manager.instance.connectHandleAlwaysShown;
         menu = GameObject.FindGameObjectWithTag("MainMenu").GetComponent<PopUpMenu>();
         inputField.text = SaveManager.instance.savePath;
