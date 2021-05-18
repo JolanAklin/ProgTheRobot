@@ -70,9 +70,22 @@ public class NodeMethod : Nodes
         tMP_Dropdown.enabled = !isLocked;
         IsInputLocked = isLocked;
         if (!isLocked)
+        {
             tMP_Dropdown.Show();
+            StartCoroutine("CheckIfDropDownOpen");
+        }
         else
             tMP_Dropdown.Hide();
+    }
+
+    IEnumerator CheckIfDropDownOpen()
+    {
+        while (tMP_Dropdown.IsExpanded)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        LockUnlockAllInput(true);
+
     }
     //end tpi
 

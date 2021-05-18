@@ -90,9 +90,13 @@ public class AutoCompletion : MonoBehaviour
     /// <param name="inputField"></param>
     public void ShowCompletion(TMP_InputField inputField)
     {
-        char lastLetter = inputField.text[inputField.text.Length - 1];
-        if (lastLetter != ' ')
-            lastLetters += lastLetter;
+        try
+        {
+            char lastLetter = inputField.text[inputField.text.Length - 1];
+            if (lastLetter != ' ')
+                lastLetters += lastLetter;
+        }
+        catch (Exception){}
         CompletionProbability[] sortedProba = GetCompletion(lastLetters);
         if(sortedProba != null)
         {
@@ -120,6 +124,7 @@ public class AutoCompletion : MonoBehaviour
     /// </summary>
     public void HideCompletion()
     {
+        lastLetters = "";
         foreach (Transform child in this.transform)
         {
             Destroy(child.transform.gameObject);

@@ -151,6 +151,9 @@ public class Robot
     // add a script to this robot
     public List.ListElement AddScript(RobotScript robotScript)
     {
+        // start tpi
+
+        // end tpi
         robotScripts.Add(robotScript);
         return robotScript.ConvertToListElement();
     }
