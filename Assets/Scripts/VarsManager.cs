@@ -489,7 +489,7 @@ public class VarsManager
                             break;
                         case "Faux":
                         case "False":
-                            fBoolReturn = new BoolFunctionReturn() { result = true };
+                            fBoolReturn = new BoolFunctionReturn() { result = false };
                             break;
                         default:
                             fBoolReturn = new BoolFunctionReturn() { error = true };

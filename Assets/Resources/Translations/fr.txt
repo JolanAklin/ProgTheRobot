@@ -53,3 +53,5 @@ yBall = y ballon
 And = Et
 Or = Ou
 No = Non
+True = Vrai
+False = Faux

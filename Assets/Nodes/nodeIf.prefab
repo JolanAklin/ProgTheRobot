@@ -78,7 +78,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 702956444976196924}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.6, y: -2.1, z: 0}
+  m_LocalPosition: {x: -0.8, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 702956446777199846}
@@ -2309,7 +2309,7 @@ PrefabInstance:
       objectReference: {fileID: 7989683298206893606}
     - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: possibleWord.Array.size
-      value: 18
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: possibleWord.Array.data[0]
@@ -2382,6 +2382,14 @@ PrefabInstance:
     - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: possibleWord.Array.data[17]
       value: No
+      objectReference: {fileID: 0}
+    - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
+      propertyPath: possibleWord.Array.data[18]
+      value: Vrai
+      objectReference: {fileID: 0}
+    - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
+      propertyPath: possibleWord.Array.data[19]
+      value: Faux
       objectReference: {fileID: 0}
     - target: {fileID: 6221108642821904972, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: m_Pivot.x

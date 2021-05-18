@@ -53,3 +53,5 @@ yBall = y ball
 And = And
 Or = Or
 No = No
+True = True
+False = False

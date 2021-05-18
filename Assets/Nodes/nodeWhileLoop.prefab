@@ -440,7 +440,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3873242545781585271}
   m_HandleRect: {fileID: 8029724112705859781}
   m_Direction: 0
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3084,7 +3084,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5158547176770619525}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.1, y: -4, z: 0}
+  m_LocalPosition: {x: -0.4, y: -3.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5158547174704327007}
@@ -4097,7 +4097,7 @@ PrefabInstance:
       objectReference: {fileID: 7249064320339202762}
     - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: possibleWord.Array.size
-      value: 18
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: possibleWord.Array.data[0]
@@ -4170,6 +4170,14 @@ PrefabInstance:
     - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: possibleWord.Array.data[17]
       value: No
+      objectReference: {fileID: 0}
+    - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
+      propertyPath: possibleWord.Array.data[18]
+      value: True
+      objectReference: {fileID: 0}
+    - target: {fileID: 905160049856406098, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
+      propertyPath: possibleWord.Array.data[19]
+      value: False
       objectReference: {fileID: 0}
     - target: {fileID: 6221108642821904972, guid: e1add1a574aacc14c96d6a65e95c4f88, type: 3}
       propertyPath: m_Pivot.x
