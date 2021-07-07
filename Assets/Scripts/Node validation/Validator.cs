@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Text.RegularExpressions;
-using UnityEngine;
 
 public static class Validator
 {
@@ -94,6 +93,13 @@ public static class Validator
         }
     }
 
+    // using one string for the content validation and one for the display is recommended
+    /// <summary>
+    /// validate node content. 
+    /// </summary>
+    /// <param name="type">Validation type to use</param>
+    /// <param name="toValidate">The node content string to validate</param>
+    /// <returns></returns>
     public static ValidationReturn Validate(ValidationType type, string toValidate)
     {
         switch (type)
@@ -101,13 +107,12 @@ public static class Validator
             case ValidationType.test:
                 return ValidateTest(toValidate);
             case ValidationType.action:
-                break;
+                return new ValidationReturn(ValidationStatus.KO);
             case ValidationType.forloop:
-                break;
+                return new ValidationReturn(ValidationStatus.KO);
             default:
-                break;
+                return new ValidationReturn(ValidationStatus.KO);
         }
-        return new ValidationReturn(ValidationStatus.KO);
     }
     public static ValidationReturn Validate(ValidationType type, string[] toValidate)
     {
@@ -115,11 +120,21 @@ public static class Validator
     }
 
     // input string should be english only
+    // this validator works in a new way. Remaking a new translation system would greatly improve the overall experience
+
+    // function names are now converted to something simpler to use for the machine. Wall in front becomes bwf. Explanation below.
+
+    /// <summary>
+    /// Validate if and while node content
+    /// </summary>
+    /// <param name="toValidate">this string should be only in english</param>
+    /// <returns>An object containing the validation status and errors</returns>
     private static ValidationReturn ValidateTest(string toValidate)
     {
+        string toValidateNonAltered = toValidate;
         ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
 
-        string regexPattern = @"[^a-z^A-Z^0-9^+^-^*^/^(^)^>^<^=^\s]+";
+        string regexPattern = @"[^a-z^A-Z^0-9^+^\-^*^/^(^)^>^<^=^\s]+";
         Regex regex1 = new Regex(regexPattern);
         if(regex1.IsMatch(toValidate))
         {
@@ -134,10 +149,26 @@ public static class Validator
         string[] stringsToFind = new string[] { "Or", "And" };
         string[] exprSplit = toValidate.Split(stringsToFind, StringSplitOptions.None);
 
+        string findIndexAndOr = @"Or|And";
+        Regex findIndexAndOrRegex = new Regex(findIndexAndOr);
+        MatchCollection mc = findIndexAndOrRegex.Matches(toValidateNonAltered);
+
+        // used to add to the posInStartString to keep the error at the right position since "And" and "Or" keyword are removed from the main string
+        Dictionary<int, uint> andOrPlaceLength = new Dictionary<int, uint>();
+        foreach (Match matchItem in mc)
+        {
+            andOrPlaceLength.Add(matchItem.Index, (uint)matchItem.Length);
+        }
+
         uint posInStartString = 0;
 
         foreach (string item in exprSplit)
         {
+            if(andOrPlaceLength.ContainsKey((int)posInStartString))
+            {
+                posInStartString += andOrPlaceLength[(int)posInStartString] + 1;
+            }
+
             string[] separators = new string[] { " " };
             string[] smallExprSplit = item.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
@@ -221,11 +252,20 @@ public static class Validator
                             else
                                 exprPart2.Add(exprBits);
                         }
-                        codeBlockLength = (uint)exprBits.Length;
                         if (exprBits[0] == 'b' && abrevToFullName.ContainsKey(exprBits))
                         {
+                            codeBlockLength = (uint)abrevToFullName[exprBits].Length + 1; // space after this word
+
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
+                        }
+                        else if (exprBits[0] == 'i' && abrevToFullName.ContainsKey(exprBits))
+                        {
+                            codeBlockLength = (uint)abrevToFullName[exprBits].Length + 1; // space after this word
+                        }
+                        else
+                        {
+                            codeBlockLength = (uint)exprBits.Length + 1; // +1 = space after this word
                         }
                         posInStartString += codeBlockLength;
                     }
