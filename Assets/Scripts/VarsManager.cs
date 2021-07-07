@@ -568,8 +568,8 @@ public class VarsManager
                     int value2 = 0;
                     try
                     {
-                        value1 = Convert.ToInt32(new DataTable().Compute(string.Join("", exprPart1.ToArray()), null));
-                        value2 = Convert.ToInt32(new DataTable().Compute(string.Join("", exprPart2.ToArray()), null));
+                        value1 = Convert.ToInt32(new DataTable().Compute(string.Join(" ", exprPart1.ToArray()), null));
+                        value2 = Convert.ToInt32(new DataTable().Compute(string.Join(" ", exprPart2.ToArray()), null));
                     }
                     catch (Exception)
                     {
