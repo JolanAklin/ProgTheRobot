@@ -9,13 +9,20 @@ public class PopUpFillNode : MonoBehaviour
     public TMP_InputField input;
     public Validator.ValidationType validationType;
 
+    private Validator.ValidationReturn validationReturn;
+
     public void Validate()
     {
-        Display(Validator.Validate(validationType, input.text));
+        string toValidate = input.text;
+        toValidate = toValidate.Replace("<color=red><b>", "");
+        toValidate = toValidate.Replace("</b></color>", "");
+        input.text = toValidate;
+        Display(Validator.Validate(validationType, toValidate));
     }
 
     public void Display(Validator.ValidationReturn validationReturn)
     {
+        this.validationReturn = validationReturn;
         Dictionary<uint, string> tags = new Dictionary<uint, string>();
         string displayString = input.text;
         uint offset = 0;
@@ -40,7 +47,22 @@ public class PopUpFillNode : MonoBehaviour
                 displayString = displayString.Insert((tag.Key + offset < displayString.Length) ? (int)(tag.Key + offset) : displayString.Length, tag.Value);
                 offset += (uint)tag.Value.Length;
             }
+            input.text = displayString;
             Debug.Log(displayString);
+        }
+    }
+
+    public void ShowError(int index)
+    {
+        string errorMessage = "";
+        foreach (var errors in validationReturn.specificErrors)
+        {
+            if(index >= errors.Key && index < errors.Value.endPos)
+            {
+                errorMessage = errors.Value.message;
+                Debug.Log(errorMessage);
+                break;
+            }
         }
     }
 }
