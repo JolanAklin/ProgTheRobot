@@ -1791,9 +1791,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 34864}
-        m_TargetAssemblyTypeName: WindowsManager, Assembly-CSharp
-        m_MethodName: ShowMainMenu
+      - m_Target: {fileID: 1145785824}
+        m_TargetAssemblyTypeName: PopUpManager, Assembly-CSharp
+        m_MethodName: OpenMenu
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6778,6 +6778,8 @@ MonoBehaviour:
     obj: {fileID: 4139663630285559343, guid: c2e8312011d8c4f4d992396b3be3abd8, type: 3}
   - type: 7
     obj: {fileID: 2678283286566473457, guid: 5d77a244f6a242540ba7a7c2bbb3cac4, type: 3}
+  - type: 8
+    obj: {fileID: 7044646592199168464, guid: b94599c3d372726458a1a9e5b6a78f10, type: 3}
 --- !u!4 &1145785825
 Transform:
   m_ObjectHideFlags: 0

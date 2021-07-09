@@ -14,7 +14,8 @@ public class PopUpManager : MonoBehaviour
         addScript,
         readWrite,
         nodeInfo,
-        wait
+        wait,
+        menu
     }
 
     [Serializable]
@@ -36,6 +37,12 @@ public class PopUpManager : MonoBehaviour
             popUpsDict.Add(popUp.type, popUp.obj);
         }
         statPopUpBase = popUpBase;
+    }
+
+    public void OpenMenu()
+    {
+        GameObject basePopUp = Instantiate(statPopUpBase, Vector3.zero, Quaternion.identity);
+        Instantiate(popUpsDict[PopUpTypes.menu], basePopUp.transform.GetChild(0).GetChild(1));
     }
 
     public static GameObject ShowPopUp(PopUpTypes type)

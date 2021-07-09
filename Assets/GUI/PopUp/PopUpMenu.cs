@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class PopUpMenu : MonoBehaviour
+public class PopUpMenu : PopUp
 {
     public enum MenuSettings
     {
@@ -65,11 +65,6 @@ public class PopUpMenu : MonoBehaviour
             Destroy(child.gameObject);
         }
         return Instantiate(menuSettings[subMenuType].menuObj, content.transform);
-    }
-
-    public void Close()
-    {
-        Destroy(this.gameObject);
     }
 
     public void Quit()
