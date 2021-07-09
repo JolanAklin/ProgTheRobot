@@ -141,6 +141,7 @@ public static class Validator
             vr.ChangeValidationStatus(ValidationStatus.KO);
             Match match = regex1.Match(toValidate);
             vr.AddSpecificError((uint)match.Index, new ValidationReturn.Error((uint)match.Index, (uint)match.Index + (uint)match.Length, $"\"{match.Value}\" means nothing"));
+            return vr;
         }
 
         toValidate = FullNameToAbrev(toValidate);
@@ -252,6 +253,7 @@ public static class Validator
                             else
                                 exprPart2.Add(exprBits);
                         }
+
                         if (exprBits[0] == 'b' && abrevToFullName.ContainsKey(exprBits))
                         {
                             codeBlockLength = (uint)abrevToFullName[exprBits].Length + 1; // space after this word
@@ -267,6 +269,7 @@ public static class Validator
                         {
                             codeBlockLength = (uint)exprBits.Length + 1; // +1 = space after this word
                         }
+
                         posInStartString += codeBlockLength;
                     }
                     if (exprPart1.Count <= 0 || exprPart2.Count <= 0)
@@ -316,22 +319,22 @@ public static class Validator
     public static Dictionary<string, string> fullNameToAbrev = new Dictionary<string, string>()
     {
         // boolean func
-        {"Wall in front","bwf"},
-        {"Wall right","bwr"},
-        {"Wall left","bwl"},
-        {"Out","bo"},
-        {"Robot on an outlet","boao"},
-        {"Tile marked","btm"},
-        {"Ball on the ground","bbg"},
+        {"Wall in front","#bwf"},
+        {"Wall right","#bwr"},
+        {"Wall left","#bwl"},
+        {"Out","#bo"},
+        {"Robot on an outlet","#boao"},
+        {"Tile marked","#btm"},
+        {"Ball on the ground","#bbg"},
         // int func
-        {"Wall distance","iwd"},
-        {"Power","ip"},
-        {"x robot","ixr"},
-        {"y robot","iyr"},
-        {"dx robot","idxr"},
-        {"dy robot","idyr"},
-        {"x ball","ixb"},
-        {"y ball","iyb"},
+        {"Wall distance","#iwd"},
+        {"Power","#ip"},
+        {"x robot","#ixr"},
+        {"y robot","#iyr"},
+        {"dx robot","#idxr"},
+        {"dy robot","#idyr"},
+        {"x ball","#ixb"},
+        {"y ball","#iyb"},
     };
 
     public static void InverseKV()

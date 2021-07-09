@@ -3,21 +3,64 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Linq;
+using System.Text.RegularExpressions;
 
-public class PopUpFillNode : MonoBehaviour
+public class PopUpFillNode : PopUp
 {
+    public TMP_Text validationTypeText;
     public TMP_InputField input;
     public Validator.ValidationType validationType;
 
     private Validator.ValidationReturn validationReturn;
+
+    public override void Open() { }
+    public void Open(Validator.ValidationReturn validationReturn)
+    {
+        this.validationReturn = validationReturn;
+        validationTypeText.text = validationReturn.ToString();
+    }
+
+    public override void Close()
+    {
+        // play the close anim
+        // destroy the popup
+        throw new System.NotImplementedException();
+    }
 
     public void Validate()
     {
         string toValidate = input.text;
         toValidate = toValidate.Replace("<color=red><b>", "");
         toValidate = toValidate.Replace("</b></color>", "");
+        toValidate = FormatInput(toValidate);
         input.text = toValidate;
+        Validator.InverseKV();
         Display(Validator.Validate(validationType, toValidate));
+    }
+
+    /// <summary>
+    /// Format the string
+    /// </summary>
+    /// <param name="input">the string to format</param>
+    /// <returns>The formated string</returns>
+    private string FormatInput(string input)
+    {
+        input = input.Replace("=", " = ");
+        input = input.Replace("<", " < ");
+        input = input.Replace(">", " > ");
+        input = input.Replace("<=", " <= ");
+        input = input.Replace(">=", " >= ");
+        input = input.Replace("<>", " <> ");
+        input = input.Replace("+", " + ");
+        input = input.Replace("-", " - ");
+        input = input.Replace("*", " * ");
+        input = input.Replace("/", " / ");
+        input = input.Replace("(", " ( ");
+        input = input.Replace(")", " ) ");
+
+        string pattern = @"\s+";
+        input = Regex.Replace(input, pattern, " ");
+        return input;
     }
 
     public void Display(Validator.ValidationReturn validationReturn)
@@ -52,6 +95,7 @@ public class PopUpFillNode : MonoBehaviour
         }
     }
 
+    // really need to verify the way the error is displayed, because of the <b> and <color> attribute. They could move the caret to a different place that is in the validation return from the validator
     public void ShowError(int index)
     {
         string errorMessage = "";
@@ -65,4 +109,5 @@ public class PopUpFillNode : MonoBehaviour
             }
         }
     }
+
 }
