@@ -4,7 +4,8 @@ using UnityEngine;
 
 public abstract class PopUp : MonoBehaviour
 {
-    public abstract void Open();
-
-    public abstract void Close();
+    public void Close()
+    {
+        transform.root.GetComponent<PopUpBase>().ClosePopUp();
+    }
 }

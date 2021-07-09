@@ -21,7 +21,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class PopUpWarning : MonoBehaviour
+public class PopUpWarning : PopUp
 {
     private Action quitAction;
     private Action cancelAction;
@@ -30,11 +30,6 @@ public class PopUpWarning : MonoBehaviour
     public TMP_Text warningText;
     public Button quitButton;
     public Button saveButton;
-
-    public void Close()
-    {
-        Destroy(this.gameObject);
-    }
 
     #region buttons action
     public void SetQuitAction(Action action)

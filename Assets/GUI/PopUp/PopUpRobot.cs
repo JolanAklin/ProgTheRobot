@@ -21,7 +21,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class PopUpRobot : MonoBehaviour
+public class PopUpRobot : PopUp
 {
     [HideInInspector]
     public string robotName;
@@ -62,25 +62,18 @@ public class PopUpRobot : MonoBehaviour
     }
     public void ChangeColor()
     {
-        boxVisual.SetActive(false);
-        PopUpColor cp = Instantiate(WindowsManager.instance.popUpWindowsDict[(int)Enum.Parse(typeof(WindowsManager.popUp), "colorPicker")], Manager.instance.canvas.transform).GetComponent<PopUpColor>();
+        PopUpColor cp = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.colorPicker).GetComponent<PopUpColor>();
         cp.Init(robotColor);
         cp.SetButtonOk(() => {
             robotColor = cp.color;
             robotBodyColor.color = cp.color;
-            Destroy(cp.gameObject);
             colorButton.color = robotColor;
-            boxVisual.SetActive(true);
+            cp.Close();
         });
         cp.SetButtonCancel(() => {
             Destroy(cp.gameObject);
-            boxVisual.SetActive(true);
+            cp.Close();
         });
-    }
-
-    public void PopUpClose()
-    {
-        Destroy(this.gameObject);
     }
 
     #region buttons action
@@ -112,7 +105,7 @@ public class PopUpRobot : MonoBehaviour
         {
             // hide this window and create another to warn the user that the robot need a name
             gameObject.SetActive(false);
-            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+            PopUpWarning sw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
             sw.warningText.text = "Veuillez entrer un nom pour le robot";
             sw.quitButton.gameObject.SetActive(false);
             sw.saveButton.gameObject.SetActive(false);
@@ -128,7 +121,7 @@ public class PopUpRobot : MonoBehaviour
         {
             // hide this window and create another to warn the user that the robot need a positive power
             gameObject.SetActive(false);
-            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+            PopUpWarning sw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
             sw.warningText.text = "Veuillez entrer une énergie plus grande que 0";
             sw.quitButton.gameObject.SetActive(false);
             sw.saveButton.gameObject.SetActive(false);

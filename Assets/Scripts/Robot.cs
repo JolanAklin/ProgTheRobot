@@ -171,11 +171,11 @@ public class Robot
         // add a "+" button. The button will show a popup asking for the name of the script once clicked
         list.Add(new List.ListElement { isAddScript = true, actionOnClick = () => {
             // create the add script popup
-            PopUpAddScript pas = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "addScript"), Manager.instance.canvas.transform).GetComponent<PopUpAddScript>();
+            PopUpAddScript pas = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.addScript).GetComponent<PopUpAddScript>();
             // close the popup when the "annuler" button is pressed
             pas.SetCancelAction(() =>
             {
-                pas.PopUpClose();
+                pas.Close();
             });
             // create the script with the right name and close the window
             pas.SetOkAction(() =>
@@ -184,7 +184,7 @@ public class Robot
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
                 Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
-                pas.PopUpClose();
+                pas.Close();
             });
             pas.SetAddScriptAction((robotScript) =>
             {
@@ -195,7 +195,7 @@ public class Robot
                 Manager.instance.list.AddChoice(element);
                 Manager.instance.list.SelectLast();
                 Manager.instance.onScriptAdded?.Invoke(this, EventArgs.Empty);
-                pas.PopUpClose();
+                pas.Close();
             });
         } });
         // show all the already created script on the list

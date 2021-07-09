@@ -94,7 +94,7 @@ public class Manager : MonoBehaviour
                 TerrainManager terrainManager = GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>();
                 if (terrainManager.TerrainSize[0] * terrainManager.TerrainSize[1] < Robot.robots.Count + 1)
                 {
-                    PopUpWarning w = WindowsManager.InstantiateWindow(Convert.ToInt32(WindowsManager.popUp.saveWarning), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+                    PopUpWarning w = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
                     w.warningText.text = "Il n'y a plus de place pour un autre robot";
                     w.quitButton.gameObject.SetActive(false);
                     w.saveButton.gameObject.SetActive(false);
@@ -173,7 +173,7 @@ public class Manager : MonoBehaviour
     {
         if(ni == null)
         {
-            ni = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "nodeInfo"), instance.canvas.transform).GetComponent<PopUpNodeInfo>();
+            ni = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.nodeInfo).GetComponent<PopUpNodeInfo>();
             ni.init(node.infoTextTitle, node.infoText);
         }else
         {
@@ -195,7 +195,7 @@ public class Manager : MonoBehaviour
         {
             Robot robotToChange = Robot.robots[Robot.idSelected];
             // instantiate a popup to modify the robot and set all actions of the popup
-            PopUpRobot rm = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "robotModif"), canvas.transform).GetComponent<PopUpRobot>();
+            PopUpRobot rm = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.robotModif).GetComponent<PopUpRobot>();
             rm.Init(robotToChange.Color, robotToChange.robotName, robotToChange.defaultPower);
             // apply the config to the robot
             rm.SetOkAction(() =>
@@ -205,19 +205,19 @@ public class Manager : MonoBehaviour
                 robotToChange.defaultPower = rm.power;
                 listRobot.UpdateButtonColor();
                 listRobot.ChangeChoiceColor(robotToChange.id, rm.robotColor);
-                rm.PopUpClose();
+                rm.Close();
             });
             // close the popup
             rm.SetCancelAction(() =>
             {
-                rm.PopUpClose();
+                rm.Close();
             });
             // delete the robot
             rm.SetDeleteAction(() =>
             {
                 listRobot.RemoveRobot(robotToChange.id);
                 Robot.DeleteRobot(robotToChange.id);
-                rm.PopUpClose();
+                rm.Close();
             });
         }
     }
@@ -381,7 +381,7 @@ public class Manager : MonoBehaviour
     {
         if(!quit)
         {
-            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), instance.canvas.transform).GetComponent<PopUpWarning>();
+            PopUpWarning sw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
             sw.warningText.text = "Des changements ne sont peut-être pas sauvegardés";
             sw.SetCancelAction(() =>
             {
@@ -393,7 +393,7 @@ public class Manager : MonoBehaviour
                 SaveManager.instance.Save();
                 quit = true;
                 sw.Close();
-                PopUpWait w = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "wait"), instance.canvas.transform).GetComponent<PopUpWait>();
+                PopUpWait w = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.wait).GetComponent<PopUpWait>();
                 w.init("Quitting...", () =>
                 {
                     Application.Quit();
@@ -403,7 +403,7 @@ public class Manager : MonoBehaviour
             {
                 quit = true;
                 sw.Close();
-                PopUpWait w = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "wait"), instance.canvas.transform).GetComponent<PopUpWait>();
+                PopUpWait w = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.wait).GetComponent<PopUpWait>();
                 w.init("Quitting...", () =>
                 {
                     Application.Quit();

@@ -21,7 +21,7 @@ using TMPro;
 using System;
 using UnityEngine.UI;
 
-public class PopUpReadWrite : MonoBehaviour
+public class PopUpReadWrite : PopUp
 {
     private Action okAction;
 
@@ -38,11 +38,6 @@ public class PopUpReadWrite : MonoBehaviour
         infoText.text = text;
         inputField.text = number;
         inputField.interactable = false;
-    }
-
-    public void DestroyPopup()
-    {
-        Destroy(this.gameObject);
     }
 
     public int value()

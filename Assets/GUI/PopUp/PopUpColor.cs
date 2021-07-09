@@ -21,7 +21,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 
-public class PopUpColor : MonoBehaviour
+public class PopUpColor : PopUp
 {
 
     public Image showColor;

@@ -137,14 +137,14 @@ public class NodeReadWrite : Nodes
 
         string[] delimiters = new string[] { " " };
         inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        PopUpReadWrite rw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "readWrite"), Manager.instance.canvas.transform).GetComponent<PopUpReadWrite>();
+        PopUpReadWrite rw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.readWrite).GetComponent<PopUpReadWrite>();
         switch (inputSplited[0])
         {
             case "Afficher":
             case "Display":
                 rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]).Value.ToString());
                 rw.SetOkAction(() => { 
-                    rw.DestroyPopup();
+                    rw.Close();
                     StartCoroutine("WaitBeforeCallingNextNode");
                 });
                 break;
@@ -155,7 +155,7 @@ public class NodeReadWrite : Nodes
                     VarsManager.Var var = rs.robot.varsManager.GetVar(inputSplited[1],0);
                     var.Value = rw.value();
                     var.Persist();
-                    rw.DestroyPopup();
+                    rw.Close();
                     StartCoroutine("WaitBeforeCallingNextNode");
                 });
                 break;

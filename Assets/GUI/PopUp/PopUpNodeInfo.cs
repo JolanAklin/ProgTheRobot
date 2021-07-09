@@ -19,7 +19,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PopUpNodeInfo : MonoBehaviour
+public class PopUpNodeInfo : PopUp
 {
     public TMP_Text titleText;
     public TMP_Text text;
@@ -27,10 +27,5 @@ public class PopUpNodeInfo : MonoBehaviour
     {
         titleText.text = title;
         text.text = info;
-    }
-
-    public void Close()
-    {
-        Destroy(this.gameObject);
     }
 }

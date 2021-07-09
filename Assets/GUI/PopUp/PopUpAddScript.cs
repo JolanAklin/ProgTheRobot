@@ -21,7 +21,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 
-public class PopUpAddScript : MonoBehaviour
+public class PopUpAddScript : PopUp
 {
     [HideInInspector]
     public string scriptName;
@@ -90,7 +90,7 @@ public class PopUpAddScript : MonoBehaviour
             TerrainManager terrainManager = GameObject.FindGameObjectWithTag("Terrain").GetComponent<TerrainManager>();
             if (terrainManager.TerrainSize[0] * terrainManager.TerrainSize[1] < Robot.robots.Count + 1)
             {
-                PopUpWarning w = WindowsManager.InstantiateWindow(Convert.ToInt32(WindowsManager.popUp.saveWarning), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+                PopUpWarning w = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
                 w.warningText.text = "Il n'y a plus de place pour un autre robot";
                 w.quitButton.gameObject.SetActive(false);
                 w.saveButton.gameObject.SetActive(false);
@@ -129,7 +129,7 @@ public class PopUpAddScript : MonoBehaviour
             if (shouldRemoveEntry)
                 RobotScript.unassignedRobotScript.Remove(unassignedScript);
             Manager.instance.ChangeRobotSettings();
-            this.PopUpClose();
+            this.Close();
         });
         return buttonScript;
     }
@@ -158,11 +158,6 @@ public class PopUpAddScript : MonoBehaviour
             i++;
         }
         return buttons;
-    }
-
-    public void PopUpClose()
-    {
-        Destroy(this.gameObject);
     }
 
     public void OnEndEditScriptName(TMP_InputField inputField)
@@ -200,7 +195,7 @@ public class PopUpAddScript : MonoBehaviour
         if(scriptName.Length == 0)
         {
             gameObject.SetActive(false);
-            PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+            PopUpWarning sw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
             sw.warningText.text = "Veuillez entrer un nom pour l'organigramme";
             sw.quitButton.gameObject.SetActive(false);
             sw.saveButton.gameObject.SetActive(false);

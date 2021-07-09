@@ -58,7 +58,7 @@ public class SettingsOptions : MonoBehaviour
                     menu.Close();
                 }else
                 {
-                    PopUpWarning sw = WindowsManager.InstantiateWindow((int)Enum.Parse(typeof(WindowsManager.popUp), "saveWarning"), Manager.instance.canvas.transform).GetComponent<PopUpWarning>();
+                    PopUpWarning sw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.saveWarning).GetComponent<PopUpWarning>();
                     sw.warningText.text = "Ce repertoire n'existe pas";
                     sw.quitButton.gameObject.SetActive(false);
                     sw.saveButton.gameObject.SetActive(false);

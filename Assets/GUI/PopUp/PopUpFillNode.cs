@@ -13,18 +13,10 @@ public class PopUpFillNode : PopUp
 
     private Validator.ValidationReturn validationReturn;
 
-    public override void Open() { }
-    public void Open(Validator.ValidationReturn validationReturn)
+    public void Init(Validator.ValidationReturn validationReturn)
     {
         this.validationReturn = validationReturn;
         validationTypeText.text = validationReturn.ToString();
-    }
-
-    public override void Close()
-    {
-        // play the close anim
-        // destroy the popup
-        throw new System.NotImplementedException();
     }
 
     public void Validate()

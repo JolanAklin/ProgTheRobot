@@ -20,7 +20,7 @@ using UnityEngine;
 using System;
 using TMPro;
 
-public class PopUpWait : MonoBehaviour
+public class PopUpWait : PopUp
 {
     public TMP_Text text;
     private Action finishLoadAction;
@@ -28,11 +28,6 @@ public class PopUpWait : MonoBehaviour
     {
         text.text = info;
         this.finishLoadAction = finishLoadAction;
-    }
-
-    public void Close()
-    {
-        Destroy(this.gameObject);
     }
 
     private void Start()
