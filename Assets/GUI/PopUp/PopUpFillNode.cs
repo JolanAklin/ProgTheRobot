@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System;
 
 public class PopUpFillNode : PopUp
 {
@@ -13,12 +14,22 @@ public class PopUpFillNode : PopUp
 
     private Validator.ValidationReturn validationReturn;
 
-    public void Init(Validator.ValidationReturn validationReturn)
+    public Action cancelAction;
+    public Action OkAction;
+
+    /// <summary>
+    /// Initialise the pop up
+    /// </summary>
+    /// <param name="validationType">What type of validation to use</param>
+    public void Init(Validator.ValidationType validationType)
     {
-        this.validationReturn = validationReturn;
-        validationTypeText.text = validationReturn.ToString();
+        this.validationType = validationType;
+        validationTypeText.text = validationType.ToString();
     }
 
+    /// <summary>
+    /// Validate the input
+    /// </summary>
     public void Validate()
     {
         string toValidate = input.text;
@@ -26,7 +37,6 @@ public class PopUpFillNode : PopUp
         toValidate = toValidate.Replace("</b></color>", "");
         toValidate = FormatInput(toValidate);
         input.text = toValidate;
-        Validator.InverseKV();
         Display(Validator.Validate(validationType, toValidate));
     }
 
@@ -55,13 +65,16 @@ public class PopUpFillNode : PopUp
         return input;
     }
 
+    /// <summary>
+    /// Display errors on the input field
+    /// </summary>
+    /// <param name="validationReturn">The ValidationReturn returned from the validator</param>
     public void Display(Validator.ValidationReturn validationReturn)
     {
         this.validationReturn = validationReturn;
         Dictionary<uint, string> tags = new Dictionary<uint, string>();
         string displayString = input.text;
         uint offset = 0;
-        Debug.Log(validationReturn);
         if(validationReturn.validationStatus == Validator.ValidationStatus.KO)
         {
             foreach (KeyValuePair<uint, Validator.ValidationReturn.Error> error in validationReturn.specificErrors)
@@ -83,23 +96,37 @@ public class PopUpFillNode : PopUp
                 offset += (uint)tag.Value.Length;
             }
             input.text = displayString;
-            Debug.Log(displayString);
         }
     }
 
-    // really need to verify the way the error is displayed, because of the <b> and <color> attribute. They could move the caret to a different place that is in the validation return from the validator
+    /// <summary>
+    /// Show error messsage
+    /// </summary>
+    /// <param name="index">The index where the caret is</param>
     public void ShowError(int index)
     {
         string errorMessage = "";
-        foreach (var errors in validationReturn.specificErrors)
+        if(validationReturn.specificErrors != null && validationReturn.generalErrors != null)
         {
-            if(index >= errors.Key && index < errors.Value.endPos)
+            foreach (var errors in validationReturn.specificErrors)
             {
-                errorMessage = errors.Value.message;
-                Debug.Log(errorMessage);
-                break;
+                if(index >= errors.Key && index < errors.Value.endPos)
+                {
+                    errorMessage = errors.Value.message;
+                    Debug.Log(errorMessage);
+                    break;
+                }
             }
         }
+    }
+
+    public void Cancel()
+    {
+        cancelAction();
+    }
+    public void Ok()
+    {
+        OkAction();
     }
 
 }

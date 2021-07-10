@@ -81,9 +81,9 @@ public static class Validator
         public override string ToString()
         {
             string returnString = $"{validationStatus}{Environment.NewLine}Errors :{Environment.NewLine}";
-            foreach (Error error in specificErrors.Values)
+            foreach (KeyValuePair<uint, Error> error in specificErrors)
             {
-                returnString += " - " + error.ToString() + Environment.NewLine;
+                returnString += " - " + error.Value.ToString() + Environment.NewLine;
             }
             foreach (string error in generalErrors)
             {
@@ -144,7 +144,7 @@ public static class Validator
             return vr;
         }
 
-        toValidate = FullNameToAbrev(toValidate);
+        toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
 
 
         string[] stringsToFind = new string[] { "Or", "And" };
@@ -174,27 +174,31 @@ public static class Validator
             string[] smallExprSplit = item.Split(separators, StringSplitOptions.RemoveEmptyEntries);
 
             uint codeBlockLength = 0;
+            string fullname = "";
             switch (smallExprSplit.Length)
             {
                 // get the corresponding function, if it exist, and adds it to the result list
                 case 1:
-                    if (abrevToFullName.ContainsKey(smallExprSplit[0]))
-                        codeBlockLength = (uint)abrevToFullName[smallExprSplit[0]].Length + 1;
+                    fullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]);
+                    if (fullname != null)
+                        codeBlockLength = (uint)fullname.Length;
                     else
-                        codeBlockLength = (uint)smallExprSplit[0].Length + 1;
+                        codeBlockLength = (uint)smallExprSplit[0].Length;
 
-                    if (!(smallExprSplit[0][0] == 'b' && abrevToFullName.ContainsKey(smallExprSplit[0])))
+                    if (!(smallExprSplit[0][0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[0])))
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
                         vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
                     }
-                    posInStartString += codeBlockLength;
+                    posInStartString += codeBlockLength + 1; // +1 = space after this word
                     break;
                 // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
                 case 2:
-                    codeBlockLength = (uint)smallExprSplit[0].Length + 2; // 2 = space between the 2 texts + a space a the end
-                    if (abrevToFullName.ContainsKey(smallExprSplit[1]))
-                        codeBlockLength += (uint)abrevToFullName[smallExprSplit[1]].Length;
+                    codeBlockLength = (uint)smallExprSplit[0].Length + 1; // +1 = space after this word
+
+                    fullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[1]);
+                    if (fullname != null)
+                        codeBlockLength += (uint)fullname.Length;
                     else
                         codeBlockLength += (uint)smallExprSplit[1].Length;
 
@@ -205,13 +209,13 @@ public static class Validator
                     }
                     else
                     {
-                        if(!(smallExprSplit[1][0] == 'b' && abrevToFullName.ContainsKey(smallExprSplit[1])))
+                        if(!(smallExprSplit[1][0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[1])))
                         {
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
                         }
                     }
-                    posInStartString += codeBlockLength;
+                    posInStartString += codeBlockLength + 1; // +1 = space after this word
                     break;
                 // evaluate an expression like this one : test + 2 = myVar + 4
                 default:
@@ -220,7 +224,7 @@ public static class Validator
                     // every string while be replaced by the number 1 to test if the expression is correct with a datatable
                     List<string> exprPart1 = new List<string>();
                     List<string> exprPart2 = new List<string>();
-                    string pattern = @"^[a-zA-Z]+$";
+                    string pattern = @"^[a-zA-Z#]+$";
                     Regex regex = new Regex(pattern);
 
                     uint posInStringAtStartOfTest = posInStartString;
@@ -254,28 +258,28 @@ public static class Validator
                                 exprPart2.Add(exprBits);
                         }
 
-                        if (exprBits[0] == 'b' && abrevToFullName.ContainsKey(exprBits))
+                        if (exprBits[0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
                         {
-                            codeBlockLength = (uint)abrevToFullName[exprBits].Length + 1; // space after this word
+                            codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
 
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
                         }
-                        else if (exprBits[0] == 'i' && abrevToFullName.ContainsKey(exprBits))
+                        else if (exprBits[0] == 'i' && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
                         {
-                            codeBlockLength = (uint)abrevToFullName[exprBits].Length + 1; // space after this word
+                            codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
                         }
                         else
                         {
-                            codeBlockLength = (uint)exprBits.Length + 1; // +1 = space after this word
+                            codeBlockLength = (uint)exprBits.Length; 
                         }
 
-                        posInStartString += codeBlockLength;
+                        posInStartString += codeBlockLength + 1; // +1 = space after this word
                     }
                     if (exprPart1.Count <= 0 || exprPart2.Count <= 0)
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
-                        vr.AddSpecificError(posInStringAtStartOfTest, new ValidationReturn.Error(posInStringAtStartOfTest, posInStartString, $"You need two things to compare."));
+                        vr.AddSpecificError(posInStringAtStartOfTest, new ValidationReturn.Error(posInStringAtStartOfTest, posInStartString - 1, $"You need two things to compare."));
                     }
                     else
                     {
@@ -287,7 +291,7 @@ public static class Validator
                         catch (Exception e)
                         {
                             vr.ChangeValidationStatus(ValidationStatus.KO);
-                            vr.AddSpecificError(posInStringAtStartOfTest, new ValidationReturn.Error(posInStringAtStartOfTest, posInStartString, $"{e.Message}")); // need to display custom errors in order to be localized
+                            vr.AddSpecificError(posInStringAtStartOfTest, new ValidationReturn.Error(posInStringAtStartOfTest, posInStartString - 1, $"{e.Message}")); // need to display custom errors in order to be localized
                         }
 
                     }
@@ -305,52 +309,5 @@ public static class Validator
     private static ValidationReturn ValidateForLoop(string[] toValidate)
     {
         return new ValidationReturn(ValidationStatus.KO);
-    }
-
-    // all of this should be moved else where
-
-    /* one string in clear language and one string with function name abreviated
-     * displayed string :   Wall distance = 10 And Wall right
-     * abreviated string :  iwd = 10 And bwr
-     * i = integer function and b = boolean function
-     */
-    // should be loaded dynamicly with a language file in the future
-    public static Dictionary<string, string> abrevToFullName = new Dictionary<string, string>();
-    public static Dictionary<string, string> fullNameToAbrev = new Dictionary<string, string>()
-    {
-        // boolean func
-        {"Wall in front","#bwf"},
-        {"Wall right","#bwr"},
-        {"Wall left","#bwl"},
-        {"Out","#bo"},
-        {"Robot on an outlet","#boao"},
-        {"Tile marked","#btm"},
-        {"Ball on the ground","#bbg"},
-        // int func
-        {"Wall distance","#iwd"},
-        {"Power","#ip"},
-        {"x robot","#ixr"},
-        {"y robot","#iyr"},
-        {"dx robot","#idxr"},
-        {"dy robot","#idyr"},
-        {"x ball","#ixb"},
-        {"y ball","#iyb"},
-    };
-
-    public static void InverseKV()
-    {
-        foreach (KeyValuePair<string,string> item in fullNameToAbrev)
-        {
-            abrevToFullName.Add(item.Value, item.Key);
-        }
-    }
-
-    private static string FullNameToAbrev(string toConvert)
-    {
-        foreach (KeyValuePair<string, string> item in fullNameToAbrev)
-        {
-            toConvert = toConvert.Replace(item.Key, item.Value);
-        }
-        return toConvert;
     }
 }

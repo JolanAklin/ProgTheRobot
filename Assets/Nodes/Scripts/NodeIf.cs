@@ -22,14 +22,53 @@ using System.Linq;
 using System;
 using System.Data;
 using System.Text.RegularExpressions;
+using UnityEngine.EventSystems;
 
-public class NodeIf : Nodes
+public class NodeIf : Nodes, IPointerDownHandler
 {
     private string input;
     private string[] inputSplited;
     public int nextNodeIdFalse;
 
     public TMP_InputField inputField;
+
+    /// <summary>
+    /// When true, a double click can happen
+    /// </summary>
+    private bool doubleClick = false;
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left && doubleClick)
+        {
+            // a double left click happened
+            PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillInNode).GetComponent<PopUpFillNode>();
+            popUpFillNode.Init(Validator.ValidationType.test);
+            popUpFillNode.cancelAction = () =>
+            {
+                popUpFillNode.Close();
+            };
+            popUpFillNode.OkAction = () =>
+            {
+                popUpFillNode.Close();
+            };
+        }
+        else if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            // simple left click happened
+            doubleClick = true;
+            StartCoroutine("DoubleClick");
+        }
+    }
+
+    /// <summary>
+    /// Wait for double click
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DoubleClick()
+    {
+        yield return new WaitForSecondsRealtime(0.4f);
+        doubleClick = false;
+    }
 
     new private void Awake()
     {

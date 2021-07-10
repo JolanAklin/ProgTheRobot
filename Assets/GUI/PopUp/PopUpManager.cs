@@ -39,12 +39,20 @@ public class PopUpManager : MonoBehaviour
         statPopUpBase = popUpBase;
     }
 
+    /// <summary>
+    /// Open main menu pop up
+    /// </summary>
     public void OpenMenu()
     {
         GameObject basePopUp = Instantiate(statPopUpBase, Vector3.zero, Quaternion.identity);
         Instantiate(popUpsDict[PopUpTypes.menu], basePopUp.transform.GetChild(0).GetChild(1));
     }
 
+    /// <summary>
+    /// Open a pop up
+    /// </summary>
+    /// <param name="type">The type of popUp to open</param>
+    /// <returns>Return the opened pop up object</returns>
     public static GameObject ShowPopUp(PopUpTypes type)
     {
         GameObject basePopUp = Instantiate(statPopUpBase, Vector3.zero, Quaternion.identity);
