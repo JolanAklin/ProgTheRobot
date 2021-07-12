@@ -12,7 +12,6 @@ public class PopUpFillNodeInput : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        
         popUpFillNode.ShowError(inputField.caretPosition);
     }
 }
