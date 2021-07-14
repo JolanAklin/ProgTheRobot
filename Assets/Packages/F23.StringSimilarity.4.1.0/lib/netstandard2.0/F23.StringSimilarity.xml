@@ -86,7 +86,8 @@
             Sift4 - a general purpose string distance algorithm inspired by JaroWinkler
             and Longest Common Subsequence.
             Original JavaScript algorithm by siderite, java port by Nathan Fischer 2016.
-            https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html
+            https://siderite.dev/blog/super-fast-and-accurate-string-distance.html
+            https://blackdoor.github.io/blog/sift4-java/
             </summary>
         </member>
         <member name="P:F23.StringSimilarity.Experimental.Sift4.MaxOffset">
@@ -109,7 +110,8 @@
             Sift4 - a general purpose string distance algorithm inspired by JaroWinkler
             and Longest Common Subsequence.
             Original JavaScript algorithm by siderite, java port by Nathan Fischer 2016.
-            https://siderite.blogspot.com/2014/11/super-fast-and-accurate-string-distance.html
+            https://siderite.dev/blog/super-fast-and-accurate-string-distance.html
+            https://blackdoor.github.io/blog/sift4-java/
             </summary>
             <param name="s1"></param>
             <param name="s2"></param>
@@ -485,6 +487,41 @@
             <param name="profile1"></param>
             <param name="profile2"></param>
             <returns></returns>
+        </member>
+        <member name="T:F23.StringSimilarity.RatcliffObershelp">
+             <summary>
+             Ratcliff/Obershelp pattern recognition
+             
+             The Ratcliff/Obershelp algorithm computes the similarity of two strings a
+             the doubled number of matching characters divided by the total number of
+             characters in the two strings.Matching characters are those in the longest
+             common subsequence plus, recursively, matching characters in the unmatched
+             region on either side of the longest common subsequence.
+             The Ratcliff/Obershelp distance is computed as 1 - Ratcliff/Obershelp
+             similarity.
+            
+             Author: Ligi https://github.com/dxpux (as a patch for fuzzystring)
+             Ported to java from .net by denmase
+             Ported back to .NET by paulirwin to retain compatibility with upstream Java project
+             </summary>
+        </member>
+        <member name="M:F23.StringSimilarity.RatcliffObershelp.Similarity(System.String,System.String)">
+            <summary>
+            Compute the Ratcliff-Obershelp similarity between strings.
+            </summary>
+            <param name="s1">The first string to compare.</param>
+            <param name="s2">The second string to compare.</param>
+            <returns>The RatcliffObershelp similarity in the range [0, 1]</returns>
+            <exception cref="T:System.ArgumentNullException">If s1 or s2 is null.</exception>
+        </member>
+        <member name="M:F23.StringSimilarity.RatcliffObershelp.Distance(System.String,System.String)">
+            <summary>
+            Return 1 - similarity.
+            </summary>
+            <param name="s1">The first string to compare.</param>
+            <param name="s2">The second string to compare.</param>
+            <returns>1 - similarity</returns>
+            <exception cref="T:System.ArgumentNullException">If s1 or s2 is null.</exception>
         </member>
         <member name="P:F23.StringSimilarity.ShingleBased.k">
             <summary>

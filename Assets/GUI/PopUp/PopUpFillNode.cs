@@ -10,14 +10,15 @@ using F23.StringSimilarity;
 public class PopUpFillNode : PopUp
 {
     public TMP_Text validationTypeText;
-    public TMP_InputField input;
+    public CustomInputField input;
     public Validator.ValidationType validationType;
-
 
     public CompletionMenu completionMenu;
     // must be filled by the new language manager
     public List<CompletionPossibilities> completionPossibilities = new List<CompletionPossibilities>();
     private CompletionPossibilities completionForRightType;
+
+    private DecisionTree dTree;
 
     [Serializable]
     public class CompletionPossibilities
@@ -30,6 +31,8 @@ public class PopUpFillNode : PopUp
     {
         public double score;
         public string completion;
+        public string toReplace;
+        public CompletionItem.CompletionType completionType;
     }
 
     private Validator.ValidationReturn validationReturn;
@@ -63,11 +66,22 @@ public class PopUpFillNode : PopUp
     public void Validate()
     {
         string toValidate = input.text;
-        toValidate = toValidate.Replace("<color=red><b>", "");
-        toValidate = toValidate.Replace("</b></color>", "");
+        toValidate = RemoveRichTag(toValidate);
         toValidate = FormatInput(toValidate);
         input.text = toValidate;
         Display(Validator.Validate(validationType, toValidate));
+    }
+
+    /// <summary>
+    /// Remove <color> and <b> tags
+    /// </summary>
+    /// <param name="richText"></param>
+    /// <returns></returns>
+    private string RemoveRichTag(string richText)
+    {
+        richText = richText.Replace("<color=red><b>", "");
+        richText = richText.Replace("</b></color>", "");
+        return richText;
     }
 
     /// <summary>
@@ -156,26 +170,24 @@ public class PopUpFillNode : PopUp
 
     private void Start()
     {
-        MakeCompletionDecisionTree();
+        dTree = MakeCompletionDecisionTree();
+        completionMenu.popUpFillNode = this;
     }
 
     #region decision tree
     /// <summary>
-    /// Does a tree with each key word. for example : there is Wall distance and Wall in front function. The algorithme does this :
+    /// Does a tree with each key word. for example : there is "Wall distance" and "Wall in front" function. The algorithme does this :
     /// Wall
-    ///    |- in front
+    ///    |- in
+    ///        |- front
     ///    |- distance
+    ///    
+    /// When the autocompletion algorithm detect on of the first branches it will propose the rest of the branch.
+    /// For example the user writes "Wall" the algorithme will propose the keyword "in" and "distance".
     /// </summary>
-    private void MakeCompletionDecisionTree()
+    private DecisionTree MakeCompletionDecisionTree()
     {
-        Dictionary<string, List<int>> keyWordPos = new Dictionary<string, List<int>>();
-
         DecisionTree tree = new DecisionTree();
-
-        /* first level = 0
-         * so       Wall in front
-         * level      0   1   2
-         */
 
         foreach (string possibility in completionForRightType.possibilities)
         {
@@ -210,8 +222,12 @@ public class PopUpFillNode : PopUp
             }
         }
         Debug.Log(tree.ToString());
+        return tree;
     }
 
+    /// <summary>
+    /// The branch of a tree. Composed of a name and a dictionnary with the next branches
+    /// </summary>
     private class TreeBranch
     {
         public string root;
@@ -240,9 +256,95 @@ public class PopUpFillNode : PopUp
         }
     }
 
+    /// <summary>
+    /// A tree that will help the autocompletion to propose relevent keyword to the user.
+    /// </summary>
     private class DecisionTree
     {
         public Dictionary<string, TreeBranch> branches = new Dictionary<string, TreeBranch>();
+
+        public TreeBranch currentBranch { get; private set; }
+
+        public DecisionTree()
+        {
+            currentBranch = null;
+        }
+
+        /// <summary>
+        /// Show the next branches name
+        /// </summary>
+        /// <returns>The name of all next branches</returns>
+        public string[] getNextBranches()
+        {
+            string[] nextBranches = null;
+            if (currentBranch == null)
+            {
+                nextBranches = new string[branches.Count];
+                for (int i = 0; i < nextBranches.Length; i++)
+                {
+                    nextBranches[i] = branches.ElementAt(i).Value.root;
+                }
+            }else
+            {
+                nextBranches = new string[currentBranch.nextBranches.Count];
+                for (int i = 0; i < nextBranches.Length; i++)
+                {
+                    nextBranches[i] = currentBranch.nextBranches.ElementAt(i).Value.root;
+                }
+            }
+            return nextBranches;
+        }
+
+        /// <summary>
+        /// Select the new current branch
+        /// </summary>
+        /// <param name="nextBranch">The branch to select</param>
+        public void SelectNextBranch(string nextBranch)
+        {
+            if(currentBranch == null)
+            {
+                if (branches.ContainsKey(nextBranch))
+                    currentBranch = branches[nextBranch];
+                else
+                    throw new BranchNotFoundException(nextBranch);
+            }else
+            {
+                if (currentBranch.nextBranches.ContainsKey(nextBranch))
+                    currentBranch = currentBranch.nextBranches[nextBranch];
+                else
+                    throw new BranchNotFoundException(nextBranch);
+            }
+        }
+
+        /// <summary>
+        /// Go to the roots if the tree
+        /// </summary>
+        public void GoToRoots()
+        {
+            currentBranch = null;
+        }
+
+        /// <summary>
+        /// Test if the current branch has another branch after
+        /// </summary>
+        /// <returns>True if the current branch has a branch after</returns>
+        public bool CurrentBranchHasNext()
+        {
+            if(currentBranch != null)
+            {
+                if (currentBranch.nextBranches.Count > 0)
+                    return true;
+                else
+                    return false;
+            }
+            else
+            {
+                if (branches.Count > 0)
+                    return true;
+                else
+                    return false;
+            }
+        }
 
         public override string ToString()
         {
@@ -253,38 +355,155 @@ public class PopUpFillNode : PopUp
             }
             return message;
         }
+
+        [Serializable]
+        public class BranchNotFoundException : Exception
+        {
+            public BranchNotFoundException() { }
+            public BranchNotFoundException(string message) : base($"Asked Branch : \"{ message }\" not found.") { }
+            public BranchNotFoundException(string message, Exception inner) : base(message, inner) { }
+            protected BranchNotFoundException(
+              System.Runtime.Serialization.SerializationInfo info,
+              System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+        }
     }
     #endregion
 
-    public void PredictCompletion()
+    public bool hasCompleted = false;
+
+    public void PredictCompletion(bool forceShow = false)
     {
-        if (!input.isFocused)
+        if (!input.isFocused && !forceShow)
             return;
         // store the score and the text to complete with
         List<Completion> proba = new List<Completion>();
-
-        Jaccard jd = new Jaccard();
-        double score;
-        double heighestScore = 0;
-        foreach (string possibility in completionForRightType.possibilities)
+        string toComplete = "";
+        if (!hasCompleted)
+            toComplete = FindWord(RemoveRichTag(input.text), input.caretPosition);
+        else
         {
-            score = jd.Similarity(input.text, possibility);
-            if (score > heighestScore)
-                heighestScore = score;
-            if(score > 0.15)
+            toComplete = "";
+            hasCompleted = false;
+        }
+        foreach (string possibility in dTree.getNextBranches())
+        {
+            if (possibility.StartsWith(toComplete, StringComparison.OrdinalIgnoreCase))
             {
-                proba.Add(new Completion() { score = score, completion = possibility });
+                proba.Add(new Completion() { score = (double)possibility.Length / toComplete.Length, completion = possibility, toReplace = toComplete, completionType = CompletionItem.CompletionType.sub });
+                if (toComplete.ToLower() == possibility.ToLower())
+                {
+                    Complete(possibility, toComplete);
+                    return;
+                }
             }
         }
-        Debug.Log(heighestScore);
+        if (proba.Count == 0)
+            return;
         Completion[] completionProbabilitiesArray = proba.ToArray();
         QuickSortCompletionProbability(completionProbabilitiesArray, 0, proba.Count - 1);
         completionMenu.ShowCompletionProposition(completionProbabilitiesArray);
     }
 
+    public void Complete(string completion, string toReplace)
+    {
+        hasCompleted = true;
+        Debug.Log("completed"); // when completing with a root keyword its called more that 600 times
+        dTree.SelectNextBranch(completion);
+        if (!dTree.CurrentBranchHasNext())
+            dTree.GoToRoots();
+        completion += " ";
+        if (toReplace == "")
+        {
+            string completedString = input.text;
+            completedString = completedString.Insert(input.caretPosition, completion);
+            input.text = completedString;
+            input.stringPosition += completion.Length;
+        }
+        else
+        {
+            string completedString = input.text;
+            int[] toRemove = FindNearestWord(toReplace, completedString, input.caretPosition);
+            completedString = completedString.Remove(toRemove[0], toRemove[1]);
+            completedString = completedString.Insert(toRemove[0], completion);
+            input.text = completedString;
+            input.stringPosition = toRemove[0] + completion.Length;
+        }
+    }
+
+    private int[] FindNearestWord(string wordToFind, string text, int pos)
+    {
+        Regex findWord = new Regex(wordToFind);
+
+        MatchCollection matches = findWord.Matches(text);
+
+        if (matches.Count == 0)
+            return null;
+
+        int nearestMatch = Mathf.Abs(matches[0].Index + matches[0].Length - pos);
+        int nearestMatchPos = 0;
+
+        for (int i = 1; i < matches.Count; i++)
+        {
+            int matchDistance = Mathf.Abs(matches[i].Index + matches[i].Length - pos);
+            if (matchDistance < nearestMatch)
+            {
+                nearestMatch = matchDistance;
+                nearestMatchPos = i;
+            }
+        }
+
+        return new int[2] { matches[nearestMatchPos].Index, matches[nearestMatchPos].Length };
+    }
+
+    /// <summary>
+    /// Find the nearest word from the specified pos
+    /// </summary>
+    /// <param name="text">The text to search the word</param>
+    /// <param name="pos">The pos that the word needs to be near of</param>
+    /// <returns>The value of the closest word from the given pos</returns>
+    private string FindWord(string text, int pos)
+    {
+        // if the caret is after a space, it is considered has a new word so returning "" while show all proposition.
+        if (pos > 0)
+            if (text[pos - 1] == ' ')
+                return "";
+
+        string regexWord = @"[a-zA-Z]+";
+        Regex findWord = new Regex(regexWord);
+
+        MatchCollection matches = findWord.Matches(text);
+
+        if(matches.Count == 0)
+            return "";
+
+        int nearestMatch = Mathf.Abs(matches[0].Index - pos);
+        int nearestMatchPos = 0;
+
+        // find the nearest match
+        for (int i = 1; i < matches.Count; i++)
+        {
+            int matchDistance = Mathf.Abs(matches[i].Index - pos);
+            if (matchDistance < nearestMatch)
+            {
+                nearestMatch = matchDistance;
+                nearestMatchPos = i;
+            }
+
+            matchDistance = Mathf.Abs(matches[i].Index + matches[i].Length - pos);
+            if (matchDistance < nearestMatch)
+            {
+                nearestMatch = matchDistance;
+                nearestMatchPos = i;
+            }
+        }
+
+        return matches[nearestMatchPos].Value;
+    }
+
+    #region quick sort
     /// <summary>
     /// <see cref="https://www.geeksforgeeks.org/quick-sort/"/>
-    /// Sort an array using quicksort algorithme
+    /// Sort an array using quicksort algorithm
     /// </summary>
     /// <param name="arr">The array to sort</param>
     /// <param name="low">the start point</param>
@@ -331,6 +550,7 @@ public class PopUpFillNode : PopUp
         arr[high] = temp;
         return (i + 1);
     }
+    #endregion
 
     #endregion
 

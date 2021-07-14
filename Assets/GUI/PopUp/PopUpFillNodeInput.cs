@@ -6,8 +6,7 @@ using TMPro;
 
 public class PopUpFillNodeInput : MonoBehaviour, IPointerClickHandler
 {
-    public Camera mainCamera;
-    public TMP_InputField inputField;
+    public CustomInputField inputField;
     public PopUpFillNode popUpFillNode;
 
     public void OnPointerClick(PointerEventData eventData)

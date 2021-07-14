@@ -134,6 +134,7 @@ public static class Validator
         string toValidateNonAltered = toValidate;
         ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
 
+        // need to test with this [^a-zA-Z...] should work
         string regexPattern = @"[^a-z^A-Z^0-9^+^\-^*^/^(^)^>^<^=^\s]+";
         Regex regex1 = new Regex(regexPattern);
         if(regex1.IsMatch(toValidate))
