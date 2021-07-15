@@ -15,7 +15,7 @@ public class CompletionItem : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public Color selectColor;
     public TMP_Text completionIndication;
     public List<CompletionIndication> completionIndications = new List<CompletionIndication>();
-    public CompletionType type;
+    public PopUpFillNode.BranchType type;
     private Image image;
 
     public CompletionMenu completionMenu;
@@ -24,15 +24,8 @@ public class CompletionItem : MonoBehaviour, IPointerClickHandler, IPointerEnter
     [Serializable]
     public class CompletionIndication
     {
-        public CompletionType type;
+        public PopUpFillNode.BranchType type;
         public string indication;
-    }
-
-    public enum CompletionType
-    {
-        integer,
-        boolean,
-        sub,
     }
 
     private void Awake()

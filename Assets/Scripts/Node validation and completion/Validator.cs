@@ -65,7 +65,8 @@ public static class Validator
 
         public void AddSpecificError(uint pos, Error error)
         {
-            specificErrors.Add(pos, error);
+            if(!specificErrors.ContainsKey(pos))
+                specificErrors.Add(pos, error);
         }
 
         public void AddGeneralErrors(string error)
@@ -202,7 +203,6 @@ public static class Validator
                         codeBlockLength += (uint)fullname.Length;
                     else
                         codeBlockLength += (uint)smallExprSplit[1].Length;
-
                     if (smallExprSplit[0] != "No")
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);

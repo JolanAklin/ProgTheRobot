@@ -672,6 +672,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   completionProposition: {fileID: 8870234562125715562, guid: 1da837b0eb8d27048a27ab6be7cf354a, type: 3}
   completionPanel: {fileID: 3646763282175384906}
+  popUpFillNode: {fileID: 0}
 --- !u!114 &6835804443859864904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1052,26 +1053,27 @@ MonoBehaviour:
   completionPossibilities:
   - typeOfValidation: 0
     possibilities:
-    - Wall in front
-    - Wall left
-    - Wall right
-    - Wall distance
-    - Out
-    - Robot on an outlet
-    - Tile marked
-    - Ball on ground
-    - Power
-    - Robot position x
-    - Robot position y
-    - Robot direction x
-    - Robot direction y
-    - Ball position x
-    - Ball position y
-    - And
-    - Or
-    - No
-    - True
-    - False
+    - Wall in front bool
+    - Wall left bool
+    - Wall right bool
+    - Wall distance int
+    - Out bool
+    - Robot on an outlet bool
+    - Tile marked bool
+    - Ball on ground bool
+    - Power int
+    - Robot position x int
+    - Robot position y int
+    - Robot direction x int
+    - Robot direction y int
+    - Ball position x int
+    - Ball position y int
+    - And boolOp
+    - Or boolOp
+    - No boolOp
+    - True bool
+    - False bool
+  hasCompleted: 0
 --- !u!1 &6997163655983856632
 GameObject:
   m_ObjectHideFlags: 0

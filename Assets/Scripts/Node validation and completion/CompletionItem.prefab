@@ -262,6 +262,8 @@ MonoBehaviour:
   - type: 1
     indication: 1011
   - type: 2
+    indication: 01^11
+  - type: 3
     indication: '>'
   type: 0
   completionMenu: {fileID: 0}

@@ -35,12 +35,12 @@ public class LanguageManager : MonoBehaviour
         // int func
         {"Wall distance","iwd#"},
         {"Power","ip#"},
-        {"x robot","ixr#"},
-        {"y robot","iyr#"},
-        {"dx robot","idxr#"},
-        {"dy robot","idyr#"},
-        {"x ball","ixb#"},
-        {"y ball","iyb#"},
+        {"Robot position x","irpx#"},
+        {"Robot position y","irpy#"},
+        {"Robot direction x","irdx#"},
+        {"Robot direction y","irdy#"},
+        {"Ball position x","ibpx#"},
+        {"Ball position y","ibpy#"},
     };
 
     /// <summary>
