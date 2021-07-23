@@ -121,6 +121,7 @@ public class PopUpFillNode : PopUp
         uint offset = 0;
         if(validationReturn.validationStatus == Validator.ValidationStatus.KO)
         {
+            // adds tag in a list to put them correctly in the string
             foreach (KeyValuePair<uint, Validator.ValidationReturn.Error> error in validationReturn.specificErrors)
             {
                 if(!(tags.ContainsKey(error.Value.startPos) || tags.ContainsKey(error.Value.endPos)))
@@ -168,16 +169,32 @@ public class PopUpFillNode : PopUp
 
     #region Autocompletion
 
+
     private void Start()
     {
         dTree = MakeCompletionDecisionTree();
         completionMenu.popUpFillNode = this;
+
+        lastInputStringLength = input.text.Length;
+        lastCaretPos = input.caretPosition;
     }
+
+    private int lastInputStringLength = 0;
+    private int lastCaretPos = 0;
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Backspace))
             lastKeyWasBackspace = true;
+
+        // test if the caret has been moved by the mouse
+        if (lastInputStringLength == input.text.Length && lastCaretPos != input.caretPosition)
+        {
+            dTree.GoToRoots();
+            PredictCompletion();
+        }
+        lastInputStringLength = input.text.Length;
+        lastCaretPos = input.caretPosition;
     }
 
     #region decision tree
@@ -208,6 +225,7 @@ public class PopUpFillNode : PopUp
 
                 TreeBranch treeBranch = new TreeBranch() { root = temp[i] };
 
+                // set the branch type. defined by the last word of the function name, for example : Wall in front bool.
                 if(i == temp.Count - 2)
                 {
                     switch (temp[i + 1])
@@ -227,22 +245,23 @@ public class PopUpFillNode : PopUp
                     }
                 }
 
+                // link the branch to its parent or the base of the tree
                 if(i > 0)
                 {
-                    TreeBranch previousBranch = previousBranch = tree.branches[temp[0]];
+                    TreeBranch parentBranch = parentBranch = tree.branches[temp[0]];
                     for (int j = 1; j < i; j++)
                     {
-                        if(previousBranch.nextBranches.ContainsKey(temp[j]))
+                        if(parentBranch.nextBranches.ContainsKey(temp[j]))
                         {
-                            previousBranch = previousBranch.nextBranches[temp[j]];
+                            parentBranch = parentBranch.nextBranches[temp[j]];
                         }
                     }
-                    if(previousBranch != null)
+                    if(parentBranch != null)
                     {
-                        if (!previousBranch.nextBranches.ContainsKey(treeBranch.root))
+                        if (!parentBranch.nextBranches.ContainsKey(treeBranch.root))
                         {
-                            treeBranch.parent = previousBranch;
-                            previousBranch.nextBranches.Add(treeBranch.root, treeBranch);
+                            treeBranch.parent = parentBranch;
+                            parentBranch.nextBranches.Add(treeBranch.root, treeBranch);
                         }
                     }
                 }else if(i == 0)
@@ -270,7 +289,7 @@ public class PopUpFillNode : PopUp
     private class TreeBranch
     {
         public string root;
-        public TreeBranch parent;
+        public TreeBranch parent = null;
         public Dictionary<string, TreeBranch> nextBranches = new Dictionary<string, TreeBranch>();
         public BranchType type = BranchType.branch;
 
@@ -426,16 +445,21 @@ public class PopUpFillNode : PopUp
         }
         if (!input.isFocused && !forceShow)
             return;
+
+
         // store the score and the text to complete with
         List<Completion> proba = new List<Completion>();
         string toComplete = "";
         if (!hasCompleted)
+        {
             toComplete = FindWord(RemoveRichTag(input.text), input.caretPosition);
+        }
         else
         {
             toComplete = "";
             hasCompleted = false;
         }
+        // find completion possibilities
         foreach (TreeBranch possibility in dTree.getNextBranches())
         {
             if (possibility.root.StartsWith(toComplete, StringComparison.OrdinalIgnoreCase))
@@ -443,13 +467,27 @@ public class PopUpFillNode : PopUp
                 proba.Add(new Completion() { score = (double)possibility.root.Length / toComplete.Length, completion = possibility.root, toReplace = toComplete, completionType = possibility.type });
                 if (toComplete.ToLower() == possibility.root.ToLower())
                 {
-                    Complete(possibility.root, toComplete);
+                    // rewrite the word if the case does not match
+                    if(toComplete != possibility.root)
+                        Complete(possibility.root, toComplete);
+                    else
+                    {
+                        dTree.SelectNextBranch(possibility.root);
+                        if (!dTree.CurrentBranchHasNext())
+                            dTree.GoToRoots();
+
+                        string completedString = input.text;
+                        completedString = completedString.Insert(input.stringPosition, " ");
+                        input.text = completedString;
+                        input.stringPosition += 1;
+                    }
                     return;
                 }
             }
         }
         if (proba.Count == 0)
             return;
+        // show completion proposition to the user
         Completion[] completionProbabilitiesArray = proba.ToArray();
         QuickSortCompletionProbability(completionProbabilitiesArray, 0, proba.Count - 1);
         completionMenu.ShowCompletionProposition(completionProbabilitiesArray);
@@ -467,6 +505,7 @@ public class PopUpFillNode : PopUp
         if (!dTree.CurrentBranchHasNext())
             dTree.GoToRoots();
         completion += " ";
+        // if there is nothing to override, it just insert it
         if (toReplace == "")
         {
             string completedString = input.text;
@@ -474,6 +513,7 @@ public class PopUpFillNode : PopUp
             input.text = completedString;
             input.stringPosition += completion.Length;
         }
+        // replace a given word
         else
         {
             string completedString = input.text;
@@ -525,7 +565,8 @@ public class PopUpFillNode : PopUp
     /// <returns>The value of the closest word from the given pos</returns>
     private string FindWord(string text, int pos)
     {
-        // if the caret is after a space, it is considered has a new word so returning "" while show all proposition.
+        // if the caret is after a space, it is considered has a new word so returning "" will show all proposition.
+        // 
         if (pos > 0)
             if (text[pos - 1] == ' ')
                 return "";
@@ -538,20 +579,13 @@ public class PopUpFillNode : PopUp
         if(matches.Count == 0)
             return "";
 
-        int nearestMatch = Mathf.Abs(matches[0].Index - pos);
+        int nearestMatch = Mathf.Abs(matches[0].Index + matches[0].Length - pos);
         int nearestMatchPos = 0;
 
         // find the nearest match
         for (int i = 1; i < matches.Count; i++)
         {
-            int matchDistance = Mathf.Abs(matches[i].Index - pos);
-            if (matchDistance < nearestMatch)
-            {
-                nearestMatch = matchDistance;
-                nearestMatchPos = i;
-            }
-
-            matchDistance = Mathf.Abs(matches[i].Index + matches[i].Length - pos);
+            int matchDistance = Mathf.Abs(matches[i].Index + matches[i].Length - pos);
             if (matchDistance < nearestMatch)
             {
                 nearestMatch = matchDistance;
