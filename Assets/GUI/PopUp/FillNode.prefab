@@ -1070,7 +1070,7 @@ MonoBehaviour:
     - Ball position y int
     - And boolOp
     - Or boolOp
-    - No boolOp
+    - Not boolOp
     - True bool
     - False bool
   hasCompleted: 0

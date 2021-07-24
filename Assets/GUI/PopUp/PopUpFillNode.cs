@@ -31,7 +31,6 @@ public class PopUpFillNode : PopUp
     {
         public double score;
         public string completion;
-        public string toReplace;
         public BranchType completionType;
     }
 
@@ -191,7 +190,18 @@ public class PopUpFillNode : PopUp
         if (lastInputStringLength == input.text.Length && lastCaretPos != input.caretPosition)
         {
             dTree.GoToRoots();
-            PredictCompletion();
+            toReplace = "";
+            List<Completion> proba = new List<Completion>();
+            foreach (TreeBranch possibility in dTree.getNextBranches())
+            {
+                proba.Add(new Completion() { score = Mathf.Infinity, completion = possibility.root, completionType = possibility.type });
+            }
+            if (proba.Count == 0)
+                return;
+            // show completion proposition to the user
+            Completion[] completionProbabilitiesArray = proba.ToArray();
+            QuickSortCompletionProbability(completionProbabilitiesArray, 0, proba.Count - 1);
+            completionMenu.ShowCompletionProposition(completionProbabilitiesArray);
         }
         lastInputStringLength = input.text.Length;
         lastCaretPos = input.caretPosition;
@@ -431,6 +441,7 @@ public class PopUpFillNode : PopUp
 
     public bool hasCompleted = false;
     private bool lastKeyWasBackspace;
+    public string toReplace { get; private set; }
 
     /// <summary>
     /// Predict what the user can write
@@ -438,6 +449,10 @@ public class PopUpFillNode : PopUp
     /// <param name="forceShow">Show the completion list even if the input is not focused</param>
     public void PredictCompletion(bool forceShow = false)
     {
+        if(input.hasPasted)
+        {
+            return;
+        }
         if(lastKeyWasBackspace)
         {
             lastKeyWasBackspace = false;
@@ -459,12 +474,13 @@ public class PopUpFillNode : PopUp
             toComplete = "";
             hasCompleted = false;
         }
+        toReplace = toComplete;
         // find completion possibilities
         foreach (TreeBranch possibility in dTree.getNextBranches())
         {
             if (possibility.root.StartsWith(toComplete, StringComparison.OrdinalIgnoreCase))
             {
-                proba.Add(new Completion() { score = (double)possibility.root.Length / toComplete.Length, completion = possibility.root, toReplace = toComplete, completionType = possibility.type });
+                proba.Add(new Completion() { score = (double)possibility.root.Length / toComplete.Length, completion = possibility.root, completionType = possibility.type });
                 if (toComplete.ToLower() == possibility.root.ToLower())
                 {
                     // rewrite the word if the case does not match
@@ -472,6 +488,7 @@ public class PopUpFillNode : PopUp
                         Complete(possibility.root, toComplete);
                     else
                     {
+                        hasCompleted = true;
                         dTree.SelectNextBranch(possibility.root);
                         if (!dTree.CurrentBranchHasNext())
                             dTree.GoToRoots();

@@ -132,6 +132,9 @@ public static class Validator
     /// <returns>An object containing the validation status and errors</returns>
     private static ValidationReturn ValidateTest(string toValidate)
     {
+        if(toValidate == "")
+            return new ValidationReturn(ValidationStatus.OK);
+
         string toValidateNonAltered = toValidate;
         ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
 
@@ -189,8 +192,11 @@ public static class Validator
 
                     if (!(smallExprSplit[0][0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[0])))
                     {
-                        vr.ChangeValidationStatus(ValidationStatus.KO);
-                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
+                        if(!(smallExprSplit[0] == "False" || smallExprSplit[0] == "True"))
+                        {
+                            vr.ChangeValidationStatus(ValidationStatus.KO);
+                            vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
+                        }
                     }
                     posInStartString += codeBlockLength + 1; // +1 = space after this word
                     break;
@@ -203,7 +209,7 @@ public static class Validator
                         codeBlockLength += (uint)fullname.Length;
                     else
                         codeBlockLength += (uint)smallExprSplit[1].Length;
-                    if (smallExprSplit[0] != "No")
+                    if (smallExprSplit[0] != "Not")
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
                         vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"The keyword \"{smallExprSplit[0]}\" is unknown."));
@@ -212,8 +218,11 @@ public static class Validator
                     {
                         if(!(smallExprSplit[1][0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[1])))
                         {
-                            vr.ChangeValidationStatus(ValidationStatus.KO);
-                            vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
+                            if (!(smallExprSplit[1] == "False" || smallExprSplit[1] == "True"))
+                            {
+                                vr.ChangeValidationStatus(ValidationStatus.KO);
+                                vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
+                            }
                         }
                     }
                     posInStartString += codeBlockLength + 1; // +1 = space after this word

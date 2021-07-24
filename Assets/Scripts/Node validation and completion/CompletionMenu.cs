@@ -34,7 +34,6 @@ public class CompletionMenu : MonoBehaviour
             completionItem.SetText(completions[i].completion);
             completionItem.completionMenu = this;
             completionItem.popUpFillNode = popUpFillNode;
-            completionItem.toReplace = completions[i].toReplace;
             completionItem.type = completions[i].completionType;
             completionItems.Add(completionItem);
             if(i == 0)

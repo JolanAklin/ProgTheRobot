@@ -1406,6 +1406,7 @@ namespace TMPro
         // TODO: Make LateUpdate a coroutine instead. Allows us to control the update to only be when the field is active.
         protected virtual void LateUpdate()
         {
+            hasPasted = false;
             // Only activate if we are not already activated.
             if (m_ShouldActivateNextUpdate)
             {
@@ -1885,6 +1886,12 @@ namespace TMPro
             Finish
         }
 
+
+        /// <summary>
+        /// Used to determine if the completion needs to be ran. The completion should not be ran when some text is pasted.
+        /// </summary>
+        public bool hasPasted { get; private set; }
+
         protected EditState KeyPressed(Event evt)
         {
             var currentEventModifiers = evt.modifiers;
@@ -1949,6 +1956,7 @@ namespace TMPro
                     {
                         if (ctrlOnly)
                         {
+                            hasPasted = true;
                             Append(clipboard);
                             return EditState.Continue;
                         }

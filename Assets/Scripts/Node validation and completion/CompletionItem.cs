@@ -10,7 +10,6 @@ using System;
 public class CompletionItem : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public TMP_Text text;
-    public string toReplace;
     public Color defaultColor;
     public Color selectColor;
     public TMP_Text completionIndication;
@@ -47,7 +46,7 @@ public class CompletionItem : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void Complete()
     {
-        popUpFillNode.Complete(text.text, toReplace);
+        popUpFillNode.Complete(text.text, popUpFillNode.toReplace);
     }
 
     public void OnPointerClick(PointerEventData eventData)
