@@ -183,9 +183,6 @@ public class PopUpFillNode : PopUp
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Backspace))
-            lastKeyWasBackspace = true;
-
         // test if the caret has been moved by the mouse
         if (lastInputStringLength == input.text.Length && lastCaretPos != input.caretPosition)
         {
@@ -205,6 +202,11 @@ public class PopUpFillNode : PopUp
         }
         lastInputStringLength = input.text.Length;
         lastCaretPos = input.caretPosition;
+    }
+
+    private void LateUpdate()
+    {
+        hasProcessedBackSpace = false;
     }
 
     #region decision tree
@@ -386,6 +388,17 @@ public class PopUpFillNode : PopUp
             }
         }
 
+        public void GoToParent()
+        {
+            if(currentBranch != null)
+            {
+                if (currentBranch.parent != null)
+                    currentBranch = currentBranch.parent;
+                else
+                    GoToRoots();
+            }
+        }
+
         /// <summary>
         /// Go to the roots if the tree
         /// </summary>
@@ -440,7 +453,8 @@ public class PopUpFillNode : PopUp
     #endregion
 
     public bool hasCompleted = false;
-    private bool lastKeyWasBackspace;
+    private bool lastKeyWasBackspace = false;
+    private bool hasProcessedBackSpace = false;
     public string toReplace { get; private set; }
 
     /// <summary>
@@ -449,13 +463,12 @@ public class PopUpFillNode : PopUp
     /// <param name="forceShow">Show the completion list even if the input is not focused</param>
     public void PredictCompletion(bool forceShow = false)
     {
+        if(Input.GetKeyDown(KeyCode.Backspace) && !hasProcessedBackSpace)
+        {
+            lastKeyWasBackspace = true;
+        }
         if(input.hasPasted)
         {
-            return;
-        }
-        if(lastKeyWasBackspace)
-        {
-            lastKeyWasBackspace = false;
             return;
         }
         if (!input.isFocused && !forceShow)
@@ -488,20 +501,47 @@ public class PopUpFillNode : PopUp
                         Complete(possibility.root, toComplete);
                     else
                     {
-                        hasCompleted = true;
-                        dTree.SelectNextBranch(possibility.root);
-                        if (!dTree.CurrentBranchHasNext())
-                            dTree.GoToRoots();
 
-                        string completedString = input.text;
-                        completedString = completedString.Insert(input.stringPosition, " ");
-                        input.text = completedString;
-                        input.stringPosition += 1;
+                        if(!lastKeyWasBackspace)
+                        {
+                            hasCompleted = true;
+                            dTree.SelectNextBranch(possibility.root);
+                            if (!dTree.CurrentBranchHasNext())
+                                dTree.GoToRoots();
+                            string completedString = input.text;
+                            completedString = completedString.Insert(input.stringPosition, " ");
+                            input.text = completedString;
+                            input.stringPosition += 1;
+                        }
+                        else
+                        {
+                            lastKeyWasBackspace = false;
+                            hasProcessedBackSpace = true;
+
+                            if(toComplete.Length == 0)
+                            {
+                                dTree.GoToParent();
+                                PredictCompletion();
+                                return;
+                            }
+                        }
                     }
                     return;
                 }
             }
         }
+        if(lastKeyWasBackspace)
+        {
+            lastKeyWasBackspace = false;
+            hasProcessedBackSpace = true;
+            if (toComplete.Length == 0)
+            {
+                dTree.GoToParent();
+                PredictCompletion();
+                return;
+            }
+        }
+        Debug.Log(toReplace);
         if (proba.Count == 0)
             return;
         // show completion proposition to the user
