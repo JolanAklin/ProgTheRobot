@@ -14,6 +14,10 @@ public class PopUpNodeInput : MonoBehaviour
 
     public Validator.ValidationType validationType;
 
+    public Validator.ValidationReturn validation { get; private set; }
+
+    public PopUpFillNode popUpFillNode;
+
     public class Completion
     {
         public double score;
@@ -21,11 +25,14 @@ public class PopUpNodeInput : MonoBehaviour
         public LanguageManager.BranchType completionType;
     }
 
-    private Validator.ValidationReturn validationReturn;
-
     public void OnSelect()
     {
         LanguageManager.instance.DTrees[validationType].GoToRoots();
+    }
+
+    public void OnDeselect()
+    {
+        completionMenu.Close();
     }
 
     private void Start()
@@ -50,7 +57,12 @@ public class PopUpNodeInput : MonoBehaviour
         toValidate = RemoveRichTag(toValidate);
         toValidate = FormatInput(toValidate);
         input.text = toValidate;
-        Display(Validator.Validate(validationType, toValidate));
+        validation = Validator.Validate(validationType, toValidate);
+        if (validation.validationStatus == Validator.ValidationStatus.KO)
+            popUpFillNode.ShowInfo(true, "");
+        else
+            popUpFillNode.ShowInfo(false, "No error found");
+        Display(validation);
     }
 
     /// <summary>
@@ -96,7 +108,6 @@ public class PopUpNodeInput : MonoBehaviour
     /// <param name="validationReturn">The ValidationReturn returned from the validator</param>
     public void Display(Validator.ValidationReturn validationReturn)
     {
-        this.validationReturn = validationReturn;
         Dictionary<uint, string> tags = new Dictionary<uint, string>();
         string displayString = input.text;
         uint offset = 0;
@@ -132,17 +143,21 @@ public class PopUpNodeInput : MonoBehaviour
     public void ShowError(int index)
     {
         string errorMessage = "";
-        if (validationReturn.specificErrors != null && validationReturn.generalErrors != null)
+        if (validation.specificErrors != null && validation.generalErrors != null)
         {
-            foreach (var errors in validationReturn.specificErrors)
+            foreach (var errors in validation.specificErrors)
             {
-                if (index >= errors.Key && index < errors.Value.endPos)
+                if (index >= errors.Key && index <= errors.Value.endPos)
                 {
                     errorMessage = errors.Value.message;
-                    Debug.Log(errorMessage);
-                    break;
+                    popUpFillNode.ShowInfo(true, errorMessage);
+                    return;
                 }
             }
+            if (validation.validationStatus == Validator.ValidationStatus.KO)
+                popUpFillNode.ShowInfo(true, "");
+            else
+                popUpFillNode.ShowInfo(false, "No error found");
         }
     }
 

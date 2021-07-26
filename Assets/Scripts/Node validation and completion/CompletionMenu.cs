@@ -23,11 +23,7 @@ public class CompletionMenu : MonoBehaviour
 
     public void ShowCompletionProposition(PopUpNodeInput.Completion[] completions)
     {
-        completionItems.Clear();
-        foreach (Transform child in completionPanel.transform)
-        {
-            Destroy(child.gameObject);
-        }
+        Close();
         for (int i = 0; i < completions.Length; i++)
         {
             CompletionItem completionItem = Instantiate(completionProposition, completionPanel.transform).GetComponent<CompletionItem>();
@@ -42,6 +38,15 @@ public class CompletionMenu : MonoBehaviour
             }
         }
         LayoutRebuilder.ForceRebuildLayoutImmediate(completionPanelRectTransform);
+    }
+
+    public void Close()
+    {
+        completionItems.Clear();
+        foreach (Transform child in completionPanel.transform)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     private void Update()

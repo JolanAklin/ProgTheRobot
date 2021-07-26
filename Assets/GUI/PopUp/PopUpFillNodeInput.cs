@@ -4,13 +4,19 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using TMPro;
 
-public class PopUpFillNodeInput : MonoBehaviour, IPointerClickHandler
+public class PopUpFillNodeInput : MonoBehaviour
 {
     public CustomInputField inputField;
     public PopUpNodeInput popUpNodeInput;
 
-    public void OnPointerClick(PointerEventData eventData)
+    private int lastCaretPosition = 0;
+
+    private void Update()
     {
-        popUpNodeInput.ShowError(inputField.caretPosition);
+        if(inputField.caretPosition != lastCaretPosition)
+        {
+            popUpNodeInput.ShowError(inputField.caretPosition);
+            lastCaretPosition = inputField.caretPosition;
+        }
     }
 }
