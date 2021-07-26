@@ -14,16 +14,16 @@ public class CompletionItem : MonoBehaviour, IPointerClickHandler, IPointerEnter
     public Color selectColor;
     public TMP_Text completionIndication;
     public List<CompletionIndication> completionIndications = new List<CompletionIndication>();
-    public PopUpFillNode.BranchType type;
+    public LanguageManager.BranchType type;
     private Image image;
 
     public CompletionMenu completionMenu;
-    public PopUpFillNode popUpFillNode;
+    public PopUpNodeInput popUpFillNodeInput;
 
     [Serializable]
     public class CompletionIndication
     {
-        public PopUpFillNode.BranchType type;
+        public LanguageManager.BranchType type;
         public string indication;
     }
 
@@ -46,7 +46,7 @@ public class CompletionItem : MonoBehaviour, IPointerClickHandler, IPointerEnter
 
     public void Complete()
     {
-        popUpFillNode.Complete(text.text, popUpFillNode.toReplace);
+        popUpFillNodeInput.Complete(text.text, popUpFillNodeInput.toReplace);
     }
 
     public void OnPointerClick(PointerEventData eventData)

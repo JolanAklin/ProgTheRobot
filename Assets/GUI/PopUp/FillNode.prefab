@@ -198,6 +198,7 @@ GameObject:
   - component: {fileID: 3495598613859328702}
   - component: {fileID: 3139052747934928664}
   - component: {fileID: 8691804530616607920}
+  - component: {fileID: 1645949807596707363}
   m_Layer: 5
   m_Name: InputField
   m_TagString: Untagged
@@ -276,7 +277,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputField: {fileID: 8691804530616607920}
-  popUpFillNode: {fileID: 6063664865070612006}
+  popUpNodeInput: {fileID: 1645949807596707363}
 --- !u!114 &8691804530616607920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,8 +340,8 @@ MonoBehaviour:
   m_OnEndEdit:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6063664865070612006}
-        m_TargetAssemblyTypeName: PopUpFillNode, Assembly-CSharp
+      - m_Target: {fileID: 1645949807596707363}
+        m_TargetAssemblyTypeName: PopUpNodeInput, Assembly-CSharp
         m_MethodName: Validate
         m_Mode: 1
         m_Arguments:
@@ -356,16 +357,10 @@ MonoBehaviour:
       m_Calls: []
   m_OnSelect:
     m_PersistentCalls:
-      m_Calls: []
-  m_OnDeselect:
-    m_PersistentCalls:
-      m_Calls: []
-  m_OnTextSelection:
-    m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6063664865070612006}
-        m_TargetAssemblyTypeName: PopUpFillNode, Assembly-CSharp
-        m_MethodName: OnCaretMoved
+      - m_Target: {fileID: 1645949807596707363}
+        m_TargetAssemblyTypeName: PopUpNodeInput, Assembly-CSharp
+        m_MethodName: OnSelect
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -373,16 +368,34 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 1645949807596707363}
+        m_TargetAssemblyTypeName: PopUpNodeInput, Assembly-CSharp
+        m_MethodName: PredictCompletion
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+  m_OnDeselect:
+    m_PersistentCalls:
+      m_Calls: []
+  m_OnTextSelection:
+    m_PersistentCalls:
+      m_Calls: []
   m_OnEndTextSelection:
     m_PersistentCalls:
       m_Calls: []
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6063664865070612006}
-        m_TargetAssemblyTypeName: PopUpFillNode, Assembly-CSharp
+      - m_Target: {fileID: 1645949807596707363}
+        m_TargetAssemblyTypeName: PopUpNodeInput, Assembly-CSharp
         m_MethodName: PredictCompletion
         m_Mode: 6
         m_Arguments:
@@ -411,6 +424,20 @@ MonoBehaviour:
   m_isRichTextEditingAllowed: 0
   m_LineLimit: 0
   m_InputValidator: {fileID: 0}
+--- !u!114 &1645949807596707363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3139052747934928665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ebac1197349b9046bc75d113ce2341e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  completionMenu: {fileID: 8624695750968975370}
+  validationType: 0
 --- !u!1 &3424328959563236310
 GameObject:
   m_ObjectHideFlags: 0
@@ -672,7 +699,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   completionProposition: {fileID: 8870234562125715562, guid: 1da837b0eb8d27048a27ab6be7cf354a, type: 3}
   completionPanel: {fileID: 3646763282175384906}
-  popUpFillNode: {fileID: 0}
+  popUpNodeInput: {fileID: 0}
 --- !u!114 &6835804443859864904
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1046,34 +1073,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cf26c8fdb36734f82da0ca9bc0f25a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  validationTypeText: {fileID: 7629870006481057898}
-  input: {fileID: 8691804530616607920}
-  validationType: 0
-  completionMenu: {fileID: 8624695750968975370}
-  completionPossibilities:
-  - typeOfValidation: 0
-    possibilities:
-    - Wall in front bool
-    - Wall left bool
-    - Wall right bool
-    - Wall distance int
-    - Out bool
-    - Robot on an outlet bool
-    - Tile marked bool
-    - Ball on ground bool
-    - Power int
-    - Robot position x int
-    - Robot position y int
-    - Robot direction x int
-    - Robot direction y int
-    - Ball position x int
-    - Ball position y int
-    - And boolOp
-    - Or boolOp
-    - Not boolOp
-    - True bool
-    - False bool
-  hasCompleted: 0
 --- !u!1 &6997163655983856632
 GameObject:
   m_ObjectHideFlags: 0

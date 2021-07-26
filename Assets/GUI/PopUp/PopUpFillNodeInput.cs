@@ -7,10 +7,10 @@ using TMPro;
 public class PopUpFillNodeInput : MonoBehaviour, IPointerClickHandler
 {
     public CustomInputField inputField;
-    public PopUpFillNode popUpFillNode;
+    public PopUpNodeInput popUpNodeInput;
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        popUpFillNode.ShowError(inputField.caretPosition);
+        popUpNodeInput.ShowError(inputField.caretPosition);
     }
 }

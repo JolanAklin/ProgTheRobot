@@ -282,6 +282,11 @@ public static class Validator
                         else
                         {
                             codeBlockLength = (uint)exprBits.Length; 
+                            if (exprBits == "False" || exprBits == "True")
+                            {
+                                vr.ChangeValidationStatus(ValidationStatus.KO);
+                                vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
+                            }
                         }
 
                         posInStartString += codeBlockLength + 1; // +1 = space after this word

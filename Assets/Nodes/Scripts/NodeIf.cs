@@ -42,7 +42,6 @@ public class NodeIf : Nodes, IPointerDownHandler
         {
             // a double left click happened
             PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillInNode).GetComponent<PopUpFillNode>();
-            popUpFillNode.Init(Validator.ValidationType.test);
             popUpFillNode.cancelAction = () =>
             {
                 popUpFillNode.Close();

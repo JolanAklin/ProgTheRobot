@@ -9,7 +9,7 @@ public class CompletionMenu : MonoBehaviour
     public GameObject completionProposition;
     public GameObject completionPanel;
 
-    public PopUpFillNode popUpFillNode;
+    public PopUpNodeInput popUpNodeInput;
 
     private RectTransform completionPanelRectTransform;
 
@@ -21,7 +21,7 @@ public class CompletionMenu : MonoBehaviour
         completionPanelRectTransform = completionPanel.GetComponent<RectTransform>();
     }
 
-    public void ShowCompletionProposition(PopUpFillNode.Completion[] completions)
+    public void ShowCompletionProposition(PopUpNodeInput.Completion[] completions)
     {
         completionItems.Clear();
         foreach (Transform child in completionPanel.transform)
@@ -33,7 +33,7 @@ public class CompletionMenu : MonoBehaviour
             CompletionItem completionItem = Instantiate(completionProposition, completionPanel.transform).GetComponent<CompletionItem>();
             completionItem.SetText(completions[i].completion);
             completionItem.completionMenu = this;
-            completionItem.popUpFillNode = popUpFillNode;
+            completionItem.popUpFillNodeInput = popUpNodeInput;
             completionItem.type = completions[i].completionType;
             completionItems.Add(completionItem);
             if(i == 0)
