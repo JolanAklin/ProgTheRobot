@@ -18,9 +18,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System.Collections;
 
 // handle all the common features of nodes
-public abstract class Nodes : MonoBehaviour
+public abstract class Nodes : MonoBehaviour, IPointerClickHandler
 {
     public enum NodeTypes
     {
@@ -173,6 +175,45 @@ public abstract class Nodes : MonoBehaviour
         public float bottom;
     }
     //end tpi
+
+
+    #region click handling
+    public EventHandler OnDoubleClick;
+    public EventHandler OnRightClick;
+    public EventHandler OnLeftClick;
+
+    /// <summary>
+    /// When true, a double click can happen
+    /// </summary>
+    private bool doubleClick = false;
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left && doubleClick)
+        {
+            OnDoubleClick?.Invoke(this, EventArgs.Empty);
+        }
+        else if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            OnLeftClick?.Invoke(this, EventArgs.Empty);
+            doubleClick = true;
+            StartCoroutine("DoubleClick");
+        }
+        else if (eventData.button == PointerEventData.InputButton.Right)
+        {
+            OnRightClick?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>
+    /// Wait for double click
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator DoubleClick()
+    {
+        yield return new WaitForSecondsRealtime(0.4f);
+        doubleClick = false;
+    }
+    #endregion
 
 
     public void Awake()

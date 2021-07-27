@@ -11,17 +11,6 @@ public class LanguageManager : MonoBehaviour
     /// </summary>
     public static LanguageManager instance;
 
-    private void Awake()
-    {
-        InverseKV();
-        instance = this;
-    }
-
-    private void Start()
-    {
-        PrepareTrees();
-    }
-
     /* one string in clear language and one string with function name abreviated
      * displayed string :   Wall distance = 10 And Wall right
      * abreviated string :  iwd = 10 And bwr
@@ -49,6 +38,38 @@ public class LanguageManager : MonoBehaviour
         {"Ball position x","ibpx#"},
         {"Ball position y","ibpy#"},
     };
+
+    public Dictionary<string,string> FullNameToAbrevDict { get => fullNameToAbrev; }
+
+    private List<string> reservedKeywords = new List<string>();
+    public List<string> ReservedKeywords { get => reservedKeywords; private set => reservedKeywords = value; }
+
+    private void Awake()
+    {
+        InverseKV();
+        instance = this;
+    }
+
+    private void Start()
+    {
+        PrepareTrees();
+        MakeReservedKeywordList();
+    }
+
+    private void MakeReservedKeywordList() // Not, Or, And, True, False aren't taken into account.
+    {
+        char[] splitChars = new char[] { ' ' };
+        foreach (string function in fullNameToAbrev.Keys)
+        {
+            string[] temp = function.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+            foreach (string word in temp)
+            {
+                if (!ReservedKeywords.Contains(word))
+                    ReservedKeywords.Add(word);
+            }
+        }
+    }
+
 
     /// <summary>
     /// Get the fullname of a function by using it's abreviation
@@ -117,6 +138,20 @@ public class LanguageManager : MonoBehaviour
     public string FullNameToAbrev(string toConvert)
     {
         foreach (KeyValuePair<string, string> item in fullNameToAbrev)
+        {
+            toConvert = toConvert.Replace(item.Key, item.Value);
+        }
+        return toConvert;
+    }
+
+    /// <summary>
+    /// Convert all abreviation to fullname present in a string
+    /// </summary>
+    /// <param name="toConvert">String to convert</param>
+    /// <returns>The converted string</returns>
+    public string AbrevToFullName(string toConvert)
+    {
+        foreach (KeyValuePair<string,string> item in abrevToFullName)
         {
             toConvert = toConvert.Replace(item.Key, item.Value);
         }

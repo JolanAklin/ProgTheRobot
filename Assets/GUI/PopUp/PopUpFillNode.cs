@@ -41,6 +41,11 @@ public class PopUpFillNode : PopUp
         }
     }
 
+    /// <summary>
+    /// Display a text with a valid or an error logo
+    /// </summary>
+    /// <param name="isAnError">If set to true, it will display an error logo</param>
+    /// <param name="text">The text to show</param>
     public void ShowInfo(bool isAnError, string text)
     {
         if (isAnError)
@@ -51,12 +56,18 @@ public class PopUpFillNode : PopUp
         infoText.text = text;
     }
 
+    /// <summary>
+    /// Will show an error sign
+    /// </summary>
     public void ShowError()
     {
         validImage.SetActive(false);
         errorImage.SetActive(true);
     }
 
+    /// <summary>
+    /// Will show an valid sign
+    /// </summary>
     public void ShowValid()
     {
         errorImage.SetActive(false);

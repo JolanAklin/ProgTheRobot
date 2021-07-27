@@ -9,7 +9,8 @@ using System.Text.RegularExpressions;
 [RequireComponent(typeof(CustomInputField))]
 public class PopUpNodeInput : MonoBehaviour
 {
-    private CustomInputField input;
+    public CustomInputField input { get; private set; }
+    public string executableFunction { get; private set; }
     public CompletionMenu completionMenu;
 
     public Validator.ValidationType validationType;
@@ -59,9 +60,14 @@ public class PopUpNodeInput : MonoBehaviour
         input.text = toValidate;
         validation = Validator.Validate(validationType, toValidate);
         if (validation.validationStatus == Validator.ValidationStatus.KO)
+        {
             popUpFillNode.ShowInfo(true, "");
+        }
         else
+        {
             popUpFillNode.ShowInfo(false, "No error found");
+            executableFunction = LanguageManager.instance.FullNameToAbrev(input.text);
+        }
         Display(validation);
     }
 
@@ -285,7 +291,6 @@ public class PopUpNodeInput : MonoBehaviour
                 return;
             }
         }
-        Debug.Log(toReplace);
         if (proba.Count == 0)
             return;
         // show completion proposition to the user

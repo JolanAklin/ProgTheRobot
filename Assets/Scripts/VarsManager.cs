@@ -151,28 +151,28 @@ public class VarsManager
         bool result = false;
         switch (funcName)
         {
-            case "WallInFront":
+            case "bwf#":
                 result = rm.WallInFront();
                 break;
-            case "WallRight":
+            case "bwr#":
                 result = rm.WallRight();
                 break;
-            case "WallLeft":
+            case "bwl#":
                 result = rm.WallLeft();
                 break;
-            case "Out":
+            case "bo#":
                 result = rm.IsOut();
                 break;
-            case "RobotOnAnOutlet":
+            case "boao#":
                 result = rm.IsOnAnOutlet();
                 break;
-            case "TileMarked":
+            case "btm#":
                 result = rm.IsCaseMarked();
                 break;
             //case "CaseDevantOccupée":
             //case "TileInFrontOccupied":
             //    return false;
-            case "BallOnTheGround":
+            case "bbg#":
                 foreach (Ball ball in robot.robotManager.balls)
                 {
                     if (!ball.ballTaken)
@@ -205,19 +205,19 @@ public class VarsManager
         int result = 0;
         switch (funcName)
         {
-            case "WallDistance":
+            case "iwd#":
                 result = rm.WallDistance();
                 break;
-            case "Power":
+            case "ip#":
                 result = (int)robot.Power;
                 break;
-            case "xRobot":
+            case "irpx#":
                 result = Mathf.RoundToInt(rm.transform.position.x);
                 break;
-            case "yRobot":
+            case "irpy#":
                 result = Mathf.RoundToInt(rm.transform.position.z);
                 break;
-            case "dxRobot":
+            case "irdx#":
                 switch(Mathf.RoundToInt(rm.transform.rotation.eulerAngles.y))
                 {
                     case 0:
@@ -232,7 +232,7 @@ public class VarsManager
                         break;
                 }
                 break;
-            case "dyRobot":
+            case "irdy#":
                 switch (Mathf.RoundToInt(rm.transform.rotation.eulerAngles.y))
                 {
                     case 90:
@@ -247,7 +247,7 @@ public class VarsManager
                         break;
                 }
                 break;
-            case "xBall":
+            case "ibpx#":
                 foreach (Ball ball in robot.robotManager.balls)
                 {
                     if (!ball.ballTaken)
@@ -257,7 +257,7 @@ public class VarsManager
                     }
                 }
                 break;
-            case "yBall":
+            case "ibpy#":
                 foreach (Ball ball in robot.robotManager.balls)
                 {
                     if(!ball.ballTaken)
@@ -328,55 +328,21 @@ public class VarsManager
         public bool result;
     }
 
-    // start tpi
     public string ReplaceFunctionByValue(string expression)
     {
-        // bool function
-        expression = expression.Replace("Mur en face", GetBoolFunction("WallInFront").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Wall in front", GetBoolFunction("WallInFront").result == true ? "Vrai" : "Faux");
-
-        expression = expression.Replace("Mur à droite", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Wall right", GetBoolFunction("WallRight").result == true ? "Vrai" : "Faux");
-        
-        expression = expression.Replace("Mur à gauche", GetBoolFunction("WallLeft").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Wall left", GetBoolFunction("WallLeft").result == true ? "Vrai" : "Faux");
-
-        expression = expression.Replace("Sorti", GetBoolFunction("Out").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Out", GetBoolFunction("Out").result == true ? "Vrai" : "Faux");
-
-        expression = expression.Replace("Robot sur une prise", GetBoolFunction("RobotOnAnOutlet").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Robot on an outlet", GetBoolFunction("RobotOnAnOutlet").result == true ? "Vrai" : "Faux");
-
-        expression = expression.Replace("Case marquée", GetBoolFunction("TileMarked").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Tile marked", GetBoolFunction("TileMarked").result == true ? "Vrai" : "Faux");
-
-        expression = expression.Replace("Ballon sur le sol", GetBoolFunction("BallOnTheGround").result == true ? "Vrai" : "Faux");
-        expression = expression.Replace("Ball on the ground", GetBoolFunction("BallOnTheGround").result == true ? "Vrai" : "Faux");
-
-        // int function
-        expression = expression.Replace("Distance mur", GetFunction("WallDistance").result.ToString());
-        expression = expression.Replace("Wall distance", GetFunction("WallDistance").result.ToString());
-
-        expression = expression.Replace("Energie", GetFunction("Power").result.ToString());
-        expression = expression.Replace("Power", GetFunction("Power").result.ToString());
-
-        expression = expression.Replace("x robot", GetFunction("xRobot").result.ToString());
-
-        expression = expression.Replace("y robot", GetFunction("yRobot").result.ToString());
-
-        expression = expression.Replace("dx robot", GetFunction("dxRobot").result.ToString());
-
-        expression = expression.Replace("dy robot", GetFunction("dyRobot").result.ToString());
-
-        expression = expression.Replace("x ballon", GetFunction("xBall").result.ToString());
-        expression = expression.Replace("x ball", GetFunction("xBall").result.ToString());
-
-        expression = expression.Replace("y ballon", GetFunction("yBall").result.ToString());
-        expression = expression.Replace("y ball", GetFunction("yBall").result.ToString());
+        foreach (string function in LanguageManager.instance.FullNameToAbrevDict.Values)
+        {
+            if(function[0] == 'b')
+            {
+                expression = expression.Replace(function, GetBoolFunction(function).result ? "True" : "False");
+            }else if (function[0] == 'i')
+            {
+                expression = expression.Replace(function, GetFunction(function).result.ToString());
+            }
+        }
 
         return expression;
     }
-    // end tpi
 
     public bool CheckExpression(string expression)
     {
@@ -448,7 +414,7 @@ public class VarsManager
     {
         expression = ReplaceFunctionByValue(expression);
 
-        string[] stringsToFind = new string[] { "Ou", "Or", "Et", "And" };
+        string[] stringsToFind = new string[] { "Or", "And" };
 
         List<string> findOrder = new List<string>();
 
@@ -483,11 +449,9 @@ public class VarsManager
                     // start tpi
                     switch (smallExprSplit[0])
                     {
-                        case "Vrai":
                         case "True":
                             fBoolReturn = new BoolFunctionReturn() { result = true };
                             break;
-                        case "Faux":
                         case "False":
                             fBoolReturn = new BoolFunctionReturn() { result = false };
                             break;
@@ -506,11 +470,9 @@ public class VarsManager
                     // start tpi
                     switch (smallExprSplit[1])
                     {
-                        case "Vrai":
                         case "True":
                             fBoolReturn = new BoolFunctionReturn() { result = true };
                             break;
-                        case "Faux":
                         case "False":
                             fBoolReturn = new BoolFunctionReturn() { result = false };
                             break;
@@ -521,7 +483,7 @@ public class VarsManager
                     // end tpi
                     if (!fBoolReturn.error)
                     {
-                        if (smallExprSplit[0] == "Non" || smallExprSplit[0] == "No")
+                        if (smallExprSplit[0] == "Not")
                         {
                             results.Add(!fBoolReturn.result);
                         }

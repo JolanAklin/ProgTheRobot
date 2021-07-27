@@ -281,6 +281,11 @@ public static class Validator
                         else
                         {
                             codeBlockLength = (uint)exprBits.Length; 
+                            if(LanguageManager.instance.ReservedKeywords.Contains(exprBits))
+                            {
+                                vr.ChangeValidationStatus(ValidationStatus.KO);
+                                vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"\"{exprBits}\" is a reserved keyword and therefore can't be used as a variable"));
+                            }
                             if (exprBits == "False" || exprBits == "True")
                             {
                                 vr.ChangeValidationStatus(ValidationStatus.KO);

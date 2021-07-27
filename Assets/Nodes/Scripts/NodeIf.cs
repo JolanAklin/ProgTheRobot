@@ -18,106 +18,51 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-using System.Linq;
 using System;
-using System.Data;
 using System.Text.RegularExpressions;
-using UnityEngine.EventSystems;
 
-public class NodeIf : Nodes, IPointerDownHandler
+public class NodeIf : Nodes
 {
-    private string input;
+    /// <summary>
+    /// This string is attended to be used only internally. This is not shown to the user.
+    /// </summary>
+    private string nodeExecutableString;
+
     private string[] inputSplited;
     public int nextNodeIdFalse;
 
-    public TMP_InputField inputField;
-
-    /// <summary>
-    /// When true, a double click can happen
-    /// </summary>
-    private bool doubleClick = false;
-    public void OnPointerDown(PointerEventData eventData)
-    {
-        if(eventData.button == PointerEventData.InputButton.Left && doubleClick)
-        {
-            // a double left click happened
-            PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillInNode).GetComponent<PopUpFillNode>();
-            popUpFillNode.cancelAction = () =>
-            {
-                popUpFillNode.Close();
-            };
-            popUpFillNode.OkAction = () =>
-            {
-                popUpFillNode.Close();
-            };
-        }
-        else if(eventData.button == PointerEventData.InputButton.Left)
-        {
-            // simple left click happened
-            doubleClick = true;
-            StartCoroutine("DoubleClick");
-        }
-    }
-
-    /// <summary>
-    /// Wait for double click
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator DoubleClick()
-    {
-        yield return new WaitForSecondsRealtime(0.4f);
-        doubleClick = false;
-    }
+    public TMP_Text nodeContentDisplay;
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.test;
         ExecManager.onChangeBegin += LockUnlockAllInput;
+        OnDoubleClick += ModifyNodeContent;
     }
 
     public void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
 
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    public void ModifyNodeContent(object sender, EventArgs e)
     {
-        LockUnlockAllInput(true);
-    }
-    // start tpi
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
-    public override void LockUnlockAllInput(bool isLocked)
-    {
-        inputField.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-            inputField.Select();
-    }
-    //end tpi
-
-    public void ChangeInput(TMP_InputField tMP_InputField)
-    {
-        input = tMP_InputField.text;
-        input = FormatInput(input);
-        inputField.text = input;
-        if (!ValidateInput())
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillInNode).GetComponent<PopUpFillNode>();
+        popUpFillNode.cancelAction = () =>
         {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            nodeExecutableString = popUpFillNode.customInputFields[0].executableFunction;
+            nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+            popUpFillNode.Close();
+        };
     }
 
-    // start tpi
     /// <summary>
     /// Format the string
     /// </summary>
@@ -142,15 +87,6 @@ public class NodeIf : Nodes, IPointerDownHandler
         input = Regex.Replace(input, pattern, " ");
         return input;
     }
-    // end tpi
-
-    private bool ValidateInput()
-    {
-        if (input.Length > 0)
-            return rs.robot.varsManager.CheckExpression(input);
-        else
-            return true;
-    }
 
     public override void Execute()
     {
@@ -171,7 +107,7 @@ public class NodeIf : Nodes, IPointerDownHandler
 
         IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeIdFalse);
 
-        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(input);
+        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(nodeExecutableString);
 
         if (!eval.error)
             if (eval.result)
@@ -247,7 +183,7 @@ public class NodeIf : Nodes, IPointerDownHandler
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         serializableNode.nodeSettings.Add(nextNodeIdFalse.ToString());
         return serializableNode;
     }
@@ -256,11 +192,19 @@ public class NodeIf : Nodes, IPointerDownHandler
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
-        inputField.text = input;
+        nodeExecutableString = serializableNode.nodeSettings[0];
+        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
         nextNodeIdFalse = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
+    }
+
+    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
+    {
+    }
+
+    public override void LockUnlockAllInput(bool isLocked)
+    {
     }
     #endregion
 }
