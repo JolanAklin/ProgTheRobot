@@ -201,7 +201,7 @@ public static class Validator
 
                     codeBlockLength = (uint)fullname.Length;
 
-                    if (!(GetFunctionType(smallExprSplit[0]) == FunctionType.@bool && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[0])))
+                    if (GetFunctionType(smallExprSplit[0]) != FunctionType.@bool)
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
                         vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"\"{fullname}\" is not a valid boolean function."));
@@ -286,21 +286,21 @@ public static class Validator
 
                         FunctionType exprType = GetFunctionType(exprBits);
 
-                        if (exprType != FunctionType.@int && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
+                        if (exprType != FunctionType.@int)
                         {
                             codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
 
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
                         }
-                        else if (exprType == FunctionType.@int && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
+                        else if (exprType == FunctionType.@int)
                         {
                             codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
                         }
                         else
                         {
                             codeBlockLength = (uint)exprBits.Length; 
-                            if(LanguageManager.instance.ReservedKeywords.Contains(exprBits))
+                            if(LanguageManager.instance.ReservedKeywords[ValidationType.test].Contains(exprBits))
                             {
                                 vr.ChangeValidationStatus(ValidationStatus.KO);
                                 vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"\"{exprBits}\" is a reserved keyword and therefore can't be used as a variable"));
@@ -336,7 +336,38 @@ public static class Validator
 
     private static ValidationReturn ValidateAction(string toValidate)
     {
-        return new ValidationReturn(ValidationStatus.KO);
+        ValidationReturn vr = new ValidationReturn();
+
+        toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
+        string[] splited = toValidate.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        FunctionType type;
+        switch (splited.Length)
+        {
+            case 1:
+                type = GetFunctionType(splited[0]);
+                if (type != FunctionType.action)
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, (uint)toValidate.Length, $"\"{toValidate}\" is not an action."));
+                }
+                break;
+            default:
+                type = GetFunctionType(splited[0]);
+                uint posInDisplayedString = 0;
+                if (type != FunctionType.action)
+                {
+                    posInDisplayedString = (uint)LanguageManager.instance.AbrevToFullName(splited[0]).Length;
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, posInDisplayedString, $"\"{toValidate}\" is not an action."));
+                }
+                posInDisplayedString++;
+                vr.ChangeValidationStatus(ValidationStatus.KO);
+                vr.AddSpecificError(posInDisplayedString, new ValidationReturn.Error(posInDisplayedString, (uint)toValidate.Length, $"This node takes only one action as parameter."));
+                break;
+        }
+
+        return vr;
     }
 
     private static ValidationReturn ValidateForLoop(string[] toValidate)
@@ -366,6 +397,11 @@ public static class Validator
         /// Not a function and not a boolean operator and does not contain only char between a-z
         /// </summary>
         other,
+        /// <summary>
+        /// A robot action like go forward
+        /// </summary>
+        action,
+        unknown,
     }
 
     /// <summary>
@@ -375,30 +411,36 @@ public static class Validator
     /// <returns></returns>
     private static FunctionType GetFunctionType(string function)
     {
-        if(function.StartsWith("bop"))
+        if(!LanguageManager.instance.AbrevToFullNameContainsKey(function))
         {
-            return FunctionType.boolOp;
-        }
-        else
-        {
-            if(function[0] == 'i')
+            if (Regex.IsMatch(function, @"[a-z]", RegexOptions.IgnoreCase))
             {
-                return FunctionType.@int;
-            }else if (function[0] == 'b')
-            {
-                return FunctionType.@bool;
+                return FunctionType.word;
             }
             else
             {
-                if(Regex.IsMatch(function, @"[a-z]", RegexOptions.IgnoreCase))
-                {
-                    return FunctionType.word;
-                }
-                else
-                {
-                    return FunctionType.other;
-                }
+                return FunctionType.other;
             }
+        }
+        else if(function.StartsWith("bop"))
+        {
+            return FunctionType.boolOp;
+        }
+        else if(function.StartsWith("ac"))
+        {
+            return FunctionType.action;
+        }
+        else if(function[0] == 'i')
+        {
+            return FunctionType.@int;
+        }
+        else if (function[0] == 'b')
+        {
+            return FunctionType.@bool;
+        }
+        else
+        {
+            return FunctionType.unknown;
         }
     }
 }

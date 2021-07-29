@@ -43,12 +43,22 @@ public class LanguageManager : MonoBehaviour
         {"And", "bopand#" },
         {"Or", "bopor#" },
         {"Not", "bopnot#" },
+        // robot action
+        { "Go forward", "acgf#" },
+        { "Turn right", "actr#" },
+        { "Turn left", "actl#" },
+        { "Mark", "acm#" },
+        { "Unmark", "acum#" },
+        { "Recharge", "acr#" },
+        { "Place ball", "acpb#" },
+        { "Take ball", "actb#" },
+        { "Throw ball", "actwb#" },
     };
 
     public Dictionary<string,string> FullNameToAbrevDict { get => fullNameToAbrev; }
 
-    private List<string> reservedKeywords = new List<string>();
-    public List<string> ReservedKeywords { get => reservedKeywords; private set => reservedKeywords = value; }
+    private Dictionary<Validator.ValidationType, List<string>> reservedKeywords = new Dictionary<Validator.ValidationType, List<string>>();
+    public Dictionary<Validator.ValidationType, List<string>> ReservedKeywords { get => reservedKeywords; }
 
     private void Awake()
     {
@@ -62,16 +72,34 @@ public class LanguageManager : MonoBehaviour
         MakeReservedKeywordList();
     }
 
-    private void MakeReservedKeywordList() // Not, Or, And, True, False aren't taken into account.
+    private void MakeReservedKeywordList() // needs to be uptaded. this version cannot put some keywords in more than one validation type
     {
+        reservedKeywords.Add(Validator.ValidationType.test, new List<string>());
+        reservedKeywords.Add(Validator.ValidationType.action, new List<string>());
         char[] splitChars = new char[] { ' ' };
-        foreach (string function in fullNameToAbrev.Keys)
+        foreach (KeyValuePair<string, string> function in fullNameToAbrev)
         {
-            string[] temp = function.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+            string[] temp = function.Key.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
+            Validator.ValidationType validationType = Validator.ValidationType.test;
+            switch (function.Value)
+            {
+                case string func when func.StartsWith("i"):
+                    validationType = Validator.ValidationType.test;
+                    break;
+                case string func when func.StartsWith("b"):
+                    validationType = Validator.ValidationType.test;
+                    break;
+                case string func when func.StartsWith("bop"):
+                    validationType = Validator.ValidationType.test;
+                    break;
+                case string func when func.StartsWith("ac"):
+                    validationType = Validator.ValidationType.action;
+                    break;
+            }
             foreach (string word in temp)
             {
-                if (!ReservedKeywords.Contains(word))
-                    ReservedKeywords.Add(word);
+                if (!reservedKeywords[validationType].Contains(word))
+                    reservedKeywords[validationType].Add(word);
             }
         }
     }
@@ -236,16 +264,20 @@ public class LanguageManager : MonoBehaviour
                 {
                     switch (temp[i + 1])
                     {
-                        case "int":
+                        case "@int":
                             treeBranch.type = BranchType.@int;
                             breakNext = true;
                             break;
-                        case "bool":
+                        case "@bool":
                             treeBranch.type = BranchType.@bool;
                             breakNext = true;
                             break;
-                        case "boolOp":
+                        case "@boolOp":
                             treeBranch.type = BranchType.boolOp;
+                            breakNext = true;
+                            break;
+                        case "@action":
+                            treeBranch.type = BranchType.action;
                             breakNext = true;
                             break;
                     }
@@ -288,6 +320,7 @@ public class LanguageManager : MonoBehaviour
         @bool,
         boolOp,
         branch,
+        action,
     }
 
     /// <summary>
