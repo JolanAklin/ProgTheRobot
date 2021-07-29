@@ -7,7 +7,6 @@ public class PopUpManager : MonoBehaviour
 {
     public enum PopUpTypes
     {
-        FillInNode,
         robotModif,
         colorPicker,
         saveWarning,
@@ -15,7 +14,9 @@ public class PopUpManager : MonoBehaviour
         readWrite,
         nodeInfo,
         wait,
-        menu
+        menu,
+        FillTest,
+        FillWhile,
     }
 
     [Serializable]

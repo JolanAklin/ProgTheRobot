@@ -50,7 +50,9 @@ public class NodeIf : Nodes
 
     public void ModifyNodeContent(object sender, EventArgs e)
     {
-        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillInNode).GetComponent<PopUpFillNode>();
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillTest).GetComponent<PopUpFillNode>();
+        if(nodeExecutableString != null)
+            popUpFillNode.SetContent(new string[] { nodeExecutableString });
         popUpFillNode.cancelAction = () =>
         {
             popUpFillNode.Close();
@@ -61,31 +63,6 @@ public class NodeIf : Nodes
             nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
             popUpFillNode.Close();
         };
-    }
-
-    /// <summary>
-    /// Format the string
-    /// </summary>
-    /// <param name="input">the string to format</param>
-    /// <returns>The formated string</returns>
-    private string FormatInput(string input)
-    {
-        input = input.Replace("=", " = ");
-        input = input.Replace("<", " < ");
-        input = input.Replace(">", " > ");
-        input = input.Replace("<=", " <= ");
-        input = input.Replace(">=", " >= ");
-        input = input.Replace("<>", " <> ");
-        input = input.Replace("+", " + ");
-        input = input.Replace("-", " - ");
-        input = input.Replace("*", " * ");
-        input = input.Replace("/", " / ");
-        input = input.Replace("(", " ( ");
-        input = input.Replace(")", " ) ");
-
-        string pattern = @"\s+";
-        input = Regex.Replace(input, pattern, " ");
-        return input;
     }
 
     public override void Execute()

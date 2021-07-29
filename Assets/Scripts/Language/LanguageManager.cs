@@ -28,6 +28,8 @@ public class LanguageManager : MonoBehaviour
         {"Robot on an outlet","boao#"},
         {"Tile marked","btm#"},
         {"Ball on ground","bbg#"},
+        {"True", "btrue#" },
+        {"False", "bfalse#" },
         // int func
         {"Wall distance","iwd#"},
         {"Power","ip#"},
@@ -37,6 +39,10 @@ public class LanguageManager : MonoBehaviour
         {"Robot direction y","irdy#"},
         {"Ball position x","ibpx#"},
         {"Ball position y","ibpy#"},
+        // boolean operators
+        {"And", "bopand#" },
+        {"Or", "bopor#" },
+        {"Not", "bopnot#" },
     };
 
     public Dictionary<string,string> FullNameToAbrevDict { get => fullNameToAbrev; }
@@ -231,15 +237,15 @@ public class LanguageManager : MonoBehaviour
                     switch (temp[i + 1])
                     {
                         case "int":
-                            treeBranch.type = BranchType.intLeaf;
+                            treeBranch.type = BranchType.@int;
                             breakNext = true;
                             break;
                         case "bool":
-                            treeBranch.type = BranchType.boolLeaf;
+                            treeBranch.type = BranchType.@bool;
                             breakNext = true;
                             break;
                         case "boolOp":
-                            treeBranch.type = BranchType.boolOpLeaf;
+                            treeBranch.type = BranchType.boolOp;
                             breakNext = true;
                             break;
                     }
@@ -278,9 +284,9 @@ public class LanguageManager : MonoBehaviour
 
     public enum BranchType
     {
-        intLeaf,
-        boolLeaf,
-        boolOpLeaf,
+        @int,
+        @bool,
+        boolOp,
         branch,
     }
 

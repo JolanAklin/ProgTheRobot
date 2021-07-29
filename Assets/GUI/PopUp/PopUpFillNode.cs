@@ -42,6 +42,20 @@ public class PopUpFillNode : PopUp
     }
 
     /// <summary>
+    /// Set the content of all input fields present in the customInputFields list
+    /// </summary>
+    /// <param name="content">The content of each input fields. Given in the executable way. content[0] will set the content for the first input field</param>
+    public void SetContent(string[] content)
+    {
+        for (int i = 0; i < customInputFields.Count; i++)
+        {
+            customInputFields[i].blockCompletion = true;
+            customInputFields[i].input.text = LanguageManager.instance.AbrevToFullName(content[i]);
+            customInputFields[i].blockCompletion = false;
+        }
+    }
+
+    /// <summary>
     /// Display a text with a valid or an error logo
     /// </summary>
     /// <param name="isAnError">If set to true, it will display an error logo</param>

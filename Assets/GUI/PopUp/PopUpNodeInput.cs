@@ -36,11 +36,13 @@ public class PopUpNodeInput : MonoBehaviour
         completionMenu.Close();
     }
 
-    private void Start()
+    private void Awake()
     {
         input = GetComponent<CustomInputField>();
+    }
 
-        
+    private void Start()
+    {
         completionMenu.popUpNodeInput = this;
 
         lastInputStringLength = input.text.Length;
@@ -90,21 +92,9 @@ public class PopUpNodeInput : MonoBehaviour
     /// <returns>The formated string</returns>
     private string FormatInput(string input)
     {
-        input = input.Replace("=", " = ");
-        input = input.Replace("<", " < ");
-        input = input.Replace(">", " > ");
-        input = input.Replace("<=", " <= ");
-        input = input.Replace(">=", " >= ");
-        input = input.Replace("<>", " <> ");
-        input = input.Replace("+", " + ");
-        input = input.Replace("-", " - ");
-        input = input.Replace("*", " * ");
-        input = input.Replace("/", " / ");
-        input = input.Replace("(", " ( ");
-        input = input.Replace(")", " ) ");
-
-        string pattern = @"\s+";
-        input = Regex.Replace(input, pattern, " ");
+        input = Regex.Replace(input, @"((?:[<>]?=)|(?:<>)|[<>])", " $1 ");
+        input = Regex.Replace(input, @"([+\-*/()])", " $1 ");
+        input = Regex.Replace(input, @"\s+", " ");
         return input;
     }
 
@@ -205,6 +195,7 @@ public class PopUpNodeInput : MonoBehaviour
     private bool hasCompleted = false;
     private bool lastKeyWasBackspace = false;
     private bool hasProcessedBackSpace = false;
+    public bool blockCompletion = false;
     public string toReplace { get; private set; }
 
     /// <summary>
@@ -221,6 +212,8 @@ public class PopUpNodeInput : MonoBehaviour
         {
             return;
         }
+        if (blockCompletion)
+            return;
         if (!input.isFocused && !forceShow)
             return;
 
@@ -228,7 +221,7 @@ public class PopUpNodeInput : MonoBehaviour
         // store the score and the text to complete with
         List<Completion> proba = new List<Completion>();
         string toComplete = "";
-        if (!hasCompleted)
+        if (!hasCompleted && !forceShow)
         {
             toComplete = FindWord(RemoveRichTag(input.text), input.caretPosition);
         }
@@ -373,7 +366,7 @@ public class PopUpNodeInput : MonoBehaviour
     {
         // if the caret is after a space, it is considered has a new word so returning "" will show all proposition.
         if (pos > 0)
-            if (text[pos - 1] == ' ')
+            if (Regex.IsMatch(text[pos - 1].ToString(), @"[^a-zA-Z]"))
                 return "";
 
         string regexWord = @"[a-zA-Z]+";

@@ -24,9 +24,8 @@ using System.Text.RegularExpressions;
 
 public class NodeWhileLoop : Nodes
 {
-    private string input = "";
-    private string[] inputSplited;
-    public TMP_InputField inputField;
+    private string nodeExecutableString = "";
+    public TMP_Text nodeContentDisplay;
 
     public int nextNodeInside = -1;
     new private void Awake()
@@ -35,96 +34,51 @@ public class NodeWhileLoop : Nodes
         nodeTypes = NodeTypes.whileLoop;
         ExecManager.onChangeBegin += LockUnlockAllInput;
 
-        // start tpi
+        // click management
+        OnDoubleClick += ModifyNodeContent;
 
         // set in wich looparea is the inside connectHandle
         if (handleEndArray.Length > 1)
             handleEndArray[1].loopArea = nodesLoopArea;
         if (handleStartArray.Length > 1)
             handleStartArray[1].loopArea = nodesLoopArea;
-        //end tpi
     }
 
-    public void ChangeInput()
+    public void ModifyNodeContent(object sender, EventArgs e)
     {
-        input = inputField.text;
-        input = FormatInput(input);
-        inputField.text = input;
-        if (!ValidateInput())
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillWhile).GetComponent<PopUpFillNode>();
+        if (nodeExecutableString != null)
+            popUpFillNode.SetContent(new string[] { nodeExecutableString });
+        popUpFillNode.cancelAction = () =>
         {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            nodeExecutableString = popUpFillNode.customInputFields[0].executableFunction;
+            nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+            popUpFillNode.Close();
+        };
     }
-
-    // start tpi
-    /// <summary>
-    /// Format the string
-    /// </summary>
-    /// <param name="input">the string to format</param>
-    /// <returns>The formated string</returns>
-    private string FormatInput(string input)
-    {
-        input = input.Replace("=", " = ");
-        input = input.Replace("<", " < ");
-        input = input.Replace(">", " > ");
-        input = input.Replace("<=", " <= ");
-        input = input.Replace(">=", " >= ");
-        input = input.Replace("<>", " <> ");
-        input = input.Replace("+", " + ");
-        input = input.Replace("-", " - ");
-        input = input.Replace("*", " * ");
-        input = input.Replace("/", " / ");
-        input = input.Replace("(", " ( ");
-        input = input.Replace(")", " ) ");
-
-        string pattern = @"\s+";
-        input = Regex.Replace(input, pattern, " ");
-        return input;
-    }
-    //end tpi
 
 
     private void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+
+        // click management
+        OnDoubleClick -= ModifyNodeContent;
+
         DestroyNode();
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    // start tpi
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
+
     public override void LockUnlockAllInput(bool isLocked)
     {
-        inputField.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-            inputField.Select();
-    }
-    //end tpi
-
-
-    private bool ValidateInput()
-    {
-        if (input.Length > 0)
-        {
-            return rs.robot.varsManager.CheckExpression(input);
-        }
-        else
-        {
-            return true;
-        }
+        
     }
 
     public override void Execute()
@@ -146,7 +100,7 @@ public class NodeWhileLoop : Nodes
 
         IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
 
-        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(input);
+        VarsManager.Evaluation eval = rs.robot.varsManager.Evaluate(nodeExecutableString);
 
         if (!eval.error)
             if (eval.result)
@@ -221,7 +175,7 @@ public class NodeWhileLoop : Nodes
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         serializableNode.nodeSettings.Add(nextNodeInside.ToString());
         return serializableNode;
     }
@@ -230,11 +184,10 @@ public class NodeWhileLoop : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
-        inputField.text = input;
+        nodeExecutableString = serializableNode.nodeSettings[0];
+        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        ValidateInput();
         NodesDict.Add(id, this);
     }
     #endregion

@@ -414,7 +414,7 @@ public class VarsManager
     {
         expression = ReplaceFunctionByValue(expression);
 
-        string[] stringsToFind = new string[] { "Or", "And" };
+        string[] stringsToFind = new string[] { "bopor#", "bopand#" };
 
         List<string> findOrder = new List<string>();
 
@@ -483,7 +483,7 @@ public class VarsManager
                     // end tpi
                     if (!fBoolReturn.error)
                     {
-                        if (smallExprSplit[0] == "Not")
+                        if (smallExprSplit[0] == "bopnot#")
                         {
                             results.Add(!fBoolReturn.result);
                         }
@@ -569,14 +569,14 @@ public class VarsManager
         bool finalResult = false;
         if (findOrder.Count > 0)
         {
-            if (findOrder[0] == "Et" || findOrder[0] == "And")
+            if (findOrder[0] == "bopand#")
             {
                 if (results[0] && results[1])
                     finalResult = true;
                 else
                     finalResult = false;
             }
-            else if (findOrder[0] == "Ou" || findOrder[0] == "Or")
+            else if (findOrder[0] == "bopor#")
             {
                 if (results[0] || results[1])
                     finalResult = true;
@@ -585,14 +585,14 @@ public class VarsManager
             }
             for (int i = 2; i < results.Count; i++)
             {
-                if (findOrder[i - 1] == "Et" || findOrder[i - 1] == "And")
+                if (findOrder[i - 1] == "bopand#")
                 {
                     if (finalResult && results[i])
                         finalResult = true;
                     else
                         finalResult = false;
                 }
-                else if (findOrder[i - 1] == "Ou" || findOrder[i - 1] == "Or")
+                else if (findOrder[i - 1] == "bopor#")
                 {
                     if (finalResult || results[i])
                         finalResult = true;

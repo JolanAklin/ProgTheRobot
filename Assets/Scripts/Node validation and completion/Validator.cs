@@ -151,10 +151,10 @@ public static class Validator
         toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
 
 
-        string[] stringsToFind = new string[] { "Or", "And" };
+        string[] stringsToFind = new string[] { "bopor#", "bopand#" };
         string[] exprSplit = toValidate.Split(stringsToFind, StringSplitOptions.None);
 
-        string findIndexAndOr = @"Or|And";
+        string findIndexAndOr = @$"{LanguageManager.instance.AbrevToFullName("bopor#")}|{LanguageManager.instance.AbrevToFullName("bopand#")}";
         Regex findIndexAndOrRegex = new Regex(findIndexAndOr);
         MatchCollection mc = findIndexAndOrRegex.Matches(toValidateNonAltered);
 
@@ -166,12 +166,15 @@ public static class Validator
         }
 
         uint posInStartString = 0;
+        uint andOrAddedLength = 0;
 
         foreach (string item in exprSplit)
         {
+            andOrAddedLength = 0;
             if(andOrPlaceLength.ContainsKey((int)posInStartString))
             {
-                posInStartString += andOrPlaceLength[(int)posInStartString] + 1;
+                andOrAddedLength = andOrPlaceLength[(int)posInStartString] + 1;
+                posInStartString += andOrAddedLength;
             }
 
             string[] separators = new string[] { " " };
@@ -179,57 +182,71 @@ public static class Validator
 
             uint codeBlockLength = 0;
             string fullname = "";
+            string[] testOperators = new string[] { "=", "<", ">", ">=", "<=", "<>" };
             switch (smallExprSplit.Length)
             {
-                // get the corresponding function, if it exist, and adds it to the result list
-                case 1:
-                    fullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]);
-                    if (fullname != null)
-                        codeBlockLength = (uint)fullname.Length;
-                    else
-                        codeBlockLength = (uint)smallExprSplit[0].Length;
-
-                    if (!(smallExprSplit[0][0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[0])))
-                    {
-                        if(!(smallExprSplit[0] == "False" || smallExprSplit[0] == "True"))
-                        {
-                            vr.ChangeValidationStatus(ValidationStatus.KO);
-                            vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
-                        }
-                    }
-                    posInStartString += codeBlockLength + 1; // +1 = space after this word
-                    break;
-                // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
-                case 2:
-                    codeBlockLength = (uint)smallExprSplit[0].Length + 1; // +1 = space after this word
-
-                    fullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[1]);
-                    if (fullname != null)
-                        codeBlockLength += (uint)fullname.Length;
-                    else
-                        codeBlockLength += (uint)smallExprSplit[1].Length;
-                    if (smallExprSplit[0] != "Not")
+                case 0:
+                    if(andOrAddedLength > 0)
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
-                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"The keyword \"{smallExprSplit[0]}\" is unknown."));
+                        vr.AddSpecificError(posInStartString - andOrAddedLength, new ValidationReturn.Error(posInStartString - andOrAddedLength, posInStartString - 1, $"\"And\" and \"Or\" keywords must have a statement before and after them"));
                     }
-                    else
+                    break;
+                case 1:
+                    // get the corresponding function, if it exist, and adds it to the result list
+                    codeBlockLength = 0;
+                    fullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]);
+                    if (fullname == null)
+                        fullname = smallExprSplit[0];
+
+                    codeBlockLength = (uint)fullname.Length;
+
+                    if (!(GetFunctionType(smallExprSplit[0]) == FunctionType.@bool && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[0])))
                     {
-                        if(!(smallExprSplit[1][0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(smallExprSplit[1])))
-                        {
-                            if (!(smallExprSplit[1] == "False" || smallExprSplit[1] == "True"))
-                            {
-                                vr.ChangeValidationStatus(ValidationStatus.KO);
-                                vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Is not a valid boolean function."));
-                            }
-                        }
+                        vr.ChangeValidationStatus(ValidationStatus.KO);
+                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"\"{fullname}\" is not a valid boolean function."));
                     }
                     posInStartString += codeBlockLength + 1; // +1 = space after this word
                     break;
-                // evaluate an expression like this one : test + 2 = myVar + 4
-                default:
-                    string[] delimiters = new string[] { "=", "<", ">", ">=", "<=", "<>" };
 
+                case 2:
+                    // get the corresponding function, if it exist, invert the result if there is a No or Non at the begining and adds it to the result list
+                    codeBlockLength = 0;
+                    FunctionType firstWordType = GetFunctionType(smallExprSplit[0]);
+                    FunctionType secondWordType = GetFunctionType(smallExprSplit[1]);
+
+                    string firstWordFullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]);
+                    if (firstWordFullname == null)
+                        firstWordFullname = smallExprSplit[0];
+                    string secondWordFullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[1]);
+                    if (secondWordFullname == null)
+                        secondWordFullname = smallExprSplit[1];
+
+                    codeBlockLength += (uint)firstWordFullname.Length + 1;
+                    codeBlockLength += (uint)secondWordFullname.Length;
+
+                    if (firstWordType != FunctionType.boolOp && secondWordType != FunctionType.@bool)
+                    {
+                        // is not an boolean statement
+                        goto default;
+                    }
+
+                    if(firstWordType == FunctionType.boolOp && secondWordType != FunctionType.@bool)
+                    {
+                        vr.ChangeValidationStatus(ValidationStatus.KO);
+                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString + (uint)firstWordFullname.Length, posInStartString + 1 + (uint)firstWordFullname.Length + (uint)secondWordFullname.Length, $"\"{secondWordFullname}\" is not a valid boolean function."));
+                    }
+                    else if(firstWordType != FunctionType.boolOp && secondWordType == FunctionType.@bool)
+                    {
+                        vr.ChangeValidationStatus(ValidationStatus.KO);
+                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + (uint)firstWordFullname.Length, $"The keyword \"{firstWordFullname}\" is unknown in the current context."));
+                    }
+                    posInStartString += codeBlockLength + 1; // + 1 = space after this word
+                    break;
+
+                default:
+                    // evaluate an expression like this one : test + 2 = myVar + 4
+                    codeBlockLength = 0;
                     // every string while be replaced by the number 1 to test if the expression is correct with a datatable
                     List<string> exprPart1 = new List<string>();
                     List<string> exprPart2 = new List<string>();
@@ -243,7 +260,7 @@ public static class Validator
                     {
                         if (!findDelimiter)
                         {
-                            foreach (string del in delimiters)
+                            foreach (string del in testOperators)
                             {
                                 if (exprBits == del)
                                 {
@@ -267,14 +284,16 @@ public static class Validator
                                 exprPart2.Add(exprBits);
                         }
 
-                        if (exprBits[0] == 'b' && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
+                        FunctionType exprType = GetFunctionType(exprBits);
+
+                        if (exprType != FunctionType.@int && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
                         {
                             codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
 
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
                         }
-                        else if (exprBits[0] == 'i' && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
+                        else if (exprType == FunctionType.@int && LanguageManager.instance.AbrevToFullNameContainsKey(exprBits))
                         {
                             codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
                         }
@@ -285,11 +304,6 @@ public static class Validator
                             {
                                 vr.ChangeValidationStatus(ValidationStatus.KO);
                                 vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"\"{exprBits}\" is a reserved keyword and therefore can't be used as a variable"));
-                            }
-                            if (exprBits == "False" || exprBits == "True")
-                            {
-                                vr.ChangeValidationStatus(ValidationStatus.KO);
-                                vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
                             }
                         }
 
@@ -328,5 +342,63 @@ public static class Validator
     private static ValidationReturn ValidateForLoop(string[] toValidate)
     {
         return new ValidationReturn(ValidationStatus.KO);
+    }
+
+    private enum FunctionType
+    {
+        /// <summary>
+        /// A function returning an int
+        /// </summary>
+        @int,
+        /// <summary>
+        /// A function returning a boolean
+        /// </summary>
+        @bool,
+        /// <summary>
+        /// A boolean operator such as Not, Or,...
+        /// </summary>
+        boolOp,
+        /// <summary>
+        /// Contain only char between a-z
+        /// </summary>
+        word,
+        /// <summary>
+        /// Not a function and not a boolean operator and does not contain only char between a-z
+        /// </summary>
+        other,
+    }
+
+    /// <summary>
+    /// Return the type of a string
+    /// </summary>
+    /// <param name="function"></param>
+    /// <returns></returns>
+    private static FunctionType GetFunctionType(string function)
+    {
+        if(function.StartsWith("bop"))
+        {
+            return FunctionType.boolOp;
+        }
+        else
+        {
+            if(function[0] == 'i')
+            {
+                return FunctionType.@int;
+            }else if (function[0] == 'b')
+            {
+                return FunctionType.@bool;
+            }
+            else
+            {
+                if(Regex.IsMatch(function, @"[a-z]", RegexOptions.IgnoreCase))
+                {
+                    return FunctionType.word;
+                }
+                else
+                {
+                    return FunctionType.other;
+                }
+            }
+        }
     }
 }
