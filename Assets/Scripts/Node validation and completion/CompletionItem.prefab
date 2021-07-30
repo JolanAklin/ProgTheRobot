@@ -252,7 +252,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 8870234562200412248}
-  toReplace: 
   defaultColor: {r: 0.1882353, g: 0.1882353, b: 0.1882353, a: 1}
   selectColor: {r: 0, g: 0.2737186, b: 0.4339623, a: 1}
   completionIndication: {fileID: 4344447922404355423}
@@ -265,9 +264,11 @@ MonoBehaviour:
     indication: 01^11
   - type: 3
     indication: '>'
+  - type: 4
+    indication: -->
   type: 0
   completionMenu: {fileID: 0}
-  popUpFillNode: {fileID: 0}
+  popUpFillNodeInput: {fileID: 0}
 --- !u!1 &8870234562200412198
 GameObject:
   m_ObjectHideFlags: 0

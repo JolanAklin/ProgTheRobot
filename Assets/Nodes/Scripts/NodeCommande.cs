@@ -25,133 +25,52 @@ using UnityEngine.UI;
 
 public class NodeCommande : Nodes
 {
-    private string input;
-    public TMP_InputField inputField;
+    /// <summary>
+    /// This string is attended to be used only internally. This is not shown to the user.
+    /// </summary>
+    private string nodeExecutableString;
+    public TMP_Text nodeContentDisplay;
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.execute;
-        Manager.instance.OnLanguageChanged += TranslateText;
         ExecManager.onChangeBegin += LockUnlockAllInput;
+
+        OnDoubleClick += ModifyNodeContent;
     }
 
     private void OnDestroy()
     {
-        Manager.instance.OnLanguageChanged -= TranslateText;
         ExecManager.onChangeBegin -= LockUnlockAllInput;
         DestroyNode();
+
+        OnDoubleClick -= ModifyNodeContent;
+    }
+
+    public void ModifyNodeContent(object sender, EventArgs e)
+    {
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillAction).GetComponent<PopUpFillNode>();
+        if (nodeExecutableString != null)
+            popUpFillNode.SetContent(new string[] { nodeExecutableString });
+        popUpFillNode.cancelAction = () =>
+        {
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            nodeExecutableString = popUpFillNode.customInputFields[0].executableFunction;
+            nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+            popUpFillNode.Close();
+        };
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    // start tpi
 
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
-        inputField.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-            inputField.Select();
-    }
-    //end tpi
-
-    public void ChangeInput(TMP_InputField tMP_InputField)
-    {
-        inputField = tMP_InputField;
-        input = tMP_InputField.text;
-        if (!ValidateInput())
-        {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
-    }
-
-
-    private bool ValidateInput()
-    {
-        switch (input)
-        {
-            case "":
-            case "Avancer":
-            case "Go forward":
-            case "Tourner à droite":
-            case "Turn right":
-            case "Tourner à gauche":
-            case "Turn left":
-            case "Marquer":
-            case "Mark":
-            case "Démarquer":
-            case "Unmark":
-            case "Recharger":
-            case "Reload":
-            case "Poser ballon":
-            case "Place ball":
-            case "Prendre ballon":
-            case "Take ball":
-            case "Lancer ballon":
-            case "Throw ball":
-                TranslateText(this, EventArgs.Empty);
-                return true;
-        }
-        return false;
-    }
-
-    public void TranslateText(object sender, EventArgs e)
-    {
-        switch (input)
-        {
-            case "":
-                break;
-            case "Avancer":
-            case "Go forward":
-                input = Translation.Get("GoForward");
-                break;
-            case "Tourner à droite":
-            case "Turn right":
-                input = Translation.Get("TurnRight");
-                break;
-            case "Tourner à gauche":
-            case "Turn left":
-                input = Translation.Get("TurnLeft");
-                break;
-            case "Marquer":
-            case "Mark":
-                input = Translation.Get("Mark");
-                break;
-            case "Démarquer":
-            case "Unmark":
-                input = Translation.Get("Unmark");
-                break;
-            case "Recharger":
-            case "Reload":
-                input = Translation.Get("Reload");
-                break;
-            case "Poser ballon":
-            case "Place ball":
-                input = Translation.Get("PlaceBall");
-                break;
-            case "Prendre ballon":
-            case "Take ball":
-                input = Translation.Get("TakeBall");
-                break;
-            case "Lancer ballon":
-            case "Throw ball":
-                input = Translation.Get("Throwball");
-                break;
-        }
-        inputField.text = input;
     }
 
     public override void Execute()
@@ -160,44 +79,35 @@ public class NodeCommande : Nodes
             return;
         ChangeBorderColor(currentExecutedNode);
 
-        switch (input)
+        switch (nodeExecutableString)
         {
             case "":
                 break;
-            case "Avancer":
-            case "Go forward":
+            case string test when test.Contains("acgf#"):
                 rs.robot.robotManager.GoForward(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Tourner à droite":
-            case "Turn right":
+            case string test when test.Contains("actr#"):
                 rs.robot.robotManager.TurnRight(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Tourner à gauche":
-            case "Turn left":
+            case string test when test.Contains("actl#"):
                 rs.robot.robotManager.TurnLeft(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Marquer":
-            case "Mark":
+            case string test when test.Contains("acm#"):
                 rs.robot.robotManager.Mark(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Démarquer":
-            case "Unmark":
+            case string test when test.Contains("acum#"):
                 rs.robot.robotManager.Unmark(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Recharger":
-            case "Reload":
+            case string test when test.Contains("acr#"):
                 rs.robot.robotManager.Charge(() => { StartCoroutine("WaitBeforeCallingNextNode"); });
                 break;
-            case "Poser ballon":
-            case "Place ball":
+            case string test when test.Contains("acpb#"):
                 rs.robot.robotManager.PlaceBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Prendre ballon":
-            case "Take ball":
+            case string test when test.Contains("actb#"):
                 rs.robot.robotManager.TakeBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
-            case "Lancer ballon":
-            case "Throw ball":
+            case string test when test.Contains("actwb#"):
                 rs.robot.robotManager.ThrowBall(() => { StartCoroutine("WaitBeforeCallingNextNode"); }, noPower);
                 break;
 
@@ -259,7 +169,7 @@ public class NodeCommande : Nodes
             nodeSettings = new List<string>(),
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         return serializableNode;
     }
     public override void DeSerializeNode(SerializableNode serializableNode)
@@ -267,8 +177,8 @@ public class NodeCommande : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
-        inputField.text = input;
+        nodeExecutableString = serializableNode.nodeSettings[0];
+        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
     }

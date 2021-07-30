@@ -17,6 +17,7 @@ public class PopUpManager : MonoBehaviour
         menu,
         FillTest,
         FillWhile,
+        FillAction,
     }
 
     [Serializable]

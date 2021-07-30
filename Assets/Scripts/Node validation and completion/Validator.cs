@@ -108,7 +108,7 @@ public static class Validator
             case ValidationType.test:
                 return ValidateTest(toValidate);
             case ValidationType.action:
-                return new ValidationReturn(ValidationStatus.KO);
+                return ValidateAction(toValidate);
             case ValidationType.forloop:
                 return new ValidationReturn(ValidationStatus.KO);
             default:
@@ -340,34 +340,43 @@ public static class Validator
 
     private static ValidationReturn ValidateAction(string toValidate)
     {
-        ValidationReturn vr = new ValidationReturn();
+        ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
 
+        string toValidateUnAltered = toValidate;
         toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
         string[] splited = toValidate.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
         FunctionType type;
         switch (splited.Length)
         {
+            case 0:
+                break;
             case 1:
                 type = GetFunctionType(splited[0]);
                 if (type != FunctionType.action)
                 {
                     vr.ChangeValidationStatus(ValidationStatus.KO);
-                    vr.AddSpecificError(0, new ValidationReturn.Error(0, (uint)toValidate.Length, $"\"{toValidate}\" is not an action."));
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, (uint)toValidateUnAltered.Length, $"\"{toValidate}\" is not an action."));
                 }
                 break;
             default:
                 type = GetFunctionType(splited[0]);
                 uint posInDisplayedString = 0;
+                string funcName = LanguageManager.instance.AbrevToFullName(splited[0]);
+                if (funcName != null)
+                    posInDisplayedString = (uint)funcName.Length;
+                else
+                    posInDisplayedString = (uint)splited[0].Length;
+
                 if (type != FunctionType.action)
                 {
-                    posInDisplayedString = (uint)LanguageManager.instance.AbrevToFullName(splited[0]).Length;
+
                     vr.ChangeValidationStatus(ValidationStatus.KO);
-                    vr.AddSpecificError(0, new ValidationReturn.Error(0, posInDisplayedString, $"\"{toValidate}\" is not an action."));
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, posInDisplayedString, $"\"{splited[0]}\" is not an action."));
                 }
                 posInDisplayedString++;
                 vr.ChangeValidationStatus(ValidationStatus.KO);
-                vr.AddSpecificError(posInDisplayedString, new ValidationReturn.Error(posInDisplayedString, (uint)toValidate.Length, $"This node takes only one action as parameter."));
+                vr.AddSpecificError(posInDisplayedString, new ValidationReturn.Error(posInDisplayedString, (uint)toValidateUnAltered.Length, $"This node takes only one action as parameter."));
                 break;
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Language.Loader;
+using System.Text.RegularExpressions;
 
 public class LanguageManager : MonoBehaviour
 {
@@ -190,7 +191,8 @@ public class LanguageManager : MonoBehaviour
     {
         foreach (KeyValuePair<string, string> item in fullNameToAbrev)
         {
-            toConvert = toConvert.Replace(item.Key, item.Value);
+            toConvert = Regex.Replace(toConvert, @$"(?<=\s|^){item.Key}(?=\s|$)", item.Value);
+            //toConvert = toConvert.Replace(item.Key, item.Value);
         }
         return toConvert;
     }
