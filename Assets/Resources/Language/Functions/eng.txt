@@ -34,3 +34,7 @@ acr# = Recharge
 acpb# = Place ball
 actb# = Take ball
 actwb# = Throw ball
+
+[other keywords]
+kwread# = Read
+kwwrite# = Write

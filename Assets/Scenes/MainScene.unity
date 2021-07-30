@@ -6831,6 +6831,8 @@ MonoBehaviour:
     obj: {fileID: 4010515551895399817, guid: fd32b9d23191f05429e26e50699433b9, type: 3}
   - type: 10
     obj: {fileID: 4430711168694824543, guid: dd679f048e3481c4b8999492b0a499aa, type: 3}
+  - type: 11
+    obj: {fileID: 3471151153698174368, guid: e589d6ecbb1008748a692a101a951cd8, type: 3}
 --- !u!4 &1145785825
 Transform:
   m_ObjectHideFlags: 0

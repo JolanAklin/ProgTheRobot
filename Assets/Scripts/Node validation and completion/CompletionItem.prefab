@@ -266,6 +266,8 @@ MonoBehaviour:
     indication: '>'
   - type: 4
     indication: -->
+  - type: 5
+    indication: abc
   type: 0
   completionMenu: {fileID: 0}
   popUpFillNodeInput: {fileID: 0}

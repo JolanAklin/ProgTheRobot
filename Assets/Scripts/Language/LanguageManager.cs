@@ -27,26 +27,35 @@ public class LanguageManager : MonoBehaviour
     private Dictionary<Validator.ValidationType, List<string>> reservedKeywords = new Dictionary<Validator.ValidationType, List<string>>();
     public Dictionary<Validator.ValidationType, List<string>> ReservedKeywords { get => reservedKeywords; }
 
-    private Dictionary<Validator.FunctionType, List<Validator.ValidationType>> funcType2ValidationType = new Dictionary<Validator.FunctionType, List<Validator.ValidationType>>()
+    //                                                    True = only for the reserved keyword list
+    private Dictionary<Validator.FunctionType, Dictionary<bool, Validator.ValidationType>> funcType2ValidationType = new Dictionary<Validator.FunctionType, Dictionary<bool, Validator.ValidationType>>()
     {
-        { Validator.FunctionType.@int, new List<Validator.ValidationType>()
+        { Validator.FunctionType.@int, new Dictionary<bool, Validator.ValidationType>()
             {
-                Validator.ValidationType.test
+                { false, Validator.ValidationType.test },
+                { true, Validator.ValidationType.readWrite },
             }
         },
-        { Validator.FunctionType.@bool, new List<Validator.ValidationType>()
+        { Validator.FunctionType.@bool, new Dictionary<bool, Validator.ValidationType>()
             {
-                Validator.ValidationType.test
+                { false, Validator.ValidationType.test },
+                { true, Validator.ValidationType.readWrite },
             }
         },
-        { Validator.FunctionType.boolOp, new List<Validator.ValidationType>()
+        { Validator.FunctionType.boolOp, new Dictionary<bool, Validator.ValidationType>()
             {
-                Validator.ValidationType.test
+                { false, Validator.ValidationType.test },
+                { true, Validator.ValidationType.readWrite },
             }
         },
-        { Validator.FunctionType.action, new List<Validator.ValidationType>()
+        { Validator.FunctionType.action, new Dictionary<bool, Validator.ValidationType>()
             {
-                Validator.ValidationType.action
+                { false, Validator.ValidationType.action },
+            }
+        },
+        { Validator.FunctionType.keywordReadWrite, new Dictionary<bool, Validator.ValidationType>()
+            {
+                { false, Validator.ValidationType.readWrite },
             }
         }
     };
@@ -74,9 +83,9 @@ public class LanguageManager : MonoBehaviour
         foreach (var kv in completionPossibilitiesDict)
         {
             List<string> keywords = new List<string>();
-            foreach (string possibility in kv.Value.possibilities)
+            foreach (CompletionPossibilities.Entry possibility in kv.Value.possibilities)
             {
-                string[] words = possibility.Split(splitters, StringSplitOptions.RemoveEmptyEntries);
+                string[] words = possibility.possiblity.Split(splitters, StringSplitOptions.RemoveEmptyEntries);
                 for (int i = 0; i < words.Length - 1; i++)
                 {
                     if(!keywords.Contains(words[i]))
@@ -92,14 +101,14 @@ public class LanguageManager : MonoBehaviour
     /// Get the fullname of a function by using it's abreviation
     /// </summary>
     /// <param name="abrev">The abreviation used to return the fullname</param>
-    /// <returns>The fullname of an abreviation</returns>
+    /// <returns>The fullname of an abreviation or the input string</returns>
     public string getFullnameFromAbrev(string abrev)
     {
         if(abrevToFullName.ContainsKey(abrev))
         {
             return abrevToFullName[abrev];
         }
-        return null;
+        return abrev;
     }
 
     /// <summary>
@@ -116,14 +125,14 @@ public class LanguageManager : MonoBehaviour
     /// Get the abreviation of a function by using it's fullname
     /// </summary>
     /// <param name="fullname">The fullname used to return the abreviation</param>
-    /// <returns>The abreviation of an fullname</returns>
+    /// <returns>The abreviation of an fullname or the input string</returns>
     public string getAbrevFromFullname(string fullname)
     {
         if (fullNameToAbrev.ContainsKey(fullname))
         {
             return fullNameToAbrev[fullname];
         }
-        return null;
+        return fullname;
     }
 
     /// <summary>
@@ -152,15 +161,15 @@ public class LanguageManager : MonoBehaviour
         foreach (KeyValuePair<string,string> kv in fullNameToAbrev)
         {
             Validator.FunctionType funcType = Validator.GetFunctionType(kv.Value);
-            foreach (Validator.ValidationType validationType in funcType2ValidationType[funcType])
+            foreach (KeyValuePair<bool, Validator.ValidationType> validationType in funcType2ValidationType[funcType])
             {
-                if(completionPossibilitiesDict.ContainsKey(validationType))
+                if(completionPossibilitiesDict.ContainsKey(validationType.Value))
                 {
-                    completionPossibilitiesDict[validationType].possibilities.Add(MakeCompletionPossibility(funcType, kv.Key));
+                    completionPossibilitiesDict[validationType.Value].possibilities.Add(new CompletionPossibilities.Entry(validationType.Key, MakeCompletionPossibility(funcType, kv.Key)));
                 }
                 else
                 {
-                    completionPossibilitiesDict.Add(validationType, new CompletionPossibilities() { typeOfValidation = validationType, possibilities = new List<string>() {MakeCompletionPossibility(funcType, kv.Key)} });
+                    completionPossibilitiesDict.Add(validationType.Value, new CompletionPossibilities() { typeOfValidation = validationType.Value, possibilities = new List<CompletionPossibilities.Entry>() { new CompletionPossibilities.Entry(validationType.Key, MakeCompletionPossibility(funcType, kv.Key)) } });
                 }
             }
         }
@@ -178,6 +187,8 @@ public class LanguageManager : MonoBehaviour
                 return funcName + " @boolOp";
             case Validator.FunctionType.action:
                 return funcName + " @action";
+            case Validator.FunctionType.keywordReadWrite:
+                return funcName + " @keywordReadWrite";
         }
         return null;
     }
@@ -186,13 +197,12 @@ public class LanguageManager : MonoBehaviour
     /// Convert all fullname to abreviation present in a string
     /// </summary>
     /// <param name="toConvert">String to convert</param>
-    /// <returns>The converted string</returns>
+    /// <returns>The converted string or the input string</returns>
     public string FullNameToAbrev(string toConvert)
     {
         foreach (KeyValuePair<string, string> item in fullNameToAbrev)
         {
             toConvert = Regex.Replace(toConvert, @$"(?<=\s|^){item.Key}(?=\s|$)", item.Value);
-            //toConvert = toConvert.Replace(item.Key, item.Value);
         }
         return toConvert;
     }
@@ -201,12 +211,12 @@ public class LanguageManager : MonoBehaviour
     /// Convert all abreviation to fullname present in a string
     /// </summary>
     /// <param name="toConvert">String to convert</param>
-    /// <returns>The converted string</returns>
+    /// <returns>The converted string or the input string</returns>
     public string AbrevToFullName(string toConvert)
     {
         foreach (KeyValuePair<string,string> item in abrevToFullName)
         {
-            toConvert = toConvert.Replace(item.Key, item.Value);
+            toConvert = Regex.Replace(toConvert, @$"(?<=\s|^){item.Key}(?=\s|$)", item.Value);
         }
         return toConvert;
     }
@@ -230,7 +240,18 @@ public class LanguageManager : MonoBehaviour
     public class CompletionPossibilities
     {
         public Validator.ValidationType typeOfValidation;
-        public List<string> possibilities = new List<string>();
+        public class Entry
+        {
+            public bool onlyReservedKeyword = false;
+            public string possiblity = "";
+
+            public Entry(bool onlyReservedKeyword, string possiblity)
+            {
+                this.onlyReservedKeyword = onlyReservedKeyword;
+                this.possiblity = possiblity;
+            }
+        }
+        public List<Entry> possibilities = new List<Entry>();
     }
 
     /// <summary>
@@ -247,10 +268,13 @@ public class LanguageManager : MonoBehaviour
     {
         DecisionTree tree = new DecisionTree();
 
-        foreach (string possibility in completionPossibilitiesDict[validationType].possibilities)
+        foreach (CompletionPossibilities.Entry possibility in completionPossibilitiesDict[validationType].possibilities)
         {
+            if (possibility.onlyReservedKeyword)
+                continue;
+
             List<string> temp = new List<string>();
-            temp.AddRange(possibility.Split(' ')); // [Wall, in, front, bool]
+            temp.AddRange(possibility.possiblity.Split(' ')); // [Wall, in, front, bool]
 
             bool breakNext = false;
             for (int i = 0; i < temp.Count; i++)
@@ -279,6 +303,10 @@ public class LanguageManager : MonoBehaviour
                             break;
                         case "@action":
                             treeBranch.type = BranchType.action;
+                            breakNext = true;
+                            break;
+                        case "@keywordReadWrite":
+                            treeBranch.type = BranchType.keyword;
                             breakNext = true;
                             break;
                     }
@@ -322,6 +350,7 @@ public class LanguageManager : MonoBehaviour
         boolOp,
         branch,
         action,
+        keyword,
     }
 
     /// <summary>

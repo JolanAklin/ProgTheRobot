@@ -23,99 +23,50 @@ using Language;
 
 public class NodeReadWrite : Nodes
 {
-    private string input;
-    public TMP_InputField inputField;
-    private string[] inputSplited;
-
-    public void ChangeInput(TMP_InputField tMP_InputField)
-    {
-        input = tMP_InputField.text;
-        inputField = tMP_InputField;
-        if (!ValidateInput())
-        {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
-    }
+    /// <summary>
+    /// This string is attended to be used only internally. This is not shown to the user.
+    /// </summary>
+    private string nodeExecutableString;
+    public TMP_Text nodeContentDisplay;
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.readWrite;
-        Manager.instance.OnLanguageChanged += TranslateText;
         ExecManager.onChangeBegin += LockUnlockAllInput;
+        OnDoubleClick += ModifyNodeContent;
     }
 
     private void OnDestroy()
     {
-        Manager.instance.OnLanguageChanged -= TranslateText;
         ExecManager.onChangeBegin -= LockUnlockAllInput;
         DestroyNode();
+        OnDoubleClick -= ModifyNodeContent;
+    }
+
+    public void ModifyNodeContent(object sender, EventArgs e)
+    {
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillReadWrite).GetComponent<PopUpFillNode>();
+        if (nodeExecutableString != null)
+            popUpFillNode.SetContent(new string[] { nodeExecutableString });
+        popUpFillNode.cancelAction = () =>
+        {
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            nodeExecutableString = popUpFillNode.customInputFields[0].executableFunction;
+            nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+            popUpFillNode.Close();
+        };
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    // start tpi
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
+
     public override void LockUnlockAllInput(bool isLocked)
     {
-        inputField.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-            inputField.Select();
-    }
-    //end tpi
-
-    private bool ValidateInput()
-    {
-        string[] delimiters = new string[] { " " };
-        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-        if (inputSplited.Length > 2 || inputSplited.Length == 1)
-            return false;
-        if(inputSplited.Length != 0)
-            switch (inputSplited[0])
-            {
-                case "Afficher":
-                case "Display":
-                case "Lire":
-                case "Read":
-                    if(VarsManager.CheckVarName(inputSplited[1]))
-                    {
-                        TranslateText(this, EventArgs.Empty);
-                        return true;
-                    }
-                    return false;
-
-                default:
-                    return false;
-            }
-        return true;
-    }
-
-    public void TranslateText(object sender, EventArgs e)
-    {
-        if (Translation.CurrentLanguage == "eng")
-        {
-            input = input.Replace("Afficher", "Display");
-            input = input.Replace("Lire", "Read");
-
-        }
-        if (Translation.CurrentLanguage == "fr")
-        {
-            input = input.Replace("Display", "Afficher");
-            input = input.Replace("Read", "Lire");
-        }
-        inputField.text = input;
     }
 
     public override void Execute()
@@ -136,20 +87,18 @@ public class NodeReadWrite : Nodes
         ChangeBorderColor(currentExecutedNode);
 
         string[] delimiters = new string[] { " " };
-        inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        string[] inputSplited = nodeExecutableString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         PopUpReadWrite rw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.readWrite).GetComponent<PopUpReadWrite>();
         switch (inputSplited[0])
         {
-            case "Afficher":
-            case "Display":
+            case "kwwrite#":
                 rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]).Value.ToString());
                 rw.SetOkAction(() => { 
                     rw.Close();
                     StartCoroutine("WaitBeforeCallingNextNode");
                 });
                 break;
-            case "Lire":
-            case "Read":
+            case "kwread#":
                 rw.Init($"Lecture de {inputSplited[1]}");
                 rw.SetOkAction(() => {
                     VarsManager.Var var = rs.robot.varsManager.GetVar(inputSplited[1],0);
@@ -205,7 +154,7 @@ public class NodeReadWrite : Nodes
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         return serializableNode;
     }
     public override void DeSerializeNode(SerializableNode serializableNode)
@@ -213,8 +162,8 @@ public class NodeReadWrite : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
-        inputField.text = input;
+        nodeExecutableString = serializableNode.nodeSettings[0];
+        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
     }

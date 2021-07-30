@@ -14,6 +14,7 @@ public static class Validator
         test,
         action,
         forloop,
+        readWrite
     }
 
     public enum ValidationStatus
@@ -65,7 +66,7 @@ public static class Validator
 
         public void AddSpecificError(uint pos, Error error)
         {
-            if(!specificErrors.ContainsKey(pos))
+            if (!specificErrors.ContainsKey(pos))
                 specificErrors.Add(pos, error);
         }
 
@@ -111,6 +112,8 @@ public static class Validator
                 return ValidateAction(toValidate);
             case ValidationType.forloop:
                 return new ValidationReturn(ValidationStatus.KO);
+            case ValidationType.readWrite:
+                return ValidateReadWrite(toValidate);
             default:
                 return new ValidationReturn(ValidationStatus.KO);
         }
@@ -128,11 +131,11 @@ public static class Validator
     /// <summary>
     /// Validate if and while node content
     /// </summary>
-    /// <param name="toValidate">this string should be only in english</param>
+    /// <param name="toValidate">This string should use the internal format for nodes</param>
     /// <returns>An object containing the validation status and errors</returns>
     private static ValidationReturn ValidateTest(string toValidate)
     {
-        if(toValidate == "")
+        if (toValidate == "")
             return new ValidationReturn(ValidationStatus.OK);
 
         string toValidateNonAltered = toValidate;
@@ -140,7 +143,7 @@ public static class Validator
 
         string regexPattern = @"[^a-zA-Z0-9+\-*/()><=\s]+";
         Regex regex1 = new Regex(regexPattern);
-        if(regex1.IsMatch(toValidate))
+        if (regex1.IsMatch(toValidate))
         {
             vr.ChangeValidationStatus(ValidationStatus.KO);
             Match match = regex1.Match(toValidate);
@@ -171,7 +174,7 @@ public static class Validator
         foreach (string item in exprSplit)
         {
             andOrAddedLength = 0;
-            if(andOrPlaceLength.ContainsKey((int)posInStartString))
+            if (andOrPlaceLength.ContainsKey((int)posInStartString))
             {
                 andOrAddedLength = andOrPlaceLength[(int)posInStartString] + 1;
                 posInStartString += andOrAddedLength;
@@ -186,7 +189,7 @@ public static class Validator
             switch (smallExprSplit.Length)
             {
                 case 0:
-                    if(andOrAddedLength > 0)
+                    if (andOrAddedLength > 0)
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
                         vr.AddSpecificError(posInStartString - andOrAddedLength, new ValidationReturn.Error(posInStartString - andOrAddedLength, posInStartString - 1, $"\"And\" and \"Or\" keywords must have a statement before and after them"));
@@ -194,12 +197,7 @@ public static class Validator
                     break;
                 case 1:
                     // get the corresponding function, if it exist, and adds it to the result list
-                    codeBlockLength = 0;
-                    fullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]);
-                    if (fullname == null)
-                        fullname = smallExprSplit[0];
-
-                    codeBlockLength = (uint)fullname.Length;
+                    codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]).Length;
 
                     if (GetFunctionType(smallExprSplit[0]) != FunctionType.@bool)
                     {
@@ -216,14 +214,12 @@ public static class Validator
                     FunctionType secondWordType = GetFunctionType(smallExprSplit[1]);
 
                     string firstWordFullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[0]);
-                    if (firstWordFullname == null)
-                        firstWordFullname = smallExprSplit[0];
                     string secondWordFullname = LanguageManager.instance.getFullnameFromAbrev(smallExprSplit[1]);
-                    if (secondWordFullname == null)
-                        secondWordFullname = smallExprSplit[1];
 
-                    codeBlockLength += (uint)firstWordFullname.Length + 1;
-                    codeBlockLength += (uint)secondWordFullname.Length;
+                    uint firstWordLength = (uint)firstWordFullname.Length;
+                    uint secondWordLength = (uint)secondWordFullname.Length;
+
+                    codeBlockLength = firstWordLength + 1 + secondWordLength;
 
                     if (firstWordType != FunctionType.boolOp && secondWordType != FunctionType.@bool)
                     {
@@ -231,15 +227,15 @@ public static class Validator
                         goto default;
                     }
 
-                    if(firstWordType == FunctionType.boolOp && secondWordType != FunctionType.@bool)
+                    if (firstWordType == FunctionType.boolOp && secondWordType != FunctionType.@bool)
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
-                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString + (uint)firstWordFullname.Length, posInStartString + 1 + (uint)firstWordFullname.Length + (uint)secondWordFullname.Length, $"\"{secondWordFullname}\" is not a valid boolean function."));
+                        vr.AddSpecificError(posInStartString + firstWordLength + 1, new ValidationReturn.Error(posInStartString + firstWordLength + 1, posInStartString + 1 + firstWordLength + secondWordLength, $"\"{secondWordFullname}\" is not a valid boolean function."));
                     }
-                    else if(firstWordType != FunctionType.boolOp && secondWordType == FunctionType.@bool)
+                    else if (firstWordType != FunctionType.boolOp && secondWordType == FunctionType.@bool)
                     {
                         vr.ChangeValidationStatus(ValidationStatus.KO);
-                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + (uint)firstWordFullname.Length, $"The keyword \"{firstWordFullname}\" is unknown in the current context."));
+                        vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + firstWordLength, $"The keyword \"{firstWordFullname}\" is unknown in the current context."));
                     }
                     posInStartString += codeBlockLength + 1; // + 1 = space after this word
                     break;
@@ -270,7 +266,7 @@ public static class Validator
                             }
                             if (!findDelimiter)
                             {
-                                if(regex.IsMatch(exprBits))
+                                if (regex.IsMatch(exprBits))
                                     exprPart1.Add("1");
                                 else
                                     exprPart1.Add(exprBits);
@@ -289,10 +285,7 @@ public static class Validator
                         if (exprType != FunctionType.@int && exprType != FunctionType.word && exprType != FunctionType.number && exprType != FunctionType.@operator)
                         {
                             string funcName = LanguageManager.instance.getFullnameFromAbrev(exprBits);
-                            if (funcName != null)
-                                codeBlockLength = (uint)funcName.Length;
-                            else
-                                codeBlockLength = (uint)exprBits.Length;
+                            codeBlockLength = (uint)funcName.Length;
 
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
@@ -303,8 +296,8 @@ public static class Validator
                         }
                         else
                         {
-                            codeBlockLength = (uint)exprBits.Length; 
-                            if(LanguageManager.instance.ReservedKeywords[ValidationType.test].Contains(exprBits))
+                            codeBlockLength = (uint)exprBits.Length;
+                            if (LanguageManager.instance.ReservedKeywords[ValidationType.test].Contains(exprBits))
                             {
                                 vr.ChangeValidationStatus(ValidationStatus.KO);
                                 vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, $"\"{exprBits}\" is a reserved keyword and therefore can't be used as a variable"));
@@ -338,6 +331,11 @@ public static class Validator
         return vr;
     }
 
+    /// <summary>
+    /// validate robot actions, such as go forward or turn left
+    /// </summary>
+    /// <param name="toValidate">This string should use the internal format for nodes</param>
+    /// <returns>An object containing the validation status and errors</returns>
     private static ValidationReturn ValidateAction(string toValidate)
     {
         ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
@@ -361,16 +359,10 @@ public static class Validator
                 break;
             default:
                 type = GetFunctionType(splited[0]);
-                uint posInDisplayedString = 0;
-                string funcName = LanguageManager.instance.AbrevToFullName(splited[0]);
-                if (funcName != null)
-                    posInDisplayedString = (uint)funcName.Length;
-                else
-                    posInDisplayedString = (uint)splited[0].Length;
+                uint posInDisplayedString = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length;
 
                 if (type != FunctionType.action)
                 {
-
                     vr.ChangeValidationStatus(ValidationStatus.KO);
                     vr.AddSpecificError(0, new ValidationReturn.Error(0, posInDisplayedString, $"\"{splited[0]}\" is not an action."));
                 }
@@ -386,6 +378,65 @@ public static class Validator
     private static ValidationReturn ValidateForLoop(string[] toValidate)
     {
         return new ValidationReturn(ValidationStatus.KO);
+    }
+
+    /// <summary>
+    /// validate read and write statement
+    /// </summary>
+    /// <param name="toValidate">This string should use the internal format for nodes</param>
+    /// <returns>An object containing the validation status and errors</returns>
+    private static ValidationReturn ValidateReadWrite(string toValidate)
+    {
+        ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
+
+        string toValidateUnAltered = toValidate;
+        toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
+        string[] splited = toValidate.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        uint pos = 0;
+        FunctionType type;
+        switch (splited.Length)
+        {
+            case 0:
+                break;
+            case 1: // test if the first word is Read or Write
+                pos = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length;
+
+                type = GetFunctionType(splited[0]);
+                if(type != FunctionType.keywordReadWrite || (splited[0] != "kwread#" && splited[0] != "kwwrite#"))
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, pos, "Expecting \"Read\" or \"Write\" keyword."));
+                }
+                break;
+            case 2: // test if the second word is a variable
+                type = GetFunctionType(splited[1]);
+                pos = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length + 1;
+
+                uint endPos = pos;
+                string secondWord = LanguageManager.instance.getFullnameFromAbrev(splited[1]);
+                endPos += (uint)secondWord.Length;
+
+                if (type != FunctionType.word)
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(pos, new ValidationReturn.Error(pos, endPos, "Expecting a variable"));
+                }else if(LanguageManager.instance.ReservedKeywords[ValidationType.readWrite].Contains(secondWord))
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(pos, new ValidationReturn.Error(pos, endPos, $"\"{secondWord}\" is a reserved keyword."));
+                }
+                goto case 1;
+            default: // say that everything more is wrong
+                for (int i = 0; i < 2; i++)
+                {
+                    pos += (uint)LanguageManager.instance.getFullnameFromAbrev(splited[i]).Length + 1;
+                }
+                vr.ChangeValidationStatus(ValidationStatus.KO);
+                vr.AddSpecificError(pos, new ValidationReturn.Error(pos, (uint)toValidateUnAltered.Length, "Expecting only 2 arguments. \"Read\" or \"Write\" keyword and a variable."));
+                goto case 2;
+        }
+        return vr;
     }
 
     public enum FunctionType
@@ -416,7 +467,8 @@ public static class Validator
         action,
         unknown,
         number,
-        @operator
+        @operator,
+        keywordReadWrite,
     }
 
     /// <summary>
@@ -428,14 +480,14 @@ public static class Validator
     {
         if(!LanguageManager.instance.AbrevToFullNameContainsKey(function))
         {
-            if (Regex.IsMatch(function, @"[a-z]", RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(function, @"^[a-z]+$", RegexOptions.IgnoreCase))
             {
                 return FunctionType.word;
-            }else if (Regex.IsMatch(function, @"[0-9]"))
+            }else if (Regex.IsMatch(function, @"^[0-9]+$"))
             {
                 return FunctionType.number;
             }
-            else if (Regex.IsMatch(function, @"[+\-*/()><=]"))
+            else if (Regex.IsMatch(function, @"^[+\-*/()><=]+$"))
             {
                 return FunctionType.@operator;
             }
@@ -451,6 +503,9 @@ public static class Validator
         else if(function.StartsWith("ac"))
         {
             return FunctionType.action;
+        }else if(function.StartsWith("kw"))
+        {
+            return FunctionType.keywordReadWrite;
         }
         else if(function[0] == 'i')
         {
