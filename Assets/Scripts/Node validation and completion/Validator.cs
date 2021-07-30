@@ -286,16 +286,20 @@ public static class Validator
 
                         FunctionType exprType = GetFunctionType(exprBits);
 
-                        if (exprType != FunctionType.@int)
+                        if (exprType != FunctionType.@int && exprType != FunctionType.word && exprType != FunctionType.number && exprType != FunctionType.@operator)
                         {
-                            codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
+                            string funcName = LanguageManager.instance.getFullnameFromAbrev(exprBits);
+                            if (funcName != null)
+                                codeBlockLength = (uint)funcName.Length;
+                            else
+                                codeBlockLength = (uint)exprBits.Length;
 
                             vr.ChangeValidationStatus(ValidationStatus.KO);
                             vr.AddSpecificError(posInStartString, new ValidationReturn.Error(posInStartString, posInStartString + codeBlockLength, "Only integer function and variable can be used in this context."));
                         }
                         else if (exprType == FunctionType.@int)
                         {
-                            codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length; // space after this word
+                            codeBlockLength = (uint)LanguageManager.instance.getFullnameFromAbrev(exprBits).Length;
                         }
                         else
                         {
@@ -375,7 +379,7 @@ public static class Validator
         return new ValidationReturn(ValidationStatus.KO);
     }
 
-    private enum FunctionType
+    public enum FunctionType
     {
         /// <summary>
         /// A function returning an int
@@ -402,20 +406,29 @@ public static class Validator
         /// </summary>
         action,
         unknown,
+        number,
+        @operator
     }
 
     /// <summary>
-    /// Return the type of a string
+    /// Return the type of a function abreviation
     /// </summary>
     /// <param name="function"></param>
     /// <returns></returns>
-    private static FunctionType GetFunctionType(string function)
+    public static FunctionType GetFunctionType(string function)
     {
         if(!LanguageManager.instance.AbrevToFullNameContainsKey(function))
         {
             if (Regex.IsMatch(function, @"[a-z]", RegexOptions.IgnoreCase))
             {
                 return FunctionType.word;
+            }else if (Regex.IsMatch(function, @"[0-9]"))
+            {
+                return FunctionType.number;
+            }
+            else if (Regex.IsMatch(function, @"[+\-*/()><=]"))
+            {
+                return FunctionType.@operator;
             }
             else
             {

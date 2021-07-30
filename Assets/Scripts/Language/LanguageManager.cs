@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Language.Loader;
 
 public class LanguageManager : MonoBehaviour
 {
@@ -18,89 +19,70 @@ public class LanguageManager : MonoBehaviour
      */
     // should be loaded dynamicly with a language file in the future
     private static Dictionary<string, string> abrevToFullName = new Dictionary<string, string>();
-    private static Dictionary<string, string> fullNameToAbrev = new Dictionary<string, string>()
-    {
-        // boolean func
-        {"Wall in front","bwf#"},
-        {"Wall right","bwr#"},
-        {"Wall left","bwl#"},
-        {"Out","bo#"},
-        {"Robot on an outlet","boao#"},
-        {"Tile marked","btm#"},
-        {"Ball on ground","bbg#"},
-        {"True", "btrue#" },
-        {"False", "bfalse#" },
-        // int func
-        {"Wall distance","iwd#"},
-        {"Power","ip#"},
-        {"Robot position x","irpx#"},
-        {"Robot position y","irpy#"},
-        {"Robot direction x","irdx#"},
-        {"Robot direction y","irdy#"},
-        {"Ball position x","ibpx#"},
-        {"Ball position y","ibpy#"},
-        // boolean operators
-        {"And", "bopand#" },
-        {"Or", "bopor#" },
-        {"Not", "bopnot#" },
-        // robot action
-        { "Go forward", "acgf#" },
-        { "Turn right", "actr#" },
-        { "Turn left", "actl#" },
-        { "Mark", "acm#" },
-        { "Unmark", "acum#" },
-        { "Recharge", "acr#" },
-        { "Place ball", "acpb#" },
-        { "Take ball", "actb#" },
-        { "Throw ball", "actwb#" },
-    };
+    private static Dictionary<string, string> fullNameToAbrev = new Dictionary<string, string>();
 
     public Dictionary<string,string> FullNameToAbrevDict { get => fullNameToAbrev; }
 
     private Dictionary<Validator.ValidationType, List<string>> reservedKeywords = new Dictionary<Validator.ValidationType, List<string>>();
     public Dictionary<Validator.ValidationType, List<string>> ReservedKeywords { get => reservedKeywords; }
 
+    private Dictionary<Validator.FunctionType, List<Validator.ValidationType>> funcType2ValidationType = new Dictionary<Validator.FunctionType, List<Validator.ValidationType>>()
+    {
+        { Validator.FunctionType.@int, new List<Validator.ValidationType>()
+            {
+                Validator.ValidationType.test
+            }
+        },
+        { Validator.FunctionType.@bool, new List<Validator.ValidationType>()
+            {
+                Validator.ValidationType.test
+            }
+        },
+        { Validator.FunctionType.boolOp, new List<Validator.ValidationType>()
+            {
+                Validator.ValidationType.test
+            }
+        },
+        { Validator.FunctionType.action, new List<Validator.ValidationType>()
+            {
+                Validator.ValidationType.action
+            }
+        }
+    };
+
     private void Awake()
     {
-        InverseKV();
         instance = this;
+        abrevToFullName = LanguageLoader.Load(LanguageLoader.SupportedLanguages.eng, LanguageLoader.FileType.functions);
+        InverseKV();
+        FillCompletionPossibilitiesDict();
     }
 
     private void Start()
     {
-        PrepareTrees();
+        foreach (Validator.ValidationType validationType in completionPossibilitiesDict.Keys)
+        {
+            DTrees.Add(validationType, MakeCompletionDecisionTree(validationType));
+        }
         MakeReservedKeywordList();
     }
 
     private void MakeReservedKeywordList() // needs to be uptaded. this version cannot put some keywords in more than one validation type
     {
-        reservedKeywords.Add(Validator.ValidationType.test, new List<string>());
-        reservedKeywords.Add(Validator.ValidationType.action, new List<string>());
-        char[] splitChars = new char[] { ' ' };
-        foreach (KeyValuePair<string, string> function in fullNameToAbrev)
+        string[] splitters = new string[] { " " };
+        foreach (var kv in completionPossibilitiesDict)
         {
-            string[] temp = function.Key.Split(splitChars, StringSplitOptions.RemoveEmptyEntries);
-            Validator.ValidationType validationType = Validator.ValidationType.test;
-            switch (function.Value)
+            List<string> keywords = new List<string>();
+            foreach (string possibility in kv.Value.possibilities)
             {
-                case string func when func.StartsWith("i"):
-                    validationType = Validator.ValidationType.test;
-                    break;
-                case string func when func.StartsWith("b"):
-                    validationType = Validator.ValidationType.test;
-                    break;
-                case string func when func.StartsWith("bop"):
-                    validationType = Validator.ValidationType.test;
-                    break;
-                case string func when func.StartsWith("ac"):
-                    validationType = Validator.ValidationType.action;
-                    break;
+                string[] words = possibility.Split(splitters, StringSplitOptions.RemoveEmptyEntries);
+                for (int i = 0; i < words.Length - 1; i++)
+                {
+                    if(!keywords.Contains(words[i]))
+                        keywords.Add(words[i]);
+                }
             }
-            foreach (string word in temp)
-            {
-                if (!reservedKeywords[validationType].Contains(word))
-                    reservedKeywords[validationType].Add(word);
-            }
+            reservedKeywords.Add(kv.Key, keywords);
         }
     }
 
@@ -158,10 +140,45 @@ public class LanguageManager : MonoBehaviour
     /// </summary>
     private static void InverseKV()
     {
-        foreach (KeyValuePair<string, string> item in fullNameToAbrev)
+        foreach (KeyValuePair<string, string> item in abrevToFullName)
         {
-            abrevToFullName.Add(item.Value, item.Key);
+            fullNameToAbrev.Add(item.Value, item.Key);
         }
+    }
+
+    private void FillCompletionPossibilitiesDict()
+    {
+        foreach (KeyValuePair<string,string> kv in fullNameToAbrev)
+        {
+            Validator.FunctionType funcType = Validator.GetFunctionType(kv.Value);
+            foreach (Validator.ValidationType validationType in funcType2ValidationType[funcType])
+            {
+                if(completionPossibilitiesDict.ContainsKey(validationType))
+                {
+                    completionPossibilitiesDict[validationType].possibilities.Add(MakeCompletionPossibility(funcType, kv.Key));
+                }
+                else
+                {
+                    completionPossibilitiesDict.Add(validationType, new CompletionPossibilities() { typeOfValidation = validationType, possibilities = new List<string>() {MakeCompletionPossibility(funcType, kv.Key)} });
+                }
+            }
+        }
+    }
+
+    private string MakeCompletionPossibility(Validator.FunctionType funcType, string funcName)
+    {
+        switch (funcType)
+        {
+            case Validator.FunctionType.@int:
+                return funcName + " @int";
+            case Validator.FunctionType.@bool:
+                return funcName + " @bool";
+            case Validator.FunctionType.boolOp:
+                return funcName + " @boolOp";
+            case Validator.FunctionType.action:
+                return funcName + " @action";
+        }
+        return null;
     }
 
     /// <summary>
@@ -212,24 +229,6 @@ public class LanguageManager : MonoBehaviour
     {
         public Validator.ValidationType typeOfValidation;
         public List<string> possibilities = new List<string>();
-    }
-    /// <summary>
-    /// Create all trees for every validation type given in completionPossibilities list
-    /// </summary>
-    private void PrepareTrees()
-    {
-        foreach (var item in completionPossibilities)
-        {
-            if (completionPossibilitiesDict.ContainsKey(item.typeOfValidation))
-            {
-                Debug.Log($"Found duplicate of \"{item.typeOfValidation}\"");
-            }
-            else
-            {
-                completionPossibilitiesDict.Add(item.typeOfValidation, item);
-                dTrees.Add(item.typeOfValidation, MakeCompletionDecisionTree(item.typeOfValidation));
-            }
-        }
     }
 
     /// <summary>

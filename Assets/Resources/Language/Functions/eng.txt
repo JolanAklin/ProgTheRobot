@@ -1,0 +1,36 @@
+[boolean functions]
+bwf# = Wall in front
+bwr# = Wall right
+bwl# = Wall left
+bo# = Out
+boao# = Robot on an outlet
+btm# = Tile marked
+bbg# = Ball on ground
+btrue# = True
+bfalse# = False
+
+[int functions]
+iwd# = Wall distance
+ip# = Power
+irpx# = Robot position x
+irpy# = Robot position y
+irdx# = Robot direction x
+irdy# = Robot direction y
+ibpx# = Ball position x
+ibpy# = Ball position y
+
+[boolean operators]
+bopand# = And
+bopor# = Or
+bopnot# = Not
+
+[robot actions]
+acgf# = Go forward
+actr# = Turn right
+actl# = Turn left
+acm# = Mark
+acum# = Unmark
+acr# = Recharge
+acpb# = Place ball
+actb# = Take ball
+actwb# = Throw ball
