@@ -14,7 +14,8 @@ public static class Validator
         test,
         action,
         forloop,
-        readWrite
+        readWrite,
+        affectation
     }
 
     public enum ValidationStatus
@@ -114,6 +115,8 @@ public static class Validator
                 return new ValidationReturn(ValidationStatus.KO);
             case ValidationType.readWrite:
                 return ValidateReadWrite(toValidate);
+            case ValidationType.affectation:
+                return ValidateAffectation(toValidate);
             default:
                 return new ValidationReturn(ValidationStatus.KO);
         }
@@ -381,7 +384,7 @@ public static class Validator
     }
 
     /// <summary>
-    /// validate read and write statement
+    /// validate read and write statements
     /// </summary>
     /// <param name="toValidate">This string should use the internal format for nodes</param>
     /// <returns>An object containing the validation status and errors</returns>
@@ -439,6 +442,83 @@ public static class Validator
         return vr;
     }
 
+    /// <summary>
+    /// validate affectation statements
+    /// </summary>
+    /// <param name="toValidate">This string should use the internal format for nodes</param>
+    /// <returns>An object containing the validation status and errors</returns>
+    private static ValidationReturn ValidateAffectation(string toValidate)
+    {
+        ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
+
+        string toValidateUnAltered = toValidate;
+        toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
+        string[] splited = toValidate.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        string fullname;
+        FunctionType type;
+        switch (splited.Length)
+        {
+            case 0:
+                break;
+            case 1:
+                type = GetFunctionType(splited[0]);
+                fullname = LanguageManager.instance.getFullnameFromAbrev(splited[0]);
+                if (type != FunctionType.word && LanguageManager.instance.ReservedKeywords[ValidationType.affectation].Contains(fullname))
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, (uint)fullname.Length, $"\"{fullname}\" is a resserved keyword."));
+                }
+                else if (type != FunctionType.word)
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, (uint)fullname.Length, "Should be a variable."));
+                }
+                break;
+            case 2:
+                fullname = LanguageManager.instance.getFullnameFromAbrev(splited[0]);
+                string funcName = LanguageManager.instance.getFullnameFromAbrev(splited[1]);
+                if (splited[1] != "=")
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError((uint)fullname.Length + 1, new ValidationReturn.Error((uint)fullname.Length + 1, (uint)fullname.Length + 1 + (uint)funcName.Length, $"Expecting \"=\" sign"));
+                }
+                goto case 1;
+            default:
+                string expr = "";
+                uint posInDisplayString = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length + 1 + (uint)LanguageManager.instance.getFullnameFromAbrev(splited[1]).Length + 1;
+                uint startPos = posInDisplayString;
+                for (int i = 2; i < splited.Length; i++)
+                {
+                    expr += Regex.Replace(splited[i], @"^[a-zA-Z#]+$", "1");
+                    type = GetFunctionType(splited[i]);
+                    string name = LanguageManager.instance.getFullnameFromAbrev(splited[i]);
+                    if (type != FunctionType.@int && type != FunctionType.word && type != FunctionType.number && type != FunctionType.@operator)
+                    {
+                        vr.ChangeValidationStatus(ValidationStatus.KO);
+                        vr.AddSpecificError(posInDisplayString, new ValidationReturn.Error(posInDisplayString, posInDisplayString + (uint)name.Length, "Only integer function and variable can be used in this context."));
+                    }
+                    else if(type != FunctionType.@int && LanguageManager.instance.ReservedKeywords[ValidationType.affectation].Contains(name))
+                    {
+                        vr.ChangeValidationStatus(ValidationStatus.KO);
+                        vr.AddSpecificError(posInDisplayString, new ValidationReturn.Error(posInDisplayString, posInDisplayString + (uint)name.Length, $"\"{name}\" is a resserved keyword."));
+                    }
+                    posInDisplayString += (uint)name.Length + 1;
+                }
+                try
+                {
+                    new DataTable().Compute(expr, null);
+                }
+                catch (Exception e)
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(startPos, new ValidationReturn.Error(startPos, posInDisplayString - 1, $"{e.Message}"));
+                }
+                goto case 2;
+        }
+        return vr;
+    }
+
     public enum FunctionType
     {
         /// <summary>
@@ -483,7 +563,7 @@ public static class Validator
             if (Regex.IsMatch(function, @"^[a-z]+$", RegexOptions.IgnoreCase))
             {
                 return FunctionType.word;
-            }else if (Regex.IsMatch(function, @"^[0-9]+$"))
+            }else if (Regex.IsMatch(function, @"^-?[0-9]+$"))
             {
                 return FunctionType.number;
             }

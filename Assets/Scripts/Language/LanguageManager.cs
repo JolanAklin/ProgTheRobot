@@ -27,37 +27,52 @@ public class LanguageManager : MonoBehaviour
     private Dictionary<Validator.ValidationType, List<string>> reservedKeywords = new Dictionary<Validator.ValidationType, List<string>>();
     public Dictionary<Validator.ValidationType, List<string>> ReservedKeywords { get => reservedKeywords; }
 
-    //                                                    True = only for the reserved keyword list
-    private Dictionary<Validator.FunctionType, Dictionary<bool, Validator.ValidationType>> funcType2ValidationType = new Dictionary<Validator.FunctionType, Dictionary<bool, Validator.ValidationType>>()
+    private class ValidationTypeInfo
     {
-        { Validator.FunctionType.@int, new Dictionary<bool, Validator.ValidationType>()
-            {
-                { false, Validator.ValidationType.test },
-                { true, Validator.ValidationType.readWrite },
-            }
-        },
-        { Validator.FunctionType.@bool, new Dictionary<bool, Validator.ValidationType>()
-            {
-                { false, Validator.ValidationType.test },
-                { true, Validator.ValidationType.readWrite },
-            }
-        },
-        { Validator.FunctionType.boolOp, new Dictionary<bool, Validator.ValidationType>()
-            {
-                { false, Validator.ValidationType.test },
-                { true, Validator.ValidationType.readWrite },
-            }
-        },
-        { Validator.FunctionType.action, new Dictionary<bool, Validator.ValidationType>()
-            {
-                { false, Validator.ValidationType.action },
-            }
-        },
-        { Validator.FunctionType.keywordReadWrite, new Dictionary<bool, Validator.ValidationType>()
-            {
-                { false, Validator.ValidationType.readWrite },
-            }
+        public bool onlyReservedKeywords { get; private set; }
+        public Validator.ValidationType validationType { get; private set; }
+
+        public ValidationTypeInfo(bool onlyReservedKeywords, Validator.ValidationType validationType)
+        {
+            this.onlyReservedKeywords = onlyReservedKeywords;
+            this.validationType = validationType;
         }
+    }
+
+    //                                                    True = only for the reserved keyword list
+    private Dictionary<Validator.FunctionType, List<ValidationTypeInfo>> funcType2ValidationType = new Dictionary<Validator.FunctionType, List<ValidationTypeInfo>>()
+    {
+        { Validator.FunctionType.@int, new List<ValidationTypeInfo>()
+            {
+                new ValidationTypeInfo( false, Validator.ValidationType.test ),
+                new ValidationTypeInfo( true, Validator.ValidationType.readWrite ),
+                new ValidationTypeInfo( false, Validator.ValidationType.affectation ),
+            }
+        },
+        { Validator.FunctionType.@bool, new List<ValidationTypeInfo>()
+            {
+                new ValidationTypeInfo( false, Validator.ValidationType.test ),
+                new ValidationTypeInfo(true, Validator.ValidationType.readWrite),
+                new ValidationTypeInfo(true, Validator.ValidationType.affectation),
+            }
+        },
+        { Validator.FunctionType.boolOp, new List<ValidationTypeInfo>()
+            {
+                new ValidationTypeInfo( false, Validator.ValidationType.test ),
+                new ValidationTypeInfo(true, Validator.ValidationType.readWrite),
+                new ValidationTypeInfo(true, Validator.ValidationType.affectation),
+            }
+        },
+        { Validator.FunctionType.action, new List<ValidationTypeInfo>()
+            {
+                new ValidationTypeInfo( false, Validator.ValidationType.action ),
+            }
+        },
+        { Validator.FunctionType.keywordReadWrite, new List<ValidationTypeInfo>()
+            {
+                new ValidationTypeInfo( false, Validator.ValidationType.readWrite ),
+            }
+        },
     };
 
     private void Awake()
@@ -161,15 +176,15 @@ public class LanguageManager : MonoBehaviour
         foreach (KeyValuePair<string,string> kv in fullNameToAbrev)
         {
             Validator.FunctionType funcType = Validator.GetFunctionType(kv.Value);
-            foreach (KeyValuePair<bool, Validator.ValidationType> validationType in funcType2ValidationType[funcType])
+            foreach (ValidationTypeInfo validationType in funcType2ValidationType[funcType])
             {
-                if(completionPossibilitiesDict.ContainsKey(validationType.Value))
+                if(completionPossibilitiesDict.ContainsKey(validationType.validationType))
                 {
-                    completionPossibilitiesDict[validationType.Value].possibilities.Add(new CompletionPossibilities.Entry(validationType.Key, MakeCompletionPossibility(funcType, kv.Key)));
+                    completionPossibilitiesDict[validationType.validationType].possibilities.Add(new CompletionPossibilities.Entry(validationType.onlyReservedKeywords, MakeCompletionPossibility(funcType, kv.Key)));
                 }
                 else
                 {
-                    completionPossibilitiesDict.Add(validationType.Value, new CompletionPossibilities() { typeOfValidation = validationType.Value, possibilities = new List<CompletionPossibilities.Entry>() { new CompletionPossibilities.Entry(validationType.Key, MakeCompletionPossibility(funcType, kv.Key)) } });
+                    completionPossibilitiesDict.Add(validationType.validationType, new CompletionPossibilities() { typeOfValidation = validationType.validationType, possibilities = new List<CompletionPossibilities.Entry>() { new CompletionPossibilities.Entry(validationType.onlyReservedKeywords, MakeCompletionPossibility(funcType, kv.Key)) } });
                 }
             }
         }

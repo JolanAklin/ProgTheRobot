@@ -365,38 +365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   completionPossibilities:
   - typeOfValidation: 0
-    possibilities:
-    - Wall in front @bool
-    - Wall left @bool
-    - Wall right @bool
-    - Out @bool
-    - Robot on an outlet @bool
-    - Tile marked @bool
-    - Ball on ground @bool
-    - False @bool
-    - True @bool
-    - Wall distance @int
-    - Power @int
-    - Robot position x @int
-    - Robot position y @int
-    - Robot direction x @int
-    - Robot direction y @int
-    - Ball position x @int
-    - Ball position y @int
-    - And @boolOp
-    - Or @boolOp
-    - Not @boolOp
   - typeOfValidation: 1
-    possibilities:
-    - Go forward @action
-    - Turn right @action
-    - Turn left @action
-    - Mark @action
-    - Unmark @action
-    - Recharge @action
-    - Place ball @action
-    - Take ball @action
-    - Throw ball @action
 --- !u!1 &4418599
 GameObject:
   m_ObjectHideFlags: 0
@@ -3077,7 +3046,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 233.5, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &568890601
@@ -5947,7 +5916,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 143, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1009728105
@@ -6833,6 +6802,8 @@ MonoBehaviour:
     obj: {fileID: 4430711168694824543, guid: dd679f048e3481c4b8999492b0a499aa, type: 3}
   - type: 11
     obj: {fileID: 3471151153698174368, guid: e589d6ecbb1008748a692a101a951cd8, type: 3}
+  - type: 12
+    obj: {fileID: 9178372292312698783, guid: 91cb5f505ee79594a95e7625823cd224, type: 3}
 --- !u!4 &1145785825
 Transform:
   m_ObjectHideFlags: 0
@@ -11452,10 +11423,10 @@ RectTransform:
   m_Father: {fileID: 27398558794119078}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 138.5, y: -3}
-  m_SizeDelta: {x: 271, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794118189
 RectTransform:
@@ -11550,10 +11521,10 @@ RectTransform:
   m_Father: {fileID: 27398558794118279}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 137, y: 0}
-  m_SizeDelta: {x: 274, y: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794118279
 RectTransform:
@@ -11743,10 +11714,10 @@ RectTransform:
   m_Father: {fileID: 27398558794119078}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 138.5, y: -100.375}
-  m_SizeDelta: {x: 271, y: 188.75}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794119065
 RectTransform:
@@ -12131,7 +12102,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 27398558794119807}
   m_HandleRect: {fileID: 27398558794118189}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:

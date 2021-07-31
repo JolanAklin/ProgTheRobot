@@ -25,136 +25,50 @@ using System.Text.RegularExpressions;
 
 public class NodeAffect : Nodes
 {
-    private string input;
+    private string nodeExecutableString;
     private string[] inputSplited;
+    public TMP_Text nodeContentDisplay;
 
     private VarsManager.Var var;
 
-    public TMP_InputField inputField;
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.affectation;
         ExecManager.onChangeBegin += LockUnlockAllInput;
+        OnDoubleClick += ModifyNodeContent;
     }
 
     public void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
+    }
+
+    public void ModifyNodeContent(object sender, EventArgs e)
+    {
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillAffectation).GetComponent<PopUpFillNode>();
+        if (nodeExecutableString != null)
+            popUpFillNode.SetContent(new string[] { nodeExecutableString });
+        popUpFillNode.cancelAction = () =>
+        {
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            nodeExecutableString = popUpFillNode.customInputFields[0].executableFunction;
+            nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+            popUpFillNode.Close();
+        };
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    // start tpi
-
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
-        inputField.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-            inputField.Select();
-    }
-    //end tpi
-
-    public void ChangeInput(TMP_InputField tMP_InputField)
-    {
-        input = tMP_InputField.text;
-        input = FormatInput(input);
-        inputField.text = input;
-        if (!ValidateInput())
-        {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
-    }
-
-    // start tpi
-    /// <summary>
-    /// Format the string
-    /// </summary>
-    /// <param name="input">the string to format</param>
-    /// <returns>The formated string</returns>
-    private string FormatInput(string input)
-    {
-        input = input.Replace("=", " = ");
-        input = input.Replace("<", " < ");
-        input = input.Replace(">", " > ");
-        input = input.Replace("<=", " <= ");
-        input = input.Replace(">=", " >= ");
-        input = input.Replace("<>", " <> ");
-        input = input.Replace("+", " + ");
-        input = input.Replace("-", " - ");
-        input = input.Replace("*", " * ");
-        input = input.Replace("/", " / ");
-        input = input.Replace("(", " ( ");
-        input = input.Replace(")", " ) ");
-
-        string pattern = @"\s+";
-        input = Regex.Replace(input, pattern, " ");
-        return input;
-    }
-    // end tpi
-
-    private bool ValidateInput()
-    {
-        if(input.Length > 0)
-        {
-            string[] delimiters = new string[] { " " };
-            inputSplited = input.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
-            if (inputSplited.Length <= 2)
-                return false;
-            if (!inputSplited[0].Any(char.IsDigit))
-            {
-                try
-                {
-                    if (inputSplited[1] == "=")
-                    {
-                        for (int i = 2; i < inputSplited.Length; i++)
-                        {
-                            if (!(inputSplited[i].Any(Char.IsDigit) || inputSplited[i].Any(Char.IsLetter)))
-                            {
-                                //return VarsManager.CheckVarName(inputSplited[i]);
-                                switch (inputSplited[i])
-                                {
-                                    case "+":
-                                    case "-":
-                                    case "*":
-                                    case "/":
-                                    case "(":
-                                    case ")":
-                                        break;
-                                    default:
-                                        return false;
-                                }
-                            }
-                        }
-                        return true;
-                    }
-                }
-                catch
-                {
-                    return false;
-                }
-            }
-        }
-        else
-        {
-            return true;
-        }
-        return false;
     }
 
     public override void Execute()
@@ -175,7 +89,7 @@ public class NodeAffect : Nodes
         ChangeBorderColor(currentExecutedNode);
         // calculate and set the var
         string[] delimiters = new string[] { " " };
-        string[] inputVarReplaced = rs.robot.varsManager.ReplaceFunctionByValue(input).Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
+        string[] inputVarReplaced = rs.robot.varsManager.ReplaceFunctionByValue(nodeExecutableString).Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         if (inputVarReplaced != null)
         {
             if (var == null)
@@ -251,7 +165,7 @@ public class NodeAffect : Nodes
             nodeSettings = new List<string>(),
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         return serializableNode;
     }
     public override void DeSerializeNode(SerializableNode serializableNode)
@@ -259,10 +173,9 @@ public class NodeAffect : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
-        inputField.text = input;
+        nodeExecutableString = serializableNode.nodeSettings[0];
+        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        ValidateInput();
         NodesDict.Add(id, this);
     }
     #endregion
