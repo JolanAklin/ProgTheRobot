@@ -22,15 +22,13 @@ using Language;
 using System;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
-
-// start tpi
+using System.Linq;
 
 public class NodeSound : Nodes
 {
-    public TMP_InputField inputField;
     public ToggleScript asyncToggle;
-    public AutoCompletion completion;
-    private string input;
+    private string nodeExecutableString;
+    public TMP_Text nodeContentDisplay;
     private bool playAsync = false;
 
     new private void Awake()
@@ -38,63 +36,42 @@ public class NodeSound : Nodes
         base.Awake();
         nodeTypes = NodeTypes.sound;
         ExecManager.onChangeBegin += LockUnlockAllInput;
-        completion.possibleWord = SoundManager.instance.GetAllAudioNames();
-        completion.ChangeProbaWord(this, EventArgs.Empty);
+        OnDoubleClick += ModifyNodeContent;
     }
 
     private void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
 
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
+    public void ModifyNodeContent(object sender, EventArgs e)
+    {
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillSound).GetComponent<PopUpFillNode>();
+        if (nodeExecutableString != null)
+            popUpFillNode.inputModule.SetInputsContent(new string[] { new PopUpFillNodeDropDownModule.DropDownItemDefiner("Choose a sound", SoundManager.instance.AudioClipsName.ToArray(), SoundManager.instance.AudioClipsName.IndexOf(nodeExecutableString) + 1).ToJson() });
+        else
+            popUpFillNode.inputModule.SetInputsContent(new string[] { new PopUpFillNodeDropDownModule.DropDownItemDefiner("Choose a sound", SoundManager.instance.AudioClipsName.ToArray(), 0).ToJson() });
+
+        popUpFillNode.cancelAction = () =>
+        {
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            TMP_Dropdown dropDown = popUpFillNode.inputModule.Inputs[0] as TMP_Dropdown;
+            nodeExecutableString = dropDown.options[dropDown.value].text;
+            nodeContentDisplay.text = nodeExecutableString;
+            popUpFillNode.Close();
+        };
+    }
+
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
-        inputField.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-            inputField.Select();
-    }
-
-    /// <summary>
-    /// Called when the node's input field is changed. It will check for error.
-    /// </summary>
-    /// <param name="tMP_InputField"></param>
-    public void ChangeInput(TMP_InputField tMP_InputField)
-    {
-        inputField = tMP_InputField;
-        input = tMP_InputField.text;
-        if (!ValidateInput())
-        {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        Manager.instance.canExecute = true;
-        ChangeBorderColor(defaultColor);
-    }
-
-    /// <summary>
-    /// Test if the node has a correct value
-    /// </summary>
-    /// <returns>True if the node has a correct value</returns>
-    private bool ValidateInput()
-    {
-        return SoundManager.instance.HasAudio(input);
     }
 
     /// <summary>
@@ -129,12 +106,12 @@ public class NodeSound : Nodes
         // play the sound
         if (!playAsync)
         {
-            SoundManager.instance.Play(input, rs.robot.robotManager.audioSource);
+            SoundManager.instance.Play(nodeExecutableString, rs.robot.robotManager.audioSource);
             StartCoroutine("WaitBeforeCallingNextNode");
         }
         else
         {
-            SoundManager.instance.PlaySync(input, rs.robot.robotManager.audioSource, () => { StartCoroutine("WaitBeforeCallingNextNode"); });
+            SoundManager.instance.PlaySync(nodeExecutableString, rs.robot.robotManager.audioSource, () => { StartCoroutine("WaitBeforeCallingNextNode"); });
         }
     }
 
@@ -196,7 +173,7 @@ public class NodeSound : Nodes
             nodeSettings = new List<string>(),
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
         };
-        serializableNode.nodeSettings.Add(input);
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         serializableNode.nodeSettings.Add(playAsync.ToString());
         return serializableNode;
     }
@@ -209,13 +186,11 @@ public class NodeSound : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        input = serializableNode.nodeSettings[0];
+        nodeExecutableString = serializableNode.nodeSettings[0];
         asyncToggle.value = Convert.ToBoolean(serializableNode.nodeSettings[1]);
-        inputField.text = input;
+        nodeContentDisplay.text = nodeExecutableString;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
     }
     #endregion
 }
-
-// end tpi

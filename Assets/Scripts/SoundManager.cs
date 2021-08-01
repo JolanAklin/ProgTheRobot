@@ -20,6 +20,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System.IO;
 using System;
+using System.Linq;
 
 // strat tpi
 /// <summary>
@@ -31,6 +32,8 @@ public class SoundManager : MonoBehaviour
 
     // sound dictionary : name, sound
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
+
+    public List<string> AudioClipsName { get => audioClips.Keys.ToList(); }
 
     private AudioClip audioClip;
     private string loadPath;
@@ -45,7 +48,7 @@ public class SoundManager : MonoBehaviour
     {
         // change loadPath dir depending of the environment
 #if UNITY_EDITOR
-        loadPath = $@"D:\001_TPI\projet\sounds";
+        loadPath = $@"E:\001_TPI\projet\sounds";
 #else
         loadPath = $@"{Application.dataPath}/sounds";
 #endif

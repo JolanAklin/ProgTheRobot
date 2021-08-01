@@ -6806,6 +6806,8 @@ MonoBehaviour:
     obj: {fileID: 9178372292312698783, guid: 91cb5f505ee79594a95e7625823cd224, type: 3}
   - type: 13
     obj: {fileID: 3666301701018902167, guid: 424da986f706da54e9bccf78a8ba7028, type: 3}
+  - type: 14
+    obj: {fileID: 1571255661229443278, guid: 49ecf1ee71ecf6e4d8482a3c913fba5c, type: 3}
 --- !u!4 &1145785825
 Transform:
   m_ObjectHideFlags: 0
@@ -11523,10 +11525,10 @@ RectTransform:
   m_Father: {fileID: 27398558794118279}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 137, y: 0}
+  m_SizeDelta: {x: 274, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794118279
 RectTransform:
