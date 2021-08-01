@@ -19,7 +19,8 @@ public class PopUpManager : MonoBehaviour
         FillWhile,
         FillAction,
         FillReadWrite,
-        FillAffectation
+        FillAffectation,
+        FillSubProgram,
     }
 
     [Serializable]

@@ -991,6 +991,7 @@ GameObject:
   - component: {fileID: 4010515551895399815}
   - component: {fileID: 4010515551895399813}
   - component: {fileID: 4010515551895399816}
+  - component: {fileID: 8419078666608418865}
   m_Layer: 5
   m_Name: FillWhile
   m_TagString: Untagged
@@ -1090,11 +1091,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9cf26c8fdb36734f82da0ca9bc0f25a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customInputFields:
-  - {fileID: 8456026261171981709}
   errorImage: {fileID: 5777241837124903324}
   validImage: {fileID: 5591227198637478039}
   infoText: {fileID: 4455044677869197987}
+--- !u!114 &8419078666608418865
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4010515551895399817}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3633372630b3aa459ca53cfecb96855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  customInputs:
+  - {fileID: 8456026261171981709}
 --- !u!1 &5196703599589809335
 GameObject:
   m_ObjectHideFlags: 0

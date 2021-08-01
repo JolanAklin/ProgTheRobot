@@ -15,7 +15,8 @@ public static class Validator
         action,
         forloop,
         readWrite,
-        affectation
+        affectation,
+        subProrgam,
     }
 
     public enum ValidationStatus

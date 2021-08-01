@@ -10,11 +10,16 @@ public class PopUpFillNode : PopUp
     public Action cancelAction;
     public Action OkAction;
 
-    public List<PopUpNodeInput> customInputFields = new List<PopUpNodeInput>();
-
     public GameObject errorImage;
     public GameObject validImage;
     public TMP_Text infoText;
+
+    public PopUpFillNodeInputInterface inputModule { get; private set; }
+
+    private void Awake()
+    {
+        inputModule = GetComponent<PopUpFillNodeInputInterface>();
+    }
 
     public void Cancel()
     {
@@ -22,17 +27,7 @@ public class PopUpFillNode : PopUp
     }
     public void Ok()
     {
-        bool validated = true;
-        foreach (PopUpNodeInput customInput in customInputFields)
-        {
-            customInput.Validate();
-            if(customInput.validation.validationStatus == Validator.ValidationStatus.KO)
-            {
-                validated = false;
-                break;
-            }
-        }
-        if(validated)
+        if(inputModule.Validate())
             OkAction();
         else
         {
@@ -47,12 +42,7 @@ public class PopUpFillNode : PopUp
     /// <param name="content">The content of each input fields. Given in the executable way. content[0] will set the content for the first input field</param>
     public void SetContent(string[] content)
     {
-        for (int i = 0; i < customInputFields.Count; i++)
-        {
-            customInputFields[i].blockCompletion = true;
-            customInputFields[i].input.text = LanguageManager.instance.AbrevToFullName(content[i]);
-            customInputFields[i].blockCompletion = false;
-        }
+        inputModule.SetInputsContent(content);
     }
 
     /// <summary>

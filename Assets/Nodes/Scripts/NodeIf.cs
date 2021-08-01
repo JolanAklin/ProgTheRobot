@@ -59,7 +59,8 @@ public class NodeIf : Nodes
         };
         popUpFillNode.OkAction = () =>
         {
-            nodeExecutableString = popUpFillNode.customInputFields[0].executableFunction;
+            PopUpNodeInput input = popUpFillNode.inputModule.Inputs[0] as PopUpNodeInput;
+            nodeExecutableString = input.executableFunction;
             nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
             popUpFillNode.Close();
         };

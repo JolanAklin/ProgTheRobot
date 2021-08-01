@@ -34,9 +34,9 @@
      inkscape:snap-intersection-paths="true"
      inkscape:snap-smooth-nodes="true"
      inkscape:snap-midpoints="true"
-     inkscape:zoom="0.7500982"
-     inkscape:cx="284.6294"
-     inkscape:cy="1088.5241"
+     inkscape:zoom="0.53039952"
+     inkscape:cx="526.96126"
+     inkscape:cy="2123.8707"
      inkscape:window-width="1920"
      inkscape:window-height="1027"
      inkscape:window-x="-8"
@@ -49,6 +49,26 @@
      inkscape:label="Calque 1"
      inkscape:groupmode="layer"
      id="layer1">
+    <rect
+       style="fill:#486fd1;fill-opacity:0;stroke:none;stroke-width:15.0001;stroke-linecap:round;stroke-linejoin:round"
+       id="rect2083"
+       width="103.888"
+       height="103.888"
+       x="40.884918"
+       y="526.84094"
+       inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\icons\down arrow.png"
+       inkscape:export-xdpi="31.295128"
+       inkscape:export-ydpi="31.295128" />
+    <rect
+       style="fill:#486fd1;fill-opacity:0;stroke:none;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       id="rect1341"
+       width="83.429932"
+       height="83.43"
+       x="53.628918"
+       y="409.43909"
+       inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\icons\checkmark.png"
+       inkscape:export-xdpi="38.969204"
+       inkscape:export-ydpi="38.969204" />
     <rect
        style="fill:#11fc00;fill-opacity:0;stroke:none;stroke-width:10;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect1832"
@@ -127,5 +147,21 @@
        inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\icons\validation.png"
        inkscape:export-xdpi="20.622114"
        inkscape:export-ydpi="20.622114" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 61.128918,449.3906 23.985756,23.98576 44.444176,-44.44421"
+       id="path4973-4"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\icons\checkmark.png"
+       inkscape:export-xdpi="38.969204"
+       inkscape:export-ydpi="38.969204" />
+    <path
+       style="fill:none;stroke:#ffffff;stroke-width:15;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 48.384737,556.56299 44.444196,44.4442 44.444167,-44.44421"
+       id="path849"
+       sodipodi:nodetypes="ccc"
+       inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\icons\down arrow.png"
+       inkscape:export-xdpi="31.295128"
+       inkscape:export-ydpi="31.295128" />
   </g>
 </svg>

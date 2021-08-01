@@ -23,10 +23,10 @@ using System;
 
 public class NodeMethod : Nodes
 {
-    public TMP_Dropdown tMP_Dropdown;
     private int nextScriptId = 0;
-    //Dictionary<int, string> options = new Dictionary<int, string>();
-    Dictionary<int, SubProgram> options = new Dictionary<int, SubProgram>();
+    private string nodeExecutableString;
+
+    public TMP_Text nodeContentDisplay;
 
     private class SubProgram
     {
@@ -34,100 +34,69 @@ public class NodeMethod : Nodes
         public string subProgramName;
     }
 
-    new private void Start()
-    {
-        base.Start();
-        UpdateScriptList();
-        tMP_Dropdown.value = dropDownValue;
-    }
-
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.subProgram;
         ExecManager.onChangeBegin += LockUnlockAllInput;
-        Manager.instance.onScriptAdded += UpdateScriptList;
+        OnDoubleClick += ModifyNodeContent;
     }
 
     public void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
-        Manager.instance.onScriptAdded -= UpdateScriptList;
         DestroyNode();
+        OnDoubleClick -= ModifyNodeContent;
+    }
+
+    public void ModifyNodeContent(object sender, EventArgs e)
+    {
+        MakeSubProgramList();
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillSubProgram).GetComponent<PopUpFillNode>();
+        if (nodeExecutableString != null)
+            popUpFillNode.inputModule.SetInputsContent(new string[] { new PopUpFillNodeDropDownModule.DropDownItemDefiner("Select a sub program", subProgramList.Values.ToArray(), Convert.ToInt32(nodeExecutableString + 1)).ToJson() });
+        else
+            popUpFillNode.inputModule.SetInputsContent(new string[] { new PopUpFillNodeDropDownModule.DropDownItemDefiner("Select a sub program", subProgramList.Values.ToArray(), 0).ToJson() });
+
+        popUpFillNode.cancelAction = () =>
+        {
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            TMP_Dropdown dropdown = popUpFillNode.inputModule.Inputs[0] as TMP_Dropdown;
+            KeyValuePair<int, string> subProgram = subProgramList.ElementAt(dropdown.value - 1);
+            nodeExecutableString = subProgram.Key.ToString();
+            nodeContentDisplay.text = subProgram.Value;
+            popUpFillNode.Close();
+        };
+    }
+
+    private Dictionary<int, string> subProgramList = new Dictionary<int, string>();
+    private void MakeSubProgramList()
+    {
+        subProgramList.Clear();
+        for (int i = 1; i < rs.robot.robotScripts.Count; i++)
+        {
+            RobotScript robotScript = rs.robot.robotScripts[i];
+            if (rs.id != robotScript.id)
+            {
+                subProgramList.Add(robotScript.id, robotScript.name);
+            }
+        }
     }
 
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    // start tpi
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
+
     public override void LockUnlockAllInput(bool isLocked)
     {
-        tMP_Dropdown.enabled = !isLocked;
-        IsInputLocked = isLocked;
-        if (!isLocked)
-        {
-            tMP_Dropdown.Show();
-            StartCoroutine("CheckIfDropDownOpen");
-        }
-        else
-            tMP_Dropdown.Hide();
-    }
-
-    /// <summary>
-    /// Test if the dropdown is  opened. If the dropdown is closed, it locks it.
-    /// </summary>
-    /// <returns></returns>
-    IEnumerator CheckIfDropDownOpen()
-    {
-        while (tMP_Dropdown.IsExpanded)
-        {
-            yield return new WaitForSeconds(0.1f);
-        }
-        LockUnlockAllInput(true);
-
-    }
-    //end tpi
-
-    private bool ValidateInput()
-    {
-        return true;
-    }
-
-    private void UpdateScriptList(object sender, EventArgs e)
-    {
-        UpdateScriptList();
-    }
-
-    private void UpdateScriptList()
-    {
-        tMP_Dropdown.options.Clear();
-        options.Clear();
-        int x = 0;
-        for (int i = 1; i < rs.robot.robotScripts.Count; i++)
-        {
-            RobotScript robotScript = rs.robot.robotScripts[i];
-            if(rs.id != robotScript.id)
-            {
-                options.Add(x, new SubProgram()
-                {
-                    subProgramId = robotScript.id,
-                    subProgramName = robotScript.name,
-                });
-                tMP_Dropdown.options.Add(new TMP_Dropdown.OptionData() { text = robotScript.name });
-                x++;
-            }
-        }
     }
 
 
     public override void Execute()
     {
-        nextScriptId = options[tMP_Dropdown.value].subProgramId;
         // test if the robot has enough power to execute the node, if not he stop the code execution
         if (rs.robot.Power <= nodeExecPower)
         {
@@ -143,6 +112,7 @@ public class NodeMethod : Nodes
             return;
         ChangeBorderColor(currentExecutedNode);
 
+        int nextScriptId = Convert.ToInt32(nodeExecutableString);
         if (RobotScript.robotScripts[nextScriptId].nodeStart != null)
         {
             RobotScript.robotScripts[nextScriptId].endCallBack = () => { CallNextNode(); };
@@ -195,7 +165,7 @@ public class NodeMethod : Nodes
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
-        serializableNode.nodeSettings.Add(tMP_Dropdown.value.ToString());
+        serializableNode.nodeSettings.Add(nodeExecutableString);
         return serializableNode;
     }
     public override void DeSerializeNode(SerializableNode serializableNode)
@@ -203,7 +173,11 @@ public class NodeMethod : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        dropDownValue = Convert.ToInt32(serializableNode.nodeSettings[0]);
+
+        MakeSubProgramList();
+        nodeExecutableString = serializableNode.nodeSettings[0];
+        nodeContentDisplay.text = subProgramList[Convert.ToInt32(nodeExecutableString)];
+
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
     }
