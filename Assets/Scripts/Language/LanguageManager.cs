@@ -19,8 +19,8 @@ public class LanguageManager : MonoBehaviour
      * i = integer function and b = boolean function
      */
     // should be loaded dynamicly with a language file in the future
-    private static Dictionary<string, string> abrevToFullName = new Dictionary<string, string>();
-    private static Dictionary<string, string> fullNameToAbrev = new Dictionary<string, string>();
+    private static Dictionary<string, string> abrevToFullName = null;
+    private static Dictionary<string, string> fullNameToAbrev = null;
 
     public Dictionary<string,string> FullNameToAbrevDict { get => fullNameToAbrev; }
 
@@ -44,33 +44,43 @@ public class LanguageManager : MonoBehaviour
     {
         { Validator.FunctionType.@int, new List<ValidationTypeInfo>()
             {
-                new ValidationTypeInfo( false, Validator.ValidationType.test ),
-                new ValidationTypeInfo( true, Validator.ValidationType.readWrite ),
-                new ValidationTypeInfo( false, Validator.ValidationType.affectation ),
+                new ValidationTypeInfo(false, Validator.ValidationType.test),
+                new ValidationTypeInfo(true, Validator.ValidationType.readWrite),
+                new ValidationTypeInfo(false, Validator.ValidationType.affectation),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopvar),
+                new ValidationTypeInfo(false, Validator.ValidationType.forloopexpression),
             }
         },
         { Validator.FunctionType.@bool, new List<ValidationTypeInfo>()
             {
-                new ValidationTypeInfo( false, Validator.ValidationType.test ),
+                new ValidationTypeInfo(false, Validator.ValidationType.test),
                 new ValidationTypeInfo(true, Validator.ValidationType.readWrite),
                 new ValidationTypeInfo(true, Validator.ValidationType.affectation),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopvar),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopexpression),
             }
         },
         { Validator.FunctionType.boolOp, new List<ValidationTypeInfo>()
             {
-                new ValidationTypeInfo( false, Validator.ValidationType.test ),
+                new ValidationTypeInfo(false, Validator.ValidationType.test),
                 new ValidationTypeInfo(true, Validator.ValidationType.readWrite),
                 new ValidationTypeInfo(true, Validator.ValidationType.affectation),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopvar),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopexpression),
             }
         },
         { Validator.FunctionType.action, new List<ValidationTypeInfo>()
             {
-                new ValidationTypeInfo( false, Validator.ValidationType.action ),
+                new ValidationTypeInfo(false, Validator.ValidationType.action),
             }
         },
         { Validator.FunctionType.keywordReadWrite, new List<ValidationTypeInfo>()
             {
-                new ValidationTypeInfo( false, Validator.ValidationType.readWrite ),
+                new ValidationTypeInfo(true, Validator.ValidationType.test),
+                new ValidationTypeInfo(false, Validator.ValidationType.readWrite),
+                new ValidationTypeInfo(true, Validator.ValidationType.affectation),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopvar),
+                new ValidationTypeInfo(true, Validator.ValidationType.forloopexpression),
             }
         },
     };
@@ -78,8 +88,13 @@ public class LanguageManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        abrevToFullName = LanguageLoader.Load(LanguageLoader.SupportedLanguages.eng, LanguageLoader.FileType.functions);
-        InverseKV();
+        if(abrevToFullName == null)
+        {
+            abrevToFullName = new Dictionary<string, string>();
+            fullNameToAbrev = new Dictionary<string, string>();
+            abrevToFullName = LanguageLoader.Load(LanguageLoader.SupportedLanguages.eng, LanguageLoader.FileType.functions);
+            InverseKV();
+        }
         FillCompletionPossibilitiesDict();
     }
 

@@ -678,7 +678,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3687543890005095077}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -0.5, z: 0}
+  m_LocalPosition: {x: 2.1, y: -0.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3687543888583791487}
@@ -764,7 +764,6 @@ MonoBehaviour:
   maxHeight: 100
   minAspectRatio: 0
   asyncToggle: {fileID: 4681863981725159137}
-  completion: {fileID: 0}
   nodeContentDisplay: {fileID: 150024682043907557}
 --- !u!1 &3687543890284980120
 GameObject:

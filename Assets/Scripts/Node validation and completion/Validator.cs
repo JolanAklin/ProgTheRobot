@@ -13,10 +13,11 @@ public static class Validator
     {
         test,
         action,
-        forloop,
+        forloopvar,
         readWrite,
         affectation,
         subProrgam,
+        forloopexpression,
     }
 
     public enum ValidationStatus
@@ -110,14 +111,22 @@ public static class Validator
         {
             case ValidationType.test:
                 return ValidateTest(toValidate);
+
             case ValidationType.action:
                 return ValidateAction(toValidate);
-            case ValidationType.forloop:
-                return new ValidationReturn(ValidationStatus.KO);
+
+            case ValidationType.forloopvar:
+                return ValidateForLoopVar(toValidate);
+
+            case ValidationType.forloopexpression:
+                return ValidateForLoopUntil(toValidate);
+
             case ValidationType.readWrite:
                 return ValidateReadWrite(toValidate);
+
             case ValidationType.affectation:
                 return ValidateAffectation(toValidate);
+
             default:
                 return new ValidationReturn(ValidationStatus.KO);
         }
@@ -379,9 +388,91 @@ public static class Validator
         return vr;
     }
 
-    private static ValidationReturn ValidateForLoop(string[] toValidate)
+    /// <summary>
+    /// validate the variable that will be incremented in the for loop
+    /// </summary>
+    /// <param name="toValidate">This string should use the internal format for nodes</param>
+    /// <returns>An object containing the validation status and errors</returns>
+    private static ValidationReturn ValidateForLoopVar(string toValidate)
     {
-        return new ValidationReturn(ValidationStatus.KO);
+        ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
+
+        string toValidateUnAltered = toValidate;
+        toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
+        string[] splited = toValidate.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        FunctionType type;
+        switch (splited.Length)
+        {
+            case 0:
+                break;
+            case 1:
+                type = GetFunctionType(splited[0]);
+                uint endpos = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length;
+                if(type != FunctionType.word)
+                {
+                    vr.ChangeValidationStatus(ValidationStatus.KO);
+                    vr.AddSpecificError(0, new ValidationReturn.Error(0, endpos, "Should be a variable"));
+                }
+                break;
+            default:
+                uint pos = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length + 1;
+                uint startpos = pos;
+                for (int i = 1; i < splited.Length; i++)
+                {
+                    pos += (uint)LanguageManager.instance.getFullnameFromAbrev(splited[i]).Length;
+                }
+                vr.ChangeValidationStatus(ValidationStatus.KO);
+                vr.AddSpecificError(startpos, new ValidationReturn.Error(startpos, pos, "Expecting only a variable"));
+                goto case 1;
+        }
+        return vr;
+    }
+
+    /// <summary>
+    /// validate the until and by increments clauses of the for loop
+    /// </summary>
+    /// <param name="toValidate">This string should use the internal format for nodes</param>
+    /// <returns>An object containing the validation status and errors</returns>
+    private static ValidationReturn ValidateForLoopUntil(string toValidate)
+    {
+        ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
+
+        string toValidateUnAltered = toValidate;
+        toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
+        string[] splited = toValidate.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
+
+        FunctionType type;
+        string expr = "";
+        uint posInDisplayString = 0;
+        uint startPos = posInDisplayString;
+        for (int i = 0; i < splited.Length; i++)
+        {
+            expr += Regex.Replace(splited[i], @"^[a-zA-Z#]+$", "1");
+            type = GetFunctionType(splited[i]);
+            string name = LanguageManager.instance.getFullnameFromAbrev(splited[i]);
+            if (type != FunctionType.@int && type != FunctionType.word && type != FunctionType.number && type != FunctionType.@operator)
+            {
+                vr.ChangeValidationStatus(ValidationStatus.KO);
+                vr.AddSpecificError(posInDisplayString, new ValidationReturn.Error(posInDisplayString, posInDisplayString + (uint)name.Length, "Only integer function and variable can be used in this context."));
+            }
+            else if (type != FunctionType.@int && LanguageManager.instance.ReservedKeywords[ValidationType.forloopexpression].Contains(name))
+            {
+                vr.ChangeValidationStatus(ValidationStatus.KO);
+                vr.AddSpecificError(posInDisplayString, new ValidationReturn.Error(posInDisplayString, posInDisplayString + (uint)name.Length, $"\"{name}\" is a resserved keyword."));
+            }
+            posInDisplayString += (uint)name.Length + 1;
+        }
+        try
+        {
+            new DataTable().Compute(expr, null);
+        }
+        catch (Exception e)
+        {
+            vr.ChangeValidationStatus(ValidationStatus.KO);
+            vr.AddSpecificError(startPos, new ValidationReturn.Error(startPos, posInDisplayString - 1, $"{e.Message}"));
+        }
+        return vr;
     }
 
     /// <summary>

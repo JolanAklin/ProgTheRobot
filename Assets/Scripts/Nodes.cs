@@ -22,7 +22,7 @@ using UnityEngine.EventSystems;
 using System.Collections;
 
 // handle all the common features of nodes
-public abstract class Nodes : MonoBehaviour, IPointerClickHandler
+public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler
 {
     public enum NodeTypes
     {
@@ -45,11 +45,8 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler
         notConnected,
     }
 
-    // start tpi
     protected NodeTypes nodeTypes;
     public NodeTypes NodeType { get => nodeTypes; protected set => nodeTypes = value; }
-
-    //end tpi
 
     /// <summary>
     /// Execute the node
@@ -631,6 +628,16 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler
             handleEndArray[0].loopArea = parentLoopArea;
             // end tpi
         }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        throw new NotImplementedException();
     }
 
     #endregion

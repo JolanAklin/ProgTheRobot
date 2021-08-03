@@ -28,6 +28,7 @@ public class PopUpNodeInput : MonoBehaviour
 
     public void OnSelect()
     {
+        completionMenu.popUpNodeInput = this;
         LanguageManager.instance.DTrees[validationType].GoToRoots();
     }
 
@@ -43,8 +44,6 @@ public class PopUpNodeInput : MonoBehaviour
 
     private void Start()
     {
-        completionMenu.popUpNodeInput = this;
-
         lastInputStringLength = input.text.Length;
         lastCaretPos = input.caretPosition;
     }
@@ -95,6 +94,7 @@ public class PopUpNodeInput : MonoBehaviour
         input = Regex.Replace(input, @"((?:[<>]?=)|(?:<>)|[<>])", " $1 ");
         input = Regex.Replace(input, @"([+\-*/()])", " $1 ");
         input = Regex.Replace(input, @"\s+", " ");
+        input = input.Trim();
         return input;
     }
 

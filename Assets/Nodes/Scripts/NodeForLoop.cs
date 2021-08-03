@@ -20,38 +20,36 @@ using UnityEngine;
 using TMPro;
 using System;
 using Language;
+using System.Data;
 
 public class NodeForLoop : Nodes
 {
-    [Tooltip("Put the input field in this order : varname, varstart, varend, varstep")]
-    public TMP_InputField[] inputFields;
+    public TMP_Text nodeContentDisplay;
     public int nextNodeInside = -1;
 
-    private VarsManager.Var varIncrement;
-    private int varStart;
-    private int varEnd;
-    private int varStep;
+    //private VarsManager.Var varIncrement;
+    //private int varStart;
+    //private int varEnd;
+    //private int varStep;
 
-    private string incrementVar = "";
-    private string startVar = "";
-    private string endVar = "";
-    private string stepVar = "";
+    //private string incrementVar = "";
+    //private string startVar = "";
+    //private string endVar = "";
+    //private string stepVar = "";
+
+    private bool isForLoopRunning = false;
+    private string varName = "";
+    private string varStartValue = "";
+    private string untilExpression = "";
+    private string incrementExpression = "";
+
+    private int startValue; // the value at the very begin of the for loop
+    private int incrementValue;
+    private int endValue;
+
+    private VarsManager.Var iterationVar;
 
     private IEnumerator waitBeforeLockInput;
-
-    public void ChangeInput()
-    {
-        if (!ValidateInput())
-        {
-            nodeErrorCode = ErrorCode.wrongInput;
-            ChangeBorderColor(errorColor);
-            Manager.instance.canExecute = false;
-            return;
-        }
-        nodeErrorCode = ErrorCode.ok;
-        ChangeBorderColor(defaultColor);
-        Manager.instance.canExecute = true;
-    }
 
     new private void Awake()
     {
@@ -59,121 +57,63 @@ public class NodeForLoop : Nodes
         nodeTypes = NodeTypes.forLoop;
         ExecManager.onChangeBegin += LockUnlockAllInput;
 
-        // start tpi
         if (handleEndArray.Length > 1)
             handleEndArray[1].loopArea = nodesLoopArea;
         if (handleStartArray.Length > 1)
             handleStartArray[1].loopArea = nodesLoopArea;
 
-        waitBeforeLockInput = WaitBeforeLockingInputs();
-        //end tpi
+        OnDoubleClick += ModifyNodeContent;
     }
 
     private void OnDestroy()
     {
         ExecManager.onChangeBegin -= LockUnlockAllInput;
+        OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
-    //start tpi
 
-    /// <summary>
-    /// Test if values inside the node are correct
-    /// </summary>
-    /// <returns>True if values are correct</returns>
-    private bool ValidateInput()
+    public void ModifyNodeContent(object sender, EventArgs e)
     {
-        if(startVar != "" && endVar != "" && stepVar != "" && incrementVar != "")
+        PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillForLoop).GetComponent<PopUpFillNode>();
+        popUpFillNode.SetContent(new string[] { varName, varStartValue, untilExpression, incrementExpression });
+        popUpFillNode.cancelAction = () =>
         {
-            return true;
-        }
-        return false;
+            popUpFillNode.Close();
+        };
+        popUpFillNode.OkAction = () =>
+        {
+            PopUpNodeInput varInput = popUpFillNode.inputModule.Inputs[0] as PopUpNodeInput;
+            PopUpNodeInput varValueInput = popUpFillNode.inputModule.Inputs[1] as PopUpNodeInput;
+            PopUpNodeInput untilInput = popUpFillNode.inputModule.Inputs[2] as PopUpNodeInput;
+            PopUpNodeInput incrementInput = popUpFillNode.inputModule.Inputs[3] as PopUpNodeInput;
+
+            SetForLoop(varInput.executableFunction.Trim(), varValueInput.executableFunction.Trim(), untilInput.executableFunction.Trim(), incrementInput.executableFunction.Trim());
+
+            popUpFillNode.Close();
+        };
     }
 
-    /// <summary>
-    /// Set the var that will be incremented through the for loop
-    /// </summary>
-    /// <param name="inputField">The input field for this setting</param>
-    public void setIncrementVar(TMP_InputField inputField)
+    private void SetForLoop(string varName, string varStartValue, string untilExpression, string incrementExpression)
     {
-        incrementVar = inputField.text;
-        ChangeInput();
+        this.varName = varName;
+        this.varStartValue = varStartValue;
+        this.untilExpression = untilExpression;
+        this.incrementExpression = incrementExpression;
+
+        startValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(varStartValue), null));
+        incrementValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(incrementExpression), null));
+        endValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(untilExpression), null));
+
+        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName("For " + varName + " from " + varStartValue + " to " + untilExpression + " by increments of " + incrementExpression);
     }
-    /// <summary>
-    /// Set the start value of the for loop
-    /// </summary>
-    /// <param name="inputField">The input field for this setting</param>
-    public void SetStart(TMP_InputField inputField)
-    {
-        startVar = inputField.text;
-        ChangeInput();
-    }
-    /// <summary>
-    /// Set the end value of the for loop
-    /// </summary>
-    /// <param name="inputField">The input field for this setting</param>
-    public void SetEnd(TMP_InputField inputField)
-    {
-        endVar = inputField.text;
-        ChangeInput();
-    }
-    /// <summary>
-    /// Set the step at which the for loop is going
-    /// </summary>
-    /// <param name="inputField">The input field for this setting</param>
-    public void SetStep(TMP_InputField inputField)
-    {
-        stepVar = inputField.text;
-        ChangeInput();
-    }
-    //end tpi
+
+    
     public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
     {
-        LockUnlockAllInput(true);
     }
-    // start tpi
-
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
     public override void LockUnlockAllInput(bool isLocked)
     {
-        IsInputLocked = isLocked;
-        foreach (TMP_InputField inputField in inputFields)
-        {
-            inputField.enabled = !isLocked;
-        }
-        if (!isLocked)
-            inputFields[0].Select();
     }
-
-    /// <summary>
-    /// Stop the coroutine that wait the end of two frame before locking inputs
-    /// </summary>
-    public void StopLocking()
-    {
-        StopCoroutine(waitBeforeLockInput);
-    }
-    
-    /// <summary>
-    /// Start the coroutine that wait the end of two frame before locking inputs
-    /// </summary>
-    public void LockAllInputWait()
-    {
-        StartCoroutine(waitBeforeLockInput);
-    }
-
-    /// <summary>
-    /// Wait for the end of two frame and then lock inputs
-    /// </summary>
-    /// <returns></returns>
-    private IEnumerator WaitBeforeLockingInputs()
-    {
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForEndOfFrame();
-        LockUnlockAllInput(true);
-    }
-    //end tpi
 
     public override void Execute()
     {
@@ -192,70 +132,41 @@ public class NodeForLoop : Nodes
             return;
         ChangeBorderColor(currentExecutedNode);
 
-        if (varIncrement == null)
+        if(!isForLoopRunning)
         {
-            if(!int.TryParse(startVar, out varStart))
-            {
-                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(startVar);
-                if(tempVar != null)
-                {
-                    varStart = tempVar.Value;
-                }
-                else
-                {
-                    Debugger.LogError("Une erreur est survenue1");
-                    return;
-                }
-            }
-            varIncrement = rs.robot.varsManager.GetVar(incrementVar,varStart);
-            if(varIncrement == null)
-            {
-                Debugger.LogError("Une erreur est survenue2");
-                return;
-            }
-            if (!int.TryParse(endVar, out varEnd))
-            {
-                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(endVar);
-                if (tempVar != null)
-                {
-                    varEnd = tempVar.Value;
-                }
-                else
-                {
-                    Debugger.LogError("Une erreur est survenue3");
-                    return;
-                }
-            }
-            if (!int.TryParse(stepVar, out varStep))
-            {
-                VarsManager.Var tempVar = rs.robot.varsManager.GetVar(stepVar);
-                if (tempVar != null)
-                {
-                    varStep = tempVar.Value;
-                }
-                else
-                {
-                    Debugger.LogError("Une erreur est survenue4");
-                    return;
-                }
-            }
+            iterationVar = rs.robot.varsManager.GetVar(varName, startValue);
+            isForLoopRunning = true;
         }
 
-        if(varIncrement.Value <= varEnd)
+        if(startValue <= endValue)
         {
-            varIncrement.Value += varStep;
-            varIncrement.Persist();
-
-            // other code will go here
-            IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
-            StartCoroutine(coroutine);
+            if(iterationVar.Value >= endValue)
+            {
+                StartCoroutine("WaitBeforeCallingNextNode");
+                isForLoopRunning = false;
+            }
+            else
+            {
+                IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
+                StartCoroutine(coroutine);
+            }
         }
         else
         {
-            varIncrement.Value = varStart;
-            varIncrement.Persist();
-            StartCoroutine("WaitBeforeCallingNextNode");
+            if (iterationVar.Value <= endValue)
+            {
+                StartCoroutine("WaitBeforeCallingNextNode");
+                isForLoopRunning = false;
+            }
+            else
+            {
+                IEnumerator coroutine = WaitBeforeCallingNextNode(nextNodeInside);
+                StartCoroutine(coroutine);
+            }
         }
+
+        iterationVar.Value += incrementValue;
+        iterationVar.Persist();
     }
 
     IEnumerator WaitBeforeCallingNextNode()
@@ -303,10 +214,10 @@ public class NodeForLoop : Nodes
     public override void PostExecutionCleanUp(object sender, EventArgs e)
     {
         ChangeBorderColor(defaultColor);
-        varStep = 1;
-        varEnd = 0;
-        varIncrement = null;
-        varStart = 0;
+        //varStep = 1;
+        //varEnd = 0;
+        //varIncrement = null;
+        //varStart = 0;
     }
 
     #region save stuff
@@ -324,10 +235,10 @@ public class NodeForLoop : Nodes
             size = new float[] { canvasRect.sizeDelta.x, canvasRect.sizeDelta.y },
 
         };
-        serializableNode.nodeSettings.Add(incrementVar);
-        serializableNode.nodeSettings.Add(startVar);
-        serializableNode.nodeSettings.Add(endVar);
-        serializableNode.nodeSettings.Add(stepVar);
+        serializableNode.nodeSettings.Add(varName);
+        serializableNode.nodeSettings.Add(varStartValue);
+        serializableNode.nodeSettings.Add(untilExpression);
+        serializableNode.nodeSettings.Add(incrementExpression);
         serializableNode.nodeSettings.Add(nextNodeInside.ToString());
         return serializableNode;
     }
@@ -336,14 +247,8 @@ public class NodeForLoop : Nodes
         id = serializableNode.id;
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
-        for (int i = 0; i < serializableNode.nodeSettings.Count-1; i++)
-        {
-            inputFields[i].text = serializableNode.nodeSettings[i];
-        }
-        incrementVar = serializableNode.nodeSettings[0];
-        startVar = serializableNode.nodeSettings[1];
-        endVar = serializableNode.nodeSettings[2];
-        stepVar = serializableNode.nodeSettings[3];
+
+        SetForLoop(serializableNode.nodeSettings[0], serializableNode.nodeSettings[1], serializableNode.nodeSettings[2], serializableNode.nodeSettings[3]);
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[4]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
