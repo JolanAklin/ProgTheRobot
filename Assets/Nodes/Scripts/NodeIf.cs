@@ -31,24 +31,20 @@ public class NodeIf : Nodes
     private string[] inputSplited;
     public int nextNodeIdFalse;
 
-    public TMP_Text nodeContentDisplay;
-
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.test;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
         OnDoubleClick += ModifyNodeContent;
     }
 
     public void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
         OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillTest).GetComponent<PopUpFillNode>();
         if(nodeExecutableString != null)
@@ -175,14 +171,6 @@ public class NodeIf : Nodes
         nextNodeIdFalse = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
-    }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-
-    public override void LockUnlockAllInput(bool isLocked)
-    {
     }
     #endregion
 }

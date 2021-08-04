@@ -25,14 +25,12 @@ using System.Text.RegularExpressions;
 public class NodeWhileLoop : Nodes
 {
     private string nodeExecutableString = "";
-    public TMP_Text nodeContentDisplay;
 
     public int nextNodeInside = -1;
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.whileLoop;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
 
         // click management
         OnDoubleClick += ModifyNodeContent;
@@ -44,7 +42,7 @@ public class NodeWhileLoop : Nodes
             handleStartArray[1].loopArea = nodesLoopArea;
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillWhile).GetComponent<PopUpFillNode>();
         if (nodeExecutableString != null)
@@ -65,21 +63,10 @@ public class NodeWhileLoop : Nodes
 
     private void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
-
         // click management
         OnDoubleClick -= ModifyNodeContent;
 
         DestroyNode();
-    }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-
-    public override void LockUnlockAllInput(bool isLocked)
-    {
-        
     }
 
     public override void Execute()

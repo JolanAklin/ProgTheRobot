@@ -20,9 +20,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using System.Collections;
+using TMPro;
 
 // handle all the common features of nodes
-public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHandler, IEndDragHandler
+public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHandler, IEndDragHandler, IDragHandler, IPointerEnterHandler, IPointerExitHandler
 {
     public enum NodeTypes
     {
@@ -142,7 +143,6 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
     public bool isEndNode = false;
 
-    //start tpi
     [Header("Size")]
     [Tooltip("Put minWidth and maxWidth to same number to prevent the node to be resized")]
     public float minWidth;
@@ -171,8 +171,10 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         public float top;
         public float bottom;
     }
-    //end tpi
 
+    private NodeInfo.Info nodeInfo;
+    [SerializeField]
+    protected TMP_Text nodeContentDisplay;
 
     #region click handling
     public EventHandler OnDoubleClick;
@@ -183,21 +185,48 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     /// When true, a double click can happen
     /// </summary>
     private bool doubleClick = false;
-    public void OnPointerClick(PointerEventData eventData)
+    private bool preventDrag = false;
+    private bool preventClicks = false;
+
+    private static bool nodeBeenLeftClicked = false;
+    public void OnPointerDown(PointerEventData eventData)
     {
-        if (eventData.button == PointerEventData.InputButton.Left && doubleClick)
+        if(!preventClicks)
         {
-            OnDoubleClick?.Invoke(this, EventArgs.Empty);
-        }
-        else if (eventData.button == PointerEventData.InputButton.Left)
-        {
-            OnLeftClick?.Invoke(this, EventArgs.Empty);
-            doubleClick = true;
-            StartCoroutine("DoubleClick");
-        }
-        else if (eventData.button == PointerEventData.InputButton.Right)
-        {
-            OnRightClick?.Invoke(this, EventArgs.Empty);
+            if (eventData.button == PointerEventData.InputButton.Left && doubleClick)
+            {
+                // double click performed
+                nodeBeenLeftClicked = true;
+                OnDoubleClick?.Invoke(this, EventArgs.Empty);
+                preventDrag = true;
+            }
+            else if (eventData.button == PointerEventData.InputButton.Left)
+            {
+                // simple left click performed
+                nodeBeenLeftClicked = true;
+
+                // stop the movement of a node only by clicking once on it
+                if (move)
+                {
+                    EndMove();
+                    return;
+                }
+
+                OnLeftClick?.Invoke(this, EventArgs.Empty);
+                doubleClick = true;
+                StartCoroutine("DoubleClick");
+                SelectNode();
+
+                // show infos about this node
+                NodeInfo.infoTitle.text = nodeInfo.infoTextTitle;
+                NodeInfo.infoDesc.text = nodeInfo.infoText;
+            }
+            else if (eventData.button == PointerEventData.InputButton.Right)
+            {
+                // simple right click performed
+                OnRightClick?.Invoke(this, EventArgs.Empty);
+                ShowContextMenu();
+            }
         }
     }
 
@@ -210,10 +239,100 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         yield return new WaitForSecondsRealtime(0.4f);
         doubleClick = false;
     }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (preventDrag)
+        {
+            preventDrag = false;
+            return;
+        }
+        this.StartMove();
+        preventClicks = true;
+        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+        {
+            if (selectedNode != null && selectedNode != this)
+            {
+                selectedNode.StartMove();
+            }
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        preventClicks = false;
+        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+        {
+            selectedNode.EndMove();
+        }
+    }
+
+    // show tooltip
+    private bool ShouldShowToolTip = false;
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (nodeContentDisplay == null)
+            return;
+        if (nodeContentDisplay.text.Length == 0)
+            return;
+        if(TextToolTip.instance.isToolTipOpened)
+        {
+            TextToolTip.instance.ShowToolTip(nodeContentDisplay.text);
+        }
+        else
+        {
+            ShouldShowToolTip = true;
+            StartCoroutine("ShowToolTip");
+        }
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        ShouldShowToolTip = false;
+        TextToolTip.instance.HideToolTip();
+    }
+    IEnumerator ShowToolTip()
+    {
+        yield return new WaitForSeconds(0.5f);
+        if(ShouldShowToolTip)
+            TextToolTip.instance.ShowToolTip(nodeContentDisplay.text);
+    }
+
+    private void ShowContextMenu()
+    {
+        if (NodeType != NodeTypes.start && nodeTypes != NodeTypes.end)
+        {
+            MenuToolTip.instance.SetContent("Node menu", new MenuToolTip.ButtonContent[] {
+                new MenuToolTip.ButtonContent("Modify", () => { ModifyNodeContent(this, EventArgs.Empty);MenuToolTip.instance.HideToolTip(); }),
+                new MenuToolTip.ButtonContent("Delete", () => { Destroy(this.gameObject);MenuToolTip.instance.HideToolTip(); }),
+            });
+        }
+        else
+        {
+            MenuToolTip.instance.SetContent("Node menu", new MenuToolTip.ButtonContent[] {
+                new MenuToolTip.ButtonContent("Delete", () => { Destroy(this.gameObject);MenuToolTip.instance.HideToolTip(); }),
+            });
+        }
+        MenuToolTip.instance.ShowToolTip();
+    }
+
+    private void SelectNode()
+    {
+        if (SelectionManager.instance.SelectedNodes.Contains(this))
+            return;
+        if (Input.GetKey(KeyCode.LeftShift))
+            SelectionManager.instance.AddNodeToSelection(this, false);
+        else
+            SelectionManager.instance.AddNodeToSelection(this);
+    }
     #endregion
 
 
-    public void Awake()
+    protected void Awake()
     {
         for (int i = 0; i < handleStartArray.Length; i++)
         {
@@ -232,8 +351,6 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
     }
 
     
-
-    //start tpi
     protected void DestroyNode()
     {
         rs.onStop -= PostExecutionCleanUp;
@@ -247,11 +364,10 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         NodesDict.Remove(id);
         rs.nodes.Remove(this.gameObject);
     }
-    //end tpi
 
-    public void Start()
+    protected void Start()
     {
-        // start tpi
+        nodeInfo = NodeInfo.nodesInfos.Find(x => x.nodeTypes == nodeTypes);
         // All nodes have a different id
         if(id == -1)
         {
@@ -259,7 +375,6 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
             nextid++;
             nodes.Add(id, this);
         }
-        //end tpi
 
         // subscribe to the checknode event. The node will check if it is connected correctly
         Manager.instance.CheckNode += isConnected;
@@ -269,6 +384,8 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
         nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder");
     }
+
+    protected abstract void ModifyNodeContent(object sender, EventArgs e);
 
     public void ChangeBorderColor(Color color)
     {
@@ -341,11 +458,9 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
 
     public void StartMove()
     {
-        // start tpi
         // get the delta between the node and the mouse cursor to avoid weird snap to the mouse cursor
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         mouseCenterDelta = transform.position - mouseToWorldPoint;
-        //end tpi
         canMove = false;
         move = true;
     }
@@ -583,10 +698,6 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
         }
     }
 
-    public abstract void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e);
-
-    public abstract void LockUnlockAllInput(bool isLocked);
-
     #region Save stuff
     [Serializable]
     public class SerializableNode
@@ -628,16 +739,6 @@ public abstract class Nodes : MonoBehaviour, IPointerClickHandler, IBeginDragHan
             handleEndArray[0].loopArea = parentLoopArea;
             // end tpi
         }
-    }
-
-    public void OnBeginDrag(PointerEventData eventData)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void OnEndDrag(PointerEventData eventData)
-    {
-        throw new NotImplementedException();
     }
 
     #endregion

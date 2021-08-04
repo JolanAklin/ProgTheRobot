@@ -22,7 +22,9 @@ using UnityEngine.UI;
 
 public class AddNodeScript : MonoBehaviour
 {
-    private Dictionary<int, Action> nodes = new Dictionary<int, Action>(); // define which action is done for what node when clicked on the menu
+    public static AddNodeScript instance { get; private set; }
+
+    private Dictionary<Nodes.NodeTypes, Action> nodes = new Dictionary<Nodes.NodeTypes, Action>(); // define which action is done for what node when clicked on the menu
     private Transform nodeHolder; // nodes will be children of this object
     public List<nodeObject> nodeObjects = new List<nodeObject>();
 
@@ -30,8 +32,13 @@ public class AddNodeScript : MonoBehaviour
     [Serializable]
     public class nodeObject
     {
-        public string nodeType;
+        public Nodes.NodeTypes nodeType;
         public GameObject gameObject;
+    }
+
+    private void Awake()
+    {
+        instance = this;
     }
 
     // create the add node panel and sets it's actions
@@ -43,7 +50,7 @@ public class AddNodeScript : MonoBehaviour
         // enumerate over the node type enum in the Nodes class
         foreach (Nodes.NodeTypes nodeType in (Nodes.NodeTypes[])Enum.GetValues(typeof(Nodes.NodeTypes)))
         {
-            AddAction(nodeType.ToString(), () =>
+            AddAction(nodeType, () =>
             {
                 // test if there is already a start node on the script, if yes, the script won't allow the creation of another one
                 if(RobotScript.robotScripts[Manager.instance.currentlySelectedScript].nodeStart != false && nodeType.ToString() == "start")
@@ -53,7 +60,7 @@ public class AddNodeScript : MonoBehaviour
                 {
                     Vector3 spawnPos = Round(NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono),1);
                     spawnPos.z = 0;
-                    GameObject node = nodeObjects.Find(x => x.nodeType == nodeType.ToString()).gameObject; // find the correct gameobject to instantiate
+                    GameObject node = nodeObjects.Find(x => x.nodeType == nodeType).gameObject; // find the correct gameobject to instantiate
                     GameObject instantiatedNode = Instantiate(node, spawnPos, Quaternion.identity, nodeHolder);
 
                     // add the start node to the right robotscript for execution purposes
@@ -70,16 +77,13 @@ public class AddNodeScript : MonoBehaviour
                     SelectionManager.instance.AddNodeToSelection(nodeScript);
                     nodeScript.StartMove();
                 }
-                canvas.GetComponent<UIRaycaster>().panelOpen = false;
-                Destroy(this.gameObject);
             });
         }
     }
 
     // save the required action to create each node
-    public void AddAction(string nodeTypeName, Action action)
+    private void AddAction(Nodes.NodeTypes nodeType, Action action)
     {
-        int nodeType = (int)Enum.Parse(typeof(Nodes.NodeTypes), nodeTypeName);
         if (nodes.ContainsKey(nodeType))
         {
             nodes[nodeType] = action;
@@ -90,9 +94,9 @@ public class AddNodeScript : MonoBehaviour
     }
 
     // do the action stored for the required node
-    public void DoAction(string nodeType)
+    public void AddNode(Nodes.NodeTypes nodeType)
     {
-        nodes[(int)Enum.Parse(typeof(Nodes.NodeTypes), nodeType)]();
+        nodes[nodeType]();
     }
 
     private Vector3 Round(Vector3 vector3, int round)

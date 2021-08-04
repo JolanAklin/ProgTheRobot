@@ -23,33 +23,22 @@ using System;
 
 public class NodeMethod : Nodes
 {
-    private int nextScriptId = 0;
     private string nodeExecutableString;
-
-    public TMP_Text nodeContentDisplay;
-
-    private class SubProgram
-    {
-        public int subProgramId;
-        public string subProgramName;
-    }
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.subProgram;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
         OnDoubleClick += ModifyNodeContent;
     }
 
     public void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
         DestroyNode();
         OnDoubleClick -= ModifyNodeContent;
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         MakeSubProgramList();
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillSubProgram).GetComponent<PopUpFillNode>();
@@ -84,14 +73,6 @@ public class NodeMethod : Nodes
                 subProgramList.Add(robotScript.id, robotScript.name);
             }
         }
-    }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-
-    public override void LockUnlockAllInput(bool isLocked)
-    {
     }
 
 

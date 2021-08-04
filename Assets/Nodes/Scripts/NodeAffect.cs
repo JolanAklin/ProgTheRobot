@@ -27,7 +27,6 @@ public class NodeAffect : Nodes
 {
     private string nodeExecutableString;
     private string[] inputSplited;
-    public TMP_Text nodeContentDisplay;
 
     private VarsManager.Var var;
 
@@ -36,18 +35,16 @@ public class NodeAffect : Nodes
     {
         base.Awake();
         nodeTypes = NodeTypes.affectation;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
         OnDoubleClick += ModifyNodeContent;
     }
 
     public void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
         OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillAffectation).GetComponent<PopUpFillNode>();
         if (nodeExecutableString != null)
@@ -65,12 +62,6 @@ public class NodeAffect : Nodes
         };
     }
 
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-    public override void LockUnlockAllInput(bool isLocked)
-    {
-    }
 
     public override void Execute()
     {

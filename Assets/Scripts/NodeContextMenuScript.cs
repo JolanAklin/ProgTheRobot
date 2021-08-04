@@ -28,7 +28,6 @@ public class NodeContextMenuScript : MonoBehaviour
     /// </summary>
     public void Modify()
     {
-        nodeToModify.LockUnlockAllInput(false);
         UIRaycaster.instance.nodeContextMenuOpen = false;
         Destroy(this.gameObject);
     }

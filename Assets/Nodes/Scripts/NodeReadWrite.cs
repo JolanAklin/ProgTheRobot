@@ -27,24 +27,21 @@ public class NodeReadWrite : Nodes
     /// This string is attended to be used only internally. This is not shown to the user.
     /// </summary>
     private string nodeExecutableString;
-    public TMP_Text nodeContentDisplay;
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.readWrite;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
         OnDoubleClick += ModifyNodeContent;
     }
 
     private void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
         DestroyNode();
         OnDoubleClick -= ModifyNodeContent;
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillReadWrite).GetComponent<PopUpFillNode>();
         if (nodeExecutableString != null)
@@ -60,14 +57,6 @@ public class NodeReadWrite : Nodes
             nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
             popUpFillNode.Close();
         };
-    }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-
-    public override void LockUnlockAllInput(bool isLocked)
-    {
     }
 
     public override void Execute()

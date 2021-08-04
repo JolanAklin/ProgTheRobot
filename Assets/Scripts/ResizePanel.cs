@@ -19,8 +19,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
 
-public class ResizePanel : MonoBehaviour
+public class ResizePanel : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IDragHandler, IBeginDragHandler, IEndDragHandler
 {
     public GameObject panelToResize;
     public bool horizontal = true;
@@ -28,21 +29,31 @@ public class ResizePanel : MonoBehaviour
     private RectTransform rectTransform;
     private RectTransform resizePanelRectTransform;
 
-    private Action moveAction;
+    public CursorManager.CursorDef.CursorTypes cursorType;
 
-    public string cursorType;
-
-    private void Start()
+    private void Awake()
     {
         layoutElement = panelToResize.GetComponent<LayoutElement>();
         rectTransform = panelToResize.GetComponent<RectTransform>();
         resizePanelRectTransform = this.GetComponent<RectTransform>();
 
-        
+        WindowResized.instance.onWindowResized += PlaceResizePanel;
     }
-    private void Update()
+
+    private void Start()
     {
-        if(rectTransform.rect.width > 0 && horizontal)
+        StartCoroutine("PlaceResizeBarAfterDelay");
+    }
+
+    IEnumerator PlaceResizeBarAfterDelay()
+    {
+        yield return new WaitForEndOfFrame();
+        PlaceResizePanel(this, EventArgs.Empty);
+    }
+
+    private void PlaceResizePanel(object sender, EventArgs e)
+    {
+        if (rectTransform.rect.width > 0 && horizontal)
         {
             resizePanelRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Left, rectTransform.rect.width, resizePanelRectTransform.rect.width);
         }
@@ -50,24 +61,32 @@ public class ResizePanel : MonoBehaviour
         {
             resizePanelRectTransform.SetInsetAndSizeFromParentEdge(RectTransform.Edge.Bottom, rectTransform.rect.height, resizePanelRectTransform.rect.height);
         }
-        moveAction?.Invoke();
-
-        if(Input.GetMouseButtonUp(0))
-        {
-            EndMove();
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-        }
     }
 
-    public void StartMove()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        if (moveAction == null)
-            moveAction = () => { Move(); };
+        CursorManager.instance.ChangeCursor(cursorType);
     }
 
-    public void EndMove()
+    public void OnPointerExit(PointerEventData eventData)
     {
-        moveAction = null;
+        CursorManager.instance.ChangeCursor(CursorManager.CursorDef.CursorTypes.arrow);
+    }
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        CursorManager.instance.ChangeCursor(cursorType, true);
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        PlaceResizePanel(this, EventArgs.Empty);
+        Move();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        CursorManager.instance.UnLockCursorTexture();
+        CursorManager.instance.ChangeCursor(CursorManager.CursorDef.CursorTypes.arrow);
     }
 
     private void Move()
@@ -85,4 +104,5 @@ public class ResizePanel : MonoBehaviour
             resizePanelRectTransform.anchoredPosition = new Vector2(0, rectTransform.rect.height);
         }
     }
+
 }

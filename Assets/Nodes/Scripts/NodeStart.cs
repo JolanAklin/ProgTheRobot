@@ -40,19 +40,8 @@ public class NodeStart : Nodes
     {
         DestroyNode();
     }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-    // start tpi
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
-    public override void LockUnlockAllInput(bool isLocked)
-    {
-    }
-    //end tpi
+    protected override void ModifyNodeContent(object sender, EventArgs e)
+    {}
 
     IEnumerator WaitBeforeCallingNextNode()
     {
@@ -109,5 +98,6 @@ public class NodeStart : Nodes
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
     }
+
     #endregion
 }

@@ -48,7 +48,6 @@ public class CompletionProposition : MonoBehaviour
 
         toFill.text = ReplaceLastOccurrence(toFill.text, lettersToRemove, completion);
         callBack?.Invoke();
-        completedNode.LockUnlockAllInput(false);
         toFill.ActivateInputField();
         toFill.Select();
         toFill.caretPosition = toFill.text.Length;

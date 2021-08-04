@@ -24,7 +24,6 @@ using System.Data;
 
 public class NodeForLoop : Nodes
 {
-    public TMP_Text nodeContentDisplay;
     public int nextNodeInside = -1;
 
     //private VarsManager.Var varIncrement;
@@ -55,7 +54,6 @@ public class NodeForLoop : Nodes
     {
         base.Awake();
         nodeTypes = NodeTypes.forLoop;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
 
         if (handleEndArray.Length > 1)
             handleEndArray[1].loopArea = nodesLoopArea;
@@ -67,12 +65,11 @@ public class NodeForLoop : Nodes
 
     private void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
         OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillForLoop).GetComponent<PopUpFillNode>();
         popUpFillNode.SetContent(new string[] { varName, varStartValue, untilExpression, incrementExpression });
@@ -107,13 +104,6 @@ public class NodeForLoop : Nodes
         nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName("For " + varName + " from " + varStartValue + " to " + untilExpression + " by increments of " + incrementExpression);
     }
 
-    
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-    public override void LockUnlockAllInput(bool isLocked)
-    {
-    }
 
     public override void Execute()
     {

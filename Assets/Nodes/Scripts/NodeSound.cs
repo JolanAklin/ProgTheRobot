@@ -28,25 +28,22 @@ public class NodeSound : Nodes
 {
     public ToggleScript asyncToggle;
     private string nodeExecutableString;
-    public TMP_Text nodeContentDisplay;
     private bool playAsync = false;
 
     new private void Awake()
     {
         base.Awake();
         nodeTypes = NodeTypes.sound;
-        ExecManager.onChangeBegin += LockUnlockAllInput;
         OnDoubleClick += ModifyNodeContent;
     }
 
     private void OnDestroy()
     {
-        ExecManager.onChangeBegin -= LockUnlockAllInput;
         OnDoubleClick -= ModifyNodeContent;
         DestroyNode();
     }
 
-    public void ModifyNodeContent(object sender, EventArgs e)
+    protected override void ModifyNodeContent(object sender, EventArgs e)
     {
         PopUpFillNode popUpFillNode = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.FillSound).GetComponent<PopUpFillNode>();
         if (nodeExecutableString != null)
@@ -65,13 +62,6 @@ public class NodeSound : Nodes
             nodeContentDisplay.text = nodeExecutableString;
             popUpFillNode.Close();
         };
-    }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-    public override void LockUnlockAllInput(bool isLocked)
-    {
     }
 
     /// <summary>

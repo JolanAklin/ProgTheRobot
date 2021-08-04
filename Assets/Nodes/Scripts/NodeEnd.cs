@@ -47,6 +47,8 @@ public class NodeEnd : Nodes
             ChangeBorderColor(defaultColor);
         }
     }
+    protected override void ModifyNodeContent(object sender, EventArgs e)
+    {}
 
     IEnumerator WaitBeforeCallingNextNode()
     {
@@ -54,20 +56,6 @@ public class NodeEnd : Nodes
         ChangeBorderColor(defaultColor);
         CallNextNode();
     }
-
-    public override void LockUnlockAllInput(object sender, ExecManager.onChangeBeginEventArgs e)
-    {
-    }
-    // start tpi
-
-    /// <summary>
-    /// Lock all input fields of the node
-    /// </summary>
-    /// <param name="isLocked">If true, all input fields cannot be modified</param>
-    public override void LockUnlockAllInput(bool isLocked)
-    {
-    }
-    //end tpi
 
     public override void CallNextNode()
     {
@@ -106,5 +94,6 @@ public class NodeEnd : Nodes
         NodesDict.Remove(id);
         NodesDict.Add(id, this);
     }
+
     #endregion
 }

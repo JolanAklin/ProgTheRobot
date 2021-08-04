@@ -26,12 +26,19 @@ public class CursorManager : MonoBehaviour
     public static CursorManager instance;
 
     private bool lockCurTexture = false;
-    private string currentCurName = "";
+    private CursorDef.CursorTypes currentCurType;
 
     [Serializable]
     public class CursorDef
     {
-        public string curName;
+        public enum CursorTypes
+        {
+            arrow,
+            resizeH,
+            resizeV,
+            move,
+        }
+        public CursorTypes type;
         public Texture2D curTexture;
         public Vector2 hotSpot;
     }
@@ -39,16 +46,16 @@ public class CursorManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        ChangeCursor("default");
+        ChangeCursor(CursorDef.CursorTypes.arrow);
     }
 
-    public void ChangeCursor(string curName, bool lockCurTexture = false)
+    public void ChangeCursor(CursorDef.CursorTypes curType, bool lockCurTexture = false)
     {
-        if(!this.lockCurTexture && currentCurName != curName)
+        if(!this.lockCurTexture && currentCurType != curType)
         {
             this.lockCurTexture = lockCurTexture;
-            currentCurName = curName;
-            CursorDef def = cursors.Find(x => x.curName == curName);
+            currentCurType = curType;
+            CursorDef def = cursors.Find(x => x.type == curType);
             if(def != null)
                 Cursor.SetCursor(def.curTexture, def.hotSpot, CursorMode.Auto);
         }
