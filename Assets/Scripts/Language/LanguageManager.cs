@@ -369,7 +369,6 @@ public class LanguageManager : MonoBehaviour
                 }
             }
         }
-        Debug.Log(tree.ToString());
         return tree;
     }
 

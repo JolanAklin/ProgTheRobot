@@ -76,29 +76,6 @@ public class UIRaycaster : MonoBehaviour
         rayCastResults = new List<RaycastResult>();
         graphicraycaster.Raycast(pointerevent, rayCastResults);
 
-
-        // start tpi
-        if (Input.GetMouseButton(0))
-        {
-            // close the add node panel
-            if (panelOpen && rayCastResults.Find(X => X.gameObject.tag == "MenuAddScript").gameObject == null)
-            {
-                if (addNodeMenu != null)
-                {
-                    Destroy(addNodeMenu);
-                    panelOpen = false;
-                }
-            } // close the node context menu
-            else if (nodeContextMenuOpen && rayCastResults.Find(X => X.gameObject.tag == "NodeContextMenu").gameObject == null)
-            {
-                if (nodeContextMenuInstance != null)
-                {
-                    Destroy(nodeContextMenuInstance);
-                    nodeContextMenuOpen = false;
-                }
-            }
-        }
-        //end tpi
         GameObject resizePanel = null;
         if (rayCastResults.Count > 0)
         {
@@ -137,36 +114,6 @@ public class UIRaycaster : MonoBehaviour
 
         // only do raycast in the 3D/2D world
         #region On nodes
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            //end resize
-            if(resizeHandle != null && resizeHandle.node.canResize)
-            {
-                resizeHandle.NodeResize();
-                resizeHandle = null;
-            }
-        }
-        if (Input.GetMouseButtonDown(0))
-        {
-            RaycastHit2D hit;
-            Ray ray;
-
-
-            // start resize
-            if (rayCastResults.Count == 0 && resizeHandle == null)
-            {
-                ray = NodeDisplay.instance.nodeCamera.ScreenPointToRay(Input.mousePosition);
-                if (hit = Physics2D.Raycast(ray.origin, ray.direction, Mathf.Infinity))
-                {
-                    if (hit.collider.gameObject.tag == "ResizeHandle")
-                    {
-                        resizeHandle = hit.collider.GetComponent<ResizeHandle>();
-                        resizeHandle.NodeResize();
-                    }
-                }
-            }
-        }
 
         if(Input.GetMouseButtonDown(0))
         {

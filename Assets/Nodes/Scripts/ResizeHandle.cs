@@ -17,13 +17,53 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class ResizeHandle : MonoBehaviour
+public class ResizeHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
     public Nodes node;
 
     public void NodeResize()
     {
         node.StartEndResize();
+    }
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            Debug.Log("here" + Time.frameCount);
+            node.preventMove = true;
+        }
+    }
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            node.preventMove = false;
+        }
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            Debug.Log("there" + Time.frameCount);
+            node.preventMove = true;
+            node.StartEndResize();
+        }
+    }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            node.StartEndResize();
+            node.preventMove = false;
+        }
     }
 }

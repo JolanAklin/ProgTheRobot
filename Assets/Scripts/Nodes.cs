@@ -187,6 +187,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
     private bool doubleClick = false;
     private bool preventDrag = false;
     private bool preventClicks = false;
+    public bool preventMove = false;
 
     private static bool nodeBeenLeftClicked = false;
     public void OnPointerDown(PointerEventData eventData)
@@ -242,18 +243,23 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        if (preventDrag)
+        if(eventData.button == PointerEventData.InputButton.Left)
         {
-            preventDrag = false;
-            return;
-        }
-        this.StartMove();
-        preventClicks = true;
-        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
-        {
-            if (selectedNode != null && selectedNode != this)
+            if (preventMove)
+                return;
+            if (preventDrag)
             {
-                selectedNode.StartMove();
+                preventDrag = false;
+                return;
+            }
+            this.StartMove();
+            preventClicks = true;
+            foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+            {
+                if (selectedNode != null && selectedNode != this)
+                {
+                    selectedNode.StartMove();
+                }
             }
         }
     }
@@ -264,10 +270,13 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        preventClicks = false;
-        foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+        if (eventData.button == PointerEventData.InputButton.Left)
         {
-            selectedNode.EndMove();
+            preventClicks = false;
+            foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+            {
+                selectedNode.EndMove();
+            }
         }
     }
 
