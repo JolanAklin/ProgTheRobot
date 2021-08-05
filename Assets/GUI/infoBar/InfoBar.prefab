@@ -27,7 +27,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4465575687507606342}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -110,9 +110,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infos:
-  - infoName: ScriptInfo
+  - infoType: 0
     prefab: {fileID: 4971677386438487480, guid: 1fa6946b5fe2ca043b3d7caaa43be09a, type: 3}
-  - infoName: RobotSmallWindow
+  - infoType: 1
     prefab: {fileID: 3470556694018162013, guid: 34d90cc110ed6584eba10804b94d9efa, type: 3}
-  - infoName: RobotBigWindow
+  - infoType: 2
     prefab: {fileID: 7867920508013971030, guid: bc7208bc8a8a2994ea44ee9e8ef366aa, type: 3}

@@ -31,7 +31,6 @@ public class ResizeHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         if(eventData.button == PointerEventData.InputButton.Left)
         {
-            Debug.Log("here" + Time.frameCount);
             node.preventMove = true;
         }
     }
@@ -47,7 +46,6 @@ public class ResizeHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            Debug.Log("there" + Time.frameCount);
             node.preventMove = true;
             node.StartEndResize();
         }

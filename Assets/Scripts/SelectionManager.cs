@@ -210,7 +210,7 @@ public class SelectionManager : MonoBehaviour
                 }
                 node.ParentLoopArea = null;
             }
-            UIRaycaster.instance.MoveNode();
+            // @todo : make node moves after a copy
         }
     }
 

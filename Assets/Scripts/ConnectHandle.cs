@@ -18,8 +18,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class ConnectHandle : MonoBehaviour
+public class ConnectHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
     public Nodes node; // which is his parent
     public bool isInput = false;
@@ -135,6 +136,23 @@ public class ConnectHandle : MonoBehaviour
                 image.enabled = true;
                 boxCollider2d.enabled = true;
             }
+        }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            node.preventMove = true;
+            Click();
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        if (eventData.button == PointerEventData.InputButton.Left)
+        {
+            node.preventMove = false;
         }
     }
 }

@@ -22,29 +22,45 @@ using System.Linq;
 
 public class InfoBar : MonoBehaviour
 {
+    public static InfoBar instance { get; private set; }
     [SerializeField]
     public List<infoObject> infos = new List<infoObject>();
 
     [Serializable]
     public class infoObject
     {
-        public string infoName;
+        public enum InfoType
+        {
+            scriptInfo,
+            robotSmallWindow,
+            robotBigWindow,
+            none,
+        }
+        public InfoType infoType;
         public GameObject prefab;
     }
-    private string currentInfo;
+    public infoObject.InfoType currentInfo { get; private set; }
 
-    public void ChangeInfos(string info)
+    private void Awake()
     {
-        if(currentInfo != info)
+        instance = this;
+    }
+
+    public void ChangeInfos(infoObject.InfoType infoType)
+    {
+        if(currentInfo != infoType)
         {
-            currentInfo = info;
+            currentInfo = infoType;
             foreach (Transform child in this.transform)
             {
                 Destroy(child.gameObject);
             }
-            GameObject infoPrefab = infos.Find(x => x.infoName == info).prefab;
-            if(infoPrefab != null)
-                Instantiate(infoPrefab, this.transform);
+            if(infoType != infoObject.InfoType.none)
+            {
+                GameObject infoPrefab = infos.Find(x => x.infoType == infoType).prefab;
+                if(infoPrefab != null)
+                    Instantiate(infoPrefab, this.transform);
+            }     
         }
     }
 }

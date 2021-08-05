@@ -17,18 +17,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class MoveLinkHandle : MonoBehaviour
+public class MoveLinkHandle : MonoBehaviour, IPointerDownHandler
 {
     public GameObject SplineLink;
 
-    private SpriteRenderer spriteRenderer;
+    private Image image;
     private BoxCollider2D boxCollider2d;
 
     public void Start()
     {
         boxCollider2d = GetComponent<BoxCollider2D>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        image = GetComponent<Image>();
         Manager.instance.OnSpline += ShowHide;
     }
 
@@ -42,14 +44,22 @@ public class MoveLinkHandle : MonoBehaviour
 
         if (!e.splineStarted)
         {
-            spriteRenderer.enabled = true;
+            image.enabled = true;
             boxCollider2d.enabled = true;
         }
         else
         {
-            spriteRenderer.enabled = false;
+            image.enabled = false;
             boxCollider2d.enabled = false;
         }
 
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        if(eventData.button == PointerEventData.InputButton.Left)
+        {
+            SplineLink.GetComponent<SplineManager>().MoveSpline();
+        }
     }
 }

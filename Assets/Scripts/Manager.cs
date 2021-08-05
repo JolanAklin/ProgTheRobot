@@ -57,12 +57,8 @@ public class Manager : MonoBehaviour
     // define the execution speed of the script
     public float execSpeed;
 
-    // start tpi
     [Header("Settings")]
     public bool connectHandleAlwaysShown = true;
-
-    public bool canTerrainCamMove;
-    // end tpi
 
     private void Awake()
     {
