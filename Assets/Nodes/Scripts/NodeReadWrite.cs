@@ -82,7 +82,7 @@ public class NodeReadWrite : Nodes
         switch (inputSplited[0])
         {
             case "kwwrite#":
-                rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]).Value.ToString());
+                rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]));
                 rw.SetOkAction(() => { 
                     rw.Close();
                     StartCoroutine("WaitBeforeCallingNextNode");

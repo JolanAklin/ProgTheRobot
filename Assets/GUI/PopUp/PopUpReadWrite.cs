@@ -32,11 +32,15 @@ public class PopUpReadWrite : PopUp
     {
         infoText.text = text;
         inputField.interactable = true;
+        inputField.Select();
     }
-    public void Init(string text, string number)
+    public void Init(string text, VarsManager.Var number)
     {
         infoText.text = text;
-        inputField.text = number;
+        if (number != null)
+            inputField.text = number.Value.ToString();
+        else
+            inputField.text = "Undefined";
         inputField.interactable = false;
     }
 

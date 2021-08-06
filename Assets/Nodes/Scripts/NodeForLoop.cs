@@ -124,7 +124,7 @@ public class NodeForLoop : Nodes
 
         if(!isForLoopRunning)
         {
-            iterationVar = rs.robot.varsManager.GetVar(varName, startValue);
+            iterationVar = rs.robot.varsManager.GetVar(varName, startValue - incrementValue);
             isForLoopRunning = true;
         }
 

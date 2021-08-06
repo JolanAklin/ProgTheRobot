@@ -182,6 +182,12 @@ public class VarsManager
                     }
                 }
                 break;
+            case "btrue#":
+                result = true;
+                break;
+            case "bfalse#":
+                result = false;
+                break;
 
             default:
                 return new BoolFunctionReturn() { error = true, };
@@ -330,18 +336,42 @@ public class VarsManager
 
     public string ReplaceFunctionByValue(string expression)
     {
-        foreach (string function in LanguageManager.instance.FullNameToAbrevDict.Values)
+        string[] separators = new string[] { " " };
+        string[] splited = expression.Split(separators, StringSplitOptions.RemoveEmptyEntries);
+
+        for (int i = 0; i < splited.Length; i++)
         {
-            if(function[0] == 'b')
+            switch (Validator.GetFunctionType(splited[i]))
             {
-                expression = expression.Replace(function, GetBoolFunction(function).result ? "True" : "False");
-            }else if (function[0] == 'i')
-            {
-                expression = expression.Replace(function, GetFunction(function).result.ToString());
+                case Validator.FunctionType.@int:
+                    splited[i] = GetBoolFunction(splited[i]).result.ToString();
+                    break;
+                case Validator.FunctionType.@bool:
+                    splited[i] = GetBoolFunction(splited[i]).result ? "True" : "False";
+                    break;
+                case Validator.FunctionType.word:
+                    if (vars.ContainsKey(splited[i]))
+                        splited[i] = vars[splited[i]].ToString();
+                    break;
+                default:
+                    break;
             }
         }
 
-        return expression;
+        return string.Join(" ", splited);
+
+        //foreach (string function in LanguageManager.instance.FullNameToAbrevDict.Values)
+        //{
+        //    if(Validator.GetFunctionType(function) == Validator.FunctionType.@bool)
+        //    {
+        //        expression = expression.Replace(function, GetBoolFunction(function).result ? "True" : "False");
+        //    }else if (Validator.GetFunctionType(function) == Validator.FunctionType.@int)
+        //    {
+        //        expression = expression.Replace(function, GetFunction(function).result.ToString());
+        //    }
+        //}
+
+        //return expression;
     }
 
     public Evaluation Evaluate(string expression)

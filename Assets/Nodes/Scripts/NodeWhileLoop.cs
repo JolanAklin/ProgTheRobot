@@ -55,7 +55,7 @@ public class NodeWhileLoop : Nodes
         {
             PopUpNodeInput input = popUpFillNode.inputModule.Inputs[0] as PopUpNodeInput;
             nodeExecutableString = input.executableFunction;
-            nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+            nodeContentDisplay.text = "While " + LanguageManager.instance.AbrevToFullName(nodeExecutableString).Trim();
             popUpFillNode.Close();
         };
     }
@@ -173,7 +173,7 @@ public class NodeWhileLoop : Nodes
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
         nodeExecutableString = serializableNode.nodeSettings[0];
-        nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
+        nodeContentDisplay.text = "While " + LanguageManager.instance.AbrevToFullName(nodeExecutableString).Trim();
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
         NodesDict.Add(id, this);
