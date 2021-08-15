@@ -92,7 +92,7 @@ public class LanguageManager : MonoBehaviour
         {
             abrevToFullName = new Dictionary<string, string>();
             fullNameToAbrev = new Dictionary<string, string>();
-            abrevToFullName = LanguageLoader.Load(LanguageLoader.SupportedLanguages.eng, LanguageLoader.FileType.functions);
+            abrevToFullName = LanguageLoader.Load(LanguageLoader.SupportedLanguages.fra, LanguageLoader.FileType.functions);
             InverseKV();
         }
         FillCompletionPossibilitiesDict();

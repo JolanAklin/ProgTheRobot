@@ -1,0 +1,40 @@
+[boolean functions]
+bwf# = Mur en face
+bwr# = Mur à droite
+bwl# = Mur à gauche
+bo# = Sorti
+boao# = Robot sur une prise
+btm# = Case marquée
+bbg# = Ballon au sol
+btrue# = Vrai
+bfalse# = Faux
+
+[int functions]
+iwd# = Distance au mur
+ip# = Energie
+irpx# = Position du robot x
+irpy# = Position du robot y
+irdx# = Direction du robot x
+irdy# = Direction du robot y
+ibpx# = Position du ballon x
+ibpy# = Position du ballon y
+
+[boolean operators]
+bopand# = Et
+bopor# = Ou
+bopnot# = Pas
+
+[robot actions]
+acgf# = Avancer
+actr# = Tourner à droite
+actl# = Tourner à gauche
+acm# = Marquer
+acum# = Démarquer
+acr# = Recharger
+acpb# = Poser ballon
+actb# = Prendre ballon
+actwb# = Lancer ballon
+
+[other keywords]
+kwread# = Lire
+kwwrite# = Ecrire

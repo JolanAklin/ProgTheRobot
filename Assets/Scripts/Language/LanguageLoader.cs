@@ -10,6 +10,7 @@ namespace Language.Loader
         public enum SupportedLanguages
         {
             eng,
+            fra
         }
         public enum FileType
         {
