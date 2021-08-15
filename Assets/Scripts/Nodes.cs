@@ -78,7 +78,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
     public int parentId = -1; // as another node higher in the hierarchy
     public ThreeElementNodeVisual nodeVisual; // change the node element to look good when resized
     [HideInInspector]
-    public int numberOfInputConnection = 0;
+    private int numberOfInputConnection = 0;
 
     public RectTransform canvasRect; // the node canvas
     private Canvas canvas;
@@ -375,8 +375,13 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
     
     protected void DestroyNode()
     {
+        //hide the tooltip
+        ShouldShowToolTip = false;
+        TextToolTip.instance.HideToolTip();
+
         rs.onStop -= PostExecutionCleanUp;
         OnNodeModified?.Invoke(this, new OnNodeModifiedEventArgs() { destroy = true });
+
         // remove all the connected splines
         for (int j = 0; j < currentSplines.Length; j++)
         {
@@ -456,6 +461,23 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
                 }
             }
         }
+        else
+        {
+            if (nodeErrorCode != ErrorCode.wrongInput)
+            {
+                nodeErrorCode = ErrorCode.ok;
+                ChangeBorderColor(defaultColor);
+            }
+        }
+    }
+
+    public void AddConnection()
+    {
+        numberOfInputConnection++;
+    }
+    public void RemoveConnection()
+    {
+        numberOfInputConnection--;
     }
 
     private void FixedUpdate()

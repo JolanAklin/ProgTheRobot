@@ -190,8 +190,8 @@ public class SplineManager : MonoBehaviour
         nodeStart.nextNodeId = -1;
         try
         {
+            nodeEnd.RemoveConnection();
             nodeEnd.OnNodeModified -= ChangeSpline;
-            nodeEnd.numberOfInputConnection--;
         }catch(Exception)
         {
 

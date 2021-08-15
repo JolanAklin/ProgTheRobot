@@ -284,7 +284,7 @@ public class Manager : MonoBehaviour
                 OnSpline?.Invoke(this, new OnSplineEventArgs() { splineStarted = false });
                 splineManager.EndSpline(handleTransform, sender, handleId);
                 actionWhenConnectionFinished(sender.id);
-                sender.numberOfInputConnection++;
+                sender.AddConnection();
                 return node;
             }
             return null;
