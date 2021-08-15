@@ -19,7 +19,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-// start tpi
 /// <summary>
 /// this class will handle the selection of nodes, copy and pasting of nodes
 /// </summary>
@@ -211,6 +210,10 @@ public class SelectionManager : MonoBehaviour
                 node.ParentLoopArea = null;
             }
             // @todo : make node moves after a copy
+            foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
+            {
+                selectedNode.StartMove();
+            }
         }
     }
 
@@ -230,4 +233,3 @@ public class SelectionManager : MonoBehaviour
         return nodes;
     }
 }
-// end tpi

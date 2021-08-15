@@ -17,6 +17,17 @@ public class PopUpFillNodeCustomInputFieldModule : MonoBehaviour, PopUpFillNodeI
         }
     }
 
+    private void Start()
+    {
+        StartCoroutine("SelectInputField");
+    }
+
+    IEnumerator SelectInputField()
+    {
+        yield return new WaitForEndOfFrame();
+        customInputs[0].input.Select();
+    }
+
     public bool Validate()
     {
         bool validated = true;

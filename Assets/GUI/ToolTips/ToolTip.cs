@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 
 public class ToolTip : MonoBehaviour
 {
     public bool isToolTipOpened { get; private set; }
-    private RectTransform rectTransform;
+    protected RectTransform rectTransform;
 
     [SerializeField] protected RectTransform bgRectTransform;
     [SerializeField] protected RectTransform canvasRectTransform;

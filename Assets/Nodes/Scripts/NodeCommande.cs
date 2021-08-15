@@ -170,7 +170,17 @@ public class NodeCommande : Nodes
         nodeExecutableString = serializableNode.nodeSettings[0];
         nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName(nodeExecutableString);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        NodesDict.Add(id, this);
+        if (!NodesDict.ContainsKey(id))
+        {
+            NodesDict.Add(id, this);
+        }
+        else
+        {
+            if (NodesDict[id] != this)
+            {
+                Debug.LogError("Tried to replace a node by another one");
+            }
+        }
     }
     #endregion
 }

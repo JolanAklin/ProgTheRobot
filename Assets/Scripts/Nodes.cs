@@ -192,6 +192,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
     private static bool nodeBeenLeftClicked = false;
     public void OnPointerDown(PointerEventData eventData)
     {
+        MenuToolTip.instance.HideToolTip();
         if(!preventClicks)
         {
             if (eventData.button == PointerEventData.InputButton.Left && doubleClick)
@@ -252,39 +253,50 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
                 preventDrag = false;
                 return;
             }
-            this.StartMove();
-            preventClicks = true;
             foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
             {
-                if (selectedNode != null && selectedNode != this)
-                {
-                    selectedNode.StartMove();
-                }
+                selectedNode.StartMove();
             }
+        }
+
+        // Prepare the movement of the script area
+        if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            MoveScriptArea.instance.PrepareDrag();
         }
     }
 
     public void OnDrag(PointerEventData eventData)
     {
+        // move the script area
+        if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            MoveScriptArea.instance.MoveArea();
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
-            preventClicks = false;
             foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
             {
                 selectedNode.EndMove();
             }
         }
+
+        // finishe the move area movement
+        MoveScriptArea.instance.EndDrag();
     }
 
     // show tooltip
     private bool ShouldShowToolTip = false;
     public void OnPointerEnter(PointerEventData eventData)
     {
+        MoveScriptArea.instance.CursorHover(true);
         if (nodeContentDisplay == null)
+            return;
+        if (nodeContentDisplay.text == null)
             return;
         if (nodeContentDisplay.text.Length == 0)
             return;
@@ -301,6 +313,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        MoveScriptArea.instance.CursorHover(false);
         ShouldShowToolTip = false;
         TextToolTip.instance.HideToolTip();
     }
@@ -378,12 +391,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
     {
         nodeInfo = NodeInfo.nodesInfos.Find(x => x.nodeTypes == nodeTypes);
         // All nodes have a different id
-        if(id == -1)
-        {
-            id = nextid;
-            nextid++;
-            nodes.Add(id, this);
-        }
+        SetId();
 
         // subscribe to the checknode event. The node will check if it is connected correctly
         Manager.instance.CheckNode += isConnected;
@@ -392,6 +400,16 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
         rs.onStop += PostExecutionCleanUp;
 
         nodeHolder = GameObject.FindGameObjectWithTag("NodeHolder");
+    }
+
+    public void SetId()
+    {
+        if(id == -1)
+        {
+            id = nextid;
+            nextid++;
+            nodes.Add(id, this);
+        }
     }
 
     protected abstract void ModifyNodeContent(object sender, EventArgs e);
@@ -467,6 +485,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
 
     public void StartMove()
     {
+        preventClicks = true;
         // get the delta between the node and the mouse cursor to avoid weird snap to the mouse cursor
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         mouseCenterDelta = transform.position - mouseToWorldPoint;
@@ -490,6 +509,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
             lastInsideLoopImage.color = insideNodeColor;
         if (canMove)
             move = false;
+        preventClicks = false;
         onMoveEnd?.Invoke();
     }
 

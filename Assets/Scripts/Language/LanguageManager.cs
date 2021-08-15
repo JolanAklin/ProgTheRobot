@@ -230,6 +230,8 @@ public class LanguageManager : MonoBehaviour
     /// <returns>The converted string or the input string</returns>
     public string FullNameToAbrev(string toConvert)
     {
+        if (toConvert == null)
+            return toConvert;
         foreach (KeyValuePair<string, string> item in fullNameToAbrev)
         {
             toConvert = Regex.Replace(toConvert, @$"(?<=\s|^){item.Key}(?=\s|$)", item.Value);
@@ -244,6 +246,8 @@ public class LanguageManager : MonoBehaviour
     /// <returns>The converted string or the input string</returns>
     public string AbrevToFullName(string toConvert)
     {
+        if (toConvert == null)
+            return toConvert;
         foreach (KeyValuePair<string,string> item in abrevToFullName)
         {
             toConvert = Regex.Replace(toConvert, @$"(?<=\s|^){item.Key}(?=\s|$)", item.Value);

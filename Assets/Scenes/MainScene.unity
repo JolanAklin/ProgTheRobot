@@ -7775,6 +7775,7 @@ GameObject:
   - component: {fileID: 1203312624}
   - component: {fileID: 1203312626}
   - component: {fileID: 1203312627}
+  - component: {fileID: 1203312628}
   m_Layer: 5
   m_Name: robotImage
   m_TagString: ModifyTerrain
@@ -7863,6 +7864,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   infoType: 2
+--- !u!114 &1203312628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1203312622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 839cccf20d9860440956f6235c9d07a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cameraController: {fileID: 0}
 --- !u!1 &1213521562
 GameObject:
   m_ObjectHideFlags: 0
@@ -11411,7 +11425,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 2
-    m_SensorSize: {x: 1.7777778, y: 1}
+    m_SensorSize: {x: 2.0243506, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -12864,8 +12878,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 138.5, y: -171.5}
-  m_SizeDelta: {x: 271, y: 331}
+  m_AnchoredPosition: {x: 138.5, y: -100}
+  m_SizeDelta: {x: 271, y: 188}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &27398558794119065
 RectTransform:

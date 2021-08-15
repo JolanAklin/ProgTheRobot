@@ -92,14 +92,16 @@ public class NodeForLoop : Nodes
 
     private void SetForLoop(string varName, string varStartValue, string untilExpression, string incrementExpression)
     {
+        if (varName == "" || varStartValue == "" || untilExpression == "" || incrementExpression == "")
+            return;
         this.varName = varName;
         this.varStartValue = varStartValue;
         this.untilExpression = untilExpression;
         this.incrementExpression = incrementExpression;
 
-        startValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(varStartValue), null));
-        incrementValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(incrementExpression), null));
-        endValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(untilExpression), null));
+        try { startValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(varStartValue), null)); } catch (Exception) { startValue = 0; }
+        try { incrementValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(incrementExpression), null)); } catch (Exception) { incrementValue = 0; }
+        try { endValue = Convert.ToInt32(new DataTable().Compute(rs.robot.varsManager.ReplaceFunctionByValue(untilExpression), null)); } catch (Exception) { endValue = 0; }
 
         nodeContentDisplay.text = LanguageManager.instance.AbrevToFullName("For " + varName + " from " + varStartValue + " to " + untilExpression + " by increments of " + incrementExpression);
     }
@@ -241,7 +243,17 @@ public class NodeForLoop : Nodes
         SetForLoop(serializableNode.nodeSettings[0], serializableNode.nodeSettings[1], serializableNode.nodeSettings[2], serializableNode.nodeSettings[3]);
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[4]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        NodesDict.Add(id, this);
+        if(!NodesDict.ContainsKey(id))
+        {
+            NodesDict.Add(id, this);
+        }
+        else
+        {
+            if(NodesDict[id] != this)
+            {
+                Debug.LogError("Tried to replace a node by another one");
+            }
+        }
     }
     #endregion
 }

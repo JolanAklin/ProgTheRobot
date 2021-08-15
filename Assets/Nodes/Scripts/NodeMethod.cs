@@ -157,10 +157,22 @@ public class NodeMethod : Nodes
 
         MakeSubProgramList();
         nodeExecutableString = serializableNode.nodeSettings[0];
+        if (nodeExecutableString == null)
+            return;
         nodeContentDisplay.text = subProgramList[Convert.ToInt32(nodeExecutableString)];
 
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        NodesDict.Add(id, this);
+        if (!NodesDict.ContainsKey(id))
+        {
+            NodesDict.Add(id, this);
+        }
+        else
+        {
+            if (NodesDict[id] != this)
+            {
+                Debug.LogError("Tried to replace a node by another one");
+            }
+        }
     }
     #endregion
 }

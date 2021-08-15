@@ -11,28 +11,56 @@ public class MoveScriptArea : MonoBehaviour, IDragHandler, IBeginDragHandler, IE
     private bool isCursorHover = true;
     [SerializeField] private float nodeAreaPanSensitivity;
 
+    public static MoveScriptArea instance { get; private set; }
+
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    public void CursorHover(bool ishover)
+    {
+        isCursorHover = ishover;
+    }
+
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Middle)
         {
-            mousePosBeginMove = Input.mousePosition;
-            cameraPosAtPanStart = NodeDisplay.instance.nodeCamera.transform.position;
-            CursorManager.instance.ChangeCursor(CursorManager.CursorDef.CursorTypes.move, true);
+            PrepareDrag();
         }
+    }
+
+    public void PrepareDrag()
+    {
+        mousePosBeginMove = Input.mousePosition;
+        cameraPosAtPanStart = NodeDisplay.instance.nodeCamera.transform.position;
+        CursorManager.instance.ChangeCursor(CursorManager.CursorDef.CursorTypes.move, true);
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         if(eventData.button == PointerEventData.InputButton.Middle)
         {
-            Vector3 currentMousePos = Input.mousePosition;
-            Vector3 delta = (currentMousePos - mousePosBeginMove);
-            Vector3 cameraPos = new Vector3(-delta.x / nodeAreaPanSensitivity, -delta.y / nodeAreaPanSensitivity, 0);
-            NodeDisplay.instance.nodeCamera.transform.position = cameraPos + cameraPosAtPanStart;
+            MoveArea();
         }
     }
 
+    public void MoveArea()
+    {
+        Vector3 currentMousePos = Input.mousePosition;
+        Vector3 delta = (currentMousePos - mousePosBeginMove);
+        Vector3 cameraPos = new Vector3(-delta.x / nodeAreaPanSensitivity, -delta.y / nodeAreaPanSensitivity, 0);
+        NodeDisplay.instance.nodeCamera.transform.position = cameraPos + cameraPosAtPanStart;
+    }
+
     public void OnEndDrag(PointerEventData eventData)
+    {
+        EndDrag();
+    }
+
+    public void EndDrag()
     {
         CursorManager.instance.UnLockCursorTexture();
         CursorManager.instance.ChangeCursor(CursorManager.CursorDef.CursorTypes.arrow);

@@ -180,7 +180,17 @@ public class NodeSound : Nodes
         asyncToggle.value = Convert.ToBoolean(serializableNode.nodeSettings[1]);
         nodeContentDisplay.text = nodeExecutableString;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        NodesDict.Add(id, this);
+        if (!NodesDict.ContainsKey(id))
+        {
+            NodesDict.Add(id, this);
+        }
+        else
+        {
+            if (NodesDict[id] != this)
+            {
+                Debug.LogError("Tried to replace a node by another one");
+            }
+        }
     }
     #endregion
 }

@@ -96,7 +96,17 @@ public class NodeStart : Nodes
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        NodesDict.Add(id, this);
+        if (!NodesDict.ContainsKey(id))
+        {
+            NodesDict.Add(id, this);
+        }
+        else
+        {
+            if (NodesDict[id] != this)
+            {
+                Debug.LogError("Tried to replace a node by another one");
+            }
+        }
     }
 
     #endregion

@@ -173,10 +173,21 @@ public class NodeWhileLoop : Nodes
         nextNodeId = serializableNode.nextNodeId; //this is the next node in the execution order
         parentId = serializableNode.parentId;
         nodeExecutableString = serializableNode.nodeSettings[0];
-        nodeContentDisplay.text = "While " + LanguageManager.instance.AbrevToFullName(nodeExecutableString).Trim();
+        if(nodeExecutableString != null && nodeExecutableString != "")
+            nodeContentDisplay.text = "While " + LanguageManager.instance.AbrevToFullName(nodeExecutableString).Trim();
         nextNodeInside = Convert.ToInt32(serializableNode.nodeSettings[1]);
         Resize(new Vector2(serializableNode.size[0], serializableNode.size[1]));
-        NodesDict.Add(id, this);
+        if (!NodesDict.ContainsKey(id))
+        {
+            NodesDict.Add(id, this);
+        }
+        else
+        {
+            if (NodesDict[id] != this)
+            {
+                Debug.LogError("Tried to replace a node by another one");
+            }
+        }
     }
     #endregion
 }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class CompletionMenu : MonoBehaviour
+public class CompletionMenu : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public GameObject completionProposition;
     public GameObject completionPanel;
@@ -16,6 +17,8 @@ public class CompletionMenu : MonoBehaviour
     private int selectedItemIndex = 0;
     private List<CompletionItem> completionItems = new List<CompletionItem>();
 
+    private bool isHovered = false;
+
     private void Start()
     {
         completionPanelRectTransform = completionPanel.GetComponent<RectTransform>();
@@ -23,7 +26,7 @@ public class CompletionMenu : MonoBehaviour
 
     public void ShowCompletionProposition(PopUpNodeInput.Completion[] completions)
     {
-        Close();
+        Close(true);
         for (int i = 0; i < completions.Length; i++)
         {
             CompletionItem completionItem = Instantiate(completionProposition, completionPanel.transform).GetComponent<CompletionItem>();
@@ -40,8 +43,12 @@ public class CompletionMenu : MonoBehaviour
         LayoutRebuilder.ForceRebuildLayoutImmediate(completionPanelRectTransform);
     }
 
-    public void Close()
+    public void Close(bool force = false)
     {
+        //if (isHovered && !force)
+        //{
+        //    return;
+        //}
         completionItems.Clear();
         foreach (Transform child in completionPanel.transform)
         {
@@ -96,5 +103,15 @@ public class CompletionMenu : MonoBehaviour
                 completionItems[selectedItemIndex].ChangeColor(true);
             }
         }
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        isHovered = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isHovered = false;
     }
 }

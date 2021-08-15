@@ -90,6 +90,7 @@ public class ScriptCloner : MonoBehaviour
             GameObject nodeInstance = SaveManager.instance.InstantiateSavedObj(node, nodeToClone.transform.position, Quaternion.identity, nodeHolder);
 
             Nodes nodeInstanceScript = nodeInstance.GetComponent<Nodes>();
+            nodeInstanceScript.SetId();
             nodeInstanceScript.rs = robotScript;
 
             OldNodeId oldNodeId = new OldNodeId() { id = nodeToClone.id, nextNodeId = nodeToClone.nextNodeId, parentId = nodeToClone.parentId };

@@ -204,8 +204,6 @@ public class SplineManager : MonoBehaviour
             connect.canBeClicked = true;
             if(connect.image != null)
                 connect.image.enabled = true;
-            if(connect.boxCollider2d != null)
-                connect.boxCollider2d.enabled = true;
         }
     }
 

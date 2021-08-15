@@ -25,11 +25,9 @@ public class MoveLinkHandle : MonoBehaviour, IPointerDownHandler
     public GameObject SplineLink;
 
     private Image image;
-    private BoxCollider2D boxCollider2d;
 
     public void Start()
     {
-        boxCollider2d = GetComponent<BoxCollider2D>();
         image = GetComponent<Image>();
         Manager.instance.OnSpline += ShowHide;
     }
@@ -45,12 +43,10 @@ public class MoveLinkHandle : MonoBehaviour, IPointerDownHandler
         if (!e.splineStarted)
         {
             image.enabled = true;
-            boxCollider2d.enabled = true;
         }
         else
         {
             image.enabled = false;
-            boxCollider2d.enabled = false;
         }
 
     }

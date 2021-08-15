@@ -28,8 +28,6 @@ public class ConnectHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public bool canBeClicked = true;
     [HideInInspector]
     public Image image;
-    [HideInInspector]
-    public BoxCollider2D boxCollider2d;
 
     // used when the node is a loop or a if node
     public bool ifFalse;
@@ -44,12 +42,10 @@ public class ConnectHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     {
         canBeClicked = true;
         image = GetComponent<Image>();
-        boxCollider2d = GetComponent<BoxCollider2D>();
         Manager.instance.OnSpline += ShowHide; // this event while be triggered when a spline is created or ended
-        if (image != null && boxCollider2d != null && isInput && !Manager.instance.connectHandleAlwaysShown)
+        if (image != null && isInput && !Manager.instance.connectHandleAlwaysShown)
         {
             image.enabled = false;
-            boxCollider2d.enabled = false;
         }
     }
 
@@ -96,7 +92,6 @@ public class ConnectHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
         if (!isInput)
         {
             image.enabled = false;
-            boxCollider2d.enabled = false;
         }
     }
 
@@ -106,7 +101,6 @@ public class ConnectHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
     public void Hide()
     {
         image.enabled = false;
-        boxCollider2d.enabled = false;
     }
 
     // show and hide the input image (red dot)
@@ -117,24 +111,20 @@ public class ConnectHandle : MonoBehaviour, IPointerDownHandler, IPointerUpHandl
             if (e.splineStarted)
             {
                 image.enabled = true;
-                boxCollider2d.enabled = true;
             }
             else if(!Manager.instance.connectHandleAlwaysShown)
             {
                 image.enabled = false;
-                boxCollider2d.enabled = false;
             }
         }else if(canBeClicked)
         {
             if (e.splineStarted && !Manager.instance.connectHandleAlwaysShown)
             {
                 image.enabled = false;
-                boxCollider2d.enabled = false;
             }
             else
             {
                 image.enabled = true;
-                boxCollider2d.enabled = true;
             }
         }
     }
