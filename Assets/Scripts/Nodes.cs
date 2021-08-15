@@ -189,10 +189,14 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
     private bool preventClicks = false;
     public bool preventMove = false;
 
+    public bool canBePlacedOnClick { get; private set; }
+
     private static bool nodeBeenLeftClicked = false;
     public void OnPointerDown(PointerEventData eventData)
     {
         MenuToolTip.instance.HideToolTip();
+        if (canBePlacedOnClick)
+            EndMove();
         if(!preventClicks)
         {
             if (eventData.button == PointerEventData.InputButton.Left && doubleClick)
@@ -204,6 +208,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
             }
             else if (eventData.button == PointerEventData.InputButton.Left)
             {
+
                 // simple left click performed
                 nodeBeenLeftClicked = true;
 
@@ -255,7 +260,7 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
             }
             foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
             {
-                selectedNode.StartMove();
+                selectedNode.StartMove(false);
             }
         }
 
@@ -286,7 +291,10 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
         }
 
         // finishe the move area movement
-        MoveScriptArea.instance.EndDrag();
+        if (eventData.button == PointerEventData.InputButton.Middle)
+        {
+            MoveScriptArea.instance.EndDrag();
+        }
     }
 
     // show tooltip
@@ -505,9 +513,10 @@ public abstract class Nodes : MonoBehaviour, IPointerDownHandler, IBeginDragHand
         }
     }
 
-    public void StartMove()
+    public void StartMove(bool canBePlacedOnClick)
     {
         preventClicks = true;
+        this.canBePlacedOnClick = canBePlacedOnClick;
         // get the delta between the node and the mouse cursor to avoid weird snap to the mouse cursor
         Vector3 mouseToWorldPoint = NodeDisplay.instance.nodeCamera.ScreenToWorldPoint(Input.mousePosition, Camera.MonoOrStereoscopicEye.Mono);
         mouseCenterDelta = transform.position - mouseToWorldPoint;

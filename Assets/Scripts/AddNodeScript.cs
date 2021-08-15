@@ -75,7 +75,7 @@ public class AddNodeScript : MonoBehaviour
                     nodeScript.rs = RobotScript.robotScripts[Manager.instance.currentlySelectedScript]; // make the node aware in which robotScript he is
 
                     SelectionManager.instance.AddNodeToSelection(nodeScript);
-                    nodeScript.StartMove();
+                    nodeScript.StartMove(true);
                 }
             });
         }

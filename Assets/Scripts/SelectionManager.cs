@@ -209,10 +209,10 @@ public class SelectionManager : MonoBehaviour
                 }
                 node.ParentLoopArea = null;
             }
-            // @todo : make node moves after a copy
+
             foreach (Nodes selectedNode in SelectionManager.instance.SelectedNodes)
             {
-                selectedNode.StartMove();
+                selectedNode.StartMove(true);
             }
         }
     }
