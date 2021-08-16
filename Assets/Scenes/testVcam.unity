@@ -689,7 +689,7 @@ MonoBehaviour:
     ModeOverride: 0
     LensShift: {x: 0, y: 0}
     GateFit: 0
-    m_SensorSize: {x: 1.7275591, y: 1}
+    m_SensorSize: {x: 1.9058442, y: 1}
   m_Transitions:
     m_BlendHint: 0
     m_InheritPosition: 0
@@ -1478,6 +1478,63 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3aa165b887478143ac22f6beccb84f1, type: 3}
+--- !u!1001 &1532783928
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_RootOrder
+      value: 28
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527043, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3547055596659527068, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
+      propertyPath: m_Name
+      value: Robot (1)
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 18e475c364ce8424c9e28714e79afe90, type: 3}
 --- !u!1001 &1556294578
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2411,6 +2468,10 @@ MonoBehaviour:
   - {fileID: 230097236736078602}
   - {fileID: 7290907116137480397}
   - {fileID: 3509997161703474642}
+  bodyRenderer: {fileID: 0}
+  audioSource: {fileID: 0}
+  cameraPoint: {fileID: 0}
+  defaultCameraPointPos: {x: 0, y: 0, z: 0}
   robotStartPos: {x: 0, y: 0, z: 0}
   robotStartRot: {x: 0, y: 0, z: 0, w: 0}
   wallLayer:
@@ -2422,6 +2483,9 @@ MonoBehaviour:
   objectPlacement:
     serializedVersion: 2
     m_Bits: 1024
+  portalLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
   goForwardPower: 20
   turnPower: 15
   otherActionPower: 10

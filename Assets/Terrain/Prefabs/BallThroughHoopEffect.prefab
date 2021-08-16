@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 841569353293481887}
   - component: {fileID: 841569353293481880}
   - component: {fileID: 841569353293481881}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BallThroughHoopEffect
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,30 +114,30 @@ ParticleSystem:
     enabled: 1
     startLifetime:
       serializedVersion: 2
-      minMaxState: 3
-      scalar: 1.5
-      minScalar: 0.5
+      minMaxState: 1
+      scalar: 1
+      minScalar: 0.0001
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
           value: 1
-          inSlope: 0
-          outSlope: 0
+          inSlope: -0.23243615
+          outSlope: -0.23243615
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0
+          outWeight: 0.16389549
         - serializedVersion: 3
           time: 1
-          value: 1
-          inSlope: 0
-          outSlope: 0
+          value: 0.2
+          inSlope: -2.0047617
+          outSlope: -2.0047617
           tangentMode: 0
           weightedMode: 0
-          inWeight: 0.33333334
-          outWeight: 0.33333334
+          inWeight: 0.11401427
+          outWeight: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
@@ -285,7 +285,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 0.2
-      minScalar: 0.2
+      minScalar: 0.15
       maxCurve:
         serializedVersion: 2
         m_Curve:

@@ -209,10 +209,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: BallThroughHoopEffect
       objectReference: {fileID: 0}
-    - target: {fileID: 841569353293481882, guid: b436bb752e791a947b184b25976cd770, type: 3}
-      propertyPath: m_Layer
-      value: 7
-      objectReference: {fileID: 0}
     - target: {fileID: 841569353293481887, guid: b436bb752e791a947b184b25976cd770, type: 3}
       propertyPath: m_RootOrder
       value: 2
