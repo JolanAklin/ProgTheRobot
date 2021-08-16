@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg5"
+   inkscape:version="1.1 (c68e22c387, 2021-05-23)"
+   sodipodi:docname="winEffect.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview7"
+     pagecolor="#505050"
+     bordercolor="#eeeeee"
+     borderopacity="1"
+     inkscape:pageshadow="0"
+     inkscape:pageopacity="0"
+     inkscape:pagecheckerboard="0"
+     inkscape:document-units="mm"
+     showgrid="false"
+     inkscape:snap-bbox="true"
+     inkscape:bbox-paths="true"
+     inkscape:bbox-nodes="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:zoom="1.5001964"
+     inkscape:cx="297.29441"
+     inkscape:cy="444.94174"
+     inkscape:window-width="1920"
+     inkscape:window-height="1027"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer1" />
+  <defs
+     id="defs2">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient1681">
+      <stop
+         style="stop-color:#f2fff2;stop-opacity:1"
+         offset="0"
+         id="stop1677" />
+      <stop
+         style="stop-color:#a9a9a9;stop-opacity:1"
+         offset="0.3135314"
+         id="stop2819" />
+      <stop
+         style="stop-color:#a9a9a9;stop-opacity:1"
+         offset="0.68646872"
+         id="stop3397" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1"
+         offset="1"
+         id="stop1679" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient1681"
+       id="linearGradient1683"
+       x1="57.759796"
+       y1="94.532066"
+       x2="57.759796"
+       y2="147.9709"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <g
+     inkscape:label="Calque 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <rect
+       style="fill:#0ce473;fill-opacity:0;stroke-width:15;stroke-linecap:round;stroke-linejoin:round"
+       id="rect6973"
+       width="56.612999"
+       height="56.612999"
+       x="29.453087"
+       y="92.944984"
+       inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\winEffect.png"
+       inkscape:export-xdpi="114.85699"
+       inkscape:export-ydpi="114.85699" />
+    <path
+       id="rect846"
+       style="fill:url(#linearGradient1683);stroke-width:15;stroke-linecap:round;stroke-linejoin:round;fill-opacity:1"
+       d="M 43.033253,94.532066 H 86.066505 C 72.01603,112.16864 87.242277,129.98159 72.486339,147.9709 H 29.453087 c 14.932304,-20.98753 0.41152,-36.86045 13.580166,-53.438834 z"
+       sodipodi:nodetypes="ccccc"
+       inkscape:export-filename="E:\001_TPI\projet\Prog the robot\Assets\Textures\winEffect.png"
+       inkscape:export-xdpi="114.85699"
+       inkscape:export-ydpi="114.85699" />
+  </g>
+</svg>

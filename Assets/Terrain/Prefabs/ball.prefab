@@ -286,6 +286,10 @@ PrefabInstance:
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: edefdb842f4e06c4da8fc3779dddf611, type: 3}
+      propertyPath: m_TagString
+      value: BallObj
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: edefdb842f4e06c4da8fc3779dddf611, type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
       objectReference: {fileID: 0}
