@@ -45,7 +45,7 @@ public class LanguageManager : MonoBehaviour
         { Validator.FunctionType.@int, new List<ValidationTypeInfo>()
             {
                 new ValidationTypeInfo(false, Validator.ValidationType.test),
-                new ValidationTypeInfo(true, Validator.ValidationType.readWrite),
+                new ValidationTypeInfo(false, Validator.ValidationType.readWrite),
                 new ValidationTypeInfo(false, Validator.ValidationType.affectation),
                 new ValidationTypeInfo(true, Validator.ValidationType.forloopvar),
                 new ValidationTypeInfo(false, Validator.ValidationType.forloopexpression),

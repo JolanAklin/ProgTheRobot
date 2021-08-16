@@ -3176,7 +3176,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6739195634499042300}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.5, y: -6.3, z: 0}
+  m_LocalPosition: {x: 1.6, y: -6.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6739195634193324582}
@@ -3200,7 +3200,6 @@ MonoBehaviour:
   nextGameObject: {fileID: 0}
   parentId: -1
   nodeVisual: {fileID: 6739195634193324570}
-  numberOfInputConnection: 0
   canvasRect: {fileID: 6739195634193324582}
   nodeLayerMask:
     serializedVersion: 2

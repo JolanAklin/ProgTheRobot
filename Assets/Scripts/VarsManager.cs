@@ -280,54 +280,6 @@ public class VarsManager
         return new FunctionReturn() { result = result };
     }
 
-    /// <summary>
-    /// Replace var's name with the number of the var
-    /// </summary>
-    /// <param name="expression">The mathematic expression that need to be transformed</param>
-    /// <returns></returns>
-    public string[] ReplaceStringsByVar(string[] expression)
-    {
-        for (int i = 0; i < expression.Length; i++)
-        {
-            if(Regex.IsMatch(expression[i], @"^[a-zA-Z]+$"))
-            {
-                FunctionReturn fReturn = GetFunction(expression[i]);
-                if(!fReturn.error)
-                {
-                    expression[i] = fReturn.result.ToString();
-                }
-                else if(vars.ContainsKey(expression[i]))
-                {
-                    expression[i] = vars[expression[i]].ToString();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
-        return expression;
-    }
-
-    /// <summary>
-    /// Replace the string by the corresponding var value
-    /// </summary>
-    /// <param name="expression">The string that need to be converted to the var number</param>
-    /// <returns></returns>
-    public string ReplaceStringByVar(string expression)
-    {
-        if (Regex.IsMatch(expression, @"^[a-zA-Z]+$"))
-            if (vars.ContainsKey(expression))
-            {
-                expression = vars[expression].ToString();
-            }
-            else
-            {
-                return null;
-            }
-        return expression;
-    }
-
     public class Evaluation
     {
         public bool error = false;
@@ -344,7 +296,7 @@ public class VarsManager
             switch (Validator.GetFunctionType(splited[i]))
             {
                 case Validator.FunctionType.@int:
-                    splited[i] = GetBoolFunction(splited[i]).result.ToString();
+                    splited[i] = GetFunction(splited[i]).result.ToString();
                     break;
                 case Validator.FunctionType.@bool:
                     splited[i] = GetBoolFunction(splited[i]).result ? "True" : "False";
@@ -359,19 +311,6 @@ public class VarsManager
         }
 
         return string.Join(" ", splited);
-
-        //foreach (string function in LanguageManager.instance.FullNameToAbrevDict.Values)
-        //{
-        //    if(Validator.GetFunctionType(function) == Validator.FunctionType.@bool)
-        //    {
-        //        expression = expression.Replace(function, GetBoolFunction(function).result ? "True" : "False");
-        //    }else if (Validator.GetFunctionType(function) == Validator.FunctionType.@int)
-        //    {
-        //        expression = expression.Replace(function, GetFunction(function).result.ToString());
-        //    }
-        //}
-
-        //return expression;
     }
 
     public Evaluation Evaluate(string expression)

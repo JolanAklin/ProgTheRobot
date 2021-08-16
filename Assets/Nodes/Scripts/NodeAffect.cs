@@ -26,7 +26,6 @@ using System.Text.RegularExpressions;
 public class NodeAffect : Nodes
 {
     private string nodeExecutableString;
-    private string[] inputSplited;
 
     private VarsManager.Var var;
 
@@ -86,17 +85,12 @@ public class NodeAffect : Nodes
         {
             if (var == null)
             {
-                if(VarsManager.CheckVarName(inputSplited[0]))
+                string expression = string.Join("", inputVarReplaced, 2, inputVarReplaced.Length - 2).Trim();
+                var = rs.robot.varsManager.GetVar(inputVarReplaced[0], Convert.ToInt32(new DataTable().Compute(expression, null)));
+                if (var == null)
                 {
-                    // start tpi
-                    string expression = string.Join("", inputVarReplaced, 2, inputVarReplaced.Length - 2).Trim();
-                    var = rs.robot.varsManager.GetVar(inputSplited[0], Convert.ToInt32(new DataTable().Compute(expression, null)));
-                    // end tpi
-                    if (var == null)
-                    {
-                        Debugger.LogError("Une erreur est survenue");
-                        return;
-                    }
+                    Debugger.LogError("Une erreur est survenue");
+                    return;
                 }
             }
 
@@ -106,7 +100,7 @@ public class NodeAffect : Nodes
             // stop execution
             //Debugger.LogError("La variable spécifiée n'est pas connue");
             //ChangeBorderColor(errorColor);
-            rs.robot.varsManager.GetVar(inputSplited[0], 0);
+            rs.robot.varsManager.GetVar(inputVarReplaced[0], 0);
             Execute();
         }
         StartCoroutine("WaitBeforeCallingNextNode");

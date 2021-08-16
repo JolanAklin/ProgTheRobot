@@ -79,17 +79,19 @@ public class NodeReadWrite : Nodes
         string[] delimiters = new string[] { " " };
         string[] inputSplited = nodeExecutableString.Split(delimiters, StringSplitOptions.RemoveEmptyEntries);
         PopUpReadWrite rw = PopUpManager.ShowPopUp(PopUpManager.PopUpTypes.readWrite).GetComponent<PopUpReadWrite>();
+        VarsManager.Var value = rs.robot.varsManager.GetVar(inputSplited[1]);
+
         switch (inputSplited[0])
         {
             case "kwwrite#":
-                rw.Init($"Affichage de {inputSplited[1]}", rs.robot.varsManager.GetVar(inputSplited[1]));
+                rw.Init($"Affichage de <b>{LanguageManager.instance.AbrevToFullName(inputSplited[1])}</b>", rs.robot.varsManager.ReplaceFunctionByValue(inputSplited[1]).Trim(), false);
                 rw.SetOkAction(() => { 
                     rw.Close();
                     StartCoroutine("WaitBeforeCallingNextNode");
                 });
                 break;
             case "kwread#":
-                rw.Init($"Lecture de {inputSplited[1]}");
+                rw.Init($"Lecture de <b>{inputSplited[1]}</b>", rs.robot.varsManager.ReplaceFunctionByValue(inputSplited[1]).Trim(), true);
                 rw.SetOkAction(() => {
                     VarsManager.Var var = rs.robot.varsManager.GetVar(inputSplited[1],0);
                     var.Value = rw.value();

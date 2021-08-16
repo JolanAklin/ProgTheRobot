@@ -28,20 +28,28 @@ public class PopUpReadWrite : PopUp
     public TMP_Text infoText;
     public TMP_InputField inputField;
 
-    public void Init(string text)
+    public void Init(string text, string number, bool isReading)
     {
-        infoText.text = text;
-        inputField.interactable = true;
-        inputField.Select();
-    }
-    public void Init(string text, VarsManager.Var number)
-    {
-        infoText.text = text;
-        if (number != null)
-            inputField.text = number.Value.ToString();
+        int iNumber;
+        if(int.TryParse(number, out iNumber))
+        {
+            inputField.text = iNumber.ToString();
+        }
         else
+        {
             inputField.text = "Undefined";
-        inputField.interactable = false;
+        }
+        infoText.text = text;
+        if(isReading)
+        {
+            inputField.interactable = true;
+            inputField.Select();
+        }
+        else
+        {
+            inputField.interactable = false;
+        }
+
     }
 
     public int value()

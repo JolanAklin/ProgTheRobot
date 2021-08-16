@@ -131,10 +131,6 @@ public static class Validator
                 return new ValidationReturn(ValidationStatus.KO);
         }
     }
-    public static ValidationReturn Validate(ValidationType type, string[] toValidate)
-    {
-        return new ValidationReturn(ValidationStatus.KO);
-    }
 
     // input string should be english only
     // this validator works in a new way. Remaking a new translation system would greatly improve the overall experience
@@ -504,7 +500,7 @@ public static class Validator
                     vr.AddSpecificError(0, new ValidationReturn.Error(0, pos, "Expecting \"Read\" or \"Write\" keyword."));
                 }
                 break;
-            case 2: // test if the second word is a variable
+            case 2: // test if the second word is a variable or is an int function with the keyword read before
                 type = GetFunctionType(splited[1]);
                 pos = (uint)LanguageManager.instance.getFullnameFromAbrev(splited[0]).Length + 1;
 
@@ -512,11 +508,20 @@ public static class Validator
                 string secondWord = LanguageManager.instance.getFullnameFromAbrev(splited[1]);
                 endPos += (uint)secondWord.Length;
 
-                if (type != FunctionType.word)
+                if (type != FunctionType.word && type != FunctionType.@int)
                 {
                     vr.ChangeValidationStatus(ValidationStatus.KO);
                     vr.AddSpecificError(pos, new ValidationReturn.Error(pos, endPos, "Expecting a variable"));
-                }else if(LanguageManager.instance.ReservedKeywords[ValidationType.readWrite].Contains(secondWord))
+                }
+                else if (type == FunctionType.@int)
+                {
+                    if(splited[0] != "kwwrite#")
+                    {
+                        vr.ChangeValidationStatus(ValidationStatus.KO);
+                        vr.AddSpecificError(pos, new ValidationReturn.Error(pos, endPos, "Assigning values to functions is not permitted."));
+                    }
+                }
+                else if(LanguageManager.instance.ReservedKeywords[ValidationType.readWrite].Contains(secondWord))
                 {
                     vr.ChangeValidationStatus(ValidationStatus.KO);
                     vr.AddSpecificError(pos, new ValidationReturn.Error(pos, endPos, $"\"{secondWord}\" is a reserved keyword."));
