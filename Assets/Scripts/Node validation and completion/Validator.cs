@@ -107,6 +107,18 @@ public static class Validator
     /// <returns></returns>
     public static ValidationReturn Validate(ValidationType type, string toValidate)
     {
+        // test if there is a char that shouldn't be there
+        ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
+        string regexPattern = @"[^a-zA-Z0-9+\-*/()><=\s]+";
+        Regex regex1 = new Regex(regexPattern);
+        if (regex1.IsMatch(toValidate))
+        {
+            vr.ChangeValidationStatus(ValidationStatus.KO);
+            Match match = regex1.Match(toValidate);
+            vr.AddSpecificError((uint)match.Index, new ValidationReturn.Error((uint)match.Index, (uint)match.Index + (uint)match.Length, $"\"{match.Value}\" means nothing"));
+            return vr;
+        }
+
         switch (type)
         {
             case ValidationType.test:
@@ -149,16 +161,6 @@ public static class Validator
 
         string toValidateNonAltered = toValidate;
         ValidationReturn vr = new ValidationReturn(ValidationStatus.OK);
-
-        string regexPattern = @"[^a-zA-Z0-9+\-*/()><=\s]+";
-        Regex regex1 = new Regex(regexPattern);
-        if (regex1.IsMatch(toValidate))
-        {
-            vr.ChangeValidationStatus(ValidationStatus.KO);
-            Match match = regex1.Match(toValidate);
-            vr.AddSpecificError((uint)match.Index, new ValidationReturn.Error((uint)match.Index, (uint)match.Index + (uint)match.Length, $"\"{match.Value}\" means nothing"));
-            return vr;
-        }
 
         toValidate = LanguageManager.instance.FullNameToAbrev(toValidate);
 
